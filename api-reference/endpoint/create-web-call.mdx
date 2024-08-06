@@ -1,0 +1,31 @@
+---
+title: 'Create Web Call'
+openapi: 'POST /create-web-call'
+---
+
+<Endpoint
+  method="POST"
+  path="/create-web-call"
+  description="Create a web call with your Agent ID"
+>
+  <RequestBody
+    description="Create a web call with your Agent ID"
+    required
+    contentType="application/json"
+    schemaRef="#/components/schemas/NewPlant"
+  />
+  <ResponseFields>
+    <ResponseField
+      status="200"
+      description="Web call response"
+      contentType="application/json"
+      schemaRef="#/components/schemas/Plant"
+    />
+    <ResponseField
+      status="400"
+      description="Unexpected error"
+      contentType="application/json"
+      schemaRef="#/components/schemas/Error"
+    />
+  </ResponseFields>
+</Endpoint>

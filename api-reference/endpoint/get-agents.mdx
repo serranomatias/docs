@@ -1,0 +1,25 @@
+---
+title: 'Get Agents'
+openapi: 'GET /agents'
+---
+
+<Endpoint
+  method="GET"
+  path="/agents"
+  description="Returns all agents from the system that the user has access to"
+>
+  <ResponseFields>
+    <ResponseField
+      status="200"
+      description="Agents response"
+      contentType="application/json"
+      schemaRef="#/components/schemas/Plant"
+    />
+    <ResponseField
+      status="400"
+      description="Unexpected error"
+      contentType="application/json"
+      schemaRef="#/components/schemas/Error"
+    />
+  </ResponseFields>
+</Endpoint>

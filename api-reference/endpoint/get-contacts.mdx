@@ -1,0 +1,31 @@
+---
+title: 'Get Contacts'
+openapi: 'GET /v1/contacts'
+---
+
+<Endpoint
+  method="GET"
+  path="/v1/contacts"
+  description="Make an AI phone call with your Agent ID"
+>
+  <RequestBody
+    description="Make an AI phone call with your Agent ID"
+    required
+    contentType="application/json"
+    schemaRef="#/components/schemas/NewCall"
+  />
+  <ResponseFields>
+    <ResponseField
+      status="200"
+      description="AI phone call response"
+      contentType="application/json"
+      schemaRef="#/components/schemas/CallResponse"
+    />
+    <ResponseField
+      status="400"
+      description="Unexpected error"
+      contentType="application/json"
+      schemaRef="#/components/schemas/Error"
+    />
+  </ResponseFields>
+</Endpoint>

@@ -1,0 +1,31 @@
+---
+title: 'Create New Contact'
+openapi: 'POST /v1/contacts'
+---
+
+<Endpoint
+  method="POST"
+  path="/v1/contacts"
+  description="Create a new contact"
+>
+  <RequestBody
+    description="Create a new contact"
+    required
+    contentType="application/json"
+    schemaRef="#/components/schemas/NewCall"
+  />
+  <ResponseFields>
+    <ResponseField
+      status="200"
+      description="AI phone call response"
+      contentType="application/json"
+      schemaRef="#/components/schemas/CallResponse"
+    />
+    <ResponseField
+      status="400"
+      description="Unexpected error"
+      contentType="application/json"
+      schemaRef="#/components/schemas/Error"
+    />
+  </ResponseFields>
+</Endpoint>

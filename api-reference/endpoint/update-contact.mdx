@@ -1,0 +1,31 @@
+---
+title: 'Update Contact'
+openapi: 'PATCH /v1/contacts'
+---
+
+<Endpoint
+  method="PATCH"
+  path="/v1/contacts"
+  description="Update a contact"
+>
+  <RequestBody
+    description="Update a contact"
+    required
+    contentType="application/json"
+    schemaRef="#/components/schemas/UpdateContact"
+  />
+  <ResponseFields>
+    <ResponseField
+      status="200"
+      description="Contact updated"
+      contentType="application/json"
+      schemaRef="#/components/schemas/ContactResponse"
+    />
+    <ResponseField
+      status="400"
+      description="Unexpected error"
+      contentType="application/json"
+      schemaRef="#/components/schemas/Error"
+    />
+  </ResponseFields>
+</Endpoint>

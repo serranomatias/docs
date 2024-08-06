@@ -1,15 +1,19 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "ContactShip Docs",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/Isologotipo.png",
+    "light": "/logo/Isologotipo.png"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/favicon2.png",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#0252ff",
+    "light": "#1E89FF",
+    "dark": "#0252ff",
+    "background": {
+      "dark": "#121212",
+      "light": "#fff"
+    },
     "anchors": {
       "from": "#0D9373",
       "to": "#07C983"
@@ -23,7 +27,7 @@
   ],
   "topbarCtaButton": {
     "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "url": "https://app.contactship.ai"
   },
   "tabs": [
     {
@@ -31,42 +35,90 @@
       "url": "api-reference"
     }
   ],
-  "anchors": [
-    {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
-    }
-  ],
+  "versions": ["en", "es"],
   "navigation": [
     {
       "group": "Get Started",
       "pages": [
-        "introduction",
-        "quickstart",
-        "development"
-      ]
+        "en/introduction",
+        "en/quickstart",
+        "en/support"
+      ],
+      "version": "en"
+    },
+    {
+      "group": "Get Started",
+      "pages": [
+        "es/introduccion",
+        "es/arranque-rapido",
+        "es/soporte"
+      ],
+      "version": "es"
     },
     {
       "group": "Essentials",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
-      ]
+        "en/essentials/markdown",
+        "en/essentials/code",
+        "en/essentials/settings",
+        "en/essentials/navigation",
+        "en/essentials/reusable-snippets"
+      ],
+      "version": "en"
+    },
+    {
+      "group": "Agents",
+      "pages": [
+        "en/agents/overview",
+        "en/agents/prompt-engineering-guide",
+        "en/agents/identity",
+        "en/agents/instructions",
+        "en/agents/tools",
+        "en/agents/automations"
+      ],
+      "version": "en"
+    },
+    {
+      "group": "Esenciales",
+      "pages": [
+        "es/essentials/markdown",
+        "es/essentials/code",
+        "es/essentials/settings",
+        "es/essentials/navigation",
+        "es/essentials/reusable-snippets"
+      ],
+      "version": "es"
+    },
+    {
+      "group": "Agentes",
+      "pages": [
+        "es/agents/overview",
+        "es/agents/prompt-engineering-guide",
+        "es/agents/agent-transitions"
+
+      ],
+      "version": "es"
+    },
+    {
+      "group": "Campaigns",
+      "pages": [
+        "en/campaigns/overview"
+      ],
+      "version": "en"
+    },
+    {
+      "group": "Widgets",
+      "pages": [
+        "en/widgets/overview"
+      ],
+      "version": "en"
+    },
+    {
+      "group": "Inbound",
+      "pages": [
+        "en/inbound/overview"
+      ],
+      "version": "en"
     },
     {
       "group": "API Documentation",
@@ -75,17 +127,37 @@
       ]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "Calls",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "api-reference/endpoint/make-ai-phone-call",
+        "api-reference/endpoint/create-web-call"
+      ]
+    },
+    {
+      "group": "Organization",
+      "pages": [
+        "api-reference/endpoint/get-credits"
+      ]
+    },
+    {
+      "group": "Agents",
+      "pages": [
+        "api-reference/endpoint/get-agents"
+      ]
+    },
+    {
+      "group": "Contacts",
+      "pages": [
+        "api-reference/endpoint/create-contact",
+        "api-reference/endpoint/get-contacts",
+        "api-reference/endpoint/update-contact"
+        
       ]
     }
   ],
   "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "x": "https://x.com/contactshipai",
+    "linkedin": "https://www.linkedin.com/company/contactshipai",
+    "tiktok": "https://www.tiktok.com/contactshipai"
   }
 }

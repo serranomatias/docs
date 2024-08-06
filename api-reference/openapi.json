@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
+    "title": "OpenAPI Example",
+    "description": "A sample API to demonstrate features in the OpenAPI specification",
     "license": {
       "name": "MIT"
     },
@@ -10,38 +10,119 @@
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
+      "url": "https://api.contactship.ai"
     }
   ],
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
+    "/v1/calls/single-phone-call": {
+      "post": {
+        "description": "Make an AI phone call with your Agent ID",
         "parameters": [
           {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "string"
+            },
+            "description": "x-api-key"
           }
         ],
+        "requestBody": {
+          "description": "Make an AI phone call with your Agent ID",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewCall"
+              },
+              "example": {
+                "from_number": "+12124567890",
+                "to_number": "+12124567890",
+                "full_name": "Jhon Doe",
+                "agent_id": "string",
+                "email": "example@mail.es",
+                "country": "Mexico",
+                "additional_data": {},
+                "webhook_url": "https://your.webhook.domain.es"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "AI phone call response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CallResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/create-web-call": {
+      "post": {
+        "description": "Create a web call with your Agent ID",
+        "requestBody": {
+          "description": "Create a web call with your Agent ID",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewCall"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Web call response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CallResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agents": {
+      "get": {
+        "description": "Returns all agents from the system that the user has access to",
+        "responses": {
+          "200": {
+            "description": "Agents response",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Plant"
+                    "$ref": "#/components/schemas/Agent"
                   }
                 }
               }
@@ -58,122 +139,111 @@
             }
           }
         }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
       }
     }
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "NewCall": {
         "type": "object",
+        "required": ["agent_id", "from_number", "to_number", "full_name", "country"],
         "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
+          "agent_id": {
+            "type": "string",
+            "description": "The ID of the agent making the call"
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          "from_number": {
+            "type": "string",
+            "description": "The number from which the call is made"
+          },
+          "to_number": {
+            "type": "string",
+            "description": "The number to which the call is made"
+          },
+          "full_name": {
+            "type": "string",
+            "description": "The full name of the person being called"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email of the person being called"
+          },
+          "country": {
+            "type": "string",
+            "description": "The country of the person being called"
+          },
+          "additional_data": {
+            "type": "object",
+            "description": "Additional data for the call"
+          },
+          "webhook_url": {
+            "type": "string",
+            "description": "The webhook URL for call status updates"
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
+      "CallResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "The status code of the response"
           },
-          {
-            "required": [
-              "id"
-            ],
+          "data": {
             "type": "object",
             "properties": {
               "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
+                "type": "string",
+                "description": "The ID of the call"
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time",
+                "description": "The creation time of the call"
+              },
+              "provider_agent_id": {
+                "type": "string",
+                "description": "The provider agent ID"
+              },
+              "additional_data": {
+                "type": "object",
+                "nullable": true,
+                "description": "Additional data for the call"
+              },
+              "webhook_url": {
+                "type": "string",
+                "nullable": true,
+                "description": "The webhook URL for call status updates"
+              },
+              "call_id": {
+                "type": "string",
+                "description": "The ID of the call"
+              },
+              "contact_id": {
+                "type": "string",
+                "description": "The ID of the contact"
               }
             }
           }
-        ]
+        }
+      },
+      "Agent": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the agent"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the agent"
+          }
+        }
       },
       "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
         "type": "object",
+        "required": ["error", "message"],
         "properties": {
           "error": {
             "type": "integer",
@@ -183,12 +253,6 @@
             "type": "string"
           }
         }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
       }
     }
   }

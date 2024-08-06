@@ -1,0 +1,31 @@
+---
+title: 'Make AI Phone Call'
+openapi: 'POST /v1/calls/single-phone-call'
+---
+
+<Endpoint
+  method="POST"
+  path="/v1/calls/single-phone-call"
+  description="Make an AI phone call with your Agent ID"
+>
+  <RequestBody
+    description="Make an AI phone call with your Agent ID"
+    required
+    contentType="application/json"
+    schemaRef="#/components/schemas/NewCall"
+  />
+  <ResponseFields>
+    <ResponseField
+      status="201"
+      description="AI phone call response"
+      contentType="application/json"
+      schemaRef="#/components/schemas/CallResponse"
+    />
+    <ResponseField
+      status="400"
+      description="Unexpected error"
+      contentType="application/json"
+      schemaRef="#/components/schemas/Error"
+    />
+  </ResponseFields>
+</Endpoint>
