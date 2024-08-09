@@ -111,9 +111,20 @@
         }
       }
     },
-    "/agents": {
+    "/v1/agents": {
       "get": {
         "description": "Returns all agents from the system that the user has access to",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "x-api-key"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Agents response",
@@ -229,7 +240,7 @@
       },
       "Agent": {
         "type": "object",
-        "required": ["id", "name"],
+        "required": ["id", "name", "created_at", "language"],
         "properties": {
           "id": {
             "type": "string",
@@ -238,6 +249,45 @@
           "name": {
             "type": "string",
             "description": "The name of the agent"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The creation time of the agent"
+          },
+          "language": {
+            "type": "string",
+            "description": "The language of the agent"
+          },
+          "webhook_url": {
+            "type": "string",
+            "nullable": true,
+            "description": "The webhook URL for call status updates"
+          },
+          "conversation_purpose": {
+            "type": "string",
+            "nullable": true,
+            "description": "The purpose of the conversation"
+          },
+          "prompt": {
+            "type": "string",
+            "nullable": true,
+            "description": "The prompt for the agent"
+          }
+        }
+      },
+      "AgentsResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "The status code of the response"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Agent"
+            }
           }
         }
       },

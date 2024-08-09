@@ -1,19 +1,27 @@
 ---
 title: 'Get Agents'
-openapi: 'GET /agents'
+openapi: 'GET /v1/agents'
 ---
 
 <Endpoint
   method="GET"
-  path="/agents"
+  path="/v1/agents"
   description="Returns all agents from the system that the user has access to"
 >
+  <RequestHeaders>
+    <RequestHeader
+      name="x-api-key"
+      description="x-api-key"
+      required
+      example="YOUR_API_KEY"
+    />
+  </RequestHeaders>
   <ResponseFields>
     <ResponseField
       status="200"
       description="Agents response"
       contentType="application/json"
-      schemaRef="#/components/schemas/Plant"
+      schemaRef="#/components/schemas/AgentsResponse"
     />
     <ResponseField
       status="400"

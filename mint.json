@@ -56,17 +56,6 @@
       "version": "es"
     },
     {
-      "group": "Essentials",
-      "pages": [
-        "en/essentials/markdown",
-        "en/essentials/code",
-        "en/essentials/settings",
-        "en/essentials/navigation",
-        "en/essentials/reusable-snippets"
-      ],
-      "version": "en"
-    },
-    {
       "group": "Agents",
       "pages": [
         "en/agents/overview",
