@@ -89,6 +89,14 @@
       "version": "es"
     },
     {
+      "group": "Integrations",
+      "pages": [
+        "en/integrations/quickstart",
+        "en/integrations/make"
+      ],
+      "version": "en"
+    },
+    {
       "group": "Campaigns",
       "pages": [
         "en/campaigns/overview"
@@ -116,10 +124,9 @@
       ]
     },
     {
-      "group": "Calls",
+      "group": "Voice",
       "pages": [
-        "api-reference/endpoint/make-ai-phone-call",
-        "api-reference/endpoint/create-web-call"
+        "api-reference/endpoint/make-ai-phone-call"
       ]
     },
     {
@@ -137,10 +144,7 @@
     {
       "group": "Contacts",
       "pages": [
-        "api-reference/endpoint/create-contact",
-        "api-reference/endpoint/get-contacts",
-        "api-reference/endpoint/update-contact"
-        
+        "api-reference/endpoint/get-contacts"
       ]
     }
   ],

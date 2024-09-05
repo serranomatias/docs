@@ -42,8 +42,24 @@
                 "agent_id": "string",
                 "email": "example@mail.es",
                 "country": "Mexico",
-                "additional_data": {},
-                "webhook_url": "https://your.webhook.domain.es"
+                "additional_data": [
+                  {
+                    "key": "amount_debt",
+                    "value": "14058"
+                  },
+                  {
+                    "key": "due_date",
+                    "value": "2024-09-30"
+                  },
+                  {
+                    "key": "currency",
+                    "value": "USD"
+                  },
+                  {
+                    "key": "payment_status",
+                    "value": "pending"
+                  }
+                ]
               }
             }
           },
@@ -56,6 +72,50 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CallResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/credits": {
+      "get": {
+        "description": "Retrieve the number of credits available",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Credits response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "credits": {
+                      "type": "number",
+                      "description": "The number of credits available"
+                    }
+                  }
                 }
               }
             }
@@ -94,6 +154,47 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CallResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/contacts": {
+      "get": {
+        "description": "Retrieve all contacts from the organization",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contacts response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Contact"
+                  }
                 }
               }
             }
@@ -184,12 +285,19 @@
             "description": "The country of the person being called"
           },
           "additional_data": {
-            "type": "object",
-            "description": "Additional data for the call"
-          },
-          "webhook_url": {
-            "type": "string",
-            "description": "The webhook URL for call status updates"
+            "type": "array",
+            "description": "Additional data for the call",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       },
@@ -235,6 +343,40 @@
                 "description": "The ID of the contact"
               }
             }
+          }
+        }
+      },
+      "Contact": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the contact"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The creation time of the contact"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "The phone number of the contact"
+          },
+          "full_name": {
+            "type": "string",
+            "description": "The full name of the contact"
+          },
+          "country": {
+            "type": "string",
+            "description": "The country of the contact"
+          },
+          "organization_id": {
+            "type": "string",
+            "description": "The ID of the organization"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email of the contact"
           }
         }
       },

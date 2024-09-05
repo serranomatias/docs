@@ -6,20 +6,22 @@ openapi: 'GET /v1/credits'
 <Endpoint
   method="GET"
   path="/v1/credits"
-  description="Make an AI phone call with your Agent ID"
+  description="Retrieve the number of credits available"
 >
-  <RequestBody
-    description="Make an AI phone call with your Agent ID"
-    required
-    contentType="application/json"
-    schemaRef="#/components/schemas/NewCall"
-  />
+  <RequestHeaders>
+    <RequestHeader
+      name="x-api-key"
+      description="API key for authentication"
+      required
+      schemaType="string"
+    />
+  </RequestHeaders>
   <ResponseFields>
     <ResponseField
       status="200"
-      description="AI phone call response"
+      description="Credits response"
       contentType="application/json"
-      schemaRef="#/components/schemas/CallResponse"
+      schemaRef="#/components/schemas/CreditsResponse"
     />
     <ResponseField
       status="400"
