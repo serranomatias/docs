@@ -68,22 +68,10 @@
       "version": "en"
     },
     {
-      "group": "Esenciales",
-      "pages": [
-        "es/essentials/markdown",
-        "es/essentials/code",
-        "es/essentials/settings",
-        "es/essentials/navigation",
-        "es/essentials/reusable-snippets"
-      ],
-      "version": "es"
-    },
-    {
       "group": "Agentes",
       "pages": [
         "es/agents/overview",
-        "es/agents/prompt-engineering-guide",
-        "es/agents/agent-transitions"
+        "es/agents/prompt-engineering-guide"
 
       ],
       "version": "es"
