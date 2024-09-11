@@ -1,34 +1,102 @@
 ---
-title: 'Integración de Contactship con Make'
-description: 'Guía para integrar Contactship con Make'
+title: 'Make'
+description: 'Guide to integrating Contactship with Make'
 ---
 
-### Configuración de Contactship en Make
+<Note>We are currently in the review process, so the Contactship module is not yet available in the marketplace. You will need to install it via an invitation link. Once installed, the module will appear in your scenarios.</Note>
 
-Para integrar Contactship con Make, sigue estos pasos:
+### Setting Up Contactship in Make
 
-1. **Crear una API Key**: 
-   - Inicia sesión en tu cuenta de Contactship.
-   - Navega a la sección de API y genera una nueva API key.
+To integrate Contactship with Make, follow these simple steps:
 
-2. **Instalar el Módulo de Contactship**:
-   - Ve a la plataforma de Make.
-   - Busca el módulo de Contactship e instálalo.
+<AccordionGroup>
+  <Accordion title="1. Get Your API Key">
+    - Log in to your Contactship account.
+    - Navigate to the **API Keys** section under the **Organizations** menu.
+    - Click on **Generate Key** to create your API key.
+    - **Important**: The API key will only be displayed once for security reasons. Make sure to save it securely.
+    <Frame>
+      ![API Keys](/images/apikeys.png)
+    </Frame>
+  </Accordion>
 
-3. **Conectar el Módulo**:
-   - Abre el módulo de Contactship en Make.
-   - Ingresa tu API key para establecer la conexión.
+  <Accordion title="2. Install Contactship in Make">
+    - Go to the Make platform.
+    - Use the following invitation link to install the Contactship module: [Install Contactship](https://us1.make.com/app/invite/0fbc06d185316aa84bf499d6cfdfd87b).
+    - Click on **Install**, and the module will be added to your scenarios.
+    <Frame>
+      ![Install Module](/images/SCR-20240831-cclb.png)
+    </Frame>
+  </Accordion>
 
-4. **Configurar el Módulo de Llamada AI**:
-   - Completa los campos requeridos:
-     - **Desde Número de Teléfono**: Tu número de contacto.
-     - **Número de Teléfono a Llamar**: El número del destinatario.
-     - **Nombre Completo del Usuario**: El nombre del usuario que realiza la llamada.
-     - **Correo Electrónico del Usuario**: La dirección de correo del usuario.
-     - **País del Usuario**: El país del usuario.
-     - **Variables Personalizadas**: Agrega cualquier dato adicional como pares clave-valor.
+  <Accordion title="3. Find the Contactship Module in Your Scenarios">
+    - After installation, open your scenarios in Make.
+    - Look for the **Contactship** module in the list of available modules.
+    - Drag and drop the module into your scenario to start using it.
+    <Frame>
+      ![Find Module](/images/SCR-20240831-byzs.png)
+    </Frame>
+  </Accordion>
 
-5. **Automatizar Llamadas**:
-   - Una vez configurado, puedes activar llamadas como parte de tu flujo de trabajo en Make.
+  <Accordion title="4. Connect the Contactship Client in Make">
+    - Open the Contactship module in Make.
+    - Enter your API key to establish the connection.
+    
+    <Frame>
+      ![Enter API Key](/images/SCR-20240831-bzpy.png)
+    </Frame>
+    
+    - Locate the field labeled **API Key** in the module settings.
+    - Paste your API key into this field to connect successfully.
+    
+    <Frame>
+      ![API Key Field](/images/SCR-20240831-bzwn.png)
+    </Frame>
+    
+    - You are now ready to use the Contactship features in your scenarios!
+  </Accordion>
 
-Esta integración te permitirá optimizar tu proceso de llamadas y mejorar tus campañas.
+  <Accordion title="5. Configure the Phone Call Settings">
+    - In the Contactship module, fill in the required fields:
+      - **From Phone Number**: Your phone number.
+      - **Phone Number to Call**: The contact's phone number.
+      - **User Full Name**: The name of the contact.
+      - **User Email**: The email address of the contact.
+      - **User Country**: The country of the contact.
+      - **Custom Variables**: Add any additional data as key-value pairs about the contact.
+    <Frame>
+      ![Phone Call Settings](/images/SCR-20240831-cada.png)
+    </Frame>
+  </Accordion>
+
+  <Accordion title="6. Make Your First Call">
+    - Once everything is set up, you can initiate a call using the configured settings.
+    - Click on the **Make AI Phone Call** button to start the call.
+    <Frame>
+      ![Make Call](/images/SCR-20240831-bzwn.png)
+    </Frame>
+  </Accordion>
+
+  <Accordion title="7. Review Call Details">
+    - After the call, you have two options to review the details and logs to ensure everything worked as expected:
+      1. **From Contactship Platform**:
+         - Navigate to the **API Calls** section in your Contactship dashboard.
+         - Here, you can review all the [API calls](https://app.contactship.ai/en/organization/api-calls) along with their transcriptions, audio recordings, call details, and analysis.
+         <Frame>
+           ![Review Call on Platform](/images/SCR-20240905-bgkz.png)
+         </Frame>
+      2. **By Webhook**:
+         - You can configure a webhook to receive call details after the call is made.
+         - Refer to the [Webhook Documentation](https://docs.contactship.ai/webhooks) for instructions on how to set up and use webhooks.
+  </Accordion>
+</AccordionGroup>
+
+### Tips for a Successful Integration
+
+- **Secure Connection**: Keep your API key safe and do not share it publicly.
+- **Documentation**: Refer to the [API documentation](https://docs.contactship.ai/en/api-reference) for details on how to use the API in your integrations.
+- **Support**: If you have questions or need assistance, feel free to contact our support team.
+
+### Start Integrating!
+
+Now that you have the necessary information, it’s time to start integrating Contactship with Make! Make the most of our capabilities and enhance your workflow.
