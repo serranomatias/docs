@@ -99,13 +99,6 @@
       "version": "en"
     },
     {
-      "group": "Inbound",
-      "pages": [
-        "en/inbound/overview"
-      ],
-      "version": "en"
-    },
-    {
       "group": "API Documentation",
       "pages": [
         "api-reference/introduction"
