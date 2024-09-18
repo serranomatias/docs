@@ -85,6 +85,14 @@
       "version": "en"
     },
     {
+      "group": "Integrations",
+      "pages": [
+        "es/integrations/quickstart",
+        "es/integrations/make"
+      ],
+      "version": "es"
+    },
+    {
       "group": "Campaigns",
       "pages": [
         "en/campaigns/overview"
