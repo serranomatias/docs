@@ -1,0 +1,31 @@
+---
+title: 'Update Agent'
+openapi: 'PUT /v1/agents/{agentId}'
+---
+
+<Endpoint
+  method="PUT"
+  path="/v1/agents/{agentId}"
+  description="Update an existing agent's configuration"
+>
+  <RequestBody
+    description="Update agent configuration"
+    required
+    contentType="application/json"
+    schemaRef="#/components/schemas/UpdateAgent"
+  />
+  <ResponseFields>
+    <ResponseField
+      status="200"
+      description="Agent updated successfully"
+      contentType="application/json"
+      schemaRef="#/components/schemas/AgentResponse"
+    />
+    <ResponseField
+      status="400"
+      description="Unexpected error"
+      contentType="application/json"
+      schemaRef="#/components/schemas/Error"
+    />
+  </ResponseFields>
+</Endpoint>

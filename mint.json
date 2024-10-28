@@ -47,7 +47,7 @@
       "version": "en"
     },
     {
-      "group": "Get Started",
+      "group": "Comenzar",
       "pages": [
         "es/introduccion",
         "es/arranque-rapido",
@@ -70,9 +70,12 @@
     {
       "group": "Agentes",
       "pages": [
-        "es/agents/overview",
-        "es/agents/prompt-engineering-guide"
-
+        "es/agents/vision-general",
+        "es/agents/identidad",
+        "es/agents/instrucciones",
+        "es/agents/guia-ingenieria-prompts",
+        "es/agents/herramientas",
+        "es/agents/automatizaciones"
       ],
       "version": "es"
     },
@@ -98,6 +101,13 @@
         "en/campaigns/overview"
       ],
       "version": "en"
+    },
+    {
+      "group": "Campaigns",
+      "pages": [
+        "es/campaigns/overview"
+      ],
+      "version": "es"
     },
     {
       "group": "Widgets",
@@ -127,7 +137,9 @@
     {
       "group": "Agents",
       "pages": [
-        "api-reference/endpoint/get-agents"
+        "api-reference/endpoint/get-agent",
+        "api-reference/endpoint/list-agents",
+        "api-reference/endpoint/update-agent"
       ]
     },
     {
@@ -139,7 +151,6 @@
   ],
   "footerSocials": {
     "x": "https://x.com/contactshipai",
-    "linkedin": "https://www.linkedin.com/company/contactshipai",
-    "tiktok": "https://www.tiktok.com/contactshipai"
+    "linkedin": "https://www.linkedin.com/company/contactshipai"
   }
 }

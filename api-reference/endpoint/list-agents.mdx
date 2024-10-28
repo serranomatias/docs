@@ -1,5 +1,5 @@
 ---
-title: 'Get Agents'
+title: 'List Agents'
 openapi: 'GET /v1/agents'
 ---
 
@@ -11,7 +11,7 @@ openapi: 'GET /v1/agents'
   <RequestHeaders>
     <RequestHeader
       name="x-api-key"
-      description="x-api-key"
+      description="API key for authentication"
       required
       example="YOUR_API_KEY"
     />
@@ -19,7 +19,7 @@ openapi: 'GET /v1/agents'
   <ResponseFields>
     <ResponseField
       status="200"
-      description="Agents response"
+      description="Agents retrieved successfully"
       contentType="application/json"
       schemaRef="#/components/schemas/AgentsResponse"
     />

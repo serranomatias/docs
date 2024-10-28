@@ -1,0 +1,91 @@
+---
+title: 'Guía de Ingeniería de Prompts'
+description: 'Aprende a escribir prompts efectivos para tus agentes de IA'
+---
+
+## Guía de Ingeniería de Prompts
+
+La ingeniería de prompts puede ser la parte más importante de tu agente, ya que puede hacer o deshacer su efectividad.
+Esta guía compartirá nuestros hallazgos sobre cómo escribir prompts que los agentes puedan seguir de manera más confiable.
+
+Esta guía está en constante evolución y se actualizará a medida que aprendamos más.
+Si tienes sugerencias o comentarios, por favor háznos saber.
+
+Para ver algunos de los prompts que hemos creado, puedes consultar las plantillas en el Panel de Control (crea un nuevo agente y selecciona una plantilla para comenzar).
+
+### Prompts Seccionales
+
+Al escribir prompts, es importante dividir los prompts del sistema en secciones más pequeñas, donde cada sección tenga su
+enfoque, como identidad, estilo, directrices, tareas y objetivos. Esto tiene varios beneficios:
+
+- Reutilizables
+- Más fáciles de mantener
+- Más fáciles de entender para el modelo de lenguaje
+
+```md
+## Identidad
+Eres un asistente de IA amigable para Contactship AI. 
+....
+
+## Pautas de Estilo
+Sé conciso: ...
+Sé conversacional: ...
+...
+
+## Directrices de Respuesta
+Devuelve las fechas en su forma hablada: ...
+Haz hasta una pregunta a la vez: ...
+...
+
+
+## Tarea
+1. Saluda al usuario
+...
+```
+### Mejores Prácticas
+
+1. **Sé Específico**: Cuanto más específico seas en tus instrucciones, más preciso será el agente.
+   
+   Ejemplo:
+   ```
+   Malo: Responde preguntas sobre nuestro producto.
+   Bueno: Responde preguntas sobre nuestro software de gestión de proyectos, enfocándote en sus características de colaboración en tiempo real y seguimiento de tareas.
+   ```
+
+2. **Usa Ejemplos**: Proporciona ejemplos concretos de cómo quieres que el agente responda.
+   
+   Ejemplo:
+   ```
+   Cuando te pregunten sobre precios, responde así:
+   "Nuestro plan básico comienza en $29/mes. Para obtener un presupuesto personalizado basado en sus necesidades específicas, le recomiendo programar una llamada con nuestro equipo de ventas."
+   ```
+
+3. **Define el Tono**: Especifica el tono de voz que quieres que el agente use.
+   
+   Ejemplo:
+   ```
+   Mantén un tono profesional pero amigable. Usa un lenguaje accesible y evita la jerga técnica a menos que el cliente la use primero.
+   ```
+
+4. **Establece Límites**: Define claramente lo que el agente no debe hacer.
+   
+   Ejemplo:
+   ```
+   No proporciones información sobre los precios de los competidores. Si te preguntan, sugiere amablemente que se enfoquen en el valor que nuestro producto puede ofrecer.
+   ```
+
+5. **Estructura la Conversación**: Proporciona una estructura clara para la conversación.
+   
+   Ejemplo:
+   ```
+   1. Saluda al cliente y preséntate
+   2. Pregunta sobre sus necesidades actuales
+   3. Explica cómo nuestro producto puede ayudar
+   4. Responde a sus preguntas
+   5. Sugiere el siguiente paso (demo, prueba gratuita, etc.)
+   ```
+
+### Prueba y Refinamiento
+
+Recuerda que la ingeniería de prompts es un proceso iterativo. No temas experimentar y refinar tus prompts basándote en el rendimiento del agente y el feedback de los clientes. Monitorea regularmente las conversaciones y ajusta tus prompts según sea necesario para mejorar continuamente la efectividad de tu agente.
+

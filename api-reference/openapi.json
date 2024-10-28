@@ -223,19 +223,286 @@
             "schema": {
               "type": "string"
             },
-            "description": "x-api-key"
+            "description": "API key for authentication"
           }
         ],
         "responses": {
           "200": {
-            "description": "Agents response",
+            "description": "Agents retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Agent"
+                  "$ref": "#/components/schemas/AgentsResponse"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "data": [
+                    {
+                      "id": "337a9eeb-3e16-4cc5-94ec-25fa159eb57a",
+                      "name": "Sales Representative Agent",
+                      "person_name": "Sarah Johnson",
+                      "language": "en-US",
+                      "webhook_url": "https://webhook.example.com/sales-notifications",
+                      "conversation_purpose": "Qualify leads and schedule product demos",
+                      "prompt": "You are Sarah, a professional sales representative. Your goal is to understand potential customers' needs and schedule product demonstrations when appropriate.",
+                      "volume": 1.2,
+                      "voice_id": "custom_voice_sarah_123",
+                      "interruption_sensitivity": 0.8,
+                      "ambient_sound": "call-center",
+                      "voice_speed": 1.1,
+                      "voice_temperature": 0.9,
+                      "post_call_analysis_data": [
+                        {
+                          "name": "lead_score",
+                          "type": "number",
+                          "description": "Lead qualification score (1-100)"
+                        },
+                        {
+                          "name": "demo_scheduled",
+                          "type": "boolean",
+                          "description": "Whether a product demo was scheduled"
+                        }
+                      ],
+                      "tools": [
+                        {
+                          "name": "schedule_demo",
+                          "type": "function",
+                          "description": "Schedule a product demonstration"
+                        }
+                      ],
+                      "created_at": "2024-01-15T10:30:00.000Z",
+                      "updated_at": "2024-01-15T15:45:00.000Z"
+                    },
+                    {
+                      "id": "b39d48c2-7340-446d-b08f-0e3204bc7cb4",
+                      "name": "Customer Support Agent",
+                      "person_name": "Michael Chen",
+                      "language": "multi",
+                      "webhook_url": "https://webhook.example.com/support-tickets",
+                      "conversation_purpose": "Provide technical support and resolve customer issues",
+                      "prompt": "You are Michael, a technical support specialist. Help customers resolve their issues efficiently and create support tickets when necessary.",
+                      "volume": 1.0,
+                      "voice_id": "custom_voice_michael_456",
+                      "interruption_sensitivity": 0.7,
+                      "ambient_sound": "call-center",
+                      "voice_speed": 1.0,
+                      "voice_temperature": 0.8,
+                      "post_call_analysis_data": [
+                        {
+                          "name": "issue_resolved",
+                          "type": "boolean",
+                          "description": "Whether the customer's issue was resolved"
+                        },
+                        {
+                          "name": "satisfaction_score",
+                          "type": "number",
+                          "description": "Customer satisfaction rating (1-10)"
+                        }
+                      ],
+                      "tools": [
+                        {
+                          "name": "create_ticket",
+                          "type": "function",
+                          "description": "Create a support ticket"
+                        },
+                        {
+                          "name": "search_knowledge_base",
+                          "type": "function",
+                          "description": "Search technical documentation"
+                        }
+                      ],
+                      "created_at": "2024-02-20T08:15:00.000Z",
+                      "updated_at": "2024-02-20T14:30:00.000Z"
+                    },
+                    {
+                      "id": "209ed663-0dcf-41ba-aac8-9450303de1e2",
+                      "name": "Appointment Scheduler",
+                      "person_name": "Emma Wilson",
+                      "language": "en-GB",
+                      "webhook_url": "https://webhook.example.com/appointments",
+                      "conversation_purpose": "Schedule and manage medical appointments",
+                      "prompt": "You are Emma, a medical office coordinator. Help patients schedule, reschedule, or cancel their appointments efficiently.",
+                      "volume": 0.9,
+                      "voice_id": "custom_voice_emma_789",
+                      "interruption_sensitivity": 0.6,
+                      "ambient_sound": "convention-hall",
+                      "voice_speed": 0.95,
+                      "voice_temperature": 0.7,
+                      "post_call_analysis_data": [
+                        {
+                          "name": "appointment_scheduled",
+                          "type": "boolean",
+                          "description": "Whether an appointment was scheduled"
+                        },
+                        {
+                          "name": "preferred_time_available",
+                          "type": "boolean",
+                          "description": "Whether patient's preferred time slot was available"
+                        }
+                      ],
+                      "tools": [
+                        {
+                          "name": "check_availability",
+                          "type": "function",
+                          "description": "Check calendar availability"
+                        },
+                        {
+                          "name": "schedule_appointment",
+                          "type": "function",
+                          "description": "Schedule a new appointment"
+                        }
+                      ],
+                      "created_at": "2024-03-10T09:45:00.000Z",
+                      "updated_at": "2024-03-10T16:20:00.000Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agents/{agentId}": {
+      "get": {
+        "description": "Get a specific agent by ID",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          },
+          {
+            "name": "agentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the agent to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentResponse"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "data": {
+                    "id": "337a9eeb-3e16-4cc5-94ec-25fa159eb57a",
+                    "name": "Enterprise Sales Agent",
+                    "person_name": "James Wilson",
+                    "language": "en-US",
+                    "webhook_url": "https://webhook.example.com/enterprise-sales",
+                    "conversation_purpose": "Qualify enterprise leads and schedule product demonstrations",
+                    "prompt": "You are James Wilson, an experienced enterprise sales representative. Your goal is to understand potential customers' business needs and demonstrate how our solutions can help them scale. Focus on building rapport and identifying key decision-makers.\n\nKey points to remember:\n- Ask about their current business challenges\n- Explain our enterprise solutions clearly\n- Highlight relevant case studies\n- Schedule demos with qualified leads\n\nMaintain a professional yet friendly tone, and always follow up on specific industry requirements.",
+                    "volume": 1.1,
+                    "voice_id": "custom_voice_james_enterprise",
+                    "interruption_sensitivity": 0.85,
+                    "ambient_sound": "office",
+                    "voice_speed": 0.95,
+                    "voice_temperature": 0.7,
+                    "post_call_analysis_data": [
+                      {
+                        "name": "company_size",
+                        "type": "string",
+                        "description": "Size category of the prospect company"
+                      },
+                      {
+                        "name": "budget_range",
+                        "type": "string",
+                        "description": "Estimated budget range for the solution"
+                      }
+                    ],
+                    "tools": [
+                      {
+                        "name": "schedule_enterprise_demo",
+                        "type": "function",
+                        "description": "Schedule a product demonstration for enterprise clients"
+                      },
+                      {
+                        "name": "access_case_studies",
+                        "type": "function",
+                        "description": "Retrieve relevant case studies by industry"
+                      }
+                    ],
+                    "created_at": "2024-01-15T10:30:00.000Z",
+                    "updated_at": "2024-03-20T15:45:00.000Z"
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update an existing agent's configuration",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          },
+          {
+            "name": "agentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the agent to update"
+          }
+        ],
+        "requestBody": {
+          "description": "Update agent configuration",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAgent"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Agent updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentResponse"
                 }
               }
             }
@@ -390,12 +657,11 @@
           },
           "name": {
             "type": "string",
-            "description": "The name of the agent"
+            "description": "The name of the agent in our system"
           },
-          "created_at": {
+          "person_name": {
             "type": "string",
-            "format": "date-time",
-            "description": "The creation time of the agent"
+            "description": "The name of the agent in the call"
           },
           "language": {
             "type": "string",
@@ -415,6 +681,57 @@
             "type": "string",
             "nullable": true,
             "description": "The prompt for the agent"
+          },
+          "volume": {
+            "type": "number",
+            "description": "Volume level for the voice"
+          },
+          "voice_id": {
+            "type": "string",
+            "description": "The ID of the voice to use"
+          },
+          "interruption_sensitivity": {
+            "type": "number",
+            "description": "Sensitivity level for interruptions (0-1)"
+          },
+          "ambient_sound": {
+            "type": "string",
+            "nullable": true,
+            "description": "Background sound configuration"
+          },
+          "voice_speed": {
+            "type": "number",
+            "description": "Speed of the voice"
+          },
+          "voice_temperature": {
+            "type": "number",
+            "description": "Temperature parameter for voice generation"
+          },
+          "post_call_analysis_data": {
+            "type": "array",
+            "nullable": true,
+            "description": "Configuration for post-call analysis",
+            "items": {
+              "type": "object"
+            }
+          },
+          "tools": {
+            "type": "array",
+            "nullable": true,
+            "description": "List of tools available to the agent",
+            "items": {
+              "type": "object"
+            }
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The creation time of the agent"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The last update time of the agent"
           }
         }
       },
@@ -423,7 +740,7 @@
         "properties": {
           "statusCode": {
             "type": "integer",
-            "description": "The status code of the response"
+            "description": "HTTP status code"
           },
           "data": {
             "type": "array",
@@ -443,6 +760,97 @@
           },
           "message": {
             "type": "string"
+          }
+        }
+      },
+      "UpdateAgent": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the agent in our system. Only used for your own reference."
+          },
+          "person_name": {
+            "type": "string",
+            "description": "The name of the agent in the call."
+          },
+          "voice_id": {
+            "type": "string",
+            "description": "The ID of the voice to use `[Still working on this]`"
+          },
+          "language": {
+            "type": "string",
+            "description": "Specifies what language (and dialect) the speech recognition will operate in. For instance, selecting `en-GB` optimizes speech recognition for British English. If unset, will use default value `en-US`. Select `multi` for multilingual support, currently this supports Spanish and English.\n\n Available options: `en-US`, `en-IN`, `en-GB`, `de-DE`, `es-ES`, `es-419`, `hi-IN`, `ja-JP`, `pt-PT`, `pt-BR`, `fr-FR`, `zh-CN`, `ru-RU`, `it-IT`, `ko-KR`, `nl-NL`, `pl-PL`, `tr-TR`, `vi-VN`, `multi`"
+          },
+          "ambient_sound": {
+            "type": "string",
+            "description": "If set, will add ambient environment sound to the call to make experience more realistic. Currently supports the following options:\n\n- `coffee-shop`: Coffee shop ambience with people chatting in background. [Listen to Ambience](https://utfs.io/f/lq9uThRNnWbYbOxwpTTmk6RGMQWPxJlZeoXwymSYTDLB9qfA)\n\n- `convention-hall`: Convention hall ambience, with some echo and people chatting in background. [Listen to Ambience](https://utfs.io/f/lq9uThRNnWbY50taIawGGN1VRlWetZd205m9uED4x63UHJiI)\n\n- `summer-outdoor`: Summer outdoor ambience with cicada chirping. [Listen to Ambience](https://utfs.io/f/lq9uThRNnWbY50URDWTGGN1VRlWetZd205m9uED4x63UHJiI)\n\n- `mountain-outdoor`: Mountain outdoor ambience with birds singing. [Listen to Ambience](https://utfs.io/f/lq9uThRNnWbY18Wj5vPoRw9qLuYsGjAUyWQzdrNlZ1cp640h)\n\n- `static-noise`: Constant static noise. [Listen to Ambience](https://utfs.io/f/lq9uThRNnWbYehXy6HiLMvRztpy4fneJQrq5gXkBCH8oxl2N)\n\n- `call-center`: Call center work noise. [Listen to Ambience](https://utfs.io/f/lq9uThRNnWbYNyG8A23IUXjuxqE9skNeTvFgdtbWhG26nV5c)\n\nSet to null to remove ambient sound from this agent.\n\nAvailable options: coffee-shop, convention-hall, summer-outdoor, mountain-outdoor, static-noise, call-center",
+            "enum": [
+              "coffee-shop",
+              "convention-hall",
+              "summer-outdoor",
+              "mountain-outdoor",
+              "static-noise",
+              "call-center",
+              null
+            ],
+            "nullable": true
+          },
+          "interruption_sensitivity": {
+            "type": "number",
+            "description": "Controls how sensitive the agent is to user interruptions. Value ranging from `[0.1,1]`. Lower value means it will take longer / more words for user to interrupt agent, while higher value means it's easier for user to interrupt agent. \n\nIf unset, default value 1 will apply. When this is set to `0.1`, agent would never be interrupted."
+          },
+          "webhook_url": {
+            "type": "string",
+            "description": "URL for webhook notifications. They will be sent when the agent finishes a call, from API calls, Inbound calls, Campaigns calls or Widgets calls."
+          },
+          "conversation_purpose": {
+            "type": "string",
+            "description": "The purpose of conversations for this agent"
+          },
+          "prompt": {
+            "type": "string",
+            "description": "The prompt template for the agent"
+          },
+          "voice_speed": {
+            "type": "number",
+            "description": "Controls speed of voice. Value ranging from `[0.5,2]`. Lower value means slower speech, while higher value means faster speech rate. If unset, default value 1 will apply."
+          },
+          "voice_temperature": {
+            "type": "number",
+            "description": "Controls how stable the voice is. Value ranging from `[0,2]`. Lower value means more stable, and higher value means more variant speech generation. If unset, default value 1 will apply."
+          },
+          "volume": {
+            "type": "number",
+            "description": "If set, will control the volume of the agent. Value ranging from `[0,2]`. Lower value means quieter agent speech, while higher value means louder agent speech. If unset, default value 1 will apply."
+          },
+          "post_call_analysis_data": {
+            "type": "array",
+            "description": "Configuration for post-call analysis",
+            "items": {
+              "type": "object",
+              "nullable": true
+            }
+          },
+          "tools": {
+            "type": "array",
+            "description": "List of tools available to the agent",
+            "items": {
+              "type": "object",
+              "nullable": true
+            }
+          }
+        }
+      },
+      "AgentResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "HTTP status code"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Agent"
           }
         }
       }
