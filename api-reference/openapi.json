@@ -503,6 +503,75 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AgentResponse"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "data": {
+                    "id": "337a9eeb-3e16-4cc5-94ec-25fa159eb57a",
+                    "name": "Technical Support Specialist",
+                    "person_name": "Emily Parker",
+                    "language": "en-US",
+                    "webhook_url": "https://webhook.example.com/support-notifications",
+                    "conversation_purpose": "Provide technical support and troubleshooting assistance to customers",
+                    "prompt": "You are Emily Parker, an experienced technical support specialist. Your role is to help customers resolve technical issues efficiently and professionally.\n\nGuidelines:\n- Start by understanding the customer's issue clearly\n- Provide step-by-step solutions in a clear, natural way\n- Use simple language, avoiding technical jargon unless necessary\n- Create support tickets for complex issues\n- Follow up to ensure the solution worked\n\nMaintain a patient and helpful tone throughout the conversation.",
+                    "volume": 1.1,
+                    "voice_id": "custom_voice_emily_tech",
+                    "interruption_sensitivity": 0.7,
+                    "ambient_sound": "call-center",
+                    "voice_speed": 1.0,
+                    "voice_temperature": 0.8,
+                    "post_call_analysis_data": [
+                      {
+                        "name": "issue_resolved",
+                        "type": "boolean",
+                        "description": "Whether the technical issue was resolved"
+                      },
+                      {
+                        "name": "resolution_time",
+                        "type": "number",
+                        "description": "Time taken to resolve the issue (minutes)"
+                      },
+                      {
+                        "name": "ticket_created",
+                        "type": "boolean",
+                        "description": "Whether a support ticket was created"
+                      },
+                      {
+                        "name": "customer_satisfaction",
+                        "type": "number",
+                        "description": "Customer satisfaction score (1-10)"
+                      }
+                    ],
+                    "tools": [
+                      {
+                        "name": "create_ticket",
+                        "type": "function",
+                        "description": "Create a support ticket for unresolved issues"
+                      },
+                      {
+                        "name": "search_knowledge_base",
+                        "type": "function",
+                        "description": "Search technical documentation for solutions",
+                        "parameters": {
+                          "type": "object",
+                          "required": ["query"],
+                          "properties": {
+                            "query": {
+                              "type": "string",
+                              "description": "Search query for technical documentation"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "name": "schedule_followup",
+                        "type": "function",
+                        "description": "Schedule a follow-up call for complex issues"
+                      }
+                    ],
+                    "created_at": "2024-01-15T10:30:00.000Z",
+                    "updated_at": "2024-03-20T15:45:00.000Z"
+                  }
                 }
               }
             }
