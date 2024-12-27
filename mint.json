@@ -56,6 +56,15 @@
       "version": "es"
     },
     {
+      "group": "Platform",
+      "pages": [
+        "en/platform/members",
+        "en/platform/my-numbers",
+        "en/platform/credits"
+      ],
+      "version": "en"
+    },
+    {
       "group": "Agents",
       "pages": [
         "en/agents/overview",
@@ -68,6 +77,15 @@
       "version": "en"
     },
     {
+      "group": "Plataforma",
+      "pages": [
+        "es/plataforma/miembros",
+        "es/plataforma/mis-numeros",
+        "es/plataforma/creditos"
+      ],
+      "version": "es"
+    },
+    {
       "group": "Agentes",
       "pages": [
         "es/agents/vision-general",
@@ -75,7 +93,8 @@
         "es/agents/instrucciones",
         "es/agents/guia-ingenieria-prompts",
         "es/agents/herramientas",
-        "es/agents/automatizaciones"
+        "es/agents/automatizaciones",
+        "es/agents/buenas-practicas"
       ],
       "version": "es"
     },

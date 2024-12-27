@@ -1,0 +1,87 @@
+---
+title: 'Buenas Prácticas'
+description: '🔄 Esta es una guia con recomendaciones y tips para mejorar las instrucciones de tus Agentes IA.'
+---
+
+
+
+### Tips
+
+#### 👋 Saludo inicial
+
+- Cuando saluda al principio con los signos de exclamacion se toma una pausa que no es buena. En vez de "¡Hola!" usar "Hola" por ejemplo y asi en el resto de casos.
+- Cuando los Agentes IA son nutridos con datos externos y se quiere personalizar el saludo, es recomendable manejar el caso donde no llega la informacion externa y en su defecto usar un saludo generico.
+Por ejemplo:
+
+```json
+## Tarea
+1. Saludar al contacto por su primer nombre.
+- Si no se encuentra el nombre del contacto o no parece ser un nombre, saludar con un saludo generico.
+```
+
+
+#### 🫵 Manejo de conversaciones
+
+- Los agentes IA suelen utilizar enumeraciones o formatos de lista para responder a las preguntas. Lo cual genera una respuesta larga y poco natural en Agentes IA de Voz. 
+Para evitar esto, es recomendable agregar esta aclaracion en las instrucciones:
+
+<Accordion title="Ejemplo de Instrucciones">
+  ```json
+"- Responde siempre de manera fluida, evitando enumeraciones o listas.
+ Si debes explicar pasos o describir elementos,
+ intégralos en una narrativa clara, 
+ como si estuvieras contando una historia o conversando de manera natural con una persona.
+Mantén el tono cálido y conversacional, utilizando conectores como 'primero', 'luego' o 'después', en lugar de números o puntos.
+   Enfócate en que la respuesta suene como una conversación espontánea, no como un manual técnico."
+```
+</Accordion>
+
+
+- Para evitar que un asistente de IA repita o parafrasee innecesariamente lo que el usuario ha dicho, puedes ajustar el prompt de la siguiente manera:
+<Tabs>
+  <Tab title="Respuesta Normal">
+ Lo que hace típicamente:
+ ```
+Usuario: ¿Cómo puedo recuperar mi contraseña?
+IA: Claro, puedo ayudarte con eso. ¿Quieres saber cómo recuperar tu contraseña?
+IA: Solo necesitas ingresar a la página, seleccionar "Recuperar contraseña" y seguir las instrucciones.
+```
+  </Tab>
+  <Tab title="Respuesta Mejorada">
+  💪 Respuesta mejorada con la instruccion:
+  ```
+Usuario: ¿Cómo puedo recuperar mi contraseña?
+IA: Ingresa a la página, selecciona "Recuperar contraseña" y sigue las instrucciones. Es muy sencillo.
+```
+  </Tab>
+  <Tab title="Ejemplo de Instrucciones">
+    💪 Ejemplo de instrucciones:
+    ```json
+   - No repitas ni parafrasees lo que el usuario ha dicho antes de responder. Responde directamente de manera natural y fluida, como si estuvieras conversando con alguien en tiempo real. Enfócate en avanzar la conversación, proporcionando la información solicitada o continuando con el tema sin redundancias innecesarias. Mantén un tono cálido, humano y directo.
+    ```
+  </Tab>
+  <Tab title="Ejemplo adicional">
+    Si necesitas confirmar información o manejar incertidumbre, indícale al agente que lo haga de forma integrada, sin parafraseo literal:
+    ```json
+   - Si necesitas confirmar información, hazlo directamente y sin parafrasear lo que el usuario ha dicho. Por ejemplo, en lugar de '¿Dices que quieres recuperar tu contraseña?', podrías decir '¿Es para tu cuenta principal?' o integrar la duda directamente en la respuesta, como 'Te ayudo con eso. ¿Es para la cuenta principal o secundaria?
+    ```
+  </Tab>
+</Tabs>
+
+
+- Si el agente tiene problemas al leer un correo/email, puedes agregar esta instruccion:
+<Accordion title="Ejemplo de Instrucciones">
+Prompt:
+"Cuando leas un correo electrónico, separa las palabras, números y dominios con pausas cortas y mantén un ritmo constante para que sea fácil de entender. Por ejemplo, 'nombre punto apellido arroba dominio punto com'. Evita deletrear salvo que el usuario lo solicite o el correo sea muy complejo."
+
+Ejemplo práctico:
+
+Correo: nombre.apellido@dominio.com
+
+Lectura natural: "nombre punto apellido arroba dominio punto com"
+
+Correo: contacto123@empresa.net
+
+Lectura natural: "contacto uno dos tres arroba empresa punto net"
+</Accordion>
+
