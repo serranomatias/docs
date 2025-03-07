@@ -36,6 +36,9 @@
     }
   ],
   "versions": ["en", "es"],
+  "api": {
+    "baseUrl": "https://api.contactship.ai"
+  },
   "navigation": [
     {
       "group": "Get Started",
@@ -164,7 +167,13 @@
     {
       "group": "Contacts",
       "pages": [
-        "api-reference/endpoint/get-contacts"
+        "api-reference/endpoint/get-contacts",
+        "api-reference/endpoint/create-contact",
+        "api-reference/endpoint/get-contact-by-identifier",
+        "api-reference/endpoint/get-contact-call-history",
+        "api-reference/endpoint/update-contact",
+        "api-reference/endpoint/delete-contact",
+        "api-reference/endpoint/get-contact-comments"
       ]
     }
   ],

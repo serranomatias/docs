@@ -1,0 +1,281 @@
+---
+title: 'Get Contact Call History'
+api: 'GET /v1/contacts/{contactId}/calls'
+description: 'Retrieve the complete call history for a specific contact'
+---
+
+This endpoint allows you to retrieve the complete call history for a specific contact, including incoming and outgoing calls, call duration, timestamps, and call status information. This data is useful for tracking communications, analyzing engagement patterns, and maintaining a complete interaction record.
+
+## Use Cases
+
+- Review all previous calls with a contact
+- Track frequency and duration of communications
+- Analyze communication patterns for customer engagement
+- Provide customer service representatives with historical context
+- Generate reports on communication frequency and outcomes
+
+## Path Parameters
+
+<ParamField path="contactId" type="string" required>
+  The unique identifier of the contact whose call history you want to retrieve. This is a UUID string that was generated when the contact was created.
+</ParamField>
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication. You can find this in your dashboard under API settings.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="start_date" type="string">
+  Filter calls that occurred on or after this date (ISO 8601 format, e.g., 2023-01-01). If not specified, returns all calls from the beginning.
+</ParamField>
+
+<ParamField query="end_date" type="string">
+  Filter calls that occurred on or before this date (ISO 8601 format, e.g., 2023-12-31). If not specified, returns all calls up to the current date.
+</ParamField>
+
+<ParamField query="direction" type="string">
+  Filter calls by direction. Possible values: `inbound`, `outbound`. If not specified, returns both inbound and outbound calls.
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter calls by status. Possible values: `answered`, `missed`, `rejected`, `busy`, `failed`. If not specified, returns calls with any status.
+</ParamField>
+
+## Response
+
+<ResponseField name="status code" type="number">
+  200 on success
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  Array of call records for the contact
+  <Expandable title="Call record object">
+    <ResponseField name="id" type="string">
+      The unique identifier of the call record (UUID format)
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      The timestamp when the call record was created (ISO 8601 format)
+    </ResponseField>
+    <ResponseField name="call_time" type="string">
+      The timestamp when the call occurred (ISO 8601 format)
+    </ResponseField>
+    <ResponseField name="duration" type="number">
+      The duration of the call in seconds
+    </ResponseField>
+    <ResponseField name="direction" type="string">
+      The direction of the call (`inbound` or `outbound`)
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      The status of the call (`answered`, `missed`, `rejected`, `busy`, or `failed`)
+    </ResponseField>
+    <ResponseField name="notes" type="string">
+      Any notes associated with the call
+    </ResponseField>
+    <ResponseField name="recording_url" type="string">
+      URL to the call recording, if available (null if no recording exists)
+    </ResponseField>
+    <ResponseField name="contact_id" type="string">
+      The ID of the contact associated with this call
+    </ResponseField>
+    <ResponseField name="user_id" type="string">
+      The ID of the user who made or received the call
+    </ResponseField>
+    <ResponseField name="organization_id" type="string">
+      The ID of the organization
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Error Codes
+
+- `400 Bad Request` - Invalid query parameters
+- `401 Unauthorized` - Invalid or missing API key
+- `404 Not Found` - Contact not found
+- `500 Internal Server Error` - Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL Example (All Calls)
+# Retrieve all call history for a contact
+curl -X GET "https://api.contactship.ai/v1/contacts/c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6/calls" \
+  -H "x-api-key: your-api-key"
+```
+
+```bash cURL Example (Filtered Calls)
+# Retrieve calls with specific filters
+curl -X GET "https://api.contactship.ai/v1/contacts/c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6/calls?start_date=2023-01-01&direction=outbound&status=answered" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript Example
+// Using Fetch API to get call history for a contact
+const getContactCallHistory = async (contactId, queryParams = {}) => {
+  try {
+    // Build query string from parameters
+    const queryString = Object.keys(queryParams)
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
+      .join('&');
+    
+    const url = `https://api.contactship.ai/v1/contacts/${contactId}/calls${queryString ? `?${queryString}` : ''}`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'x-api-key': 'your-api-key'
+      }
+    });
+    
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.error('Contact not found');
+        return null;
+      }
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    
+    const callHistory = await response.json();
+    console.log(`Retrieved ${callHistory.length} call records`);
+    return callHistory;
+  } catch (error) {
+    console.error('Error fetching call history:', error);
+  }
+};
+
+// Example usage with filters
+const contactId = 'c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6';
+const queryParams = {
+  start_date: '2023-01-01',
+  end_date: '2023-12-31',
+  direction: 'outbound',
+  status: 'answered'
+};
+
+getContactCallHistory(contactId, queryParams);
+```
+
+```python Python Example
+import requests
+from datetime import datetime, timedelta
+
+# Replace with your actual API key
+api_key = "your-api-key"
+
+# Base URL for the API
+base_url = "https://api.contactship.ai"
+
+# Contact ID to retrieve call history for
+contact_id = "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6"
+
+# Headers
+headers = {
+    "x-api-key": api_key
+}
+
+# Optional: Add query parameters for filtering
+# Get calls from the last 30 days
+thirty_days_ago = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+today = datetime.now().strftime('%Y-%m-%d')
+
+params = {
+    "start_date": thirty_days_ago,
+    "end_date": today,
+    # "direction": "outbound",  # Optional: Filter by call direction
+    # "status": "answered"      # Optional: Filter by call status
+}
+
+# Make the GET request
+response = requests.get(
+    f"{base_url}/v1/contacts/{contact_id}/calls", 
+    headers=headers,
+    params=params
+)
+
+# Check if the request was successful
+if response.status_code == 200:
+    calls = response.json()
+    print(f"Found {len(calls)} call records")
+    
+    # Calculate some statistics
+    total_duration = sum(call.get('duration', 0) for call in calls)
+    outbound_calls = sum(1 for call in calls if call.get('direction') == 'outbound')
+    inbound_calls = sum(1 for call in calls if call.get('direction') == 'inbound')
+    
+    print(f"Total call duration: {total_duration} seconds")
+    print(f"Outbound calls: {outbound_calls}")
+    print(f"Inbound calls: {inbound_calls}")
+    
+    # Print the most recent calls
+    print("\nMost recent calls:")
+    sorted_calls = sorted(calls, key=lambda x: x.get('call_time', ''), reverse=True)
+    for call in sorted_calls[:5]:  # Show 5 most recent calls
+        call_time = call.get('call_time', 'Unknown')
+        direction = call.get('direction', 'Unknown')
+        status = call.get('status', 'Unknown')
+        duration = call.get('duration', 0)
+        print(f"  {call_time}: {direction.capitalize()} call, {status}, {duration} seconds")
+        
+elif response.status_code == 404:
+    print("Error: Contact not found")
+else:
+    print(f"Error: {response.status_code}")
+    print(response.text)
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+[
+  {
+    "id": "d5e6f7g8-h9i0-j1k2-l3m4-n5o6p7q8r9s0",
+    "created_at": "2023-03-15T14:35:00Z",
+    "call_time": "2023-03-15T14:30:00Z",
+    "duration": 245,
+    "direction": "outbound",
+    "status": "answered",
+    "notes": "Cliente interesado en el plan premium, solicita demostración",
+    "recording_url": "https://api.contactship.ai/recordings/d5e6f7g8-h9i0-j1k2-l3m4-n5o6p7q8r9s0.mp3",
+    "contact_id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
+    "user_id": "u1v2w3x4-y5z6-a7b8-c9d0-e1f2g3h4i5j6",
+    "organization_id": "org123456"
+  },
+  {
+    "id": "f7g8h9i0-j1k2-l3m4-n5o6-p7q8r9s0t1u2",
+    "created_at": "2023-02-20T10:15:00Z",
+    "call_time": "2023-02-20T10:10:00Z",
+    "duration": 180,
+    "direction": "inbound",
+    "status": "answered",
+    "notes": "Cliente pidió información sobre precios",
+    "recording_url": "https://api.contactship.ai/recordings/f7g8h9i0-j1k2-l3m4-n5o6-p7q8r9s0t1u2.mp3",
+    "contact_id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
+    "user_id": "u1v2w3x4-y5z6-a7b8-c9d0-e1f2g3h4i5j6",
+    "organization_id": "org123456"
+  },
+  {
+    "id": "h9i0j1k2-l3m4-n5o6-p7q8-r9s0t1u2v3w4",
+    "created_at": "2023-01-10T15:45:00Z",
+    "call_time": "2023-01-10T15:40:00Z",
+    "duration": 0,
+    "direction": "outbound",
+    "status": "missed",
+    "notes": "No contestó, intentar más tarde",
+    "recording_url": null,
+    "contact_id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
+    "user_id": "u1v2w3x4-y5z6-a7b8-c9d0-e1f2g3h4i5j6",
+    "organization_id": "org123456"
+  }
+]
+```
+</ResponseExample>
+
+## Notes and Best Practices
+
+- Use date filtering to narrow down results for contacts with extensive call histories
+- Store call IDs if you need to reference specific calls in the future
+- Consider implementing caching for frequently accessed call histories
+- Use the call history data to identify patterns in customer communication
+- Monitor call durations and frequencies to optimize customer engagement strategies 

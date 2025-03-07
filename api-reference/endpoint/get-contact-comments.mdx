@@ -1,0 +1,240 @@
+---
+title: 'Get Contact Comments'
+api: 'GET /v1/contacts/{contactId}/comments'
+description: 'Retrieve all comments associated with a specific contact'
+---
+
+This endpoint allows you to retrieve all comments and notes that have been added to a specific contact. Comments provide historical context about interactions with the contact and can be helpful for team collaboration.
+
+## Use Cases
+
+- Review the conversation history with a contact
+- Prepare for a call or meeting by reviewing previous interactions
+- Track the progress of a relationship with a contact
+- Ensure team members are aware of important notes about the contact
+- Generate reports on engagement history
+
+## Path Parameters
+
+<ParamField path="contactId" type="string" required>
+  The unique identifier of the contact whose comments you want to retrieve. This is a UUID string that was generated when the contact was created.
+</ParamField>
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication. You can find this in your dashboard under API settings.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="limit" type="number">
+  The maximum number of comments to return. Defaults to 50, maximum allowed is 100.
+</ParamField>
+
+<ParamField query="offset" type="number">
+  The number of comments to skip before starting to return results. Used for pagination. Defaults to 0.
+</ParamField>
+
+<ParamField query="sort" type="string">
+  The sort order for the comments. Possible values: `newest` (default), `oldest`.
+</ParamField>
+
+## Response
+
+<ResponseField name="status code" type="number">
+  200 on success
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  Array of comment objects
+  <Expandable title="Comment object">
+    <ResponseField name="id" type="string">
+      The unique identifier of the comment (UUID format)
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      The timestamp when the comment was created (ISO 8601 format)
+    </ResponseField>
+    <ResponseField name="updated_at" type="string">
+      The timestamp when the comment was last updated (ISO 8601 format)
+    </ResponseField>
+    <ResponseField name="content" type="string">
+      The content of the comment
+    </ResponseField>
+    <ResponseField name="user_id" type="string">
+      The ID of the user who created the comment
+    </ResponseField>
+    <ResponseField name="user_name" type="string">
+      The name of the user who created the comment
+    </ResponseField>
+    <ResponseField name="contact_id" type="string">
+      The ID of the contact this comment is associated with
+    </ResponseField>
+    <ResponseField name="organization_id" type="string">
+      The ID of the organization
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Error Codes
+
+- `400 Bad Request` - Invalid request parameters
+- `401 Unauthorized` - Invalid or missing API key
+- `404 Not Found` - Contact not found
+- `500 Internal Server Error` - Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL Example
+# Retrieve all comments for a specific contact
+curl -X GET "https://api.contactship.ai/v1/contacts/c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6/comments" \
+  -H "x-api-key: your-api-key"
+```
+
+```bash cURL Example with Pagination
+# Retrieve comments with pagination and sorting
+curl -X GET "https://api.contactship.ai/v1/contacts/c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6/comments?limit=10&offset=0&sort=oldest" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript Example
+// Using Fetch API to get a contact's comments
+const getContactComments = async (contactId, options = {}) => {
+  try {
+    // Build query string from options
+    const queryParams = new URLSearchParams();
+    if (options.limit) queryParams.append('limit', options.limit);
+    if (options.offset) queryParams.append('offset', options.offset);
+    if (options.sort) queryParams.append('sort', options.sort);
+    
+    const queryString = queryParams.toString();
+    const url = `https://api.contactship.ai/v1/contacts/${contactId}/comments${queryString ? `?${queryString}` : ''}`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'x-api-key': 'your-api-key'
+      }
+    });
+    
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.error('Contact not found');
+        return null;
+      }
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    
+    const comments = await response.json();
+    console.log(`Retrieved ${comments.length} comments`);
+    return comments;
+  } catch (error) {
+    console.error('Error fetching contact comments:', error);
+  }
+};
+
+// Call the function with a contact ID and options
+const contactId = 'c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6';
+const options = {
+  limit: 20,
+  sort: 'newest'
+};
+
+getContactComments(contactId, options).then(comments => {
+  if (comments) {
+    // Process the comments, e.g., display them in your UI
+    comments.forEach(comment => {
+      console.log(`${comment.created_at} - ${comment.user_name}: ${comment.content}`);
+    });
+  }
+});
+```
+
+```python Python Example
+import requests
+
+# Replace with your actual API key
+api_key = "your-api-key"
+
+# Base URL for the API
+base_url = "https://api.contactship.ai"
+
+# Contact ID to retrieve comments for
+contact_id = "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6"
+
+# Headers
+headers = {
+    "x-api-key": api_key
+}
+
+# Optional: Add query parameters
+params = {
+    "limit": 25,  # Optional: Number of comments to return
+    "offset": 0,  # Optional: Pagination offset
+    "sort": "newest"  # Optional: Sort order (newest or oldest)
+}
+
+# Make the GET request
+response = requests.get(
+    f"{base_url}/v1/contacts/{contact_id}/comments", 
+    headers=headers,
+    params=params
+)
+
+# Check if the request was successful
+if response.status_code == 200:
+    comments = response.json()
+    print(f"Found {len(comments)} comments")
+    
+    # Print comments in a readable format
+    for comment in comments:
+        created_at = comment.get('created_at', 'Unknown date')
+        user_name = comment.get('user_name', 'Unknown user')
+        content = comment.get('content', '')
+        print(f"{created_at} - {user_name}:")
+        print(f"  {content}")
+        print("-" * 50)  # Separator between comments
+        
+elif response.status_code == 404:
+    print("Error: Contact not found")
+else:
+    print(f"Error: {response.status_code}")
+    print(response.text)
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+[
+  {
+    "id": "d5e6f7g8-h9i0-j1k2-l3m4-n5o6p7q8r9s0",
+    "created_at": "2023-03-10T09:15:00Z",
+    "updated_at": "2023-03-10T09:15:00Z",
+    "content": "Cliente interesado en el plan premium. Programar seguimiento para la próxima semana.",
+    "user_id": "u1v2w3x4-y5z6-a7b8-c9d0-e1f2g3h4i5j6",
+    "user_name": "Ana García",
+    "contact_id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
+    "organization_id": "org123456"
+  },
+  {
+    "id": "f7g8h9i0-j1k2-l3m4-n5o6-p7q8r9s0t1u2",
+    "created_at": "2023-02-20T14:30:00Z",
+    "updated_at": "2023-02-21T10:45:00Z",
+    "content": "Primera llamada completada. El cliente solicitó más información sobre los precios.",
+    "user_id": "v2w3x4y5-z6a7-b8c9-d0e1-f2g3h4i5j6k7",
+    "user_name": "Carlos Rodríguez",
+    "contact_id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
+    "organization_id": "org123456"
+  }
+]
+```
+</ResponseExample>
+
+## Notes and Best Practices
+
+- Use the `sort` parameter to display comments in the most useful order for your use case
+- Implement pagination in your application if the contact has many comments
+- Store comment IDs if you need to reference specific comments later
+- Consider implementing a comment categorization system in your application to better organize feedback
+- Keep sensitive information out of comments when possible, as they may be visible to multiple team members 

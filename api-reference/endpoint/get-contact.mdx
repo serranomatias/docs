@@ -1,0 +1,205 @@
+---
+title: 'Get Contact'
+api: 'GET /v1/contacts/{contactId}'
+description: 'Retrieve detailed information for a specific contact'
+---
+
+This endpoint allows you to retrieve complete information about a specific contact by providing their unique identifier. It returns all stored data for the contact including personal information, additional custom fields, and metadata.
+
+## Use Cases
+
+- Retrieve detailed information about a specific contact
+- Display a contact profile in your application
+- Verify contact information before updating
+- Access all custom fields and attributes for a contact
+
+## Path Parameters
+
+<ParamField path="contactId" type="string" required>
+  The unique identifier of the contact you want to retrieve. This is a UUID string that was generated when the contact was created.
+</ParamField>
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication. You can find this in your dashboard under API settings.
+</ParamField>
+
+## Response
+
+<ResponseField name="status code" type="number">
+  200 on success
+</ResponseField>
+
+<ResponseField name="id" type="string">
+  The unique identifier of the contact (UUID format)
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  The timestamp when the contact was created (ISO 8601 format)
+</ResponseField>
+
+<ResponseField name="phone_number" type="string">
+  The phone number of the contact in international format (e.g., +12124567890)
+</ResponseField>
+
+<ResponseField name="full_name" type="string">
+  The full name of the contact
+</ResponseField>
+
+<ResponseField name="country" type="string">
+  The country of the contact
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  The email of the contact
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Description or notes about the contact
+</ResponseField>
+
+<ResponseField name="additional_data" type="array">
+  Additional data associated with the contact, each as a key-value pair with a type
+  <Expandable title="additional_data object">
+    <ResponseField name="type" type="string">
+      The type of the additional data field (e.g., "text", "date", "number", "location")
+    </ResponseField>
+    <ResponseField name="field" type="string">
+      The name of the additional data field
+    </ResponseField>
+    <ResponseField name="value" type="string">
+      The value of the additional data field
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="organization_id" type="string">
+  The ID of the organization the contact belongs to
+</ResponseField>
+
+## Error Codes
+
+- `400 Bad Request` - Invalid contact ID format
+- `401 Unauthorized` - Invalid or missing API key
+- `404 Not Found` - Contact not found
+- `500 Internal Server Error` - Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL Example
+# Retrieve a specific contact by ID
+curl -X GET "https://api.contactship.ai/v1/contacts/c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript Example
+// Using Fetch API to get a specific contact
+const fetchContact = async (contactId) => {
+  try {
+    const response = await fetch(`https://api.contactship.ai/v1/contacts/${contactId}`, {
+      method: 'GET',
+      headers: {
+        'x-api-key': 'your-api-key'
+      }
+    });
+    
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.error('Contact not found');
+        return null;
+      }
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    
+    const contact = await response.json();
+    console.log('Contact retrieved:', contact);
+    return contact;
+  } catch (error) {
+    console.error('Error fetching contact:', error);
+  }
+};
+
+// Call the function with a specific contact ID
+fetchContact('c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6');
+```
+
+```python Python Example
+import requests
+
+# Replace with your actual API key
+api_key = "your-api-key"
+
+# Base URL for the API
+base_url = "https://api.contactship.ai"
+
+# Contact ID to retrieve
+contact_id = "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6"
+
+# Headers
+headers = {
+    "x-api-key": api_key
+}
+
+# Make the GET request
+response = requests.get(f"{base_url}/v1/contacts/{contact_id}", headers=headers)
+
+# Check if the request was successful
+if response.status_code == 200:
+    contact = response.json()
+    print(f"Contact found: {contact['full_name']}")
+    print(f"Phone: {contact['phone_number']}")
+    print(f"Email: {contact['email']}")
+    
+    # Print additional data if available
+    if contact['additional_data']:
+        print("Additional information:")
+        for data in contact['additional_data']:
+            print(f"  {data['field']}: {data['value']} ({data['type']})")
+elif response.status_code == 404:
+    print("Contact not found")
+else:
+    print(f"Error: {response.status_code}")
+    print(response.text)
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+{
+  "id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
+  "created_at": "2023-01-01T12:00:00Z",
+  "phone_number": "+12124567890",
+  "full_name": "Juan Pérez",
+  "country": "México",
+  "email": "juan@ejemplo.com",
+  "description": "Lead from LinkedIn campaign",
+  "additional_data": [
+    {
+      "type": "location",
+      "field": "dirección",
+      "value": "Av. Insurgentes 123"
+    },
+    {
+      "type": "text",
+      "field": "notas",
+      "value": "Cliente potencial para servicio premium"
+    },
+    {
+      "type": "date",
+      "field": "fecha_contacto_inicial",
+      "value": "2022-12-15"
+    }
+  ],
+  "organization_id": "org123456"
+}
+```
+</ResponseExample>
+
+## Notes and Best Practices
+
+- Store contact IDs securely in your database for future reference
+- Always validate the contactId format before making an API call
+- Implement proper error handling for cases where the contact might not exist
+- Consider implementing caching for frequently accessed contacts to improve performance 

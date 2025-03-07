@@ -173,7 +173,7 @@
     },
     "/v1/contacts": {
       "get": {
-        "description": "Retrieve all contacts from the organization",
+        "description": "Retrieve all contacts from the organization with filtering options",
         "parameters": [
           {
             "name": "x-api-key",
@@ -183,6 +183,33 @@
               "type": "string"
             },
             "description": "API key for authentication"
+          },
+          {
+            "name": "full_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by contact's full name"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by contact's email"
+          },
+          {
+            "name": "phone_number",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by contact's phone number"
           }
         ],
         "responses": {
@@ -195,6 +222,458 @@
                   "items": {
                     "$ref": "#/components/schemas/Contact"
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Add a new contact to your organization",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          }
+        ],
+        "requestBody": {
+          "description": "Contact details to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateContact"
+              },
+              "example": {
+                "full_name": "Juan Pérez",
+                "phone_number": "+12124567890",
+                "country": "México",
+                "email": "juan@ejemplo.com",
+                "additional_data": [
+                  {
+                    "type": "location",
+                    "field": "dirección",
+                    "value": "Av. Insurgentes 123"
+                  },
+                  {
+                    "type": "text",
+                    "field": "notas",
+                    "value": "Cliente potencial para servicio premium"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Contact created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/contacts/{identifier}": {
+      "get": {
+        "description": "Get a specific contact by its identifier (ID, phone number, or email)",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          },
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The contact identifier (ID, phone_number, or email)"
+          },
+          {
+            "name": "identifierType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["id", "phone_number", "email"]
+            },
+            "description": "Type of identifier used (id, phone_number, email)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Contact not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/contacts/{contactId}": {
+      "patch": {
+        "description": "Update an existing contact's information",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          },
+          {
+            "name": "contactId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the contact to update"
+          }
+        ],
+        "requestBody": {
+          "description": "Contact details to update",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateContact"
+              },
+              "example": {
+                "full_name": "Juan Pérez Actualizado",
+                "email": "juan.nuevo@ejemplo.com",
+                "additional_data": [
+                  {
+                    "type": "text",
+                    "field": "notas",
+                    "value": "Cliente premium"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Contact updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Contact not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a contact from the organization",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          },
+          {
+            "name": "contactId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the contact to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Contact deleted successfully"
+          },
+          "404": {
+            "description": "Contact not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/contacts/{contactId}/call-history": {
+      "get": {
+        "description": "Get call history for a specific contact",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          },
+          {
+            "name": "contactId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the contact"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact call history retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactWithCallHistory"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Contact not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/contacts/{contactId}/comments": {
+      "get": {
+        "description": "Get all comments associated with a contact",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          },
+          {
+            "name": "contactId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the contact"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comments retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Comment"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Contact not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Add a comment or note to a specific contact",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API key for authentication"
+          },
+          {
+            "name": "contactId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the contact to add a comment to"
+          }
+        ],
+        "requestBody": {
+          "description": "Comment content",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string",
+                    "description": "The content of the comment"
+                  }
+                },
+                "required": ["content"]
+              },
+              "example": {
+                "content": "Llamada realizada el 15 de marzo. El cliente está interesado en el plan premium y solicitó una demostración para la próxima semana."
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Comment added successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Contact not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
@@ -696,7 +1175,7 @@
           },
           "phone_number": {
             "type": "string",
-            "description": "The phone number of the contact"
+            "description": "The phone number of the contact in international format (e.g., +12124567890)"
           },
           "full_name": {
             "type": "string",
@@ -708,11 +1187,29 @@
           },
           "organization_id": {
             "type": "string",
-            "description": "The ID of the organization"
+            "description": "The ID of the organization the contact belongs to"
           },
           "email": {
             "type": "string",
             "description": "The email of the contact"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description or notes about the contact"
+          },
+          "additional_data": {
+            "type": "array",
+            "description": "Additional data associated with the contact",
+            "items": {
+              "$ref": "#/components/schemas/ContactAdditionalData"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags associated with the contact",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
           }
         }
       },
@@ -921,6 +1418,211 @@
           "data": {
             "$ref": "#/components/schemas/Agent"
           }
+        }
+      },
+      "CreateContact": {
+        "type": "object",
+        "required": ["full_name", "phone_number", "country"],
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "description": "The full name of the contact"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "The phone number of the contact in international format (e.g., +12124567890)"
+          },
+          "country": {
+            "type": "string",
+            "description": "The country of the contact"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email of the contact"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description or notes about the contact"
+          },
+          "additional_data": {
+            "type": "array",
+            "description": "Additional data associated with the contact",
+            "items": {
+              "$ref": "#/components/schemas/ContactAdditionalData"
+            }
+          }
+        }
+      },
+      "UpdateContact": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "description": "The full name of the contact"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email of the contact"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description or notes about the contact"
+          },
+          "additional_data": {
+            "type": "array",
+            "description": "Additional data associated with the contact",
+            "items": {
+              "$ref": "#/components/schemas/ContactAdditionalData"
+            }
+          },
+          "deleted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date of logical deletion (if applicable)"
+          }
+        }
+      },
+      "ContactAdditionalData": {
+        "type": "object",
+        "required": ["type", "field", "value"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["text", "url", "location", "number", "calendar"],
+            "description": "Type of additional data"
+          },
+          "field": {
+            "type": "string",
+            "description": "Name of the field"
+          },
+          "value": {
+            "type": "string",
+            "description": "Value of the field"
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the tag"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the tag"
+          },
+          "color": {
+            "type": "string",
+            "description": "The color of the tag (hexadecimal code)"
+          }
+        }
+      },
+      "Comment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the comment"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The creation time of the comment"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The last update time of the comment"
+          },
+          "content": {
+            "type": "string",
+            "description": "The content of the comment"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "The ID of the user who created the comment"
+          },
+          "user_name": {
+            "type": "string",
+            "description": "The name of the user who created the comment"
+          }
+        }
+      },
+      "Call": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the call"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The creation time of the call"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["completed", "failed", "no-answer", "busy", "in-progress"],
+            "description": "The status of the call"
+          },
+          "duration": {
+            "type": "number",
+            "description": "The duration of the call in seconds"
+          },
+          "recording_url": {
+            "type": "string",
+            "description": "URL to the call recording, if available"
+          },
+          "transcript": {
+            "type": "string",
+            "description": "Transcript of the call, if available"
+          }
+        }
+      },
+      "CallHistory": {
+        "type": "object",
+        "properties": {
+          "call_attempts": {
+            "type": "number",
+            "description": "Total number of call attempts"
+          },
+          "last_call": {
+            "$ref": "#/components/schemas/Call",
+            "description": "Details of the last call made"
+          },
+          "calls": {
+            "type": "array",
+            "description": "List of all calls",
+            "items": {
+              "$ref": "#/components/schemas/Call"
+            }
+          }
+        }
+      },
+      "ContactWithCallHistory": {
+        "type": "object",
+        "properties": {
+          "contact": {
+            "$ref": "#/components/schemas/Contact",
+            "description": "Contact information"
+          },
+          "call_history": {
+            "$ref": "#/components/schemas/CallHistory",
+            "description": "Call history for the contact"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "ContentType": {
+        "name": "Content-Type",
+        "in": "header",
+        "description": "The format of the request body",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "default": "application/json"
         }
       }
     }

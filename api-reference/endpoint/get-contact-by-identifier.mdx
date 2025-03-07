@@ -1,0 +1,317 @@
+---
+title: 'Get Contact by Identifier'
+api: 'GET /v1/contacts/{identifier}'
+description: 'Get a specific contact by its identifier (ID, phone number, or email)'
+---
+
+This endpoint allows you to retrieve a specific contact using different types of identifiers such as ID, phone number, or email address. This flexibility makes it easier to find contacts when you don't have their unique ID.
+
+## Use Cases
+
+- Find a contact using their phone number when you don't have their ID
+- Look up a contact by their email address
+- Verify if a contact already exists in your system
+- Retrieve contact details before making a call or sending a message
+
+## Path Parameters
+
+<ParamField path="identifier" type="string" required>
+  The contact identifier, which can be an ID, phone number, or email address. For phone numbers, use international format (e.g., +12124567890).
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="identifierType" type="string">
+  Specifies what type of identifier is being used. Possible values:
+  - `id` (default): Use when the identifier is the contact's unique ID
+  - `phone_number`: Use when the identifier is a phone number
+  - `email`: Use when the identifier is an email address
+</ParamField>
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication. You can find this in your dashboard under API settings.
+</ParamField>
+
+## Response
+
+<ResponseField name="status code" type="number">
+  200 on success
+</ResponseField>
+
+<ResponseField name="id" type="string">
+  The unique identifier of the contact (UUID format)
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  The timestamp when the contact was created (ISO 8601 format)
+</ResponseField>
+
+<ResponseField name="phone_number" type="string">
+  The phone number of the contact in international format (e.g., +12124567890)
+</ResponseField>
+
+<ResponseField name="full_name" type="string">
+  The full name of the contact
+</ResponseField>
+
+<ResponseField name="country" type="string">
+  The country of the contact
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  The email of the contact
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Description or notes about the contact
+</ResponseField>
+
+<ResponseField name="additional_data" type="array">
+  Additional data associated with the contact
+  <Expandable title="additional_data object">
+    <ResponseField name="type" type="string">
+      The type of the additional data field (e.g., "text", "date", "number", "location")
+    </ResponseField>
+    <ResponseField name="field" type="string">
+      The name of the additional data field
+    </ResponseField>
+    <ResponseField name="value" type="string">
+      The value of the additional data field
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="organization_id" type="string">
+  The ID of the organization the contact belongs to
+</ResponseField>
+
+## Error Codes
+
+- `400 Bad Request` - Invalid identifier format
+- `401 Unauthorized` - Invalid or missing API key
+- `404 Not Found` - Contact not found
+- `500 Internal Server Error` - Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL Example with ID
+# Retrieve a contact using its ID
+curl -X GET "https://api.contactship.ai/v1/contacts/c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6" \
+  -H "x-api-key: your-api-key"
+```
+
+```bash cURL Example with Email
+# Retrieve a contact using its email address
+curl -X GET "https://api.contactship.ai/v1/contacts/juan@ejemplo.com?identifierType=email" \
+  -H "x-api-key: your-api-key"
+```
+
+```bash cURL Example with Phone Number
+# Retrieve a contact using its phone number (URL-encoded)
+curl -X GET "https://api.contactship.ai/v1/contacts/%2B12124567890?identifierType=phone_number" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript Example with ID
+// Using Fetch API to retrieve a contact by ID
+const getContactById = async (contactId) => {
+  try {
+    const response = await fetch(`https://api.contactship.ai/v1/contacts/${contactId}`, {
+      method: 'GET',
+      headers: {
+        'x-api-key': 'your-api-key'
+      }
+    });
+    
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.error('Contact not found');
+        return null;
+      }
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    
+    const contact = await response.json();
+    console.log('Contact retrieved:', contact);
+    return contact;
+  } catch (error) {
+    console.error('Error fetching contact:', error);
+  }
+};
+
+// Call the function with a contact ID
+getContactById('c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6');
+```
+
+```javascript JavaScript Example with Email
+// Using Fetch API to retrieve a contact by email
+const getContactByEmail = async (email) => {
+  try {
+    const response = await fetch(`https://api.contactship.ai/v1/contacts/${encodeURIComponent(email)}?identifierType=email`, {
+      method: 'GET',
+      headers: {
+        'x-api-key': 'your-api-key'
+      }
+    });
+    
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.error('Contact not found');
+        return null;
+      }
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    
+    const contact = await response.json();
+    console.log('Contact retrieved:', contact);
+    return contact;
+  } catch (error) {
+    console.error('Error fetching contact:', error);
+  }
+};
+
+// Call the function with an email
+getContactByEmail('juan@ejemplo.com');
+```
+
+```javascript JavaScript Example with Phone Number
+// Using Fetch API to retrieve a contact by phone number
+const getContactByPhone = async (phoneNumber) => {
+  try {
+    const response = await fetch(`https://api.contactship.ai/v1/contacts/${encodeURIComponent(phoneNumber)}?identifierType=phone_number`, {
+      method: 'GET',
+      headers: {
+        'x-api-key': 'your-api-key'
+      }
+    });
+    
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.error('Contact not found');
+        return null;
+      }
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    
+    const contact = await response.json();
+    console.log('Contact retrieved:', contact);
+    return contact;
+  } catch (error) {
+    console.error('Error fetching contact:', error);
+  }
+};
+
+// Call the function with a phone number
+getContactByPhone('+12124567890');
+```
+
+```python Python Example
+import requests
+import urllib.parse
+
+# Replace with your actual API key
+api_key = "your-api-key"
+
+# Base URL for the API
+base_url = "https://api.contactship.ai"
+
+# Headers
+headers = {
+    "x-api-key": api_key
+}
+
+# Example 1: Retrieve by ID
+def get_contact_by_id(contact_id):
+    response = requests.get(f"{base_url}/v1/contacts/{contact_id}", headers=headers)
+    process_response(response)
+
+# Example 2: Retrieve by email
+def get_contact_by_email(email):
+    encoded_email = urllib.parse.quote(email)
+    response = requests.get(
+        f"{base_url}/v1/contacts/{encoded_email}?identifierType=email", 
+        headers=headers
+    )
+    process_response(response)
+
+# Example 3: Retrieve by phone number
+def get_contact_by_phone(phone_number):
+    encoded_phone = urllib.parse.quote(phone_number)
+    response = requests.get(
+        f"{base_url}/v1/contacts/{encoded_phone}?identifierType=phone_number", 
+        headers=headers
+    )
+    process_response(response)
+
+# Helper function to process the response
+def process_response(response):
+    if response.status_code == 200:
+        contact = response.json()
+        print(f"Contact found: {contact['full_name']}")
+        print(f"Phone: {contact['phone_number']}")
+        print(f"Email: {contact['email']}")
+        
+        # Print additional data if available
+        if contact['additional_data']:
+            print("Additional information:")
+            for data in contact['additional_data']:
+                print(f"  {data['field']}: {data['value']} ({data['type']})")
+    elif response.status_code == 404:
+        print("Contact not found")
+    else:
+        print(f"Error: {response.status_code}")
+        print(response.text)
+
+# Usage examples
+contact_id = "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6"
+email = "juan@ejemplo.com"
+phone_number = "+12124567890"
+
+print("Looking up by ID:")
+get_contact_by_id(contact_id)
+
+print("\nLooking up by email:")
+get_contact_by_email(email)
+
+print("\nLooking up by phone number:")
+get_contact_by_phone(phone_number)
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+{
+  "id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
+  "created_at": "2023-01-01T12:00:00Z",
+  "phone_number": "+12124567890",
+  "full_name": "Juan Pérez",
+  "country": "México",
+  "email": "juan@ejemplo.com",
+  "description": "Lead from LinkedIn campaign",
+  "additional_data": [
+    {
+      "type": "location",
+      "field": "dirección",
+      "value": "Av. Insurgentes 123"
+    },
+    {
+      "type": "text",
+      "field": "notas",
+      "value": "Cliente potencial para servicio premium"
+    }
+  ],
+  "organization_id": "org123456"
+}
+```
+</ResponseExample>
+
+## Notes and Best Practices
+
+- When using phone numbers as identifiers, always use the international format (e.g., +12124567890)
+- Remember to URL-encode identifiers, especially email addresses and phone numbers with special characters
+- The ID lookup is generally faster than lookups by email or phone number
+- If you're unsure whether a contact exists, use this endpoint to check before creating a new contact
+- Consider implementing caching mechanisms for frequently accessed contacts 
