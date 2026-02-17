@@ -35,20 +35,11 @@
       "url": "api-reference"
     }
   ],
-  "versions": ["en", "es"],
+  "versions": ["es", "en"],
   "api": {
     "baseUrl": "https://api.contactship.ai"
   },
   "navigation": [
-    {
-      "group": "Get Started",
-      "pages": [
-        "en/introduction",
-        "en/quickstart",
-        "en/support"
-      ],
-      "version": "en"
-    },
     {
       "group": "Comenzar",
       "pages": [
@@ -59,23 +50,11 @@
       "version": "es"
     },
     {
-      "group": "Platform",
+      "group": "Get Started",
       "pages": [
-        "en/platform/members",
-        "en/platform/my-numbers",
-        "en/platform/credits"
-      ],
-      "version": "en"
-    },
-    {
-      "group": "Agents",
-      "pages": [
-        "en/agents/overview",
-        "en/agents/prompt-engineering-guide",
-        "en/agents/identity",
-        "en/agents/instructions",
-        "en/agents/tools",
-        "en/agents/automations"
+        "en/introduction",
+        "en/quickstart",
+        "en/support"
       ],
       "version": "en"
     },
@@ -87,6 +66,15 @@
         "es/plataforma/creditos"
       ],
       "version": "es"
+    },
+    {
+      "group": "Platform",
+      "pages": [
+        "en/platform/members",
+        "en/platform/my-numbers",
+        "en/platform/credits"
+      ],
+      "version": "en"
     },
     {
       "group": "Agentes",
@@ -102,6 +90,26 @@
       "version": "es"
     },
     {
+      "group": "Agents",
+      "pages": [
+        "en/agents/overview",
+        "en/agents/prompt-engineering-guide",
+        "en/agents/identity",
+        "en/agents/instructions",
+        "en/agents/tools",
+        "en/agents/automations"
+      ],
+      "version": "en"
+    },
+    {
+      "group": "Integraciones",
+      "pages": [
+        "es/integrations/quickstart",
+        "es/integrations/make"
+      ],
+      "version": "es"
+    },
+    {
       "group": "Integrations",
       "pages": [
         "en/integrations/quickstart",
@@ -110,10 +118,9 @@
       "version": "en"
     },
     {
-      "group": "Integrations",
+      "group": "Campañas",
       "pages": [
-        "es/integrations/quickstart",
-        "es/integrations/make"
+        "es/campaigns/overview"
       ],
       "version": "es"
     },
@@ -125,13 +132,6 @@
       "version": "en"
     },
     {
-      "group": "Campaigns",
-      "pages": [
-        "es/campaigns/overview"
-      ],
-      "version": "es"
-    },
-    {
       "group": "Widgets",
       "pages": [
         "en/widgets/overview"
@@ -139,22 +139,55 @@
       "version": "en"
     },
     {
+      "group": "Documentación API",
+      "pages": [
+        "api-reference/introduction"
+      ],
+      "version": "es"
+    },
+    {
       "group": "API Documentation",
       "pages": [
         "api-reference/introduction"
-      ]
+      ],
+      "version": "en"
+    },
+    {
+      "group": "Voz",
+      "pages": [
+        "api-reference/endpoint/make-ai-phone-call"
+      ],
+      "version": "es"
     },
     {
       "group": "Voice",
       "pages": [
         "api-reference/endpoint/make-ai-phone-call"
-      ]
+      ],
+      "version": "en"
+    },
+    {
+      "group": "Organización",
+      "pages": [
+        "api-reference/endpoint/get-credits"
+      ],
+      "version": "es"
     },
     {
       "group": "Organization",
       "pages": [
         "api-reference/endpoint/get-credits"
-      ]
+      ],
+      "version": "en"
+    },
+    {
+      "group": "Agentes",
+      "pages": [
+        "api-reference/endpoint/get-agent",
+        "api-reference/endpoint/list-agents",
+        "api-reference/endpoint/update-agent"
+      ],
+      "version": "es"
     },
     {
       "group": "Agents",
@@ -162,7 +195,22 @@
         "api-reference/endpoint/get-agent",
         "api-reference/endpoint/list-agents",
         "api-reference/endpoint/update-agent"
-      ]
+      ],
+      "version": "en"
+    },
+    {
+      "group": "Contactos",
+      "pages": [
+        "api-reference/endpoint/get-contacts",
+        "api-reference/endpoint/create-contact",
+        "api-reference/endpoint/get-contact-by-identifier",
+        "api-reference/endpoint/get-contact-call-history",
+        "api-reference/endpoint/get-contact-call-history-by-phone",
+        "api-reference/endpoint/update-contact",
+        "api-reference/endpoint/delete-contact",
+        "api-reference/endpoint/get-contact-comments"
+      ],
+      "version": "es"
     },
     {
       "group": "Contacts",
@@ -171,10 +219,12 @@
         "api-reference/endpoint/create-contact",
         "api-reference/endpoint/get-contact-by-identifier",
         "api-reference/endpoint/get-contact-call-history",
+        "api-reference/endpoint/get-contact-call-history-by-phone",
         "api-reference/endpoint/update-contact",
         "api-reference/endpoint/delete-contact",
         "api-reference/endpoint/get-contact-comments"
-      ]
+      ],
+      "version": "en"
     }
   ],
   "footerSocials": {

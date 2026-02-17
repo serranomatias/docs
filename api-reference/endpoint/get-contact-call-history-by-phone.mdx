@@ -1,0 +1,416 @@
+---
+title: 'Get Contact Call History by Phone Number'
+api: 'GET /v1/contacts/{phoneNumber}/call-history'
+description: 'Get contact by phone number and your call history'
+---
+
+This endpoint allows you to retrieve the complete call history for a contact using their phone number. This is useful when you don't have the contact's ID but need to quickly access their call history.
+
+## Use Cases
+
+- Review call history with a contact using just their phone number
+- Track communication history for incoming calls from unknown numbers
+- Quick lookup of call records during customer service interactions
+- Verify previous interactions with a phone number
+
+## Path Parameters
+
+<ParamField path="phoneNumber" type="string" required>
+  The phone number of the contact in international format (e.g., +12124567890)
+</ParamField>
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication. You can find this in your dashboard under API settings.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="start_date" type="string">
+  Filter calls that occurred on or after this date (ISO 8601 format, e.g., 2023-01-01). If not specified, returns all calls from the beginning.
+</ParamField>
+
+<ParamField query="end_date" type="string">
+  Filter calls that occurred on or before this date (ISO 8601 format, e.g., 2023-12-31). If not specified, returns all calls up to the current date.
+</ParamField>
+
+<ParamField query="direction" type="string">
+  Filter calls by direction. Possible values: `inbound`, `outbound`. If not specified, returns both inbound and outbound calls.
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter calls by status. Possible values: `answered`, `missed`, `rejected`, `busy`, `failed`. If not specified, returns calls with any status.
+</ParamField>
+
+## Response
+
+<ResponseField name="status code" type="number">
+  200 on success
+</ResponseField>
+
+<ResponseField name="contact" type="object">
+  Information about the contact
+  <Expandable title="Contact object">
+    <ResponseField name="id" type="string">
+      The unique identifier of the contact (UUID format)
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      The timestamp when the contact was created (ISO 8601 format)
+    </ResponseField>
+    <ResponseField name="phone_number" type="string">
+      The phone number of the contact
+    </ResponseField>
+    <ResponseField name="full_name" type="string">
+      The full name of the contact
+    </ResponseField>
+    <ResponseField name="country" type="string">
+      The country of the contact
+    </ResponseField>
+    <ResponseField name="email" type="string">
+      The email of the contact
+    </ResponseField>
+    <ResponseField name="description" type="string">
+      Description or notes about the contact
+    </ResponseField>
+    <ResponseField name="additional_data" type="array">
+      Additional data associated with the contact
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="call_history" type="object">
+  The call history for the contact
+  <Expandable title="Call History object">
+    <ResponseField name="call_attempts" type="number">
+      Total number of call attempts
+    </ResponseField>
+    <ResponseField name="last_call" type="object">
+      Details of the last call made
+      <Expandable title="Call object">
+        <ResponseField name="id" type="string">
+          The unique identifier of the call record (UUID format)
+        </ResponseField>
+        <ResponseField name="created_at" type="string">
+          The timestamp when the call record was created (ISO 8601 format)
+        </ResponseField>
+        <ResponseField name="call_time" type="string">
+          The timestamp when the call occurred (ISO 8601 format)
+        </ResponseField>
+        <ResponseField name="duration" type="number">
+          The duration of the call in seconds
+        </ResponseField>
+        <ResponseField name="direction" type="string">
+          The direction of the call (`inbound` or `outbound`)
+        </ResponseField>
+        <ResponseField name="status" type="string">
+          The status of the call (`answered`, `missed`, `rejected`, `busy`, or `failed`)
+        </ResponseField>
+        <ResponseField name="notes" type="string">
+          Any notes associated with the call
+        </ResponseField>
+        <ResponseField name="recording_url" type="string">
+          URL to the call recording, if available (null if no recording exists)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="calls" type="array">
+      List of all calls
+      <Expandable title="Call object">
+        <ResponseField name="id" type="string">
+          The unique identifier of the call record (UUID format)
+        </ResponseField>
+        <ResponseField name="created_at" type="string">
+          The timestamp when the call record was created (ISO 8601 format)
+        </ResponseField>
+        <ResponseField name="call_time" type="string">
+          The timestamp when the call occurred (ISO 8601 format)
+        </ResponseField>
+        <ResponseField name="duration" type="number">
+          The duration of the call in seconds
+        </ResponseField>
+        <ResponseField name="direction" type="string">
+          The direction of the call (`inbound` or `outbound`)
+        </ResponseField>
+        <ResponseField name="status" type="string">
+          The status of the call (`answered`, `missed`, `rejected`, `busy`, or `failed`)
+        </ResponseField>
+        <ResponseField name="notes" type="string">
+          Any notes associated with the call
+        </ResponseField>
+        <ResponseField name="recording_url" type="string">
+          URL to the call recording, if available (null if no recording exists)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Error Codes
+
+- `400 Bad Request` - Invalid phone number format
+- `401 Unauthorized` - Invalid or missing API key
+- `404 Not Found` - Contact not found
+- `500 Internal Server Error` - Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL Example
+# Get call history for a contact by phone number
+curl -X GET "https://api.contactship.ai/v1/contacts/+573014445709/call-history" \
+  -H "x-api-key: your-api-key"
+```
+
+```bash cURL Example with Filters
+# Get filtered call history for a contact by phone number
+curl -X GET "https://api.contactship.ai/v1/contacts/+573014445709/call-history?start_date=2023-01-01&direction=outbound&status=answered" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript Example
+// Using Fetch API to get call history by phone number
+const getCallHistoryByPhone = async (phoneNumber, queryParams = {}) => {
+  try {
+    // Build query string from parameters
+    const queryString = Object.keys(queryParams)
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
+      .join('&');
+    
+    const url = `https://api.contactship.ai/v1/contacts/${encodeURIComponent(phoneNumber)}/call-history${queryString ? `?${queryString}` : ''}`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'x-api-key': 'your-api-key'
+      }
+    });
+    
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.error('Contact not found');
+        return null;
+      }
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('Contact:', data.contact);
+    console.log(`Retrieved ${data.call_history.calls.length} call records`);
+    return data;
+  } catch (error) {
+    console.error('Error fetching call history:', error);
+  }
+};
+
+// Example usage with filters
+const phoneNumber = '+12124567890';
+const queryParams = {
+  start_date: '2023-01-01',
+  end_date: '2023-12-31',
+  direction: 'outbound',
+  status: 'answered'
+};
+
+getCallHistoryByPhone(phoneNumber, queryParams);
+```
+
+```python Python Example
+import requests
+import urllib.parse
+from datetime import datetime, timedelta
+
+# Replace with your actual API key
+api_key = "your-api-key"
+
+# Base URL for the API
+base_url = "https://api.contactship.ai"
+
+# Phone number to retrieve call history for
+phone_number = "+12124567890"
+
+# Headers
+headers = {
+    "x-api-key": api_key
+}
+
+# Optional: Add query parameters for filtering
+# Get calls from the last 30 days
+thirty_days_ago = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+today = datetime.now().strftime('%Y-%m-%d')
+
+params = {
+    "start_date": thirty_days_ago,
+    "end_date": today,
+    # "direction": "outbound",  # Optional: Filter by call direction
+    # "status": "answered"      # Optional: Filter by call status
+}
+
+# Make the GET request
+encoded_phone = urllib.parse.quote(phone_number)
+response = requests.get(
+    f"{base_url}/v1/contacts/{encoded_phone}/call-history", 
+    headers=headers,
+    params=params
+)
+
+# Check if the request was successful
+if response.status_code == 200:
+    data = response.json()
+    contact = data['contact']
+    call_history = data['call_history']
+    
+    print(f"Contact found: {contact['full_name']}")
+    print(f"Total calls: {len(call_history['calls'])}")
+    
+    # Print the most recent calls
+    print("\nMost recent calls:")
+    sorted_calls = sorted(call_history['calls'], 
+                         key=lambda x: x['call_time'], 
+                         reverse=True)
+    
+    for call in sorted_calls[:5]:  # Show 5 most recent calls
+        call_time = call['call_time']
+        direction = call['direction']
+        status = call['status']
+        duration = call['duration']
+        print(f"  {call_time}: {direction.capitalize()} call, {status}, {duration} seconds")
+        
+elif response.status_code == 404:
+    print("Contact not found")
+else:
+    print(f"Error: {response.status_code}")
+    print(response.text)
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+{
+  "statusCode": 200,
+  "data": {
+    "contact_id": "c8a23f45-9b12-4d78-af90-1e5d23c67890",
+    "contact": {
+      "full_name": "Maria González",
+      "country": "México",
+      "email": "maria.gonzalez@ejemplo.com",
+      "phone_number": "+525512345678",
+      "additional_data": null,
+      "description": "Lead from Facebook campaign",
+      "created_at": "2024-03-01T15:30:00.123+00:00"
+    },
+    "history": {
+      "call_attempts": 2,
+      "calls": [
+        {
+          "direction": "outbound-api",
+          "from": "+525619190379",
+          "call_record": "https://storage.example.com/recordings/abc123def456/recording.wav",
+          "status": "answered",
+          "start_at": "2024-03-05T14:20:15.445+00:00",
+          "finished_at": "2024-03-05T14:23:45.571+00:00",
+          "price": 15,
+          "price_unit": "USD",
+          "duration": "210",
+          "call_analysis": {
+            "call_summary": "Cliente mostró interés en el producto premium. Solicitó información sobre precios y características específicas.",
+            "in_voicemail": false,
+            "user_sentiment": "Positive",
+            "call_successful": true,
+            "custom_analysis_data": {
+              "email_usuario": "maria.gonzalez@ejemplo.com",
+              "canal_de_seguimiento": "email",
+              "quiere_mas_informacion": true
+            }
+          },
+          "type": "api_call",
+          "created_at": "2024-03-05T14:20:00.123456+00:00",
+          "chat_history": [
+            {
+              "role": "assistant",
+              "content": "¡Hola! Le llamo de parte de nuestra empresa para hablar sobre nuestros servicios premium."
+            },
+            {
+              "role": "user",
+              "content": "Me interesa conocer más sobre los precios y características."
+            }
+          ]
+        },
+        {
+          "direction": "outbound-api",
+          "from": "+525619190379",
+          "call_record": "https://storage.example.com/recordings/xyz789uvw/recording.wav",
+          "status": "voicemail",
+          "start_at": "2024-03-01T16:00:00.445+00:00",
+          "finished_at": "2024-03-01T16:00:45.571+00:00",
+          "price": 5,
+          "price_unit": "USD",
+          "duration": "45",
+          "call_analysis": {
+            "call_summary": "Llamada dirigida a buzón de voz. Se dejó mensaje con información de contacto.",
+            "in_voicemail": true,
+            "user_sentiment": "Neutral",
+            "call_successful": true,
+            "custom_analysis_data": {
+              "email_usuario": "",
+              "canal_de_seguimiento": "phone",
+              "quiere_mas_informacion": false
+            }
+          },
+          "type": "api_call",
+          "created_at": "2024-03-01T16:00:00.123456+00:00",
+          "chat_history": [
+            {
+              "role": "assistant",
+              "content": "Le dejamos un mensaje en su buzón de voz con nuestra información de contacto."
+            }
+          ]
+        }
+      ],
+      "last_call": {
+        "direction": "outbound-api",
+        "from": "+525619190379",
+        "call_record": "https://storage.example.com/recordings/abc123def456/recording.wav",
+        "status": "answered",
+        "start_at": "2024-03-05T14:20:15.445+00:00",
+        "finished_at": "2024-03-05T14:23:45.571+00:00",
+        "price": 15,
+        "price_unit": "USD",
+        "duration": "210",
+        "call_analysis": {
+          "call_summary": "Cliente mostró interés en el producto premium. Solicitó información sobre precios y características específicas.",
+          "in_voicemail": false,
+          "user_sentiment": "Positive",
+          "call_successful": true,
+          "custom_analysis_data": {
+            "email_usuario": "maria.gonzalez@ejemplo.com",
+            "canal_de_seguimiento": "email",
+            "quiere_mas_informacion": true
+          }
+        },
+        "type": "api_call",
+        "created_at": "2024-03-05T14:20:00.123456+00:00",
+        "chat_history": [
+          {
+            "role": "assistant",
+            "content": "¡Hola! Le llamo de parte de nuestra empresa para hablar sobre nuestros servicios premium."
+          },
+          {
+            "role": "user",
+            "content": "Me interesa conocer más sobre los precios y características."
+          }
+        ]
+      }
+    }
+  }
+}
+```
+</ResponseExample>
+
+## Notes and Best Practices
+
+- Always use international format for phone numbers (e.g., +12124567890)
+- URL encode the phone number in the request URL to handle special characters
+- Use date filtering to narrow down results for contacts with extensive call histories
+- Consider implementing caching for frequently accessed call histories
+- Monitor call durations and frequencies to optimize customer engagement strategies 
