@@ -1,0 +1,56 @@
+---
+title: 'Calificar leads automáticamente'
+description: 'Llamá a cada lead en segundos después de que rellene un formulario, con un agente de IA que califica y agenda.'
+---
+
+## El problema
+
+Cuando invertís en marketing y caen leads nuevos, el tiempo de respuesta es todo. Si no los contactás el mismo día (máximo 2-3 días), ese lead se enfría y se pierde la oportunidad. Pero tu equipo no da abasto para llamar a todos al instante.
+
+## La solución
+
+Con ContactShip + una herramienta de automatización (como [N8N](/es/integrations/n8n) o [Make](/es/integrations/make)), podés hacer que **cada lead reciba una llamada de un agente de IA en menos de 30 segundos** después de enviar un formulario.
+
+El agente:
+- Lo saluda por su nombre
+- Sabe de qué producto o servicio está interesado
+- Califica al lead haciendo preguntas clave
+- Agenda una reunión si corresponde
+- Toda la información queda registrada en el CRM
+
+## Cómo armarlo paso a paso
+
+<Steps>
+  <Step title="Creá tu agente de IA">
+    Andá a [Agentes](/es/agents/vision-general) y creá un agente con las instrucciones de calificación. Por ejemplo: *"Sos un asesor comercial. Tu objetivo es entender las necesidades del lead, calificarlo y agendar una reunión de demostración."*
+  </Step>
+  <Step title="Armá tu formulario">
+    Usá cualquier proveedor: Tally, Google Forms, Typeform o uno custom. Incluí campos como nombre, teléfono, email, empresa y servicio de interés.
+  </Step>
+  <Step title="Conectá el formulario con ContactShip">
+    Usá [N8N](/es/integrations/n8n) o [Make](/es/integrations/make) para que cuando se envíe el formulario, se dispare automáticamente una llamada con tu agente. Pasale los datos del formulario como **Additional Data** para que la IA personalice la conversación.
+  </Step>
+  <Step title="Configurá etiquetas (opcional)">
+    Creá [Etiquetas de Llamada](/es/agents/etiquetas-de-llamada) como "Interesado", "Reunión agendada" o "No calificado" para que el sistema te notifique y puedas filtrar resultados.
+  </Step>
+  <Step title="Revisá los resultados">
+    Cada llamada queda registrada con audio, transcripción, resumen y sentimiento. Desde el CRM podés ver todo el historial del lead.
+  </Step>
+</Steps>
+
+## Resultado
+
+- Leads contactados en **menos de 30 segundos**
+- Cada conversación **personalizada** con los datos del formulario
+- Tu equipo solo atiende leads **ya calificados**
+- Toda la info centralizada en el CRM sin carga manual
+
+<Tip>
+Podés agregar un **delay de 5-15 minutos** para que la llamada parezca más natural y no tan inmediata después de rellenar el formulario.
+</Tip>
+
+## Funcionalidades utilizadas
+
+- [Agentes de IA](/es/agents/vision-general)
+- [Integración con N8N](/es/integrations/n8n) o [Make](/es/integrations/make)
+- [Etiquetas de Llamada](/es/agents/etiquetas-de-llamada)

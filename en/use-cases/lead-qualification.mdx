@@ -1,0 +1,56 @@
+---
+title: 'Qualify leads automatically'
+description: 'Call each lead within seconds after they fill out a form, with an AI agent that qualifies and schedules.'
+---
+
+## The problem
+
+When you invest in marketing and new leads come in, response time is everything. If you don't contact them the same day (2-3 days at most), that lead goes cold and the opportunity is lost. But your team can't keep up with calling everyone instantly.
+
+## The solution
+
+With ContactShip + an automation tool (like [N8N](/en/integrations/n8n) or [Make](/en/integrations/make)), you can have **each lead receive a call from an AI agent in less than 30 seconds** after submitting a form.
+
+The agent:
+- Greets them by name
+- Knows what product or service they're interested in
+- Qualifies the lead by asking key questions
+- Schedules a meeting when appropriate
+- All information is recorded in the CRM
+
+## How to set it up step by step
+
+<Steps>
+  <Step title="Create your AI agent">
+    Go to [Agents](/en/agents/overview) and create an agent with qualification instructions. For example: *"You are a sales advisor. Your goal is to understand the lead's needs, qualify them, and schedule a demo meeting."*
+  </Step>
+  <Step title="Set up your form">
+    Use any provider: Tally, Google Forms, Typeform, or a custom form. Include fields like name, phone, email, company, and service of interest.
+  </Step>
+  <Step title="Connect the form to ContactShip">
+    Use [N8N](/en/integrations/n8n) or [Make](/en/integrations/make) so that when the form is submitted, it automatically triggers a call with your agent. Pass the form data as **Additional Data** so the AI personalizes the conversation.
+  </Step>
+  <Step title="Configure tags (optional)">
+    Create [Call Tags](/en/agents/call-tags) like "Interested", "Meeting scheduled", or "Not qualified" so the system notifies you and you can filter results.
+  </Step>
+  <Step title="Review the results">
+    Each call is recorded with audio, transcription, summary, and sentiment. From the CRM you can see the full lead history.
+  </Step>
+</Steps>
+
+## Result
+
+- Leads contacted in **less than 30 seconds**
+- Each conversation **personalized** with form data
+- Your team only handles **already qualified** leads
+- All info centralized in the CRM with no manual entry
+
+<Tip>
+You can add a **5-15 minute delay** so the call feels more natural and not so immediate after filling out the form.
+</Tip>
+
+## Features used
+
+- [AI Agents](/en/agents/overview)
+- [N8N Integration](/en/integrations/n8n) or [Make](/en/integrations/make)
+- [Call Tags](/en/agents/call-tags)

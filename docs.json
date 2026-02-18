@@ -1,0 +1,272 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "theme": "mint",
+  "name": "ContactShip Docs",
+  "logo": {
+    "dark": "/logo/Isologotipo.png",
+    "light": "/logo/Isologotipo.png"
+  },
+  "favicon": "/favicon2.png",
+  "colors": {
+    "primary": "#0252ff",
+    "light": "#1E89FF",
+    "dark": "#0252ff"
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:support@contactship.ai"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://app.contactship.ai"
+  },
+  "api": {
+    "mdx": {
+      "server": "https://api.contactship.ai",
+      "auth": {
+        "method": "key",
+        "name": "x-api-key"
+      }
+    }
+  },
+  "navigation": {
+    "languages": [
+      {
+        "language": "es",
+        "default": true,
+        "tabs": [
+          {
+            "tab": "Documentación",
+            "groups": [
+              {
+                "group": "Comenzar",
+                "pages": [
+                  "es/introduccion",
+                  "es/arranque-rapido",
+                  "es/soporte"
+                ]
+              },
+              {
+                "group": "Plataforma",
+                "pages": [
+                  "es/plataforma/miembros",
+                  "es/plataforma/mis-numeros",
+                  "es/plataforma/creditos"
+                ]
+              },
+              {
+                "group": "Agentes",
+                "pages": [
+                  "es/agents/vision-general",
+                  "es/agents/identidad",
+                  "es/agents/instrucciones",
+                  "es/agents/guia-ingenieria-prompts",
+                  "es/agents/herramientas",
+                  "es/agents/automatizaciones",
+                  "es/agents/etiquetas-de-llamada",
+                  "es/agents/buenas-practicas"
+                ]
+              },
+              {
+                "group": "Integraciones",
+                "pages": [
+                  "es/integrations/quickstart",
+                  "es/integrations/make",
+                  "es/integrations/n8n"
+                ]
+              },
+              {
+                "group": "Campañas",
+                "pages": [
+                  "es/campaigns/overview"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Casos de Uso",
+            "groups": [
+              {
+                "group": "Casos de Uso",
+                "pages": [
+                  "es/casos-de-uso/index",
+                  "es/casos-de-uso/calificacion-de-leads",
+                  "es/casos-de-uso/cobranzas-automatizadas",
+                  "es/casos-de-uso/atencion-al-cliente-24-7",
+                  "es/casos-de-uso/campanas-de-ventas"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API Reference",
+            "groups": [
+              {
+                "group": "Documentación API",
+                "pages": [
+                  "api-reference/introduction"
+                ]
+              },
+              {
+                "group": "Voz",
+                "pages": [
+                  "api-reference/endpoint/make-ai-phone-call"
+                ]
+              },
+              {
+                "group": "Organización",
+                "pages": [
+                  "api-reference/endpoint/get-credits"
+                ]
+              },
+              {
+                "group": "Agentes",
+                "pages": [
+                  "api-reference/endpoint/get-agent",
+                  "api-reference/endpoint/list-agents",
+                  "api-reference/endpoint/update-agent"
+                ]
+              },
+              {
+                "group": "Contactos",
+                "pages": [
+                  "api-reference/endpoint/get-contacts",
+                  "api-reference/endpoint/create-contact",
+                  "api-reference/endpoint/get-contact-by-identifier",
+                  "api-reference/endpoint/get-contact-call-history",
+                  "api-reference/endpoint/get-contact-call-history-by-phone",
+                  "api-reference/endpoint/update-contact",
+                  "api-reference/endpoint/delete-contact",
+                  "api-reference/endpoint/get-contact-comments"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "language": "en",
+        "tabs": [
+          {
+            "tab": "Documentation",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "en/introduction",
+                  "en/quickstart",
+                  "en/support"
+                ]
+              },
+              {
+                "group": "Platform",
+                "pages": [
+                  "en/platform/members",
+                  "en/platform/my-numbers",
+                  "en/platform/credits"
+                ]
+              },
+              {
+                "group": "Agents",
+                "pages": [
+                  "en/agents/overview",
+                  "en/agents/prompt-engineering-guide",
+                  "en/agents/identity",
+                  "en/agents/instructions",
+                  "en/agents/tools",
+                  "en/agents/automations",
+                  "en/agents/call-tags"
+                ]
+              },
+              {
+                "group": "Integrations",
+                "pages": [
+                  "en/integrations/quickstart",
+                  "en/integrations/make",
+                  "en/integrations/n8n"
+                ]
+              },
+              {
+                "group": "Campaigns",
+                "pages": [
+                  "en/campaigns/overview"
+                ]
+              },
+              {
+                "group": "Widgets",
+                "pages": [
+                  "en/widgets/overview"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Use Cases",
+            "groups": [
+              {
+                "group": "Use Cases",
+                "pages": [
+                  "en/use-cases/index",
+                  "en/use-cases/lead-qualification",
+                  "en/use-cases/automated-collections",
+                  "en/use-cases/24-7-customer-support",
+                  "en/use-cases/sales-campaigns"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API Reference",
+            "groups": [
+              {
+                "group": "API Documentation",
+                "pages": [
+                  "api-reference/introduction"
+                ]
+              },
+              {
+                "group": "Voice",
+                "pages": [
+                  "api-reference/endpoint/make-ai-phone-call"
+                ]
+              },
+              {
+                "group": "Organization",
+                "pages": [
+                  "api-reference/endpoint/get-credits"
+                ]
+              },
+              {
+                "group": "Agents",
+                "pages": [
+                  "api-reference/endpoint/get-agent",
+                  "api-reference/endpoint/list-agents",
+                  "api-reference/endpoint/update-agent"
+                ]
+              },
+              {
+                "group": "Contacts",
+                "pages": [
+                  "api-reference/endpoint/get-contacts",
+                  "api-reference/endpoint/create-contact",
+                  "api-reference/endpoint/get-contact-by-identifier",
+                  "api-reference/endpoint/get-contact-call-history",
+                  "api-reference/endpoint/get-contact-call-history-by-phone",
+                  "api-reference/endpoint/update-contact",
+                  "api-reference/endpoint/delete-contact",
+                  "api-reference/endpoint/get-contact-comments"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "footerSocials": {
+    "x": "https://x.com/contactshipai",
+    "linkedin": "https://www.linkedin.com/company/contactshipai"
+  }
+}

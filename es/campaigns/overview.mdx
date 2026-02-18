@@ -39,78 +39,90 @@ Las campañas de llamadas te permiten automatizar llamadas salientes a escala us
   </Card>
 </CardGroup>
 
-## Configuración de una Campaña
+## Cómo crear una campaña
 
 <Steps>
-  <Step title="Crear Campaña">
-    Navega a la sección de Campañas y haz clic en "Nueva Campaña". Define el nombre y objetivos de tu campaña.
+  <Step title="Datos de la campaña">
+    Andá a **Campañas** en el menú lateral y hacé clic en **Nueva Campaña**. Configurá:
+
+    - **Nombre** de la campaña
+    - **Número de salida**: Desde qué número se van a hacer las llamadas
+    - **Inicio**: Si querés lanzarla ahora o programarla para una fecha futura
+    - **Rango horario**: En qué horario se pueden hacer las llamadas
+    - **Reintentos**: Cuántas veces volver a llamar si la persona no contesta
   </Step>
-  <Step title="Seleccionar o Crear Agente">
-    Elige un agente de IA existente o crea uno específico para esta campaña. Configura la personalidad y el flujo de conversación del agente.
+  <Step title="Seleccioná el agente de IA">
+    Elegí cuál de tus agentes de IA va a hacer las llamadas de esta campaña. Si todavía no tenés uno, podés crearlo desde el apartado de [Agentes](/es/agents/vision-general).
   </Step>
-  <Step title="Cargar Contactos">
-    Importa tu lista de contactos en formato CSV o conecta tu CRM para sincronizar contactos automáticamente.
+  <Step title="Cargá los contactos">
+    Tenés tres formas de cargar los contactos de la campaña:
+
+    - **Desde otra campaña**: Reutilizá contactos de una campaña anterior.
+    - **Subir un archivo**: Cargá un Excel con los datos de tus contactos.
+    - **Desde el CRM**: Seleccioná contactos de uno de tus tableros en el CRM de ContactShip.
   </Step>
-  <Step title="Configurar Ajustes">
-    Establece los parámetros de la campaña:
-    - Horario de llamadas y zonas horarias
-    - Intentos de rellamada para llamadas no contestadas
-    - Concurrencia de llamadas
-    - Duración de la campaña
+  <Step title="Configurá la plantilla de datos">
+    Definí qué datos vas a incluir de cada contacto. Como mínimo se requieren **4 campos** (nombre, apellido, teléfono y país), pero podés agregar muchos más para **enriquecer las llamadas** — por ejemplo, producto de interés, deuda pendiente, última compra, etc.
+
+    Si elegiste subir un archivo, podés **descargar la plantilla** en Excel, rellenarla en Google Sheets o Excel, y luego subirla.
+
+    <Tip>
+    Cuanta más información le cargues a cada contacto, más personalizada va a ser la llamada. El agente de IA usa todos estos datos para adaptar la conversación.
+    </Tip>
   </Step>
-  <Step title="Probar y Lanzar">
-    Realiza llamadas de prueba para verificar el rendimiento del agente, luego lanza tu campaña.
+  <Step title="Lanzá la campaña">
+    Confirmá y lanzá. La campaña se activa en **3 a 5 minutos** como máximo y las llamadas se lanzan **simultáneamente** a múltiples contactos a la vez — no se hacen de a una.
   </Step>
 </Steps>
 
-## Gestión de Campañas
+## Qué pasa después de cada llamada
 
-### Monitoreo en Tiempo Real
-- Rastrea llamadas activas y progreso de la campaña
-- Escucha conversaciones en curso
-- Visualiza métricas de éxito en tiempo real
-- Monitorea el rendimiento del agente
+Una vez que las llamadas empiezan a ejecutarse, podés ver todo lo que pasa en tiempo real desde el apartado de **Llamadas** en la plataforma:
 
-### Análisis y Reportes
-- Tasas de éxito de llamadas
-- Resultados de conversaciones
-- Métricas de rendimiento de campaña
-- Reportes y transcripciones descargables
+- **Audio completo** de la llamada para escuchar la conversación
+- **Transcripción** de todo lo que se habló
+- **Resumen** generado automáticamente por la IA
+- **Sentimiento del usuario** — cómo se sintió la persona durante la llamada
+- **Estado de la llamada** — si fue exitosa (el agente logró su objetivo) o no
+- **Motivo de desconexión** — quién cortó y por qué
 
-## Mejores Prácticas
+Además, desde el **CRM** podés ver toda la información del contacto: etiquetar, agregar comentarios, ver el historial completo de llamadas, crear notas y asignar tareas.
+
+## Mejores prácticas
 
 <Tip>
-**Consejos de Optimización de Campañas**
-- Comienza con un grupo pequeño de prueba para refinar tu enfoque
-- Programa llamadas durante horarios comerciales apropiados
-- Establece intentos de rellamada realistas
-- Monitorea y ajusta según los datos de rendimiento
+**Consejos para campañas efectivas**
+- Empezá con un grupo pequeño de prueba para ajustar el agente antes de escalar
+- Programá las llamadas en horarios comerciales razonables
+- Configurá reintentos para los que no contesten (2-3 reintentos suele funcionar bien)
+- Enriquecé los datos de tus contactos — cuanta más info tenga el agente, mejor personaliza
 </Tip>
 
 <Warning>
-**Consideraciones Importantes**
-- Asegura el cumplimiento de las regulaciones locales de llamadas
-- Mantén listas de contactos actualizadas
-- Respeta las preferencias de no llamar
-- Prueba exhaustivamente antes de escalar
+**Tené en cuenta**
+- Asegurate de cumplir con las regulaciones locales de llamadas de tu país
+- Mantené tus listas de contactos actualizadas
+- Respetá las preferencias de no llamar
+- Probá bien tu agente antes de lanzar a gran escala
 </Warning>
 
-## Características de las Campañas
+## Características de las campañas
 
 <Check>
-**Programación Inteligente**: Detección automática de zona horaria y tiempo óptimo de llamada
+**Llamadas simultáneas**: Las llamadas se lanzan en paralelo, no de a una
 </Check>
 <Check>
-**Conversaciones Dinámicas**: Los agentes de IA adaptan su enfoque según las respuestas del receptor
+**Programación flexible**: Lanzá ahora o programá para después, con control de rango horario
 </Check>
 <Check>
-**Escalación Instantánea**: Transferencia a agentes humanos cuando sea necesario
+**Reintentos automáticos**: Volvé a llamar a los que no contesten, sin intervención manual
 </Check>
 <Check>
-**Integración con CRM**: Sincronización automática de contactos y actualización de resultados
+**Conversaciones personalizadas**: Cada llamada se adapta según los datos del contacto
 </Check>
 <Check>
-**Reportes Personalizados**: Análisis detallados e insights de campaña
+**Resultados completos**: Audio, transcripción, resumen, sentimiento y estado por cada llamada
 </Check>
-
-¿Listo para lanzar tu primera campaña? [Contacta a nuestro equipo](../soporte) para obtener orientación personalizada sobre estrategia y optimización de campañas.
+<Check>
+**CRM integrado**: Etiquetas, historial, comentarios, notas y tareas por contacto
+</Check>

@@ -1,0 +1,55 @@
+---
+title: 'Cobranzas con IA'
+description: 'Automatizá llamadas de cobranza y recibí alertas cuando un deudor se comprometa a pagar.'
+---
+
+## El problema
+
+Tu equipo de cobranza tiene que llamar a cientos de deudores por mes. Muchas veces no contestan, las llamadas son repetitivas y enterarse de un compromiso de pago puede tardar horas o días. Es difícil escalar sin contratar más gente.
+
+## La solución
+
+Con ContactShip podés lanzar **campañas de cobranza masiva** donde tu agente de IA negocia con cada deudor de forma personalizada, y te **notifica al instante** cuando alguien se compromete a pagar.
+
+El agente:
+- Llama al deudor por su nombre
+- Le informa el monto y concepto de su deuda
+- Negocia un compromiso de pago con fecha específica
+- Registra todo lo conversado
+- Te manda un email si consigue un compromiso
+
+## Cómo armarlo paso a paso
+
+<Steps>
+  <Step title="Creá un agente de cobranza">
+    Andá a [Agentes](/es/agents/vision-general) y creá un agente con instrucciones claras. Por ejemplo: *"Sos un agente de cobranza profesional y respetuoso. Tu objetivo es informar al deudor sobre su deuda pendiente y lograr un compromiso de pago con fecha concreta. Sé firme pero empático."*
+  </Step>
+  <Step title="Configurá etiquetas de llamada">
+    Creá [Etiquetas de Llamada](/es/agents/etiquetas-de-llamada) como:
+    - **Compromiso de pago**: *"Usá esta etiqueta cuando el deudor se comprometa con una fecha específica para pagar."*
+    - **Rechaza pago**: *"Usá esta etiqueta cuando el deudor niegue la deuda o se rehúse a pagar."*
+    - **Pide más tiempo**: *"Usá esta etiqueta cuando el deudor pida una extensión sin comprometerse a una fecha."*
+
+    Activá las **notificaciones por email** en las etiquetas que te importan para enterarte al instante.
+  </Step>
+  <Step title="Armá tu campaña">
+    Andá a [Campañas](/es/campaigns/overview) y creá una nueva campaña. Cargá tus contactos con los datos de la deuda (monto, concepto, fecha de vencimiento) como campos adicionales para que el agente los use en la conversación.
+  </Step>
+  <Step title="Lanzá y monitoreá">
+    Las llamadas se lanzan simultáneamente. Cada vez que un deudor se comprometa, vas a recibir un email con la etiqueta, la razón y un link directo a la llamada.
+  </Step>
+</Steps>
+
+## Resultado
+
+- Cientos de llamadas de cobranza lanzadas en **minutos**
+- Cada conversación **personalizada** con los datos de la deuda
+- **Notificaciones instantáneas** cuando hay un compromiso de pago
+- Filtrá las llamadas por etiqueta para ver rápidamente quiénes se comprometieron
+- Tu equipo se enfoca solo en los casos que requieren intervención humana
+
+## Funcionalidades utilizadas
+
+- [Agentes de IA](/es/agents/vision-general)
+- [Campañas de llamadas](/es/campaigns/overview)
+- [Etiquetas de Llamada](/es/agents/etiquetas-de-llamada)

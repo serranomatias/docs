@@ -1,0 +1,227 @@
+---
+title: 'N8N'
+description: 'Guía para integrar ContactShip con N8N y automatizar llamadas de IA'
+---
+
+## ¿Qué podés lograr con ContactShip + N8N?
+
+[N8N](https://n8n.io) es una herramienta de automatización sin código (open source) que al integrarla con ContactShip te permite hacer cosas como:
+
+<CardGroup cols={2}>
+  <Card title="Llamadas automáticas" icon="phone-arrow-up-right">
+    Que cuando alguien rellene un formulario, automáticamente se active una llamada de un agente de IA.
+  </Card>
+  <Card title="Calificar leads al instante" icon="user-check">
+    Calificá leads en tiempo real sin que nadie los tenga que llamar manualmente.
+  </Card>
+  <Card title="Tickets de soporte" icon="ticket">
+    Atendé llamadas telefónicas y levantá tickets automáticamente para atención al cliente.
+  </Card>
+  <Card title="Reportes a tu CRM" icon="chart-line">
+    Enviá reportes de llamadas directamente a tu CRM o por email, todo sin escribir una línea de código.
+  </Card>
+</CardGroup>
+
+## Lo que necesitás para empezar
+
+Antes de comenzar, asegurate de tener:
+
+1. **Una cuenta de N8N** — ya sea [self-hosted](https://docs.n8n.io/hosting/) (open source) o en su [versión Cloud](https://n8n.io).
+2. **Una cuenta en ContactShip** — podés [registrarte gratis](https://app.contactship.ai) y probar la plataforma.
+
+---
+
+## Paso 1: Instalá el nodo de ContactShip en N8N
+
+ContactShip tiene un nodo comunitario en N8N que necesitás instalar en tu cuenta.
+
+<Steps>
+  <Step title="Andá a Configuración">
+    En tu cuenta de N8N, andá a **Settings** (Configuración) en el menú lateral.
+  </Step>
+  <Step title="Buscá Community Nodes">
+    Dentro de configuración, bajá hasta encontrar el apartado de **Community Nodes** (Nodos comunitarios).
+  </Step>
+  <Step title="Instalá el nodo">
+    Hacé clic en **Install** y escribí:
+
+    ```
+    n8n-nodes-contactship
+    ```
+
+    Aceptá e instalá. Así de simple, ya va a aparecer el nodo de ContactShip en tu cuenta.
+  </Step>
+</Steps>
+
+<Tip>
+Una vez instalado, cuando crees un workflow nuevo y busques "ContactShip", vas a ver el nodo comunitario con **Triggers** (se ejecutan cuando pasa algo) y **Actions** (ejecutan una acción, como hacer una llamada).
+</Tip>
+
+---
+
+## Paso 2: Configurá tus credenciales (API Key)
+
+Para que N8N se conecte con tu cuenta de ContactShip, necesitás crear una credencial con tu API Key.
+
+<Steps>
+  <Step title="Creá una nueva credencial en N8N">
+    Al agregar un nodo de ContactShip por primera vez, te va a pedir que configures una credencial. Hacé clic en **Create New Credential** y ponele un nombre que identifiques fácilmente (por ejemplo, el nombre de tu cuenta).
+  </Step>
+  <Step title="Obtené tu API Key desde ContactShip">
+    Iniciá sesión en [ContactShip](https://app.contactship.ai), andá al menú lateral y entrá en **Organizaciones**. Bajá hasta encontrar **Claves API** y hacé clic en **Generar Clave**.
+
+    <Frame>
+      ![Claves API](/images/apikeys.png)
+    </Frame>
+
+    <Warning>
+      La clave API solo se muestra una vez. Copiala y guardala de forma segura. Quien tenga acceso a esta clave puede ejecutar acciones dentro de tu cuenta.
+    </Warning>
+  </Step>
+  <Step title="Pegá la API Key en N8N">
+    Volvé a N8N, pegá la clave en el campo **API Key** y hacé clic en **Guardar**. La conexión queda lista.
+  </Step>
+</Steps>
+
+---
+
+## Paso 3: Configurá tu primer nodo de llamada
+
+Ahora que tenés la conexión lista, podés configurar tu primer nodo para hacer una llamada con un agente de IA.
+
+<Steps>
+  <Step title="Agregá el nodo Make an AI Phone Call">
+    En tu workflow, agregá un nodo de ContactShip y seleccioná la acción **Make an AI Phone Call**.
+  </Step>
+  <Step title="Seleccioná el agente de IA">
+    Elegí con qué agente querés hacer la llamada. Si todavía no tenés un agente creado, podés crear uno desde el [apartado de Agentes](https://app.contactship.ai) en la plataforma.
+  </Step>
+  <Step title="Elegí el número de salida">
+    Seleccioná desde qué número telefónico querés lanzar la llamada. Te van a aparecer los números que ya tengas registrados en tu cuenta.
+
+    <Note>
+    Si no ves tu número, podés agregarlo desde **Mis Números** en la plataforma, o escribirlo directamente usando el modo **Expression** con el código de área incluido.
+    </Note>
+  </Step>
+  <Step title="Completá los datos del destinatario">
+    Rellená los campos obligatorios:
+
+    - **To Number**: El número al que querés llamar.
+    - **Full Name**: El nombre de la persona.
+    - **Country**: El país del contacto (importante para controlar la zona horaria en campañas).
+
+    Y opcionalmente:
+    - **Email**: El correo electrónico del contacto.
+  </Step>
+</Steps>
+
+---
+
+## Paso 4: Enriquecé la llamada con datos adicionales
+
+Esta es una de las partes más poderosas de la integración. Podés pasarle información adicional a la IA para que **personalice la llamada**.
+
+Dentro del nodo, hacé clic en **Add Fields** y seleccioná **Additional Data**. Acá podés agregar pares de clave-valor con cualquier información relevante:
+
+| Clave (Key) | Valor (Value) | Para qué sirve |
+|---|---|---|
+| `Producto de interés` | `Agentes de IA entrantes` | La IA sabe de qué producto hablar |
+| `Source` | `Formulario de TikTok` | La IA sabe de dónde vino el lead |
+| `Presupuesto` | `$1000 USD` | La IA conoce el rango de presupuesto |
+
+<Warning>
+Es importante que la **clave sea descriptiva**. Si ponés solo "x", la IA no va a entender qué significa. Usá nombres claros como "Producto de interés" o "Servicio requerido".
+</Warning>
+
+### Delay (opcional)
+
+También podés agregar un **Delay** desde **Add Fields**. Este campo acepta un número en **minutos** que indica cuánto tiempo esperar antes de lanzar la llamada.
+
+Por ejemplo, un delay de `5` hace que la llamada se lance 5 minutos después, lo cual puede resultar más natural que llamar al instante.
+
+---
+
+## Caso real: Formulario → Llamada automática en 30 segundos
+
+Veamos un ejemplo práctico: cuando alguien rellena un formulario, automáticamente se lo llama con un agente de IA.
+
+### Creá tu formulario
+
+Podés usar cualquier proveedor de formularios: [Tally](https://tally.so), Google Forms, Typeform, o incluso un formulario custom. En este ejemplo usamos Tally con campos como:
+
+- Nombre y apellido
+- Correo electrónico
+- Número de teléfono
+- Nombre de empresa
+- Cantidad de empleados
+- Servicio requerido
+
+### Armá el flujo en N8N
+
+<Steps>
+  <Step title="Agregá un Webhook como Trigger">
+    En tu workflow, agregá un nodo **Webhook** (Trigger). Configuralo con:
+    - **Method**: POST
+    - **Path**: Un nombre descriptivo como `form-submission-tally`
+
+    Vas a obtener dos URLs: una de **testeo** y una de **producción**. Usá la de testeo mientras configurás.
+  </Step>
+  <Step title="Conectá el formulario al Webhook">
+    En Tally (o tu proveedor), andá a **Integraciones → Webhooks** y pegá la URL del webhook de N8N. Activá la conexión.
+  </Step>
+  <Step title="Hacé una prueba para ver los datos">
+    Desactivá temporalmente el nodo de ContactShip, hacé clic en **Test Workflow** en N8N, y rellená el formulario. Vas a ver la información que llega al webhook: nombre, teléfono, email, empresa, etc.
+  </Step>
+  <Step title="Mapeá los datos dinámicamente">
+    Volvé a activar el nodo de ContactShip y conectá los campos del formulario con los campos del nodo:
+
+    - **To Number** ← Número del formulario
+    - **Full Name** ← Nombre + Apellido del formulario
+    - **Email** ← Email del formulario
+    - **Additional Data** ← Empresa, servicio requerido, etc.
+
+    Esto se hace arrastrando los valores desde el panel izquierdo (input) hacia los campos del nodo. N8N automáticamente crea las expresiones dinámicas.
+  </Step>
+  <Step title="Testeá el flujo completo">
+    Hacé clic en **Test Workflow**, rellená el formulario, y en segundos vas a recibir la llamada del agente de IA con toda la información del lead.
+  </Step>
+</Steps>
+
+<Note>
+Recordá que para hacer llamadas necesitás tener créditos en tu cuenta de ContactShip. Podés cargar créditos desde **Organizaciones → Planes** en la plataforma.
+</Note>
+
+---
+
+## Revisá los resultados en ContactShip
+
+Todas las llamadas que se hagan a través de N8N van a aparecer en el apartado de **Llamadas** de ContactShip, donde podés:
+
+- Escuchar la **grabación de audio** de la llamada
+- Leer la **transcripción** completa
+- Ver un **resumen** generado por la IA
+- Conocer el **sentimiento** del usuario durante la llamada
+- Ver el **estado** de la llamada (completada, no contestada, etc.)
+- Acceder al perfil del **contacto** con su historial, etiquetas, comentarios y más
+
+---
+
+## Consejos para una integración exitosa
+
+<AccordionGroup>
+  <Accordion title="Mantené tu API Key segura">
+    No la compartas públicamente. Quien tenga acceso a tu clave puede ejecutar acciones en tu cuenta.
+  </Accordion>
+  <Accordion title="Usá la URL de producción cuando actives tu workflow">
+    La URL de testeo solo funciona mientras estás en modo test. Cuando actives tu escenario, asegurate de cambiar el webhook del formulario a la URL de producción.
+  </Accordion>
+  <Accordion title="Sé descriptivo en los Additional Data">
+    La IA va a recibir los nombres de las claves tal cual los escribas. "Producto de interés" es mucho mejor que "dato1".
+  </Accordion>
+  <Accordion title="Usá delay para que sea más natural">
+    Un delay de 5-15 minutos puede hacer que la llamada parezca más natural y no tan inmediata después de rellenar un formulario.
+  </Accordion>
+  <Accordion title="Guardá tu workflow seguido">
+    N8N no guarda automáticamente. Si se cierra el navegador, podés perder tu trabajo. Guardá cada tanto.
+  </Accordion>
+</AccordionGroup>
