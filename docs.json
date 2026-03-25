@@ -73,6 +73,10 @@
                 "group": "Integraciones",
                 "pages": [
                   "es/integrations/quickstart",
+                  "es/integrations/mcp",
+                  "es/integrations/mcp-claude",
+                  "es/integrations/mcp-claude-code",
+                  "es/integrations/mcp-cursor",
                   "es/integrations/make",
                   "es/integrations/n8n"
                 ]
@@ -184,6 +188,10 @@
                 "group": "Integrations",
                 "pages": [
                   "en/integrations/quickstart",
+                  "en/integrations/mcp",
+                  "en/integrations/mcp-claude",
+                  "en/integrations/mcp-claude-code",
+                  "en/integrations/mcp-cursor",
                   "en/integrations/make",
                   "en/integrations/n8n"
                 ]

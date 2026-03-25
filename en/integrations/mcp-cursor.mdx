@@ -1,0 +1,88 @@
+---
+title: 'MCP on Cursor'
+description: 'Connect ContactShip with Cursor IDE to manage voice agents from your code editor.'
+---
+
+## Connect ContactShip with Cursor
+
+Connect your ContactShip account with [Cursor](https://cursor.com) to manage voice agents, launch calls, and search contacts without leaving your editor.
+
+---
+
+### Step by step
+
+<Steps>
+  <Step title="Open your project in Cursor">
+    Open any project in Cursor IDE.
+  </Step>
+  <Step title="Create the config file">
+    Create `.cursor/mcp.json` in your project root (or `~/.cursor/mcp.json` for all projects):
+
+    ```json
+    {
+      "mcpServers": {
+        "contactship": {
+          "url": "https://mcp.contactship.ai/sse",
+          "headers": {
+            "x-api-key": "YOUR_API_KEY"
+          }
+        }
+      }
+    }
+    ```
+
+    Replace `YOUR_API_KEY` with your actual key.
+
+    <Tip>
+    Don't have your API key? Generate it at [app.contactship.ai/es/organization/api-keys](https://app.contactship.ai/es/organization/api-keys). Requires a Starter subscription ($30 USD/month) or above.
+    </Tip>
+  </Step>
+  <Step title="Done — auto-connects">
+    Cursor detects the file and connects automatically. No restart needed.
+
+    Try opening the Cursor chat (Cmd+L / Ctrl+L) and typing:
+
+    > "Show all my ContactShip agents"
+  </Step>
+</Steps>
+
+---
+
+### What you can ask Cursor
+
+- **"Show my agents"** — Lists all your voice agents
+- **"Show the sales agent config"** — Full detail
+- **"Update the prompt to be more professional"** — Reads, rewrites, and saves
+- **"Call +54 9 11 5555 1234 with my agent"** — Launches the call
+- **"Find the contact with phone +52 55 1234 5678"** — Searches the CRM
+
+---
+
+### Global vs. project config
+
+| File | Scope |
+|------|-------|
+| `.cursor/mcp.json` (in your project) | Only that project |
+| `~/.cursor/mcp.json` (in your home) | All your projects |
+
+<Note>
+If you have the file in both places, the project config takes priority.
+</Note>
+
+---
+
+### Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Cursor doesn't detect the connection">
+    Check that the file is named exactly `.cursor/mcp.json` and is in the project root. The JSON must be valid (no trailing commas).
+  </Accordion>
+  <Accordion title="Connection error">
+    Check the server is up by opening in your browser: `https://mcp.contactship.ai/health`
+
+    It should return `{"status":"ok"}`.
+  </Accordion>
+  <Accordion title="Tools don't appear in the chat">
+    Close and reopen Cursor. Tools are loaded at startup.
+  </Accordion>
+</AccordionGroup>

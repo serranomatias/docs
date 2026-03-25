@@ -1,0 +1,108 @@
+---
+title: 'MCP en Claude Code'
+description: 'Conecta ContactShip con Claude Code para gestionar agentes de voz desde la terminal.'
+---
+
+## Conectar ContactShip con Claude Code
+
+Conectá tu cuenta de ContactShip con [Claude Code](https://claude.com/claude-code) para gestionar agentes, lanzar llamadas y buscar contactos directamente desde la terminal.
+
+---
+
+### Paso a paso
+
+<Steps>
+  <Step title="Abrí tu terminal">
+    Asegurate de tener Claude Code instalado. Si no lo tenés, seguí las instrucciones en [claude.com/claude-code](https://claude.com/claude-code).
+  </Step>
+  <Step title="Agregá ContactShip">
+    Ejecutá este comando (reemplazá `TU_API_KEY` con tu clave real):
+
+    ```bash
+    claude mcp add-json contactship '{"type":"sse","url":"https://mcp.contactship.ai/sse","headers":{"x-api-key":"TU_API_KEY"}}'
+    ```
+
+    <Warning>
+    Es importante incluir `"type":"sse"` en el JSON. Sin ese campo, Claude Code rechaza la configuración con "Invalid configuration".
+    </Warning>
+
+    <Tip>
+    Si no tenés tu API key, generala desde [app.contactship.ai/es/organization/api-keys](https://app.contactship.ai/es/organization/api-keys). Necesitás la suscripción Starter ($30 USD/mes) o superior.
+    </Tip>
+  </Step>
+  <Step title="Verificá la conexión">
+    ```bash
+    claude mcp list
+    ```
+
+    Deberías ver `contactship` en la lista.
+  </Step>
+  <Step title="Empezá a usar">
+    Abrí Claude Code y probá:
+
+    ```bash
+    claude
+    ```
+
+    Adentro, escribí `/mcp` para verificar que el servidor está conectado. Después pedile lo que necesites:
+
+    > "Mostrá todos mis agentes de ContactShip"
+  </Step>
+</Steps>
+
+---
+
+### Qué podés pedirle
+
+- **"Listá mis agentes"** — Ve todos tus agentes de voz
+- **"Mostrá la config del agente ag_xxx"** — Detalle completo de un agente
+- **"Cambiá el prompt del agente de encuestas para que suene más natural"** — Lee, reescribe y actualiza
+- **"Llamá a +54 9 341 555 1234 con el agente de cobranzas"** — Lanza una llamada
+- **"Buscá contactos con el apellido Pérez"** — Busca en el CRM
+- **"Mostrá mis números de teléfono"** — Lista los números disponibles
+
+---
+
+### Desconectar
+
+Si necesitás remover la conexión:
+
+```bash
+claude mcp remove contactship
+```
+
+---
+
+### Solución de problemas
+
+<AccordionGroup>
+  <Accordion title='"Invalid configuration" al agregar'>
+    Asegurate de incluir `"type":"sse"` en el JSON. El comando correcto es:
+
+    ```bash
+    claude mcp add-json contactship '{"type":"sse","url":"https://mcp.contactship.ai/sse","headers":{"x-api-key":"TU_KEY"}}'
+    ```
+  </Accordion>
+  <Accordion title='"Failed to reconnect" en /mcp'>
+    Verificá que el servidor está activo:
+
+    ```bash
+    curl https://mcp.contactship.ai/health
+    ```
+
+    Si devuelve `{"status":"ok"}`, el servidor funciona. El problema puede ser tu DNS. Probá:
+
+    ```bash
+    sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder
+    ```
+  </Accordion>
+  <Accordion title="Las herramientas no responden">
+    Verificá tu API key directamente:
+
+    ```bash
+    curl -H 'x-api-key: TU_KEY' https://api.contactship.ai/v1/agents
+    ```
+
+    Si devuelve error 401, tu key es inválida. Generá una nueva desde el [dashboard](https://app.contactship.ai/es/organization/api-keys).
+  </Accordion>
+</AccordionGroup>

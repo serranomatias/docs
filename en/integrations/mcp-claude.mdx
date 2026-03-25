@@ -1,0 +1,71 @@
+---
+title: 'MCP on Claude (web)'
+description: 'Connect ContactShip with Claude.ai to manage voice agents from your browser.'
+---
+
+## Connect ContactShip with Claude.ai
+
+Connect your ContactShip account directly on [claude.ai](https://claude.ai) to manage agents, launch calls, and search contacts — all from the browser chat.
+
+---
+
+### Step by step
+
+<Steps>
+  <Step title="Open Claude.ai">
+    Go to [claude.ai](https://claude.ai) and sign in.
+  </Step>
+  <Step title="Open integration settings">
+    Click your profile (bottom left) > **Settings** > **Integrations** > **Add custom connector**.
+  </Step>
+  <Step title="Fill in the details">
+    - **Name:** `ContactShip`
+    - **Remote MCP server URL:** `https://mcp.contactship.ai/mcp`
+    - Leave OAuth fields empty (auto-configured)
+
+    Click **Add**.
+  </Step>
+  <Step title="Authorize your account">
+    A ContactShip page will open asking for your API key. Paste it and click **Connect**.
+
+    <Tip>
+    Don't have your API key? Generate it at [app.contactship.ai/es/organization/api-keys](https://app.contactship.ai/es/organization/api-keys). Requires a Starter subscription ($30 USD/month) or above.
+    </Tip>
+  </Step>
+  <Step title="Done — start using it">
+    Go back to the Claude chat and try something like:
+
+    > "Show all my ContactShip agents"
+
+    Claude will use the ContactShip tools automatically.
+  </Step>
+</Steps>
+
+---
+
+### What you can ask Claude
+
+Once connected, just talk naturally:
+
+- **"Show my agents"** — Lists all your voice agents
+- **"Show the full config of the sales agent"** — Shows prompt, voice, tools, everything
+- **"Make the agent's prompt more informal"** — Claude reads the current prompt, rewrites it, and updates it
+- **"Call +52 55 1234 5678 with the survey agent"** — Launches the call instantly
+- **"Find the contact Juan Pérez"** — Searches your ContactShip CRM
+- **"Show my available phone numbers"** — Lists your outbound numbers
+
+---
+
+### Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="I don't see the option to add a connector">
+    Custom connectors may be in beta. Make sure you have the latest version of Claude. If it doesn't appear, try [Claude Code](/en/integrations/mcp-claude-code) as an alternative.
+  </Accordion>
+  <Accordion title="Connection fails or shows an error">
+    Make sure the URL is exactly `https://mcp.contactship.ai/mcp` (with `/mcp` at the end, not `/sse`). If the issue persists, try generating a new API key.
+  </Accordion>
+  <Accordion title="Tools don't appear">
+    Close and reopen the conversation. Tools are loaded at the start of each new chat.
+  </Accordion>
+</AccordionGroup>

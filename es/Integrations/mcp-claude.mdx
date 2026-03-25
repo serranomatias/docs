@@ -1,0 +1,71 @@
+---
+title: 'MCP en Claude (web)'
+description: 'Conecta ContactShip con Claude.ai para gestionar agentes de voz desde el navegador.'
+---
+
+## Conectar ContactShip con Claude.ai
+
+Conectá tu cuenta de ContactShip directamente en [claude.ai](https://claude.ai) para gestionar tus agentes, lanzar llamadas y buscar contactos — todo desde el chat del navegador.
+
+---
+
+### Paso a paso
+
+<Steps>
+  <Step title="Abrí Claude.ai">
+    Ingresá a [claude.ai](https://claude.ai) con tu cuenta.
+  </Step>
+  <Step title="Abrí la configuración de integraciones">
+    Hacé click en tu perfil (abajo a la izquierda) > **Settings** > **Integrations** > **Add custom connector**.
+  </Step>
+  <Step title="Completá los datos">
+    - **Nombre:** `ContactShip`
+    - **URL del servidor MCP remoto:** `https://mcp.contactship.ai/mcp`
+    - Dejá OAuth vacío (se configura automáticamente)
+
+    Hacé click en **Agregar**.
+  </Step>
+  <Step title="Autorizá tu cuenta">
+    Se va a abrir una página de ContactShip pidiéndote tu API key. Pegá la key y hacé click en **Conectar**.
+
+    <Tip>
+    Si no tenés tu API key, generala desde [app.contactship.ai/es/organization/api-keys](https://app.contactship.ai/es/organization/api-keys). Necesitás la suscripción Starter ($30 USD/mes) o superior.
+    </Tip>
+  </Step>
+  <Step title="Listo — empezá a usar">
+    Volvé al chat de Claude y probá con algo como:
+
+    > "Mostrá todos mis agentes de ContactShip"
+
+    Claude va a usar las herramientas de ContactShip automáticamente.
+  </Step>
+</Steps>
+
+---
+
+### Qué podés pedirle a Claude
+
+Una vez conectado, podés hablarle normalmente:
+
+- **"Mostrá mis agentes"** — Lista todos tus agentes de voz
+- **"Mostrá la config completa del agente de ventas"** — Te muestra prompt, voz, herramientas, todo
+- **"Cambiá el prompt del agente para que suene más informal"** — Claude lee el prompt actual, lo reescribe, y lo actualiza
+- **"Llamá a +52 55 1234 5678 con el agente de encuestas"** — Lanza la llamada al instante
+- **"Buscá al contacto Juan Pérez"** — Busca en tu CRM de ContactShip
+- **"Mostrá mis números disponibles"** — Lista tus números para llamadas salientes
+
+---
+
+### Solución de problemas
+
+<AccordionGroup>
+  <Accordion title="No me aparece la opción de agregar conector">
+    La funcionalidad de conectores personalizados puede estar en beta. Asegurate de tener la última versión de Claude. Si no te aparece, probá con [Claude Code](/es/integrations/mcp-claude-code) como alternativa.
+  </Accordion>
+  <Accordion title="La conexión falla o da error">
+    Verificá que la URL sea exactamente `https://mcp.contactship.ai/mcp` (con `/mcp` al final, no `/sse`). Si el problema persiste, probá generar una nueva API key.
+  </Accordion>
+  <Accordion title="Las herramientas no aparecen">
+    Cerrá y volvé a abrir la conversación. Las herramientas se cargan al inicio de cada chat nuevo.
+  </Accordion>
+</AccordionGroup>

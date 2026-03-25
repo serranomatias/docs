@@ -1,0 +1,88 @@
+---
+title: 'MCP en Cursor'
+description: 'Conecta ContactShip con Cursor IDE para gestionar agentes de voz desde tu editor de código.'
+---
+
+## Conectar ContactShip con Cursor
+
+Conectá tu cuenta de ContactShip con [Cursor](https://cursor.com) para gestionar agentes de voz, lanzar llamadas y buscar contactos sin salir de tu editor.
+
+---
+
+### Paso a paso
+
+<Steps>
+  <Step title="Abrí tu proyecto en Cursor">
+    Abrí cualquier proyecto en Cursor IDE.
+  </Step>
+  <Step title="Creá el archivo de configuración">
+    Creá el archivo `.cursor/mcp.json` en la raíz de tu proyecto (o `~/.cursor/mcp.json` si querés que funcione en todos tus proyectos):
+
+    ```json
+    {
+      "mcpServers": {
+        "contactship": {
+          "url": "https://mcp.contactship.ai/sse",
+          "headers": {
+            "x-api-key": "TU_API_KEY"
+          }
+        }
+      }
+    }
+    ```
+
+    Reemplazá `TU_API_KEY` con tu clave real.
+
+    <Tip>
+    Si no tenés tu API key, generala desde [app.contactship.ai/es/organization/api-keys](https://app.contactship.ai/es/organization/api-keys). Necesitás la suscripción Starter ($30 USD/mes) o superior.
+    </Tip>
+  </Step>
+  <Step title="Listo — se conecta automáticamente">
+    Cursor detecta el archivo y se conecta automáticamente. No hace falta reiniciar.
+
+    Probá abriendo el chat de Cursor (Cmd+L / Ctrl+L) y escribiendo:
+
+    > "Mostrá todos mis agentes de ContactShip"
+  </Step>
+</Steps>
+
+---
+
+### Qué podés pedirle a Cursor
+
+- **"Mostrá mis agentes"** — Lista todos tus agentes de voz
+- **"Mostrá la config del agente de ventas"** — Detalle completo
+- **"Actualizá el prompt para que sea más profesional"** — Lee, reescribe y guarda
+- **"Llamá a +54 9 11 5555 1234 con mi agente"** — Lanza la llamada
+- **"Buscá el contacto con teléfono +52 55 1234 5678"** — Busca en el CRM
+
+---
+
+### Configuración global vs. por proyecto
+
+| Archivo | Alcance |
+|---------|---------|
+| `.cursor/mcp.json` (en tu proyecto) | Solo ese proyecto |
+| `~/.cursor/mcp.json` (en tu home) | Todos tus proyectos |
+
+<Note>
+Si tenés el archivo en ambos lugares, la configuración del proyecto tiene prioridad.
+</Note>
+
+---
+
+### Solución de problemas
+
+<AccordionGroup>
+  <Accordion title="Cursor no detecta la conexión">
+    Verificá que el archivo se llame exactamente `.cursor/mcp.json` y esté en la raíz del proyecto. El formato JSON debe ser válido (sin comas al final).
+  </Accordion>
+  <Accordion title="Error de conexión">
+    Verificá que el servidor esté activo abriendo en tu navegador: `https://mcp.contactship.ai/health`
+
+    Debería devolver `{"status":"ok"}`.
+  </Accordion>
+  <Accordion title="Las herramientas no aparecen en el chat">
+    Cerrá y volvé a abrir Cursor. Las herramientas se cargan al inicio.
+  </Accordion>
+</AccordionGroup>
