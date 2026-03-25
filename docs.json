@@ -70,13 +70,18 @@
                 ]
               },
               {
+                "group": "MCP",
+                "pages": [
+                  "es/mcp/vision-general",
+                  "es/mcp/claude",
+                  "es/mcp/claude-code",
+                  "es/mcp/cursor"
+                ]
+              },
+              {
                 "group": "Integraciones",
                 "pages": [
                   "es/integrations/quickstart",
-                  "es/integrations/mcp",
-                  "es/integrations/mcp-claude",
-                  "es/integrations/mcp-claude-code",
-                  "es/integrations/mcp-cursor",
                   "es/integrations/make",
                   "es/integrations/n8n"
                 ]
@@ -185,13 +190,18 @@
                 ]
               },
               {
+                "group": "MCP",
+                "pages": [
+                  "en/mcp/overview",
+                  "en/mcp/claude",
+                  "en/mcp/claude-code",
+                  "en/mcp/cursor"
+                ]
+              },
+              {
                 "group": "Integrations",
                 "pages": [
                   "en/integrations/quickstart",
-                  "en/integrations/mcp",
-                  "en/integrations/mcp-claude",
-                  "en/integrations/mcp-claude-code",
-                  "en/integrations/mcp-cursor",
                   "en/integrations/make",
                   "en/integrations/n8n"
                 ]
