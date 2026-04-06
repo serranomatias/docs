@@ -1,0 +1,116 @@
+---
+title: 'Update Tag'
+api: 'PATCH /v1/tags/{tagId}'
+description: 'Update an existing tag'
+---
+
+Updates the name, color, or label of an existing tag.
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication. Found in your dashboard under API settings.
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="tagId" type="string" required>
+  The UUID of the tag to update.
+</ParamField>
+
+## Body
+
+<ParamField body="name" type="string">
+  New name for the tag.
+</ParamField>
+
+<ParamField body="color" type="string">
+  New hex color code (e.g. `#3498DB`).
+</ParamField>
+
+<ParamField body="label" type="string">
+  New display label.
+</ParamField>
+
+## Response
+
+<ResponseField name="id" type="string">
+  UUID of the updated tag.
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Updated tag name.
+</ResponseField>
+
+<ResponseField name="color" type="string">
+  Updated hex color code.
+</ResponseField>
+
+<ResponseField name="label" type="string">
+  Updated display label.
+</ResponseField>
+
+<ResponseField name="organization_id" type="string">
+  UUID of the organization that owns this tag.
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  Timestamp of the last update (ISO 8601).
+</ResponseField>
+
+## Error Codes
+
+- `400 Bad Request` — Invalid fields
+- `401 Unauthorized` — Invalid or missing API key
+- `404 Not Found` — Tag not found
+- `500 Internal Server Error` — Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL
+curl -X PATCH "https://api.contactship.ai/v1/tags/tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890" \
+  -H "x-api-key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{"label": "Very Hot Lead", "color": "#FF0000"}'
+```
+
+```javascript JavaScript
+const tagId = 'tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+const response = await fetch(`https://api.contactship.ai/v1/tags/${tagId}`, {
+  method: 'PATCH',
+  headers: {
+    'x-api-key': 'your-api-key',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ label: 'Very Hot Lead', color: '#FF0000' }),
+});
+const updated = await response.json();
+console.log(`Updated tag: ${updated.name}`);
+```
+
+```python Python
+import requests
+
+tag_id = 'tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+response = requests.patch(
+    f'https://api.contactship.ai/v1/tags/{tag_id}',
+    headers={'x-api-key': 'your-api-key'},
+    json={'label': 'Very Hot Lead', 'color': '#FF0000'},
+)
+print(response.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+{
+  "id": "tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "name": "hot-lead",
+  "color": "#FF0000",
+  "label": "Very Hot Lead",
+  "organization_id": "org-f1e2d3c4-b5a6-7890-1234-567890abcdef",
+  "updated_at": "2026-04-06T14:00:00Z"
+}
+```
+</ResponseExample>

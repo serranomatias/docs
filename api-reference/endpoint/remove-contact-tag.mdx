@@ -1,0 +1,75 @@
+---
+title: 'Remove Tag from Contact'
+api: 'DELETE /v1/contacts/{contactId}/tags/{tagId}'
+description: 'Remove a tag assignment from a contact'
+---
+
+Removes a tag from a contact. The tag itself is not deleted — only the assignment is removed.
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication. Found in your dashboard under API settings.
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="contactId" type="string" required>
+  The UUID of the contact.
+</ParamField>
+
+<ParamField path="tagId" type="string" required>
+  The UUID of the tag to remove.
+</ParamField>
+
+## Response
+
+Returns `true` on successful removal.
+
+## Error Codes
+
+- `401 Unauthorized` — Invalid or missing API key
+- `404 Not Found` — Contact, tag, or assignment not found
+- `500 Internal Server Error` — Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL
+curl -X DELETE "https://api.contactship.ai/v1/contacts/c1d2e3f4-a5b6-7890-cdef-123456789012/tags/tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript
+const contactId = 'c1d2e3f4-a5b6-7890-cdef-123456789012';
+const tagId = 'tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+
+const response = await fetch(
+  `https://api.contactship.ai/v1/contacts/${contactId}/tags/${tagId}`,
+  {
+    method: 'DELETE',
+    headers: { 'x-api-key': 'your-api-key' },
+  }
+);
+const success = await response.json(); // true
+```
+
+```python Python
+import requests
+
+contact_id = 'c1d2e3f4-a5b6-7890-cdef-123456789012'
+tag_id = 'tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+
+response = requests.delete(
+    f'https://api.contactship.ai/v1/contacts/{contact_id}/tags/{tag_id}',
+    headers={'x-api-key': 'your-api-key'},
+)
+print(response.json())  # True
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+true
+```
+</ResponseExample>

@@ -133,9 +133,11 @@
               {
                 "group": "Agentes",
                 "pages": [
+                  "api-reference/endpoint/create-agent",
                   "api-reference/endpoint/get-agent",
                   "api-reference/endpoint/list-agents",
-                  "api-reference/endpoint/update-agent"
+                  "api-reference/endpoint/update-agent",
+                  "api-reference/endpoint/delete-agent"
                 ]
               },
               {
@@ -148,7 +150,19 @@
                   "api-reference/endpoint/get-contact-call-history-by-phone",
                   "api-reference/endpoint/update-contact",
                   "api-reference/endpoint/delete-contact",
-                  "api-reference/endpoint/get-contact-comments"
+                  "api-reference/endpoint/get-contact-comments",
+                  "api-reference/endpoint/get-contact-tags",
+                  "api-reference/endpoint/add-contact-tag",
+                  "api-reference/endpoint/remove-contact-tag"
+                ]
+              },
+              {
+                "group": "Etiquetas",
+                "pages": [
+                  "api-reference/endpoint/list-tags",
+                  "api-reference/endpoint/create-tag",
+                  "api-reference/endpoint/update-tag",
+                  "api-reference/endpoint/delete-tag"
                 ]
               },
               {
@@ -156,6 +170,12 @@
                 "pages": [
                   "api-reference/endpoint/list-calls",
                   "api-reference/endpoint/get-call"
+                ]
+              },
+              {
+                "group": "Números de Teléfono",
+                "pages": [
+                  "api-reference/endpoint/get-phone-numbers"
                 ]
               }
             ]
@@ -266,9 +286,11 @@
               {
                 "group": "Agents",
                 "pages": [
+                  "api-reference/endpoint/create-agent",
                   "api-reference/endpoint/get-agent",
                   "api-reference/endpoint/list-agents",
-                  "api-reference/endpoint/update-agent"
+                  "api-reference/endpoint/update-agent",
+                  "api-reference/endpoint/delete-agent"
                 ]
               },
               {
@@ -281,7 +303,19 @@
                   "api-reference/endpoint/get-contact-call-history-by-phone",
                   "api-reference/endpoint/update-contact",
                   "api-reference/endpoint/delete-contact",
-                  "api-reference/endpoint/get-contact-comments"
+                  "api-reference/endpoint/get-contact-comments",
+                  "api-reference/endpoint/get-contact-tags",
+                  "api-reference/endpoint/add-contact-tag",
+                  "api-reference/endpoint/remove-contact-tag"
+                ]
+              },
+              {
+                "group": "Tags",
+                "pages": [
+                  "api-reference/endpoint/list-tags",
+                  "api-reference/endpoint/create-tag",
+                  "api-reference/endpoint/update-tag",
+                  "api-reference/endpoint/delete-tag"
                 ]
               },
               {
@@ -289,6 +323,12 @@
                 "pages": [
                   "api-reference/endpoint/list-calls",
                   "api-reference/endpoint/get-call"
+                ]
+              },
+              {
+                "group": "Phone Numbers",
+                "pages": [
+                  "api-reference/endpoint/get-phone-numbers"
                 ]
               }
             ]

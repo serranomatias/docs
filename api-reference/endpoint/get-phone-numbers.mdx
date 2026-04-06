@@ -1,0 +1,117 @@
+---
+title: 'List Phone Numbers'
+api: 'GET /v1/phone-numbers'
+description: 'Retrieve all phone numbers associated with your organization'
+---
+
+Returns the phone numbers registered to your organization. Use these numbers as the `from_number_id` when initiating calls via the [Make AI Phone Call](/api-reference/endpoint/make-ai-phone-call) endpoint.
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication. Found in your dashboard under API settings.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="limit" type="number" default="5">
+  Maximum number of records to return. Must be ≥ 0.
+</ParamField>
+
+<ParamField query="offset" type="number" default="0">
+  Number of records to skip for pagination.
+</ParamField>
+
+<ParamField query="order" type="string" default="desc">
+  Sort direction by creation date. Possible values: `asc`, `desc`.
+</ParamField>
+
+<ParamField query="type" type="string">
+  Filter by number type. Possible values: `inbound`, `outbound`.
+</ParamField>
+
+## Response
+
+<ResponseField name="data" type="array">
+  Array of phone number objects.
+  <Expandable title="Phone number object">
+    <ResponseField name="id" type="string">
+      Unique identifier of the phone number (UUID). Use this as `from_number_id` when making calls.
+    </ResponseField>
+    <ResponseField name="phone_number" type="string">
+      The phone number in E.164 format (e.g. `+12025551234`).
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      Number type: `inbound` or `outbound`.
+    </ResponseField>
+    <ResponseField name="organization_id" type="string">
+      UUID of the organization that owns this number.
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      Timestamp when the number was added (ISO 8601).
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="count" type="number">
+  Total number of phone numbers in your organization.
+</ResponseField>
+
+## Error Codes
+
+- `401 Unauthorized` — Invalid or missing API key
+- `500 Internal Server Error` — Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL
+curl -X GET "https://api.contactship.ai/v1/phone-numbers" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.contactship.ai/v1/phone-numbers', {
+  headers: { 'x-api-key': 'your-api-key' },
+});
+const { data, count } = await response.json();
+console.log(`${count} phone numbers available`);
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.contactship.ai/v1/phone-numbers',
+    headers={'x-api-key': 'your-api-key'},
+)
+
+result = response.json()
+for number in result['data']:
+    print(f"{number['phone_number']} ({number['type']}) — id: {number['id']}")
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+{
+  "data": [
+    {
+      "id": "pn-a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "phone_number": "+12025551234",
+      "type": "outbound",
+      "organization_id": "org-f1e2d3c4-b5a6-7890-1234-567890abcdef",
+      "created_at": "2026-01-15T10:00:00Z"
+    },
+    {
+      "id": "pn-b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "phone_number": "+14155559876",
+      "type": "inbound",
+      "organization_id": "org-f1e2d3c4-b5a6-7890-1234-567890abcdef",
+      "created_at": "2026-02-01T08:30:00Z"
+    }
+  ],
+  "count": 2
+}
+```
+</ResponseExample>

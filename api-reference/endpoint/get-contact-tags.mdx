@@ -1,0 +1,96 @@
+---
+title: 'Get Contact Tags'
+api: 'GET /v1/contacts/{contactId}/tags'
+description: 'Retrieve all tags assigned to a specific contact'
+---
+
+Returns all tags currently assigned to a contact.
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication. Found in your dashboard under API settings.
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="contactId" type="string" required>
+  The UUID of the contact.
+</ParamField>
+
+## Response
+
+Returns an array of tag objects assigned to the contact.
+
+<ResponseField name="id" type="string">
+  Unique identifier of the tag (UUID).
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  The tag name.
+</ResponseField>
+
+<ResponseField name="color" type="string">
+  Hex color code of the tag.
+</ResponseField>
+
+<ResponseField name="label" type="string">
+  Display label of the tag, if set.
+</ResponseField>
+
+## Error Codes
+
+- `401 Unauthorized` — Invalid or missing API key
+- `404 Not Found` — Contact not found
+- `500 Internal Server Error` — Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL
+curl -X GET "https://api.contactship.ai/v1/contacts/c1d2e3f4-a5b6-7890-cdef-123456789012/tags" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript
+const contactId = 'c1d2e3f4-a5b6-7890-cdef-123456789012';
+const response = await fetch(
+  `https://api.contactship.ai/v1/contacts/${contactId}/tags`,
+  { headers: { 'x-api-key': 'your-api-key' } }
+);
+const tags = await response.json();
+console.log(`Contact has ${tags.length} tags`);
+```
+
+```python Python
+import requests
+
+contact_id = 'c1d2e3f4-a5b6-7890-cdef-123456789012'
+response = requests.get(
+    f'https://api.contactship.ai/v1/contacts/{contact_id}/tags',
+    headers={'x-api-key': 'your-api-key'},
+)
+tags = response.json()
+for tag in tags:
+    print(f"{tag['name']} ({tag['color']})")
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+[
+  {
+    "id": "tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "hot-lead",
+    "color": "#FF5733",
+    "label": "Hot Lead"
+  },
+  {
+    "id": "tag-b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    "name": "customer",
+    "color": "#33FF57",
+    "label": "Customer"
+  }
+]
+```
+</ResponseExample>

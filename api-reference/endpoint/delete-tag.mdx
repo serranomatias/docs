@@ -1,0 +1,64 @@
+---
+title: 'Delete Tag'
+api: 'DELETE /v1/tags/{tagId}'
+description: 'Permanently delete a tag from your organization'
+---
+
+Permanently deletes a tag. This also removes the tag from all contacts it was assigned to.
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication. Found in your dashboard under API settings.
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="tagId" type="string" required>
+  The UUID of the tag to delete.
+</ParamField>
+
+## Response
+
+Returns `true` on successful deletion.
+
+## Error Codes
+
+- `401 Unauthorized` — Invalid or missing API key
+- `404 Not Found` — Tag not found
+- `500 Internal Server Error` — Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL
+curl -X DELETE "https://api.contactship.ai/v1/tags/tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript
+const tagId = 'tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+const response = await fetch(`https://api.contactship.ai/v1/tags/${tagId}`, {
+  method: 'DELETE',
+  headers: { 'x-api-key': 'your-api-key' },
+});
+const success = await response.json(); // true
+```
+
+```python Python
+import requests
+
+tag_id = 'tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+response = requests.delete(
+    f'https://api.contactship.ai/v1/tags/{tag_id}',
+    headers={'x-api-key': 'your-api-key'},
+)
+print(response.json())  # True
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+true
+```
+</ResponseExample>
