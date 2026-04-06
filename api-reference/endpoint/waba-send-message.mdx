@@ -1,14 +1,11 @@
 ---
 title: 'Send WhatsApp Message'
-api: 'POST https://integrations.contactship.ai/api/integrations/waba/send'
+api: 'POST /v1/waba/send'
 description: 'Send a text message to a contact via WhatsApp Business API (WABA)'
 ---
 
 Sends a plain text message to a contact through a configured WhatsApp Business channel. Automatically creates or reuses an existing conversation thread.
 
-<Note>
-  These endpoints use the ContactShip Integration Server (`https://integrations.contactship.ai`), not the main API. Authentication uses the same `x-api-key` from your dashboard.
-</Note>
 
 ## Headers
 
@@ -72,7 +69,7 @@ Sends a plain text message to a contact through a configured WhatsApp Business c
 
 <RequestExample>
 ```bash cURL
-curl -X POST "https://integrations.contactship.ai/api/integrations/waba/send" \
+curl -X POST "https://api.contactship.ai/v1/waba/send" \
   -H "x-api-key: your-api-key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -84,7 +81,7 @@ curl -X POST "https://integrations.contactship.ai/api/integrations/waba/send" \
 
 ```javascript JavaScript
 const response = await fetch(
-  'https://integrations.contactship.ai/api/integrations/waba/send',
+  'https://api.contactship.ai/v1/waba/send',
   {
     method: 'POST',
     headers: {
@@ -106,7 +103,7 @@ console.log(`Sent: ${result.data.message_id}`);
 import requests
 
 response = requests.post(
-    'https://integrations.contactship.ai/api/integrations/waba/send',
+    'https://api.contactship.ai/v1/waba/send',
     headers={'x-api-key': 'your-api-key'},
     json={
         'channel_id': 'chn_abc123',

@@ -1,6 +1,6 @@
 ---
 title: 'Send WhatsApp Template'
-api: 'POST https://integrations.contactship.ai/api/integrations/waba/send-template'
+api: 'POST /v1/waba/send-template'
 description: 'Send an approved WhatsApp message template to a contact'
 ---
 
@@ -96,7 +96,7 @@ Sends a pre-approved WhatsApp Business message template to a contact. Templates 
 
 <RequestExample>
 ```bash cURL
-curl -X POST "https://integrations.contactship.ai/api/integrations/waba/send-template" \
+curl -X POST "https://api.contactship.ai/v1/waba/send-template" \
   -H "x-api-key: your-api-key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -118,7 +118,7 @@ curl -X POST "https://integrations.contactship.ai/api/integrations/waba/send-tem
 
 ```javascript JavaScript
 const response = await fetch(
-  'https://integrations.contactship.ai/api/integrations/waba/send-template',
+  'https://api.contactship.ai/v1/waba/send-template',
   {
     method: 'POST',
     headers: {
@@ -150,7 +150,7 @@ console.log(result.data.thread_id);
 import requests
 
 response = requests.post(
-    'https://integrations.contactship.ai/api/integrations/waba/send-template',
+    'https://api.contactship.ai/v1/waba/send-template',
     headers={'x-api-key': 'your-api-key'},
     json={
         'channel_id': 'chn_abc123',

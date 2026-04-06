@@ -1,6 +1,6 @@
 ---
 title: 'Get WhatsApp Templates'
-api: 'GET https://integrations.contactship.ai/api/integrations/waba/templates'
+api: 'GET /v1/waba/templates'
 description: 'List approved WhatsApp message templates for a channel'
 ---
 
@@ -76,19 +76,19 @@ Returns the list of approved WhatsApp Business message templates available for a
 
 <RequestExample>
 ```bash cURL
-curl -X GET "https://integrations.contactship.ai/api/integrations/waba/templates?channel_id=chn_abc123" \
+curl -X GET "https://api.contactship.ai/v1/waba/templates?channel_id=chn_abc123" \
   -H "x-api-key: your-api-key"
 ```
 
 ```bash cURL — With pagination
-curl -X GET "https://integrations.contactship.ai/api/integrations/waba/templates?channel_id=chn_abc123&limit=10&after=CURSOR_HERE" \
+curl -X GET "https://api.contactship.ai/v1/waba/templates?channel_id=chn_abc123&limit=10&after=CURSOR_HERE" \
   -H "x-api-key: your-api-key"
 ```
 
 ```javascript JavaScript
 const channelId = 'chn_abc123';
 const response = await fetch(
-  `https://integrations.contactship.ai/api/integrations/waba/templates?channel_id=${channelId}`,
+  `https://api.contactship.ai/v1/waba/templates?channel_id=${channelId}`,
   { headers: { 'x-api-key': 'your-api-key' } }
 );
 const result = await response.json();
@@ -100,7 +100,7 @@ console.log(`${approved.length} approved templates`);
 import requests
 
 response = requests.get(
-    'https://integrations.contactship.ai/api/integrations/waba/templates',
+    'https://api.contactship.ai/v1/waba/templates',
     headers={'x-api-key': 'your-api-key'},
     params={'channel_id': 'chn_abc123'},
 )

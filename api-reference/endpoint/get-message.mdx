@@ -1,0 +1,119 @@
+---
+title: 'Get Message'
+api: 'GET /v1/messages/{messageId}'
+description: 'Retrieve a single message by its ID'
+---
+
+Returns the details of a specific message in a conversation thread.
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication.
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="messageId" type="string" required>
+  The UUID of the message to retrieve.
+</ParamField>
+
+## Response
+
+<ResponseField name="id" type="string">
+  Unique identifier of the message (UUID).
+</ResponseField>
+
+<ResponseField name="thread_id" type="string">
+  UUID of the thread this message belongs to.
+</ResponseField>
+
+<ResponseField name="role" type="string">
+  Sender role: `human` (sent by a user or agent) or `assistant` (sent by AI).
+</ResponseField>
+
+<ResponseField name="type" type="string">
+  Message type: `text`, `image`, `video`, `audio`, `document`, `template`, `location`.
+</ResponseField>
+
+<ResponseField name="content" type="string">
+  Text content of the message.
+</ResponseField>
+
+<ResponseField name="media" type="object">
+  Media attachment details, present for non-text message types.
+</ResponseField>
+
+<ResponseField name="from" type="string">
+  The sender's identifier (phone number or display value).
+</ResponseField>
+
+<ResponseField name="source" type="string">
+  How the message was sent: `webapp`, `ai_agent`, or `whatsapp` (inbound).
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Delivery status: `pending`, `sent`, `delivered`, `read`, `failed`.
+</ResponseField>
+
+<ResponseField name="sender_id" type="string">
+  UUID of the user who sent the message. `null` for AI-generated or API key messages.
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  Timestamp when the message was created (ISO 8601).
+</ResponseField>
+
+## Error Codes
+
+- `401 Unauthorized` — Invalid or missing API key
+- `404 Not Found` — Message not found or does not belong to your organization
+- `500 Internal Server Error` — Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL
+curl -X GET "https://api.contactship.ai/v1/messages/msg-a1b2c3d4-e5f6-7890-abcd-ef1234567890" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript
+const messageId = 'msg-a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+const response = await fetch(
+  `https://api.contactship.ai/v1/messages/${messageId}`,
+  { headers: { 'x-api-key': 'your-api-key' } }
+);
+const message = await response.json();
+console.log(`Message: ${message.content} (${message.status})`);
+```
+
+```python Python
+import requests
+
+message_id = 'msg-a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+response = requests.get(
+    f'https://api.contactship.ai/v1/messages/{message_id}',
+    headers={'x-api-key': 'your-api-key'},
+)
+print(response.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+{
+  "id": "msg-a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "thread_id": "thr-b2c3d4e5-f6a7-8901-bcde-f12345678901",
+  "role": "human",
+  "type": "text",
+  "content": "Hello! How can I help you today?",
+  "media": null,
+  "from": "+12025551234",
+  "source": "webapp",
+  "status": "sent",
+  "sender_id": null,
+  "created_at": "2026-04-06T15:00:00Z"
+}
+```
+</ResponseExample>

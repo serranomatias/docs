@@ -1,6 +1,6 @@
 ---
 title: 'Send WhatsApp Media'
-api: 'POST https://integrations.contactship.ai/api/integrations/waba/send-media'
+api: 'POST /v1/waba/send-media'
 description: 'Send an image, video, audio, or document via WhatsApp Business API'
 ---
 
@@ -80,7 +80,7 @@ Sends a media message (image, video, audio, or document) to a contact through a 
 
 <RequestExample>
 ```bash cURL — Send image by URL
-curl -X POST "https://integrations.contactship.ai/api/integrations/waba/send-media" \
+curl -X POST "https://api.contactship.ai/v1/waba/send-media" \
   -H "x-api-key: your-api-key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -93,7 +93,7 @@ curl -X POST "https://integrations.contactship.ai/api/integrations/waba/send-med
 ```
 
 ```bash cURL — Send document by URL
-curl -X POST "https://integrations.contactship.ai/api/integrations/waba/send-media" \
+curl -X POST "https://api.contactship.ai/v1/waba/send-media" \
   -H "x-api-key: your-api-key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -108,7 +108,7 @@ curl -X POST "https://integrations.contactship.ai/api/integrations/waba/send-med
 
 ```javascript JavaScript
 const response = await fetch(
-  'https://integrations.contactship.ai/api/integrations/waba/send-media',
+  'https://api.contactship.ai/v1/waba/send-media',
   {
     method: 'POST',
     headers: {
@@ -132,7 +132,7 @@ console.log(`Media URL: ${result.data.media_url}`);
 import requests
 
 response = requests.post(
-    'https://integrations.contactship.ai/api/integrations/waba/send-media',
+    'https://api.contactship.ai/v1/waba/send-media',
     headers={'x-api-key': 'your-api-key'},
     json={
         'channel_id': 'chn_abc123',

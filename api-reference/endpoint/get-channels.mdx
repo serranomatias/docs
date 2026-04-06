@@ -1,0 +1,146 @@
+---
+title: 'List Channels'
+api: 'GET /v1/channels'
+description: 'Retrieve all messaging channels for your organization'
+---
+
+Returns all messaging channels configured for your organization (WhatsApp WABA, Instagram, etc.). Use the `id` from each channel as the `channel_id` parameter in messaging endpoints like [Send WhatsApp Message](/api-reference/endpoint/waba-send-message).
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="limit" type="number" default="10">
+  Maximum number of channels to return.
+</ParamField>
+
+<ParamField query="offset" type="number" default="0">
+  Number of records to skip for pagination.
+</ParamField>
+
+<ParamField query="order" type="string" default="desc">
+  Sort direction by creation date. Possible values: `asc`, `desc`.
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter by channel status (e.g. `active`, `inactive`).
+</ParamField>
+
+<ParamField query="type" type="string">
+  Filter by channel type (e.g. `WABA`, `INSTAGRAM`).
+</ParamField>
+
+<ParamField query="name" type="string">
+  Filter by channel name (partial match).
+</ParamField>
+
+<ParamField query="answer_method" type="string">
+  Filter by answer method. Possible values: `manual`, `auto`.
+</ParamField>
+
+## Response
+
+<ResponseField name="data" type="array">
+  Array of channel objects.
+  <Expandable title="Channel object">
+    <ResponseField name="id" type="string">
+      Unique identifier of the channel (UUID). Use this as `channel_id` in messaging endpoints.
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Display name of the channel.
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      Channel type (e.g. `WABA`, `INSTAGRAM`).
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Current status of the channel (e.g. `active`, `inactive`).
+    </ResponseField>
+    <ResponseField name="answer_method" type="string">
+      How the channel handles incoming messages: `manual` (human agents) or `auto` (AI agent).
+    </ResponseField>
+    <ResponseField name="organization_id" type="string">
+      UUID of the organization that owns this channel.
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      Timestamp when the channel was created (ISO 8601).
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="count" type="number">
+  Total number of channels matching the query.
+</ResponseField>
+
+## Error Codes
+
+- `401 Unauthorized` — Invalid or missing API key
+- `500 Internal Server Error` — Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL — All channels
+curl -X GET "https://api.contactship.ai/v1/channels" \
+  -H "x-api-key: your-api-key"
+```
+
+```bash cURL — WABA channels only
+curl -X GET "https://api.contactship.ai/v1/channels?type=WABA&status=active" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://api.contactship.ai/v1/channels?type=WABA',
+  { headers: { 'x-api-key': 'your-api-key' } }
+);
+const { data, count } = await response.json();
+console.log(`${count} channels found`);
+data.forEach(ch => console.log(`${ch.name} (${ch.type}) — id: ${ch.id}`));
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.contactship.ai/v1/channels',
+    headers={'x-api-key': 'your-api-key'},
+    params={'type': 'WABA', 'status': 'active'},
+)
+result = response.json()
+for channel in result['data']:
+    print(f"{channel['name']} ({channel['type']}) — id: {channel['id']}")
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+{
+  "data": [
+    {
+      "id": "chn_y0xspd9p1v7vla6wkwc2z01u",
+      "name": "WhatsApp Business",
+      "type": "WABA",
+      "status": "active",
+      "answer_method": "auto",
+      "organization_id": "org-f1e2d3c4-b5a6-7890-1234-567890abcdef",
+      "created_at": "2026-01-15T10:00:00Z"
+    },
+    {
+      "id": "chn_a1b2c3d4e5f6g7h8i9j0k1l2",
+      "name": "Instagram DMs",
+      "type": "INSTAGRAM",
+      "status": "active",
+      "answer_method": "manual",
+      "organization_id": "org-f1e2d3c4-b5a6-7890-1234-567890abcdef",
+      "created_at": "2026-02-01T09:00:00Z"
+    }
+  ],
+  "count": 2
+}
+```
+</ResponseExample>

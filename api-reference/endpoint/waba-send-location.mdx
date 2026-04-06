@@ -1,0 +1,144 @@
+---
+title: 'Send WhatsApp Location'
+api: 'POST https://integrations.contactship.ai/api/integrations/waba/send-location'
+description: 'Send a location pin to a contact via WhatsApp Business API'
+---
+
+Sends a location message (map pin) to a contact through a WABA channel. The contact will receive an interactive map pin in WhatsApp.
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication.
+</ParamField>
+
+## Body
+
+<ParamField body="channel_id" type="string" required>
+  UUID of the WABA channel to send from. Use [List Channels](/api-reference/endpoint/get-channels) to get available channel IDs.
+</ParamField>
+
+<ParamField body="contact_id" type="string" required>
+  UUID of the contact to message.
+</ParamField>
+
+<ParamField body="latitude" type="number" required>
+  Latitude coordinate of the location (e.g. `19.4326`).
+</ParamField>
+
+<ParamField body="longitude" type="number" required>
+  Longitude coordinate of the location (e.g. `-99.1332`).
+</ParamField>
+
+<ParamField body="name" type="string">
+  Name of the location (e.g. `ContactShip HQ`). Displayed as the pin title.
+</ParamField>
+
+<ParamField body="address" type="string">
+  Address of the location (e.g. `Paseo de la Reforma 505, CDMX`). Displayed below the pin title.
+</ParamField>
+
+<ParamField body="thread_id" type="string">
+  UUID of an existing thread. If provided, `channel_id` and `contact_id` are inferred automatically.
+</ParamField>
+
+<ParamField body="save_message" type="boolean" default="true">
+  Whether to save the message in the conversation thread.
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  `true` if the location was sent successfully.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Response data">
+    <ResponseField name="message_id" type="string">Internal UUID of the message record.</ResponseField>
+    <ResponseField name="provider_id" type="string">WhatsApp message ID returned by Meta.</ResponseField>
+    <ResponseField name="thread_id" type="string">UUID of the conversation thread.</ResponseField>
+    <ResponseField name="status" type="string">Message status: `sent` or `pending`.</ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Error Codes
+
+- `400 Bad Request` — Missing fields, invalid coordinates, or non-WABA channel
+- `401 Unauthorized` — Invalid or missing API key
+- `403 Forbidden` — Channel does not belong to your organization
+- `404 Not Found` — Contact not found
+- `500 Internal Server Error` — Meta API error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL
+curl -X POST "https://integrations.contactship.ai/api/integrations/waba/send-location" \
+  -H "x-api-key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "channel_id": "chn_y0xspd9p1v7vla6wkwc2z01u",
+    "contact_id": "c1d2e3f4-a5b6-7890-cdef-123456789012",
+    "latitude": 19.4326,
+    "longitude": -99.1332,
+    "name": "ContactShip HQ",
+    "address": "Paseo de la Reforma 505, CDMX"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://integrations.contactship.ai/api/integrations/waba/send-location',
+  {
+    method: 'POST',
+    headers: {
+      'x-api-key': 'your-api-key',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      channel_id: 'chn_y0xspd9p1v7vla6wkwc2z01u',
+      contact_id: 'c1d2e3f4-a5b6-7890-cdef-123456789012',
+      latitude: 19.4326,
+      longitude: -99.1332,
+      name: 'ContactShip HQ',
+      address: 'Paseo de la Reforma 505, CDMX',
+    }),
+  }
+);
+const result = await response.json();
+console.log(result.data.thread_id);
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://integrations.contactship.ai/api/integrations/waba/send-location',
+    headers={'x-api-key': 'your-api-key'},
+    json={
+        'channel_id': 'chn_y0xspd9p1v7vla6wkwc2z01u',
+        'contact_id': 'c1d2e3f4-a5b6-7890-cdef-123456789012',
+        'latitude': 19.4326,
+        'longitude': -99.1332,
+        'name': 'ContactShip HQ',
+        'address': 'Paseo de la Reforma 505, CDMX',
+    },
+)
+print(response.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+{
+  "success": true,
+  "message": "Location enviada y guardada",
+  "data": {
+    "message_id": "msg-a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "provider_id": "wamid.HBgNMTIxMjM0NTY3ODkwFQIAERgSM...",
+    "thread_id": "thr-b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    "status": "sent"
+  }
+}
+```
+</ResponseExample>

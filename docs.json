@@ -131,7 +131,17 @@
                   "api-reference/endpoint/waba-send-message",
                   "api-reference/endpoint/waba-send-template",
                   "api-reference/endpoint/waba-send-media",
+                  "api-reference/endpoint/waba-send-location",
                   "api-reference/endpoint/waba-get-templates"
+                ]
+              },
+              {
+                "group": "Canales y Conversaciones",
+                "pages": [
+                  "api-reference/endpoint/get-channels",
+                  "api-reference/endpoint/get-thread",
+                  "api-reference/endpoint/update-thread",
+                  "api-reference/endpoint/get-message"
                 ]
               },
               {
@@ -294,7 +304,17 @@
                   "api-reference/endpoint/waba-send-message",
                   "api-reference/endpoint/waba-send-template",
                   "api-reference/endpoint/waba-send-media",
+                  "api-reference/endpoint/waba-send-location",
                   "api-reference/endpoint/waba-get-templates"
+                ]
+              },
+              {
+                "group": "Channels & Threads",
+                "pages": [
+                  "api-reference/endpoint/get-channels",
+                  "api-reference/endpoint/get-thread",
+                  "api-reference/endpoint/update-thread",
+                  "api-reference/endpoint/get-message"
                 ]
               },
               {
