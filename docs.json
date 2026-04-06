@@ -121,7 +121,8 @@
               {
                 "group": "Voz",
                 "pages": [
-                  "api-reference/endpoint/make-ai-phone-call"
+                  "api-reference/endpoint/make-ai-phone-call",
+                  "api-reference/endpoint/make-contact-call"
                 ]
               },
               {
@@ -274,7 +275,8 @@
               {
                 "group": "Voice",
                 "pages": [
-                  "api-reference/endpoint/make-ai-phone-call"
+                  "api-reference/endpoint/make-ai-phone-call",
+                  "api-reference/endpoint/make-contact-call"
                 ]
               },
               {
