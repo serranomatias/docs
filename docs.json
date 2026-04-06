@@ -126,6 +126,15 @@
                 ]
               },
               {
+                "group": "WhatsApp (WABA)",
+                "pages": [
+                  "api-reference/endpoint/waba-send-message",
+                  "api-reference/endpoint/waba-send-template",
+                  "api-reference/endpoint/waba-send-media",
+                  "api-reference/endpoint/waba-get-templates"
+                ]
+              },
+              {
                 "group": "Organización",
                 "pages": [
                   "api-reference/endpoint/get-credits"
@@ -277,6 +286,15 @@
                 "pages": [
                   "api-reference/endpoint/make-ai-phone-call",
                   "api-reference/endpoint/make-contact-call"
+                ]
+              },
+              {
+                "group": "WhatsApp (WABA)",
+                "pages": [
+                  "api-reference/endpoint/waba-send-message",
+                  "api-reference/endpoint/waba-send-template",
+                  "api-reference/endpoint/waba-send-media",
+                  "api-reference/endpoint/waba-get-templates"
                 ]
               },
               {

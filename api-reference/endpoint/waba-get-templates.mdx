@@ -1,0 +1,160 @@
+---
+title: 'Get WhatsApp Templates'
+api: 'GET https://integrations.contactship.ai/api/integrations/waba/templates'
+description: 'List approved WhatsApp message templates for a channel'
+---
+
+Returns the list of approved WhatsApp Business message templates available for a given channel. Use template names from this endpoint when calling [Send WhatsApp Template](/api-reference/endpoint/waba-send-template).
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="channel_id" type="string" required>
+  UUID of the WABA channel to fetch templates for.
+</ParamField>
+
+<ParamField query="limit" type="number" default="25">
+  Maximum number of templates to return.
+</ParamField>
+
+<ParamField query="after" type="string">
+  Pagination cursor returned by the previous response (`paging.cursors.after`) to fetch the next page.
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  `true` on success.
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  Array of template objects from Meta.
+  <Expandable title="Template object">
+    <ResponseField name="id" type="string">
+      Meta's internal template ID.
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Template name (use this in `template_name` when sending).
+    </ResponseField>
+    <ResponseField name="language" type="string">
+      Language code of the template (e.g. `es`, `en_US`).
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Approval status: `APPROVED`, `PENDING`, `REJECTED`.
+    </ResponseField>
+    <ResponseField name="category" type="string">
+      Template category: `MARKETING`, `UTILITY`, `AUTHENTICATION`.
+    </ResponseField>
+    <ResponseField name="components" type="array">
+      Template component definitions (HEADER, BODY, FOOTER, BUTTONS).
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="paging" type="object">
+  Pagination metadata from Meta.
+  <Expandable title="Paging object">
+    <ResponseField name="cursors" type="object">
+      <ResponseField name="before" type="string">Cursor for the previous page.</ResponseField>
+      <ResponseField name="after" type="string">Cursor for the next page. Pass as `after` query parameter.</ResponseField>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Error Codes
+
+- `400 Bad Request` — Missing `channel_id` or channel is not WABA type
+- `401 Unauthorized` — Invalid or missing API key
+- `500 Internal Server Error` — Meta API error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL
+curl -X GET "https://integrations.contactship.ai/api/integrations/waba/templates?channel_id=chn_abc123" \
+  -H "x-api-key: your-api-key"
+```
+
+```bash cURL — With pagination
+curl -X GET "https://integrations.contactship.ai/api/integrations/waba/templates?channel_id=chn_abc123&limit=10&after=CURSOR_HERE" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript
+const channelId = 'chn_abc123';
+const response = await fetch(
+  `https://integrations.contactship.ai/api/integrations/waba/templates?channel_id=${channelId}`,
+  { headers: { 'x-api-key': 'your-api-key' } }
+);
+const result = await response.json();
+const approved = result.data.filter(t => t.status === 'APPROVED');
+console.log(`${approved.length} approved templates`);
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://integrations.contactship.ai/api/integrations/waba/templates',
+    headers={'x-api-key': 'your-api-key'},
+    params={'channel_id': 'chn_abc123'},
+)
+result = response.json()
+for template in result['data']:
+    print(f"{template['name']} ({template['language']}) — {template['status']}")
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+{
+  "success": true,
+  "data": [
+    {
+      "id": "1234567890",
+      "name": "primer_contacto_v1",
+      "language": "es",
+      "status": "APPROVED",
+      "category": "MARKETING",
+      "components": [
+        {
+          "type": "BODY",
+          "text": "Hola {{1}}, te contactamos porque te registraste {{2}}. ¿Tienes un momento?",
+          "example": {
+            "body_text": [["Juan Pérez", "ayer"]]
+          }
+        },
+        {
+          "type": "FOOTER",
+          "text": "Responde STOP para no recibir más mensajes"
+        }
+      ]
+    },
+    {
+      "id": "0987654321",
+      "name": "seguimiento_cotizacion",
+      "language": "es",
+      "status": "APPROVED",
+      "category": "UTILITY",
+      "components": [
+        {
+          "type": "BODY",
+          "text": "Hola {{1}}, tu cotización #{{2}} está lista. ¿Deseas revisarla?"
+        }
+      ]
+    }
+  ],
+  "paging": {
+    "cursors": {
+      "before": "MAZDZD",
+      "after": "MjQZD"
+    }
+  }
+}
+```
+</ResponseExample>
