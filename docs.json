@@ -150,6 +150,13 @@
                   "api-reference/endpoint/delete-contact",
                   "api-reference/endpoint/get-contact-comments"
                 ]
+              },
+              {
+                "group": "Llamadas",
+                "pages": [
+                  "api-reference/endpoint/list-calls",
+                  "api-reference/endpoint/get-call"
+                ]
               }
             ]
           }
@@ -275,6 +282,13 @@
                   "api-reference/endpoint/update-contact",
                   "api-reference/endpoint/delete-contact",
                   "api-reference/endpoint/get-contact-comments"
+                ]
+              },
+              {
+                "group": "Calls",
+                "pages": [
+                  "api-reference/endpoint/list-calls",
+                  "api-reference/endpoint/get-call"
                 ]
               }
             ]
