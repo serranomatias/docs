@@ -43,6 +43,8 @@ To get started with the Contactship API, follow these simple steps:
 
 4. **Understanding Responses**: The API will return responses in JSON format. Each response includes relevant data and status codes to indicate the success or failure of the request.
 
+5. **Rate Limits**: Requests are limited per organization — **120 per minute** across the API and **20 per minute** on the listing endpoints (`GET /v1/contacts`, `GET /v1/calls`). Every response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset` headers; exceeding a limit returns `429 Too Many Requests` with a `Retry-After` header. See [Rate Limits](/api-reference/rate-limits) for details and retry examples.
+
 ### Resources
 
 Our API documentation is divided into several sections, each focusing on different aspects of the API:
@@ -50,6 +52,7 @@ Our API documentation is divided into several sections, each focusing on differe
 - **Authentication**: Learn how to authenticate your requests.
 - **Endpoints**: Detailed information about each API endpoint, including parameters and example responses.
 - **Error Handling**: Understand the different error codes and how to handle them.
+- **[Rate Limits](/api-reference/rate-limits)**: How many requests you can make, the headers that report your budget and how to handle `429` responses.
 - **Best Practices**: Tips and guidelines for using the API effectively.
 
 ### Support

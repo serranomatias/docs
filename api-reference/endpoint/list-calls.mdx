@@ -150,6 +150,7 @@ Returns a paginated list of calls for your organization. By default, `chat_histo
 
 - `400 Bad Request` — Invalid query parameters
 - `401 Unauthorized` — Invalid or missing API key
+- `429 Too Many Requests` — Rate limit exceeded (this endpoint allows 20 requests per minute per organization); wait for `Retry-After` seconds. See [Rate Limits](/api-reference/rate-limits)
 - `500 Internal Server Error` — Server-side error
 
 ## Code Examples

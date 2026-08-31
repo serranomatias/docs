@@ -33,6 +33,22 @@ This endpoint allows you to retrieve all contacts from your organization's datab
   Filter contacts by phone number (partial match). For example, using "+1212" will return contacts with phone numbers starting with +1212.
 </ParamField>
 
+<ParamField query="limit" type="number">
+  Maximum number of contacts to return per page, up to **1000**. Must be sent together with `offset`.
+</ParamField>
+
+<ParamField query="offset" type="number">
+  Number of contacts to skip. Must be sent together with `limit`: sending one without the other returns `400`. If both are omitted, the API returns up to 10,000 contacts and `pagination.page` / `pagination.total_pages` are `null`.
+</ParamField>
+
+<ParamField query="order" type="string">
+  Sort direction by creation date. Possible values: `asc`, `desc`.
+</ParamField>
+
+<Note>
+  To export your whole contact base, iterate with `limit=1000` and increase `offset` until you have fetched `pagination.total_rows` contacts. This endpoint allows 20 requests per minute per organization — see [Rate Limits](/api-reference/rate-limits).
+</Note>
+
 ## Response
 
 <ResponseField name="status code" type="number">
@@ -72,18 +88,34 @@ This endpoint allows you to retrieve all contacts from your organization's datab
   </Expandable>
 </ResponseField>
 
+<ResponseField name="pagination" type="object">
+  Pagination metadata for the request
+  <Expandable title="Pagination object">
+    <ResponseField name="page" type="number">
+      Current page, derived from `offset` and `limit` (`null` when the request was not paginated)
+    </ResponseField>
+    <ResponseField name="total_rows" type="number">
+      Total number of contacts matching the filters, across all pages
+    </ResponseField>
+    <ResponseField name="total_pages" type="number">
+      Total number of pages for the requested `limit` (`null` when the request was not paginated)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
 ## Error Codes
 
-- `400 Bad Request` - Invalid request parameters
+- `400 Bad Request` - Invalid request parameters (for example `limit` above 1000, or `limit` without `offset`)
 - `401 Unauthorized` - Invalid or missing API key
+- `429 Too Many Requests` - Rate limit exceeded (this endpoint allows 20 requests per minute per organization); wait for `Retry-After` seconds. See [Rate Limits](/api-reference/rate-limits)
 - `500 Internal Server Error` - Server-side error
 
 ## Code Examples
 
 <RequestExample>
 ```bash cURL Example (All Contacts)
-# Retrieve all contacts in your organization
-curl -X GET "https://api.contactship.ai/v1/contacts" \
+# Retrieve the first page of contacts (1000 per page)
+curl -X GET "https://api.contactship.ai/v1/contacts?limit=1000&offset=0" \
   -H "x-api-key: your-api-key"
 ```
 
