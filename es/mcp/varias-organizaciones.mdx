@@ -1,0 +1,80 @@
+---
+title: 'Varias organizaciones'
+description: 'Cómo revisar y operar más de una organización de ContactShip desde el mismo asistente de IA.'
+---
+
+## Una API key, una organización
+
+Cada API key de ContactShip pertenece a una sola organización: el servidor MCP identifica la organización a partir de la key, y la API rechaza cualquier intento de usarla con otra. Por eso, para trabajar con varias organizaciones desde Claude o Cursor, conectás ContactShip **una vez por organización**, cada conexión con su propia key.
+
+<Tip>
+Usá un nombre distinto para cada conexión, por ejemplo `contactship-acme` y `contactship-beta`. Es el nombre que después vas a usar para indicarle al asistente sobre qué organización trabajar.
+</Tip>
+
+---
+
+### Claude Code
+
+Agregá una conexión por organización, cada una con la key de esa organización:
+
+```bash
+claude mcp add-json contactship-acme '{"type":"sse","url":"https://mcp.contactship.ai/sse","headers":{"x-api-key":"API_KEY_DE_ACME"}}'
+claude mcp add-json contactship-beta '{"type":"sse","url":"https://mcp.contactship.ai/sse","headers":{"x-api-key":"API_KEY_DE_BETA"}}'
+```
+
+Verificá con `claude mcp list`: deberías ver las dos conexiones. Para quitar una:
+
+```bash
+claude mcp remove contactship-acme
+```
+
+### Cursor
+
+En `.cursor/mcp.json`, una entrada por organización:
+
+```json
+{
+  "mcpServers": {
+    "contactship-acme": {
+      "url": "https://mcp.contactship.ai/sse",
+      "headers": { "x-api-key": "API_KEY_DE_ACME" }
+    },
+    "contactship-beta": {
+      "url": "https://mcp.contactship.ai/sse",
+      "headers": { "x-api-key": "API_KEY_DE_BETA" }
+    }
+  }
+}
+```
+
+### Claude Desktop
+
+Mismo formato en `claude_desktop_config.json`, dentro de `mcpServers`.
+
+### Claude.ai (web)
+
+Agregá el conector una vez por organización desde **Settings > Integrations > Add custom connector**, con un nombre distinto cada vez (por ejemplo `ContactShip · Acme` y `ContactShip · Beta`) y la misma URL `https://mcp.contactship.ai/mcp`. Cada conector te va a pedir autorizar con la API key de esa organización.
+
+---
+
+### Cómo pedir las cosas
+
+Con más de una conexión, el asistente ve las mismas herramientas repetidas, una por organización. Nombrá la organización en el pedido y el asistente elige la conexión correcta:
+
+> "En Acme, mostrá las conversaciones sin responder de hoy"
+
+> "Compará las llamadas contestadas de Acme y de Beta esta semana"
+
+Si no la nombrás y hay varias conectadas, el asistente puede preguntarte a cuál te referís o elegir una. Cuando la respuesta importe, decilo explícito.
+
+---
+
+### Tené en cuenta
+
+<Warning>
+Cada conexión suma el set completo de herramientas de ContactShip al contexto del asistente. Con dos o tres organizaciones funciona bien; con muchas más, el asistente tarda más en elegir y consume más contexto en cada mensaje. Si necesitás operar muchas organizaciones de forma habitual, contactá a soporte.
+</Warning>
+
+- Una key nunca ve datos de otra organización, aunque las dos estén conectadas en el mismo asistente.
+- Si rotás la key de una organización, actualizá solo esa conexión.
+- En Claude Code y Cursor las herramientas llevan el nombre de la conexión como prefijo; en Claude.ai se agrupan por conector. Eso permite verificar en qué organización se ejecutó cada acción.

@@ -75,7 +75,8 @@
                   "es/mcp/vision-general",
                   "es/mcp/claude",
                   "es/mcp/claude-code",
-                  "es/mcp/cursor"
+                  "es/mcp/cursor",
+                  "es/mcp/varias-organizaciones"
                 ]
               },
               {
@@ -243,7 +244,8 @@
                   "en/mcp/overview",
                   "en/mcp/claude",
                   "en/mcp/claude-code",
-                  "en/mcp/cursor"
+                  "en/mcp/cursor",
+                  "en/mcp/multiple-organizations"
                 ]
               },
               {
