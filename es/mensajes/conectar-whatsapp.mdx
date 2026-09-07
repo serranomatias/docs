@@ -1,0 +1,164 @@
+---
+title: 'Conectar WhatsApp Business'
+description: 'Cómo conectar un número de WhatsApp Business API con el registro integrado de Facebook o con un portfolio de Meta ya vinculado, qué significa Ya conectado, cómo queda el canal en la lista y cómo probarlo con el QR.'
+sidebarTitle: 'Conectar WhatsApp Business'
+tag: 'Nuevo'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="channels.create" route="Ajustes → Inbox → Canales" status="nuevo" />
+
+Un canal es un número de WhatsApp Business API conectado a tu organización. Se conecta desde **Ajustes → Inbox → Canales** con el registro integrado de Facebook, sin cargar tokens a mano. ContactShip figura como **Socio verificado de Meta** en el diálogo de conexión. Una vez conectado, el número recibe y envía mensajes desde **Mensajes**.
+
+## Antes de empezar
+
+- Necesitás el permiso `channels.read` para ver **Canales** y `channels.create` para ver el botón **New Channel**.
+- Necesitás una cuenta de Facebook con acceso de administrador a un portfolio de Meta Business (Business Portfolio). El registro se hace en una ventana de Facebook, así que tu navegador tiene que permitir ventanas emergentes.
+- Si el número ya se usa en una app de WhatsApp del teléfono, revisá la elegibilidad y las opciones de migración que presenta Meta antes de cambiar esa cuenta. Confirmá el flujo compatible antes de eliminarla como supuesto requisito.
+- Si tu organización ya conectó un portfolio de Meta, podés reutilizarlo sin volver a pasar por Facebook.
+
+## Abrir el diálogo Nuevo canal
+
+Hay tres entradas al mismo diálogo:
+
+- **Ajustes → Inbox → Canales → New Channel**. Al hacer scroll, el botón se convierte en **Nuevo canal**.
+- Desde **Mensajes**, el botón **Conectar un canal** de los estados vacíos.
+- Desde el selector de canales de la bandeja, la opción **New Channel**.
+
+El diálogo **Nuevo canal** ("Crea un nuevo canal para conectar tu bandeja de entrada.") muestra tres tarjetas, en este orden:
+
+| Tarjeta | Descripción en pantalla | Estado |
+|---|---|---|
+| **WhatsApp Business** | Conecta la API de WhatsApp Business para recibir y enviar mensajes. | Disponible. Badge **Socio verificado de Meta**. |
+| **Instagram** | Conecta los mensajes directos de Instagram a tu bandeja de entrada. | Deshabilitada. Badge **Próximamente**. |
+| **Facebook Messenger** | Conecta las conversaciones de Messenger. | Deshabilitada. Badge **Próximamente**. |
+
+{/* captura: images/mensajes/nuevo-canal-dialogo-es.png | Diálogo Nuevo canal con WhatsApp Business habilitado e Instagram y Facebook Messenger en Próximamente | app: /settings/inbox/channels?new-channel=true */}
+
+## Las tres formas de conectar
+
+Al elegir **WhatsApp Business** se abre la pantalla **WhatsApp Business API** ("Elige cómo deseas configurar tu cuenta de WhatsApp Business"). Ofrece hasta tres caminos:
+
+| Camino | Cuándo aparece | Qué hace |
+|---|---|---|
+| **Cuentas de Facebook Business conectadas** → **Usar esta cuenta** | Solo si tu organización ya vinculó un portfolio. Muestra el nombre del negocio, el estado (**activo**) y un contador de cuentas. | Salta la ventana de Facebook y va directo a elegir el número. |
+| **Conectar con Facebook** → **Comenzar** | Siempre. Con portfolios ya vinculados se llama **Conectar otra cuenta**. Lleva el badge **Recomendado** cuando no hay ninguno. | Abre el registro integrado de Facebook: "Conecta tu cuenta de Meta Business y selecciona los números que deseas usar." |
+| **Configuración manual** → **Configurar** | Siempre. | Muestra el formulario de credenciales, pero al enviarlo la app responde "Configuración manual próximamente". No crea el canal. |
+
+Mientras el SDK de Facebook se carga, el botón **Comenzar** aparece deshabilitado con el texto "Creando...". Esperá unos segundos.
+
+{/* captura: images/mensajes/conectar-whatsapp-opciones-es.png | Pantalla WhatsApp Business API con Conectar con Facebook marcado como Recomendado y Configuración manual | app: /settings/inbox/channels?new-channel=true */}
+
+## Paso a paso con Facebook
+
+<Steps>
+  <Step title="Abrí Canales y hacé clic en New Channel">
+    Ruta: **Ajustes → Inbox → Canales**. El botón está arriba a la derecha.
+  </Step>
+  <Step title="Elegí WhatsApp Business">
+    Es la única tarjeta habilitada del diálogo **Nuevo canal**.
+  </Step>
+  <Step title="Hacé clic en Comenzar dentro de Conectar con Facebook">
+    Se abre la ventana de Facebook y la app muestra **Conectando con Facebook** ("Completa el proceso en la ventana de Facebook", "Esperando respuesta de Facebook..."). El botón **Cancelar** vuelve a las opciones.
+  </Step>
+  <Step title="Completá el registro en la ventana de Facebook">
+    Iniciá sesión, elegí o creá el portfolio de Meta Business, la cuenta de WhatsApp Business y el número. Si cerrás la ventana antes de terminar, la app muestra "Usuario canceló o ocurrió un error".
+  </Step>
+  <Step title="Elegí el número">
+    Al volver, aparece "Cuenta de Facebook conectada" y la pantalla **Seleccionar número de teléfono** ("Elige un número de WhatsApp para conectar como canal."). Los números se agrupan por cuenta de WhatsApp Business. Cada fila muestra el número, el nombre verificado entre paréntesis y el botón **Conectar**.
+  </Step>
+  <Step title="Hacé clic en Conectar">
+    La app confirma "Canal conectado", cierra el diálogo y el canal aparece en la lista de **Canales**.
+  </Step>
+</Steps>
+
+{/* clip: images/mensajes/conectar-whatsapp-es.mp4 | Desde New Channel hasta Canal conectado con el registro integrado de Facebook | app: /settings/inbox/channels */}
+
+<Tip>Si el portfolio ya estaba vinculado, empezá por **Usar esta cuenta**. Llegás a **Seleccionar número de teléfono** sin pasar por la ventana de Facebook.</Tip>
+
+## Qué significa "Ya conectado"
+
+En **Seleccionar número de teléfono**, un número con la marca **Ya conectado** ya existe como canal y no muestra el botón **Conectar**. Un número no se puede conectar dos veces. Para cambiar su configuración, abrí el canal desde la lista de **Canales**.
+
+Otros mensajes de esa pantalla:
+
+- "No hay números disponibles." La cuenta no tiene números de WhatsApp Business. Agregá uno desde Meta Business y volvé a intentar.
+- "Ninguna cuenta seleccionada." Volvé con **Volver** y elegí una cuenta.
+
+## Después de conectar
+
+El canal aparece en **Ajustes → Inbox → Canales**, dentro de la sección **WhatsApp**. La lista tiene las pestañas **Todos los canales** y **Activos**, más una pestaña por tipo (**WhatsApp**, **Instagram**, **Messenger**) solo cuando hay canales de ese tipo. Cada tarjeta muestra:
+
+| Dato | Valores |
+|---|---|
+| Nombre del canal | El nombre con el que aparece en la bandeja. Se edita desde la configuración del canal. |
+| Tipo | **Business API** (WhatsApp Business API) o **WhatsApp Web**. |
+| Método de respuesta | **Manual** o **Automático**. Es informativo y no se edita desde esta pantalla. |
+| Estado | **activo** o **inactivo**, con la fecha en **Creado**. |
+| Acciones | **Conectar Meta Ads**, **Configuración del canal** (requiere `channels.update`) y el botón de eliminar (requiere `channels.delete`). |
+
+- Un canal **inactivo** aparece deshabilitado en el selector de canales de la bandeja, con el texto "This channel is inactive. Please contact support to reactivate it." En Ajustes, la app muestra el aviso "Tienes N canal(es) en estado inactivo." con el botón **Ver canales**.
+- **Conectar Meta Ads** vincula la cuenta publicitaria de Meta al canal. Sirve para que las conversaciones que llegan desde anuncios Click-to-WhatsApp muestren la campaña, el conjunto de anuncios y el anuncio de origen en la bandeja.
+- El botón de eliminar abre **Delete Channel?** ("This will permanently delete the channel … This action cannot be undone."). La eliminación es permanente.
+
+Después de conectar, configurá el canal: quién atiende, horario de atención, saludo, alertas y webhook. Guía: [Configurar un canal](/es/mensajes/configurar-canal).
+
+<Warning>Eliminar un canal es permanente y desconecta el número de ContactShip. Si solo querés dejar de atenderlo por un tiempo, apagá la asignación automática o cambiá el horario de atención en su configuración.</Warning>
+
+## Probar el canal con el QR
+
+En **Configuración del canal → Avanzado → Enviar mensaje de prueba** ("Abre un chat de WhatsApp con este número para probar el canal") hay un código QR, el número y dos botones: **Abrir WhatsApp** y **Copy Link**. Escaneá el QR desde tu teléfono, mandá un mensaje y la conversación aparece en **Mensajes** en segundos. La tarjeta solo existe para canales de WhatsApp con número.
+
+{/* captura: images/mensajes/canal-prueba-qr-es.png | Tarjeta Enviar mensaje de prueba con el QR, el número y los botones Abrir WhatsApp y Copy Link | app: /settings/inbox/channels/[id] */}
+
+## Qué no existe todavía
+
+- Instagram y Facebook Messenger: **Próximamente** en el diálogo **Nuevo canal**.
+- Configuración manual con Phone Number ID, Access Token y Business Account ID: el formulario existe, pero responde "Configuración manual próximamente".
+- No hay forma de desconectar un número sin eliminar el canal.
+- La app no muestra la calificación de calidad ni el estado del nombre verificado del número. Esos datos se consultan en Meta Business.
+- El método de respuesta (**Manual** / **Automático**) no se edita desde la app.
+
+## Problemas frecuentes
+
+| Mensaje en pantalla | Causa | Qué hacer |
+|---|---|---|
+| "El SDK de Facebook no está listo" | El script de Facebook no se cargó, en general por un bloqueador de anuncios o de scripts. | Desactivá el bloqueador para la app, recargá la página y volvé a intentar. |
+| "Usuario canceló o ocurrió un error" | Cerraste la ventana de Facebook antes de terminar o Facebook devolvió un error. | Volvé a hacer clic en **Comenzar** y completá el registro. |
+| "Error al conectar" | Falló el intercambio con Facebook o la conexión del número. | Reintentá. Si persiste, contactá a soporte con el número y el nombre del negocio. |
+| "No hay números disponibles." | La cuenta de WhatsApp Business no tiene números o todos están **Ya conectado**. | Agregá un número en Meta Business o usá el canal existente. |
+| "Has alcanzado el límite de canales de WhatsApp permitidos en tu plan." | Tu plan no permite más canales. | Considerá un plan superior o consultá a soporte. |
+| **Comenzar** deshabilitado con "Creando..." | El SDK de Facebook todavía se está cargando. | Esperá unos segundos. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Puedo usar el número que ya tengo en la app de WhatsApp Business del teléfono?">
+    No al mismo tiempo. Meta no permite que un número esté activo en la app del teléfono y en la API a la vez. Tenés que darlo de baja de la app antes de conectarlo, o usar otro número. Si necesitás conservar el historial del teléfono, consultá a soporte antes de migrar.
+  </Accordion>
+  <Accordion title="¿Necesito una cuenta personal de Facebook?">
+    Sí. El registro integrado abre una ventana de Facebook y pide iniciar sesión con una cuenta que administre el portfolio de Meta Business. La cuenta personal no aparece en ContactShip; solo se guarda el vínculo con el portfolio.
+  </Accordion>
+  <Accordion title="¿Puedo conectar varios números?">
+    Sí. Repetí el proceso por cada número. Si pertenecen al mismo portfolio, usá **Usar esta cuenta** y elegí el siguiente número. La cantidad de canales depende de tu plan; al llegar al límite la app lo avisa.
+  </Accordion>
+  <Accordion title="¿Qué pasa si intento conectar el mismo número dos veces?">
+    En **Seleccionar número de teléfono** aparece con la marca **Ya conectado** y sin botón **Conectar**. Un número se conecta una sola vez.
+  </Accordion>
+  <Accordion title="¿Puedo cargar el token y el Phone Number ID a mano?">
+    Todavía no. La tarjeta **Configuración manual** abre el formulario, pero al enviarlo la app responde "Configuración manual próximamente". Usá **Conectar con Facebook**.
+  </Accordion>
+  <Accordion title="¿Cómo desconecto un número?">
+    Eliminando el canal desde la lista de **Canales** con el botón de eliminar (permiso `channels.delete`). El diálogo **Delete Channel?** avisa que la acción es permanente.
+  </Accordion>
+  <Accordion title="¿Puedo conectar Instagram o Messenger?">
+    Todavía no. Las dos tarjetas figuran como **Próximamente** en el diálogo **Nuevo canal** y no se pueden seleccionar.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Configurar un canal](/es/mensajes/configurar-canal)
+- [Cómo funciona el inbox](/es/mensajes/vision-general)
+- [Plantillas de WhatsApp](/es/mensajes/plantillas)
+- [Trabajar en la bandeja](/es/mensajes/bandeja)

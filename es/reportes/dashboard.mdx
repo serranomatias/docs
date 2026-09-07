@@ -1,0 +1,159 @@
+---
+title: 'Dashboard de reportes'
+description: 'Qué muestra el dashboard de Reportes: los cuatro indicadores, los 20 widgets del catálogo, cómo personalizarlo (Personalizar, galería, tamaños), los filtros de rango, agrupación y zona horaria, y qué no se puede exportar.'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="reports.read" route="Reportes" />
+
+**Reportes** es un dashboard único que combina las métricas de llamadas, agentes, contactos, actividad y mensajería de tu organización. Cada persona arma el suyo: elige qué widgets ver, en qué orden y de qué tamaño. Todos los widgets responden a los mismos filtros de rango de fechas, agrupación y zona horaria.
+
+{/* captura: images/reportes/dashboard-predeterminado-es.png | Dashboard con los cuatro indicadores y los cinco widgets predeterminados, rango Últimos 30 días | app: /reports */}
+
+## Qué ves al entrar
+
+Si nunca personalizaste el dashboard, la app muestra:
+
+1. La barra de filtros: rango de fechas, **Agrupar por** y zona horaria del reporte. Por defecto, **Últimos 30 días** agrupado por **Día**.
+2. Cuatro indicadores: **Llamadas totales**, **Tasa de atendidas**, **Tasa de éxito** y **Nuevos contactos**.
+3. Cinco widgets, en este orden: **Llamadas por estado** (ancho completo), **Tasa de éxito de llamadas**, **Llamadas por agente**, **Contactos creados** y **Horas pico** (ancho completo).
+
+Un widget sin datos para el rango muestra **Sin datos aún**.
+
+## Indicadores
+
+| Métrica | Qué mide | Cómo se calcula |
+|---|---|---|
+| **Llamadas totales** | Volumen de llamadas del rango, sin importar el resultado. | Suma de todas las llamadas del rango. |
+| **Tasa de atendidas** | Qué parte de las llamadas fue atendida. | Llamadas con resultado atendida ÷ llamadas totales del rango. |
+| **Tasa de éxito** | Qué parte de las llamadas analizadas el agente completó con éxito. | Promedio de la tasa de éxito de cada período del rango. La tasa de un período es llamadas con veredicto exitoso ÷ llamadas con veredicto; las llamadas que no se analizaron quedan fuera. |
+| **Nuevos contactos** | Crecimiento de la base de contactos. | Contactos creados dentro del rango. |
+
+Cada indicador muestra una variación **vs. primera mitad**: compara la segunda mitad del rango con la primera. Si la primera mitad es cero, la variación no se muestra. Debajo del número hay una línea de tendencia con un punto por período.
+
+## Filtros
+
+| Filtro | Opciones | Notas |
+|---|---|---|
+| Rango de fechas | **Rangos rápidos**: **Hoy**, **Últimos 7 días**, **Últimos 30 días**, **Últimos 90 días**. **Rango personalizado**: **Desde** y **Hasta**. | Los días se cortan a medianoche en la zona horaria del reporte. **Hasta** no puede ser anterior a **Desde**. |
+| **Agrupar por** | **Día**, **Semana**, **Mes** | Define el período de los gráficos de evolución y de los indicadores. |
+| Zona horaria | Tu zona del navegador, más **Ciudad de México**, **Mazatlán**, **Bogotá**, **Buenos Aires**, **Santiago**, **Lima**, **Caracas**, **San José**, **Madrid** y **UTC**. Cada opción muestra la ciudad y su desfase actual, por ejemplo `Buenos Aires · UTC-3`. | Hasta que elegís una, el dashboard usa la zona horaria de tu perfil. La elección se guarda en tu navegador y se aplica también a **Actividad de colas** y **Monitoreo en vivo**. |
+
+<Note>
+La zona horaria define dónde empieza y termina cada día del rango en todos los widgets. La agrupación por día y por hora, en cambio, depende del widget: los de **Mensajería**, los reportes a medida y el reporte de evaluaciones agrupan en la zona elegida; los de **Llamadas**, **Agentes**, **Contactos** y **Actividad** agrupan en UTC.
+</Note>
+
+No hay filtro por campaña en el dashboard. Los widgets de campaña viven en el detalle de cada campaña.
+
+{/* captura: images/reportes/dashboard-filtros-es.png | Popover de rango de fechas abierto con los rangos rápidos, el rango personalizado y el selector de zona horaria al lado | app: /reports */}
+
+## Personalizar el dashboard
+
+<Steps>
+<Step title="Entrá al modo de edición">
+Hacé clic en **Personalizar**. Cada widget muestra una barra con **Cambiar tamaño**, **Quitar** y **Arrastrá para reordenar**. Los reportes a medida suman **Configurar**. Cada indicador suma **Ocultar este indicador**.
+</Step>
+<Step title="Agregá widgets desde la galería">
+Hacé clic en **Agregar widget**. Se abre la **Galería de widgets**, ordenada por categoría (**Llamadas**, **Agentes**, **Contactos**, **Actividad**, **Mensajería**) con un buscador (**Buscar widgets**) que ignora acentos y mayúsculas. Los widgets que ya están en el dashboard aparecen con un tilde y no se pueden agregar dos veces. La primera entrada, **Reporte a medida**, abre el constructor de [reportes a medida](/es/reportes/a-medida).
+</Step>
+<Step title="Ordená y cambiá el tamaño">
+Arrastrá los widgets desde el asa para reordenarlos. **Cambiar tamaño** rota entre tres tamaños: un cuarto del ancho, la mitad y el ancho completo. Cada widget del catálogo llega con un tamaño predeterminado.
+</Step>
+<Step title="Terminá">
+Hacé clic en **Listo**. Cada cambio se guarda en el momento en que lo hacés; **Listo** solo cierra el modo de edición.
+</Step>
+</Steps>
+
+Detalles del modo de edición:
+
+- **Restablecer** vuelve a los cinco widgets predeterminados y muestra a todos los indicadores. Pide confirmación: "¿Restablecer al dashboard predeterminado? Se perderá tu configuración actual."
+- Un indicador oculto reaparece en el modo de edición como un recuadro punteado con **Mostrar**. Fuera del modo de edición, los indicadores visibles se reparten el ancho de la fila.
+- Si quitás todos los widgets, el dashboard muestra **Tu dashboard está vacío** con un acceso a la galería.
+- El dashboard es personal: se guarda por usuario y por organización. Tus cambios no afectan a otros miembros.
+
+{/* captura: images/reportes/dashboard-galeria-es.png | Galería de widgets abierta en modo Personalizar, con la entrada Reporte a medida arriba y la categoría Llamadas | app: /reports */}
+
+## Catálogo de widgets
+
+| Categoría | Widget | Qué muestra |
+|---|---|---|
+| Llamadas | **Llamadas por estado** | Volumen de llamadas apilado por resultado: `answered`, `voicemail`, `no_answer`, `busy`, `failed` y `unknown` (sin resultado registrado). |
+| Llamadas | **Tasa de éxito de llamadas** | Evolución de la tasa de éxito por período. |
+| Llamadas | **Llamadas por tipo** | Distribución por tipo de llamada. |
+| Llamadas | **Llamadas por dirección** | Entrantes (el contacto te llama), salientes (el agente llama al contacto) y web (iniciadas desde el widget). |
+| Llamadas | **Razones de desconexión** | Por qué se cortaron las llamadas. |
+| Llamadas | **Horas pico** | Volumen de llamadas por hora del día. |
+| Agentes | **Llamadas por agente** | Ranking de llamadas gestionadas por cada agente de IA. |
+| Agentes | **Duración prom. por agente** | Duración promedio de llamada por agente. |
+| Agentes | **Tasa de éxito por agente** | Proporción de llamadas con veredicto exitoso por agente. |
+| Agentes | **Sentimiento por agente** | Distribución de sentimiento del usuario por agente: **Positivo**, **Neutral**, **Negativo** y **Sin clasificar**. |
+| Agentes | **Uso de herramientas** | Frecuencia de uso de cada herramienta por agente. |
+| Agentes | **Buzón de voz por agente** | Proporción de llamadas del agente que cayeron en buzón. |
+| Contactos | **Contactos creados** | Nuevos contactos en el tiempo. |
+| Contactos | **Contactos por país** | Distribución geográfica de los contactos. |
+| Actividad | **Actividad de la organización** | Llamadas y mensajes en el tiempo, en una sola vista. |
+| Mensajería | **Resumen de mensajería** | Volumen de conversaciones y mensajes, IA vs humano, por canal. |
+| Mensajería | **Rendimiento de agentes humanos** | Conversaciones atendidas, cerradas y sin responder por agente. |
+| Mensajería | **Tiempos de respuesta** | Cuánto tarda cada agente en responderle al cliente. |
+| Mensajería | **Etiquetas de conversación** | Cómo quedan clasificadas las conversaciones por etiqueta del inbox. |
+| Mensajería | **Intenciones de conversación** | De qué escriben los clientes, clasificado por intención. |
+
+Los cinco widgets de **Mensajería** solo aparecen si tu organización tiene el inbox habilitado. Cada uno tiene un botón **Ver detalle** con tablas y exportación; están documentados en [Reportes de mensajería](/es/reportes/mensajeria).
+
+## Cómo se calculan las métricas de llamadas
+
+| Métrica | Qué mide | Cómo se calcula |
+|---|---|---|
+| Tasa de éxito (general y por agente) | Llamadas que el agente completó con éxito según el veredicto del análisis. | Llamadas con veredicto exitoso ÷ llamadas con veredicto. Las llamadas que nunca se analizaron no entran en el cálculo, aunque sí cuentan en el total. Por eso la tasa por agente no es comparable con su total de llamadas. |
+| Buzón de voz por agente | Llamadas del agente que cayeron en buzón. | Llamadas con razón de desconexión o resultado de buzón ÷ todas las llamadas del agente, entrantes incluidas. |
+| Sentimiento por agente | Sentimiento del usuario detectado en el análisis. | Cuenta de llamadas **Positivo**, **Neutral** y **Negativo**. La diferencia con el total del agente se muestra como **Sin clasificar**: llamadas analizadas sin sentimiento. |
+| Duración prom. por agente | Tiempo de conversación por llamada. | Promedio de la duración en segundos de las llamadas con duración registrada. Mide la conversación, no el tiempo de repique. |
+| Razones de desconexión | Cómo terminó cada llamada. | Agrupa por `user_hangup`, `agent_hangup`, `call_transfer`, `max_duration_reached`, `inactivity`, `no_answer`, `failed`, `voicemail`; las llamadas sin razón registrada salen como `unknown`. |
+| Horas pico | En qué horas hay más llamadas. | Cuenta de llamadas por hora del día (0 a 23), agrupadas en UTC. |
+| Llamadas por dirección | Quién llamó a quién. | Lee el campo de dirección de cada llamada. Las llamadas web no tienen dirección y se muestran como web. |
+
+<Tip>
+Pasá el mouse por el ícono de ayuda de cada widget: el texto describe el numerador y el denominador exactos de esa métrica.
+</Tip>
+
+## Qué no existe todavía
+
+- El dashboard no se exporta. Tampoco se exportan los indicadores ni los widgets de **Llamadas**, **Agentes**, **Contactos** y **Actividad**. Solo los widgets de **Mensajería** exportan a XLSX desde **Ver detalle**, y los reportes a medida abren la lista de llamadas, que sí tiene exportación.
+- No hay plantillas de dashboard. La única base es el dashboard predeterminado (**Restablecer**).
+- No se puede compartir un dashboard ni ver el de otro miembro.
+- No hay filtro por campaña ni por agente en el dashboard. Los reportes a medida permiten filtrar y separar por campaña y por agente.
+- No hay widgets de créditos ni de gasto. El consumo está en **Facturación**.
+- Los widgets de llamadas, agentes, contactos y actividad no agrupan por hora ni por día en la zona horaria elegida; agrupan en UTC.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+<Accordion title="¿Por qué la tasa de éxito es alta si la mayoría de mis llamadas no fueron atendidas?">
+Porque el denominador de la tasa de éxito no es el total de llamadas. Son solo las llamadas que tienen veredicto del análisis. Una llamada no atendida o no analizada no entra ni arriba ni abajo de la división. Compará la **Tasa de éxito** con la **Tasa de atendidas**, que sí divide por el total.
+</Accordion>
+<Accordion title="¿Qué significa «vs. primera mitad» en los indicadores?">
+Divide el rango en dos mitades de períodos y compara la segunda con la primera. Con **Últimos 30 días** agrupado por **Día**, compara los últimos quince días con los quince anteriores. No es una comparación con el período anterior al rango.
+</Accordion>
+<Accordion title="¿Por qué las horas pico no coinciden con mi horario?">
+**Horas pico** y los demás widgets de llamadas, agentes, contactos y actividad agrupan por hora y por día en UTC. La zona horaria elegida solo define dónde empieza y termina el rango. Si necesitás la distribución horaria en tu zona, creá un [reporte a medida](/es/reportes/a-medida) separado por **Hora del día**: el constructor sí calcula en la zona del reporte.
+</Accordion>
+<Accordion title="¿Mis cambios en el dashboard los ven mis compañeros?">
+No. El dashboard se guarda por usuario y por organización. Cada miembro con permiso `reports.read` arma el suyo. Si cambiás de organización, ves el dashboard que armaste en esa organización.
+</Accordion>
+<Accordion title="¿Cómo recupero un indicador que oculté?">
+Hacé clic en **Personalizar**. El indicador oculto aparece como un recuadro punteado con la opción **Mostrar**. **Restablecer** también vuelve a mostrar los cuatro.
+</Accordion>
+<Accordion title="¿Por qué no veo la categoría Mensajería en la galería?">
+Los widgets de mensajería solo se ofrecen a organizaciones con el inbox habilitado. Si tu organización no usa **Mensajes**, la categoría no aparece y los widgets de mensajería que hubieras agregado dejan de mostrarse, sin borrarse de tu configuración.
+</Accordion>
+<Accordion title="¿Por qué cambiaron los números al cambiar la zona horaria?">
+Al elegir otra zona, la app recalcula el rango: mantiene los mismos días de calendario, pero cada día empieza y termina a la medianoche de la nueva zona. Las llamadas cercanas a la medianoche pueden pasar de un día a otro. La app avisa con el mensaje "Horarios recalculados en …".
+</Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Reportes a medida](/es/reportes/a-medida)
+- [Reportes de mensajería](/es/reportes/mensajeria)
+- [Criterios de evaluación](/es/reportes/evaluaciones)
+- [Registro y detalle de llamadas](/es/llamadas/registro)

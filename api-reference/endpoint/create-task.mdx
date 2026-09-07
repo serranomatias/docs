@@ -1,0 +1,36 @@
+---
+title: "Create Task"
+api: "POST /v1/tasks"
+description: "Create an organization task with a description, creator, status, and optional assignees."
+---
+
+Create an organization task with a description, creator, status, and optional assignees.
+
+## Authentication
+
+<ParamField header="x-api-key" type="string" required>Organization API key. Keep it on your server or in a credential store.</ParamField>
+
+## Body
+
+<ParamField body="details" type="string" required>Detailed text, at least four characters.</ParamField>
+<ParamField body="brief" type="string" required>Short description. Include it even though some generated API metadata labels it optional.</ParamField>
+<ParamField body="type" type="string" required>`custom`, `AI`, `system`, or `automatization`. Use `custom` for a user-created task.</ParamField>
+<ParamField body="created_by" type="string" required>Creator email. For custom tasks, the creator must be a member of the organization.</ParamField>
+<ParamField body="assigned_to" type="string[]">Member emails. They are resolved to user IDs.</ParamField>
+<ParamField body="status" type="string">`backlog`, `todo`, `in_progress`, `done`, `blocked`, or `canceled`. Default: `todo`.</ParamField>
+<ParamField body="priority" type="string">`low`, `medium`, or `high`. Default: `high`.</ParamField>
+<ParamField body="additional_data" type="object">Optional additional values.</ParamField>
+
+Organization is derived from the key; do not send `organization_id`. Contact linkage is not supported by this creation flow: although a contact field appears in some schema metadata, it is not persisted by task creation.
+
+## Example
+
+Replace the creator with an actual organization member before executing. This creates a real task.
+
+```bash
+curl -X POST 'https://api.contactship.ai/v1/tasks'   -H 'x-api-key: YOUR_API_KEY'   -H 'Content-Type: application/json'   -d '{"brief":"Review customer inquiry","details":"Review the inquiry and decide the next action.","type":"custom","created_by":"member@example.com","status":"todo","priority":"medium"}'
+```
+
+## Response
+
+A successful creation returns HTTP 201 with `statusCode` and a `data` task object. See [Get task](/api-reference/endpoint/get-task) for its fields. Creating a task records work to do; it does not itself execute a call or send a message. If a request times out, check existing tasks before repeating it.

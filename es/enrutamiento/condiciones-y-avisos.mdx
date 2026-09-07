@@ -1,0 +1,48 @@
+---
+title: "Condiciones, avisos y webhooks"
+description: "Configurá requisitos comprobables y destinatarios de avisos de enrutamiento."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Ajustes → Organización → Enrutamiento de contactos → Etapa" permission="lead_routing_config.update" addon="Enrutamiento de leads" />
+
+## Armar condiciones
+
+En **¿Qué tiene que hacer mientras está acá?**, elegí **todo** para exigir todas las condiciones o **algo** para aceptar una. Podés anidar grupos: por ejemplo, `(envió un mensaje o registró una llamada) y tiene una etiqueta`.
+
+El catálogo incluye mensajes enviados y recibidos, llamadas registradas, segundos hablados, resultado de llamadas, etiquetas, categorías etiquetadas, datos del contacto, canal, línea, notas y minutos en la columna. Elegí el operador que corresponda al campo.
+
+En los hechos que lo permiten, definí **quién** cuenta: quien tiene la tarjeta, cualquier persona, IA o cualquiera. Elegí también el período: desde que llegó a esta columna o toda la historia. Una llamada antigua puede cumplir una condición histórica pero no una exigencia de gestión nueva.
+
+Leé **Se lee así** antes de guardar. Nombrá los grupos con lenguaje que el asesor reconozca en sus avisos. Una nota interna, un mensaje saliente y un mensaje del cliente son hechos distintos.
+
+Las condiciones de entrada se evalúan al crear la tarjeta, antes de tener una conversación desarrollada. Ahí usá canal, línea o datos del contacto. Las condiciones por grupo deciden qué equipo puede recibirla.
+
+## Avisos
+
+**Avisar al** usa porcentajes consumidos del plazo. Los avisos muestran requisitos pendientes. Configurá **Quién se entera cuando algo sale mal** y, cuando haga falta, el supervisor de la filial. Sin una selección explícita se usan líderes del equipo o su jerarquía; verificá que existan líderes para recibir esos avisos.
+
+Los avisos de falta de asesor y cadena agotada necesitan responsables aunque la tarjeta no tenga dueño.
+
+## Webhooks y correo
+
+La pantalla actual de recorrido no expone un editor de webhooks ni de avisos por correo para los eventos del motor. Si tu organización necesita integrarlos, coordiná su configuración y contrato con soporte. No uses el webhook de llamadas ni el del canal como sustituto: describen eventos diferentes.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Un mensaje de la IA cuenta?">
+    Solo si elegiste IA o cualquiera como autor válido de esa condición.
+  </Accordion>
+  <Accordion title="¿Por qué se cumplió sin acciones nuevas?">
+    Revisá si el grupo está vacío o si cuenta toda la historia del contacto.
+  </Accordion>
+  <Accordion title="¿Quién recibe el aviso si no hay dueño?">
+    Los supervisores configurados o los líderes de equipo que correspondan. Revisá esa configuración.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Cómo funciona](/es/enrutamiento/como-funciona)
+- [Equipos](/es/organizacion/equipos)

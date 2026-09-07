@@ -1,0 +1,63 @@
+---
+title: "Miembros e invitaciones"
+description: "Invitá personas a tu organización, revisá invitaciones pendientes y cambiá sus roles. Resolvé enlaces vencidos, correos incorrectos y límites del plan."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Ajustes → Organización → Miembros del Equipo" permission="team_member.read" />
+
+Cada miembro accede con su propia cuenta y un rol dentro de la organización. Invitá a las personas desde **Miembros del Equipo**; agregar un contacto al CRM no le da acceso a la app.
+
+## Invitar una persona
+
+1. Comprobá que estés en la organización correcta y abrí **Miembros del Equipo**.
+2. Iniciá una invitación, ingresá el correo y elegí el rol que debe recibir.
+3. Revisá la invitación en la pestaña de pendientes. La persona debe abrir el enlace con la cuenta del correo invitado.
+4. Una vez aceptada, comprobá que aparezca entre los miembros activos con el rol esperado.
+
+El permiso `team_member.create` permite invitar. El límite de miembros depende del plan; revisá **Planes** si la app bloquea nuevas invitaciones.
+
+## Administrar accesos
+
+| Acción | Permiso |
+|---|---|
+| Ver miembros y pendientes | `team_member.read` |
+| Invitar | `team_member.create` |
+| Cambiar roles | `team_member.update` |
+| Quitar un miembro | `team_member.delete` |
+
+Podés cambiar roles desde la lista, incluso para varios miembros seleccionados. Revisá los afectados antes de confirmar: el rol cambia qué pueden ver y hacer.
+
+Una invitación puede estar pendiente, aceptada, revocada o expirada. Reenviar una invitación no implica que ya haya sido aceptada.
+
+## Problemas al aceptar
+
+| Situación | Qué hacer |
+|---|---|
+| Invitación expirada o cancelada | Pedí una invitación vigente al administrador. |
+| Correo incorrecto | Iniciá sesión con el correo al que enviaron la invitación. |
+| Ya sos miembro | Elegí la organización desde tu cuenta. |
+| Límite de miembros alcanzado | Un administrador debe revisar el cupo del plan. |
+| No ves el botón de invitar | Revisá el permiso para crear miembros. |
+
+El historial aparece cuando la organización tiene habilitado **Historial de cambios** y tu rol incluye `audit.read`.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Puedo pertenecer a varias organizaciones?">
+    Sí. Los accesos se gestionan por organización. Verificá cuál está activa antes de invitar personas o modificar roles.
+  </Accordion>
+  <Accordion title="¿Por qué no puedo aceptar con otro correo?">
+    La invitación está asociada al correo indicado. Usá esa cuenta o pedí que emitan una nueva invitación al correo correcto.
+  </Accordion>
+  <Accordion title="¿Invitar a una persona le da acceso a todo?">
+    Su acceso depende del rol y sus alcances. Revisalos en [Roles y permisos](/es/organizacion/roles-y-permisos).
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Roles y permisos](/es/organizacion/roles-y-permisos)
+- [Equipos](/es/organizacion/equipos)
+- [Planes y límites](/es/facturacion/planes)

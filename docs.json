@@ -42,35 +42,149 @@
             "groups": [
               {
                 "group": "Comenzar",
+                "icon": "rocket",
                 "pages": [
-                  "es/introduccion",
-                  "es/arranque-rapido",
-                  "es/soporte"
+                  "es/comenzar/que-es-contactship",
+                  "es/comenzar/primera-llamada",
+                  "es/comenzar/primer-whatsapp",
+                  "es/comenzar/conceptos",
+                  "es/comenzar/asistente-ia",
+                  "es/comenzar/glosario",
+                  "es/comenzar/soporte"
                 ]
               },
               {
-                "group": "Plataforma",
+                "group": "Agentes de voz",
+                "icon": "phone",
                 "pages": [
-                  "es/plataforma/miembros",
-                  "es/plataforma/mis-numeros",
-                  "es/plataforma/creditos"
+                  "es/agentes-de-voz/crear",
+                  "es/agentes-de-voz/general",
+                  "es/agentes-de-voz/instrucciones",
+                  "es/agentes-de-voz/herramientas",
+                  "es/agentes-de-voz/base-de-conocimiento",
+                  "es/agentes-de-voz/avanzado",
+                  "es/agentes-de-voz/post-llamada",
+                  "es/agentes-de-voz/etiquetas-de-llamada",
+                  "es/agentes-de-voz/versiones-y-pruebas",
+                  "es/agentes-de-voz/guia-de-prompts"
                 ]
               },
               {
-                "group": "Agentes",
+                "group": "Agentes de texto",
+                "icon": "message",
                 "pages": [
-                  "es/agents/vision-general",
-                  "es/agents/identidad",
-                  "es/agents/instrucciones",
-                  "es/agents/guia-ingenieria-prompts",
-                  "es/agents/herramientas",
-                  "es/agents/automatizaciones",
-                  "es/agents/etiquetas-de-llamada",
-                  "es/agents/buenas-practicas"
+                  "es/agentes-de-texto/crear",
+                  "es/agentes-de-texto/instrucciones",
+                  "es/agentes-de-texto/herramientas",
+                  "es/agentes-de-texto/seguimientos",
+                  "es/agentes-de-texto/sandbox"
+                ]
+              },
+              {
+                "group": "Mensajes",
+                "icon": "inbox",
+                "pages": [
+                  "es/mensajes/vision-general",
+                  "es/mensajes/conectar-whatsapp",
+                  "es/mensajes/configurar-canal",
+                  "es/mensajes/bandeja",
+                  "es/mensajes/plantillas",
+                  "es/mensajes/respuestas-rapidas-y-etiquetas",
+                  "es/mensajes/automatizaciones",
+                  "es/mensajes/campanas"
+                ]
+              },
+              {
+                "group": "Llamadas",
+                "icon": "phone-volume",
+                "pages": [
+                  "es/llamadas/mis-numeros",
+                  "es/llamadas/registro",
+                  "es/llamadas/webhooks",
+                  "es/llamadas/campanas",
+                  "es/llamadas/widget"
+                ]
+              },
+              {
+                "group": "Contactos",
+                "icon": "address-book",
+                "pages": [
+                  "es/contactos/contactos-y-propiedades",
+                  "es/contactos/importar",
+                  "es/contactos/tableros",
+                  "es/contactos/etiquetas",
+                  "es/contactos/tareas",
+                  "es/contactos/agenda"
+                ]
+              },
+              {
+                "group": "Contact center",
+                "icon": "headset",
+                "pages": [
+                  "es/contact-center/softphone",
+                  "es/contact-center/colas-y-skills",
+                  "es/contact-center/reglas-de-enrutamiento",
+                  "es/contact-center/monitoreo-en-vivo",
+                  "es/contact-center/actividad-de-colas"
+                ]
+              },
+              {
+                "group": "Enrutamiento de leads",
+                "icon": "route",
+                "pages": [
+                  "es/enrutamiento/como-funciona",
+                  "es/enrutamiento/etapas-y-grupos",
+                  "es/enrutamiento/condiciones-y-avisos",
+                  "es/enrutamiento/reporte"
+                ]
+              },
+              {
+                "group": "Reportes",
+                "icon": "chart-mixed",
+                "pages": [
+                  "es/reportes/dashboard",
+                  "es/reportes/a-medida",
+                  "es/reportes/mensajeria",
+                  "es/reportes/evaluaciones"
+                ]
+              },
+              {
+                "group": "Organización",
+                "icon": "building",
+                "pages": [
+                  "es/organizacion/miembros",
+                  "es/organizacion/roles-y-permisos",
+                  "es/organizacion/equipos",
+                  "es/organizacion/historial-de-cambios",
+                  "es/organizacion/configuracion",
+                  "es/organizacion/claves-api"
+                ]
+              },
+              {
+                "group": "Facturación",
+                "icon": "credit-card",
+                "pages": [
+                  "es/facturacion/planes",
+                  "es/facturacion/creditos-y-pagos",
+                  "es/facturacion/referidos"
+                ]
+              },
+              {
+                "group": "Integraciones",
+                "icon": "plug",
+                "pages": [
+                  "es/integraciones/vision-general",
+                  "es/integraciones/google-calendar",
+                  "es/integraciones/google-sheets",
+                  "es/integraciones/cal-com",
+                  "es/integraciones/freshdesk",
+                  "es/integraciones/make",
+                  "es/integraciones/n8n"
                 ]
               },
               {
                 "group": "MCP",
+                "icon": "sparkles",
                 "pages": [
                   "es/mcp/vision-general",
                   "es/mcp/claude",
@@ -78,28 +192,14 @@
                   "es/mcp/cursor",
                   "es/mcp/varias-organizaciones"
                 ]
-              },
-              {
-                "group": "Integraciones",
-                "pages": [
-                  "es/integrations/quickstart",
-                  "es/integrations/make",
-                  "es/integrations/n8n"
-                ]
-              },
-              {
-                "group": "Campañas",
-                "pages": [
-                  "es/campaigns/overview"
-                ]
               }
             ]
           },
           {
-            "tab": "Casos de Uso",
+            "tab": "Casos de uso",
             "groups": [
               {
-                "group": "Casos de Uso",
+                "group": "Casos de uso",
                 "pages": [
                   "es/casos-de-uso/index",
                   "es/casos-de-uso/calificacion-de-leads",
@@ -117,7 +217,8 @@
                 "group": "Documentación API",
                 "pages": [
                   "api-reference/introduction",
-                  "api-reference/rate-limits"
+                  "api-reference/rate-limits",
+                  "api-reference/webhooks"
                 ]
               },
               {
@@ -138,7 +239,7 @@
                 ]
               },
               {
-                "group": "Canales y Conversaciones",
+                "group": "Canales y conversaciones",
                 "pages": [
                   "api-reference/endpoint/get-channels",
                   "api-reference/endpoint/get-thread",
@@ -159,7 +260,8 @@
                   "api-reference/endpoint/get-agent",
                   "api-reference/endpoint/list-agents",
                   "api-reference/endpoint/update-agent",
-                  "api-reference/endpoint/delete-agent"
+                  "api-reference/endpoint/delete-agent",
+                  "api-reference/endpoint/list-voices"
                 ]
               },
               {
@@ -173,6 +275,7 @@
                   "api-reference/endpoint/update-contact",
                   "api-reference/endpoint/delete-contact",
                   "api-reference/endpoint/get-contact-comments",
+                  "api-reference/endpoint/create-comment",
                   "api-reference/endpoint/get-contact-tags",
                   "api-reference/endpoint/add-contact-tag",
                   "api-reference/endpoint/remove-contact-tag"
@@ -195,7 +298,15 @@
                 ]
               },
               {
-                "group": "Números de Teléfono",
+                "group": "Tareas",
+                "pages": [
+                  "api-reference/endpoint/list-tasks",
+                  "api-reference/endpoint/get-task",
+                  "api-reference/endpoint/create-task"
+                ]
+              },
+              {
+                "group": "Números de teléfono",
                 "pages": [
                   "api-reference/endpoint/get-phone-numbers"
                 ]
@@ -211,35 +322,150 @@
             "tab": "Documentation",
             "groups": [
               {
-                "group": "Get Started",
+                "group": "Get started",
+                "icon": "rocket",
                 "pages": [
-                  "en/introduction",
-                  "en/quickstart",
-                  "en/support"
+                  "en/get-started/what-is-contactship",
+                  "en/get-started/first-call",
+                  "en/get-started/first-whatsapp",
+                  "en/get-started/concepts",
+                  "en/get-started/ai-assistant",
+                  "en/get-started/glossary",
+                  "en/get-started/support"
                 ]
               },
               {
-                "group": "Platform",
+                "group": "Voice agents",
+                "icon": "phone",
                 "pages": [
-                  "en/platform/members",
-                  "en/platform/my-numbers",
-                  "en/platform/credits"
+                  "en/voice-agents/create",
+                  "en/voice-agents/general",
+                  "en/voice-agents/instructions",
+                  "en/voice-agents/tools",
+                  "en/voice-agents/knowledge-base",
+                  "en/voice-agents/advanced",
+                  "en/voice-agents/post-call",
+                  "en/voice-agents/call-tags",
+                  "en/voice-agents/versions-and-testing",
+                  "en/voice-agents/prompt-guide"
                 ]
               },
               {
-                "group": "Agents",
+                "group": "Text agents",
+                "icon": "message",
                 "pages": [
-                  "en/agents/overview",
-                  "en/agents/prompt-engineering-guide",
-                  "en/agents/identity",
-                  "en/agents/instructions",
-                  "en/agents/tools",
-                  "en/agents/automations",
-                  "en/agents/call-tags"
+                  "en/text-agents/create",
+                  "en/text-agents/instructions",
+                  "en/text-agents/tools",
+                  "en/text-agents/follow-ups",
+                  "en/text-agents/sandbox"
+                ]
+              },
+              {
+                "group": "Messages",
+                "icon": "inbox",
+                "pages": [
+                  "en/messages/overview",
+                  "en/messages/connect-whatsapp",
+                  "en/messages/channel-settings",
+                  "en/messages/inbox",
+                  "en/messages/templates",
+                  "en/messages/quick-replies-and-tags",
+                  "en/messages/automations",
+                  "en/messages/campaigns"
+                ]
+              },
+              {
+                "group": "Calls",
+                "icon": "phone-volume",
+                "pages": [
+                  "en/calls/my-numbers",
+                  "en/calls/call-log",
+                  "en/calls/webhooks",
+                  "en/calls/campaigns",
+                  "en/calls/web-call-widget"
+                ]
+              },
+              {
+                "group": "Contacts",
+                "icon": "address-book",
+                "pages": [
+                  "en/contacts/contacts-and-properties",
+                  "en/contacts/import",
+                  "en/contacts/boards",
+                  "en/contacts/tags",
+                  "en/contacts/tasks",
+                  "en/contacts/agenda"
+                ]
+              },
+              {
+                "group": "Contact center",
+                "icon": "headset",
+                "pages": [
+                  "en/contact-center/softphone",
+                  "en/contact-center/queues-and-skills",
+                  "en/contact-center/routing-rules",
+                  "en/contact-center/live-monitoring",
+                  "en/contact-center/queue-activity"
+                ]
+              },
+              {
+                "group": "Lead routing",
+                "icon": "route",
+                "pages": [
+                  "en/lead-routing/how-it-works",
+                  "en/lead-routing/stages-and-pools",
+                  "en/lead-routing/conditions-and-notifications",
+                  "en/lead-routing/report"
+                ]
+              },
+              {
+                "group": "Reports",
+                "icon": "chart-mixed",
+                "pages": [
+                  "en/reports/dashboard",
+                  "en/reports/custom-reports",
+                  "en/reports/messaging",
+                  "en/reports/evaluations"
+                ]
+              },
+              {
+                "group": "Organization",
+                "icon": "building",
+                "pages": [
+                  "en/organization/members",
+                  "en/organization/roles-and-permissions",
+                  "en/organization/teams",
+                  "en/organization/change-history",
+                  "en/organization/settings",
+                  "en/organization/api-keys"
+                ]
+              },
+              {
+                "group": "Billing",
+                "icon": "credit-card",
+                "pages": [
+                  "en/billing/plans",
+                  "en/billing/credits-and-payments",
+                  "en/billing/referrals"
+                ]
+              },
+              {
+                "group": "Integrations",
+                "icon": "plug",
+                "pages": [
+                  "en/integrations/overview",
+                  "en/integrations/google-calendar",
+                  "en/integrations/google-sheets",
+                  "en/integrations/cal-com",
+                  "en/integrations/freshdesk",
+                  "en/integrations/make",
+                  "en/integrations/n8n"
                 ]
               },
               {
                 "group": "MCP",
+                "icon": "sparkles",
                 "pages": [
                   "en/mcp/overview",
                   "en/mcp/claude",
@@ -247,34 +473,14 @@
                   "en/mcp/cursor",
                   "en/mcp/multiple-organizations"
                 ]
-              },
-              {
-                "group": "Integrations",
-                "pages": [
-                  "en/integrations/quickstart",
-                  "en/integrations/make",
-                  "en/integrations/n8n"
-                ]
-              },
-              {
-                "group": "Campaigns",
-                "pages": [
-                  "en/campaigns/overview"
-                ]
-              },
-              {
-                "group": "Widgets",
-                "pages": [
-                  "en/widgets/overview"
-                ]
               }
             ]
           },
           {
-            "tab": "Use Cases",
+            "tab": "Use cases",
             "groups": [
               {
-                "group": "Use Cases",
+                "group": "Use cases",
                 "pages": [
                   "en/use-cases/index",
                   "en/use-cases/lead-qualification",
@@ -289,10 +495,11 @@
             "tab": "API Reference",
             "groups": [
               {
-                "group": "API Documentation",
+                "group": "API documentation",
                 "pages": [
                   "api-reference/introduction",
-                  "api-reference/rate-limits"
+                  "api-reference/rate-limits",
+                  "api-reference/webhooks"
                 ]
               },
               {
@@ -313,7 +520,7 @@
                 ]
               },
               {
-                "group": "Channels & Threads",
+                "group": "Channels and threads",
                 "pages": [
                   "api-reference/endpoint/get-channels",
                   "api-reference/endpoint/get-thread",
@@ -334,7 +541,8 @@
                   "api-reference/endpoint/get-agent",
                   "api-reference/endpoint/list-agents",
                   "api-reference/endpoint/update-agent",
-                  "api-reference/endpoint/delete-agent"
+                  "api-reference/endpoint/delete-agent",
+                  "api-reference/endpoint/list-voices"
                 ]
               },
               {
@@ -348,6 +556,7 @@
                   "api-reference/endpoint/update-contact",
                   "api-reference/endpoint/delete-contact",
                   "api-reference/endpoint/get-contact-comments",
+                  "api-reference/endpoint/create-comment",
                   "api-reference/endpoint/get-contact-tags",
                   "api-reference/endpoint/add-contact-tag",
                   "api-reference/endpoint/remove-contact-tag"
@@ -370,7 +579,15 @@
                 ]
               },
               {
-                "group": "Phone Numbers",
+                "group": "Tasks",
+                "pages": [
+                  "api-reference/endpoint/list-tasks",
+                  "api-reference/endpoint/get-task",
+                  "api-reference/endpoint/create-task"
+                ]
+              },
+              {
+                "group": "Phone numbers",
                 "pages": [
                   "api-reference/endpoint/get-phone-numbers"
                 ]
@@ -381,6 +598,44 @@
       }
     ]
   },
+  "redirects": [
+    { "source": "/es/introduccion", "destination": "/es/comenzar/que-es-contactship" },
+    { "source": "/es/arranque-rapido", "destination": "/es/comenzar/primera-llamada" },
+    { "source": "/es/soporte", "destination": "/es/comenzar/soporte" },
+    { "source": "/es/plataforma/miembros", "destination": "/es/organizacion/miembros" },
+    { "source": "/es/plataforma/mis-numeros", "destination": "/es/llamadas/mis-numeros" },
+    { "source": "/es/plataforma/creditos", "destination": "/es/facturacion/creditos-y-pagos" },
+    { "source": "/es/agents/vision-general", "destination": "/es/agentes-de-voz/crear" },
+    { "source": "/es/agents/identidad", "destination": "/es/agentes-de-voz/general" },
+    { "source": "/es/agents/instrucciones", "destination": "/es/agentes-de-voz/instrucciones" },
+    { "source": "/es/agents/guia-ingenieria-prompts", "destination": "/es/agentes-de-voz/guia-de-prompts" },
+    { "source": "/es/agents/buenas-practicas", "destination": "/es/agentes-de-voz/guia-de-prompts" },
+    { "source": "/es/agents/herramientas", "destination": "/es/agentes-de-voz/herramientas" },
+    { "source": "/es/agents/automatizaciones", "destination": "/es/agentes-de-voz/post-llamada" },
+    { "source": "/es/agents/etiquetas-de-llamada", "destination": "/es/agentes-de-voz/etiquetas-de-llamada" },
+    { "source": "/es/integrations/quickstart", "destination": "/es/integraciones/vision-general" },
+    { "source": "/es/integrations/make", "destination": "/es/integraciones/make" },
+    { "source": "/es/integrations/n8n", "destination": "/es/integraciones/n8n" },
+    { "source": "/es/campaigns/overview", "destination": "/es/llamadas/campanas" },
+    { "source": "/en/introduction", "destination": "/en/get-started/what-is-contactship" },
+    { "source": "/en/quickstart", "destination": "/en/get-started/first-call" },
+    { "source": "/en/support", "destination": "/en/get-started/support" },
+    { "source": "/en/platform/members", "destination": "/en/organization/members" },
+    { "source": "/en/platform/my-numbers", "destination": "/en/calls/my-numbers" },
+    { "source": "/en/platform/credits", "destination": "/en/billing/credits-and-payments" },
+    { "source": "/en/agents/overview", "destination": "/en/voice-agents/create" },
+    { "source": "/en/agents/prompt-engineering-guide", "destination": "/en/voice-agents/prompt-guide" },
+    { "source": "/en/agents/identity", "destination": "/en/voice-agents/general" },
+    { "source": "/en/agents/instructions", "destination": "/en/voice-agents/instructions" },
+    { "source": "/en/agents/tools", "destination": "/en/voice-agents/tools" },
+    { "source": "/en/agents/automations", "destination": "/en/voice-agents/post-call" },
+    { "source": "/en/agents/call-tags", "destination": "/en/voice-agents/call-tags" },
+    { "source": "/en/integrations/quickstart", "destination": "/en/integrations/overview" },
+    { "source": "/en/campaigns/overview", "destination": "/en/calls/campaigns" },
+    { "source": "/en/widgets/overview", "destination": "/en/calls/web-call-widget" },
+    { "source": "/api-reference/endpoint/add-contact-comment", "destination": "/api-reference/endpoint/create-comment" },
+    { "source": "/api-reference/endpoint/get-contact", "destination": "/api-reference/endpoint/get-contact-by-identifier" }
+  ],
   "footerSocials": {
     "x": "https://x.com/contactshipai",
     "linkedin": "https://www.linkedin.com/company/contactshipai"

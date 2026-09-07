@@ -1,0 +1,47 @@
+---
+title: "Google Calendar"
+description: "Connect Google and configure the calendar, duration and hours used by the agent tool."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Integrations → Google Calendar" permission="integrations.read; integrations.create" />
+
+Google Calendar connects through **Connect with Google**. Use an account with access to the calendar where events will be created.
+
+## Connect and configure
+
+1. Open **Integrations → Google Calendar**.
+2. Choose **Connect with Google**, select the account and complete authorization.
+3. Return to ContactShip and check the connection.
+4. Open the voice agent and add its Google Calendar tool.
+5. Select the connection and review calendar, duration, concurrency and operating hours.
+6. Test availability before confirming a test booking.
+
+## Separate connection and availability
+
+Connecting Google does not add the tool to every agent. Availability also depends on the tool's configured hours and parameters.
+
+When confirming a booking, check the date, time zone and returned result. The agent's spoken reply does not replace confirmation that an event was created.
+
+## Common problems
+
+If the expected calendar is missing, check the connected account and its access. If the connection stopped working, review its status and reconnect when needed. If no slots appear, check duration, calendar and configured hours.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Do I need a Google API key?">
+    The catalog uses Google authorization. Do not paste a ContactShip API key into that flow.
+  </Accordion>
+  <Accordion title="Is this configured in Agenda?">
+    Configure the Google Calendar tool in the agent. The Agenda module is separate.
+  </Accordion>
+  <Accordion title="Can the agent confirm an appointment without checking availability?">
+    Instruct it to check first and confirm only after the tool returns the booking result.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Voice tools](/en/voice-agents/tools)
+- [Agenda](/en/contacts/agenda)

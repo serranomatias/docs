@@ -1,0 +1,59 @@
+---
+title: "Glosario"
+description: "Definiciones de inbox, canal, prompt, herramienta, webhook, SLA, softphone y otros términos usados en ContactShip."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Documentación" />
+
+Consultá este glosario cuando una pantalla o una integración use un término desconocido. Para entender las relaciones entre registros, empezá por [Conceptos](/es/comenzar/conceptos).
+
+| Término | Significado |
+|---|---|
+| Add-on | Módulo que requiere habilitación adicional por organización |
+| Alcance | Registros sobre los que se aplica un permiso |
+| API | Interfaz para consultar o modificar datos desde otros sistemas |
+| Base de conocimiento | Información del negocio que puede consultar un agente |
+| Buffer de mensajes | Espera para agrupar mensajes antes de responder |
+| Canal | Conexión por la que llegan y salen mensajes |
+| Caller ID | Número que se presenta al destinatario de una llamada |
+| Cola | Distribución de llamadas hacia agentes humanos elegibles |
+| Contexto | Datos disponibles para la IA durante la conversación |
+| Follow-up | Seguimiento posterior a una interacción |
+| Inbox | Bandeja de conversaciones de Mensajes |
+| MCP | Protocolo que conecta un asistente compatible con herramientas de ContactShip |
+| Prompt | Instrucciones escritas para la IA |
+| Round robin | Reparto por turnos entre destinos elegibles |
+| Sandbox | Entorno de prueba de conversaciones con herramientas simuladas |
+| Skill | Habilidad asignada a un agente humano para determinar elegibilidad en colas |
+| SLA | Plazo de atención o gestión según reglas configuradas |
+| Softphone | Teléfono de software usado desde el navegador |
+| Template | Plantilla; en WhatsApp, mensaje estructurado sujeto a aprobación |
+| Thread | Identificador de una conversación en la API o integraciones |
+| Tool | Herramienta que permite una acción o consulta |
+| Webhook | Solicitud que un sistema envía a otro para notificar un evento |
+| Wrap-up | Tiempo de tipificación después de una llamada |
+
+## Términos que no son intercambiables
+
+Las etiquetas de contacto, conversación y llamada pertenecen a catálogos distintos. Una etapa de tablero no es un estado de llamada. Una clave API de organización no es el permiso individual de un miembro.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Inbox y Mensajes son la misma sección?">
+    Inbox nombra la bandeja de conversaciones de **Mensajes**. Sus ajustes incluyen canales, plantillas y etiquetas.
+  </Accordion>
+  <Accordion title="¿Tool y herramienta significan lo mismo?">
+    Sí. La app usa **Tools** en el editor de texto para las herramientas del agente.
+  </Accordion>
+  <Accordion title="¿Qué diferencia hay entre API y webhook?">
+    Con la API tu sistema inicia una solicitud. Con un webhook, ContactShip notifica a una URL que configuraste cuando ocurre un evento.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Conceptos](/es/comenzar/conceptos)
+- [Herramientas de texto](/es/agentes-de-texto/herramientas)
+- [API Reference](/api-reference/introduction)

@@ -1,33 +1,40 @@
 ---
-title: 'Get Agent'
-openapi: 'GET /v1/agents/{agentId}'
+title: "Get Agent"
+api: "GET /v1/agents/{agentId}"
+description: "Retrieve a voice agent\u2019s published configuration."
 ---
 
-<Endpoint
-  method="GET"
-  path="/v1/agents/{agentId}"
-  description="Get a specific agent by ID"
->
-  <RequestHeaders>
-    <RequestHeader
-      name="x-api-key"
-      description="API key for authentication"
-      required
-      example="YOUR_API_KEY"
-    />
-  </RequestHeaders>
-  <ResponseFields>
-    <ResponseField
-      status="200"
-      description="Agent retrieved successfully"
-      contentType="application/json"
-      schemaRef="#/components/schemas/AgentResponse"
-    />
-    <ResponseField
-      status="400"
-      description="Unexpected error"
-      contentType="application/json"
-      schemaRef="#/components/schemas/Error"
-    />
-  </ResponseFields>
-</Endpoint>
+Retrieve a voice agent’s published configuration.
+
+## Authentication
+
+<ParamField header="x-api-key" type="string" required>Organization API key. Keep it on your server or in a credential store.</ParamField>
+
+## Path
+
+<ParamField path="agentId" type="string" required>Agent ID from the organization’s agent list.</ParamField>
+
+## Example
+
+```bash
+curl 'https://api.contactship.ai/v1/agents/AGENT_ID' -H 'x-api-key: YOUR_API_KEY'
+```
+
+## Response
+
+<ResponseField name="statusCode" type="number">HTTP response status.</ResponseField>
+<ResponseField name="data.id" type="string">ContactShip agent ID, used in agent and call endpoints.</ResponseField>
+<ResponseField name="data.name" type="string">Internal name.</ResponseField>
+<ResponseField name="data.person_name" type="string">In-call name.</ResponseField>
+<ResponseField name="data.prompt" type="string">Instructions.</ResponseField>
+<ResponseField name="data.conversation_purpose" type="string">Conversation objective.</ResponseField>
+<ResponseField name="data.voice_id" type="string">Voice ID.</ResponseField>
+<ResponseField name="data.language" type="string">Configured language code.</ResponseField>
+<ResponseField name="data.timezone" type="string">IANA time zone.</ResponseField>
+<ResponseField name="data.tools" type="object[]">Configured tool definitions.</ResponseField>
+<ResponseField name="data.post_call_analysis_data" type="object[]">Extraction fields.</ResponseField>
+<ResponseField name="data.webhook_url" type="string">Outgoing call webhook URL.</ResponseField>
+<ResponseField name="data.created_at" type="string">Creation timestamp.</ResponseField>
+<ResponseField name="data.updated_at" type="string">Update timestamp.</ResponseField>
+
+The response also includes configured voice/conversation values such as volume, voice_speed, voice_temperature, responsiveness, interruption_sensitivity, ambient_sound, ambient_sound_volume, begin_message, begin_message_delay_ms, max_call_duration_ms, start_speaker, and boosted_keywords.

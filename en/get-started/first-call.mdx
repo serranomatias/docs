@@ -1,0 +1,64 @@
+---
+title: "Your first AI call"
+description: "Create a voice agent, publish instructions, test it, and review your first call."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Home / Agents" permission="agents.read" />
+
+Start with one agent and a phone you control. Follow the setup sequence in Home, then use call details to confirm the result.
+
+## Set up the workspace
+
+Register at [app.contactship.ai](https://app.contactship.ai). Complete organization and profile details and review the plan or trial options presented to your account. The selected organization owns agents, numbers, contacts, and usage credits.
+
+Review the available balance before calling. Both web and phone tests consume credits. Current trial terms and offers are displayed during onboarding; use Billing and Plans for the account’s current limits.
+
+## Create and publish an agent
+
+1. Open **Agents → New agent** and choose voice.
+2. Start from a template or a blank agent. Templates supply a prompt and voice configuration; a blank agent starts without instructions.
+3. Review General, Instructions, and Tools. Give the agent a clear objective and explain what to do when information is missing.
+4. Wait for the draft to save and select **Publish**. Tests run the published version.
+
+## Run a controlled test
+
+Open **Test agent**. In **Web**, allow microphone access and start talking. In **Phone**, select a verified outgoing number and enter your test destination with its country code. Provide contact data and variables if needed.
+
+Plan duration caps are Free 3 minutes, Starter 7, Pro 30, Growth and Enterprise 60. An earlier disconnection may have another cause; inspect the call record.
+
+## Configure real phone traffic
+
+Verify a caller ID in **Organization → My numbers** to make outgoing calls. Buy an inbound number and assign the agent to receive calls. A verified outgoing number is not automatically an inbound number hosted by ContactShip.
+
+Home can offer a first-call action while the organization is new. Review its agent and destination and confirm the call. Use your own test destination before adding a campaign or exposing an inbound line.
+
+## Review and improve
+
+Open the call in **Calls** for transcript, recording when available, analysis, tool results, and extracted values. Check that the agent met its objective and that external operations actually succeeded. Correct the prompt, publish, and test the affected cases again.
+
+Next, import contacts, prepare a campaign, or embed a widget depending on your use case.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Are tests free?">
+    They consume organization credits. Check the current balance and onboarding offer.
+  </Accordion>
+  <Accordion title="Why did a prompt edit not affect the test?">
+    The test uses the published version. Save and publish the draft.
+  </Accordion>
+  <Accordion title="Why can’t I select a Call from number?">
+    Verify an outgoing number in My numbers and check the relevant permissions.
+  </Accordion>
+  <Accordion title="Where do I see the result?">
+    Open recent tests in the agent panel or the record in Calls.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Create a voice agent](/en/voice-agents/create)
+- [My numbers](/en/calls/my-numbers)
+- [Call log](/en/calls/call-log)
+- [First WhatsApp agent](/en/get-started/first-whatsapp)

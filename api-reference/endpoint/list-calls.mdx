@@ -72,6 +72,8 @@ Returns a paginated list of calls for your organization. By default, `chat_histo
 
 ## Response
 
+The response contains `statusCode`, a `data` array, and `pagination` with `page`, `total_rows`, and `total_pages`.
+
 <ResponseField name="data" type="array">
   Array of call objects.
   <Expandable title="Call object">
@@ -142,15 +144,13 @@ Returns a paginated list of calls for your organization. By default, `chat_histo
   </Expandable>
 </ResponseField>
 
-<ResponseField name="count" type="number">
-  Total number of calls matching the query (before pagination).
-</ResponseField>
+<ResponseField name="pagination" type="object">Pagination metadata: `page`, `total_rows`, and `total_pages`.</ResponseField>
 
 ## Error Codes
 
 - `400 Bad Request` — Invalid query parameters
 - `401 Unauthorized` — Invalid or missing API key
-- `429 Too Many Requests` — Rate limit exceeded (this endpoint allows 20 requests per minute per organization); wait for `Retry-After` seconds. See [Rate Limits](/api-reference/rate-limits)
+- `429 Too Many Requests` — Rate limit exceeded; honor `Retry-After` when present and use bounded backoff. See [Rate Limits](/api-reference/rate-limits)
 - `500 Internal Server Error` — Server-side error
 
 ## Code Examples
@@ -183,7 +183,7 @@ const result = await listCalls({
   call_result: 'answered',
   date_from: '2026-01-01',
 });
-console.log(`${result.data.length} calls, ${result.count} total`);
+console.log(`${result.data.length} calls, ${result.pagination.total_rows} total`);
 ```
 
 ```python Python
@@ -205,7 +205,7 @@ response = requests.get(
 
 if response.status_code == 200:
     result = response.json()
-    print(f"{len(result['data'])} calls returned, {result['count']} total")
+    print(f"{len(result['data'])} calls returned, {result['pagination']['total_rows']} total")
 else:
     print(f"Error {response.status_code}: {response.text}")
 ```
@@ -214,6 +214,7 @@ else:
 <ResponseExample>
 ```json Example Response
 {
+  "statusCode": 200,
   "data": [
     {
       "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
@@ -243,7 +244,11 @@ else:
       }
     }
   ],
-  "count": 142
+  "pagination": {
+    "page": 1,
+    "total_rows": 142,
+    "total_pages": 3
+  }
 }
 ```
 </ResponseExample>

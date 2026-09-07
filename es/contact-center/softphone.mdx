@@ -1,0 +1,231 @@
+---
+title: 'Softphone y estados de agente'
+description: 'Cómo usar el softphone del navegador: estados de agente, llamar y recibir llamadas, transferencia directa o con consulta, panel de contacto, notas, tipificación y los mensajes de falla.'
+tag: 'Add-on'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" addon="Softphone" route="Softphone (ícono de auriculares al pie de la barra lateral)" />
+
+El softphone es el teléfono de las personas de tu equipo dentro de ContactShip. Corre en el navegador, sin instalar nada, y recibe las llamadas que las colas del Contact center reparten entre los agentes. También sirve para llamar a contactos y a compañeros. Se activa por organización a pedido: escribí a soporte para habilitar el add-on Softphone y, si querés colas, skills y reglas de enrutamiento, también el add-on Contact center.
+
+{/* captura: images/contact-center/softphone-marcador-es.png | Ventana del softphone en línea con la pestaña Recientes, el teclado abierto y el selector Sale desde | app: Softphone (barra lateral) */}
+
+<Note>
+Parte de los textos del softphone se muestran en inglés aunque la app esté en español, por ejemplo **Go Online**, **Answer**, **Decline** y **Confirm transfer**. En esta página los nombres aparecen tal como se ven en pantalla.
+</Note>
+
+## Abrir el softphone y ponerse en línea
+
+<Steps>
+  <Step title="Abrí la ventana">
+    Hacé clic en **Softphone**, al pie de la barra lateral. El punto de color junto al ícono indica el estado de la conexión: verde en línea, ámbar conectando o activo en otra pestaña, rojo error.
+  </Step>
+  <Step title="Conectate">
+    Hacé clic en **Go Online**. La app te asigna un interno libre y muestra el aviso "Softphone online · Ext. 1001" (con tu número de interno). El interno se ve en el pie de la ventana como **Ext. 1001**.
+  </Step>
+  <Step title="Permití micrófono y notificaciones">
+    El navegador pide acceso al micrófono al conectar y permiso de notificaciones para avisarte de llamadas cuando la pestaña no está visible.
+  </Step>
+</Steps>
+
+La ventana es flotante: se arrastra desde la barra superior, se minimiza a una píldora y se cierra sin desconectarte. Para desconectarte, usá el botón de apagado **Desconectarme** en el pie de la ventana. Cerrar la pestaña del navegador también te deja **Desconectado**. Si cambiás de organización con el softphone en línea, se vuelve a registrar en la nueva organización.
+
+La barra superior muestra el estado de la conexión: **En línea**, **Conectando**, **Error**, **Desconectado** o **En otra pestaña**. Cuando estás en línea, ese lugar lo ocupa el selector de estado de agente.
+
+## Estados de agente
+
+El estado de agente decide si las colas te ofrecen llamadas. Se cambia desde la píldora de estado en la barra superior de la ventana. La píldora muestra también cuánto tiempo llevás en el estado actual.
+
+| Estado | Quién lo pone | Recibe llamadas | Qué hace |
+|---|---|---|---|
+| Disponible | Vos, o la app al conectarte | Sí | Único estado en el que las colas te asignan llamadas. |
+| En llamada | El sistema | No | Mientras hay una llamada activa. No podés cambiar de estado hasta colgar. |
+| Tipificación | El sistema | No | Trabajo post llamada al terminar una llamada de cola. Dura lo que define la cola en **Tiempo de tipificación**. Desde acá podés pasar a cualquier estado. |
+| Ausente | Vos | No | Pausa manual. |
+| Desconectado | El sistema al desconectarte o cerrar la pestaña | No | Sin softphone en línea. |
+| Estados personalizados (por ejemplo «Almorzando») | Vos | No | Los crea un administrador en **Ajustes → Telefonía → Contact Center → Estados**. |
+
+Reglas que aplican siempre:
+
+- El propio selector lo dice: "Solo «Disponible» recibe llamadas. Cualquier otro estado te saca de la cola".
+- **En llamada** y **Tipificación** no se pueden elegir a mano: los pone el sistema.
+- Al conectarte pasás a **Disponible**. La excepción es haber quedado en **Ausente** o en un estado personalizado antes de desconectarte o recargar: ese estado se restaura para que no recibas llamadas sin querer.
+- Si llamás vos estando en **Ausente** o en un estado personalizado, al colgar volvés a ese estado.
+- Durante **Tipificación** la ventana muestra una cuenta regresiva ("2:00 restantes · no recibís llamadas") y el botón **Estoy disponible** para terminarla antes. Al vencer, el sistema te devuelve a **Disponible**.
+
+{/* captura: images/contact-center/softphone-estados-es.png | Selector de estado del agente con Disponible, Ausente y un estado personalizado | app: Softphone → píldora de estado */}
+
+## Llamar
+
+La vista en línea tiene dos pestañas, un teclado y un selector de número saliente.
+
+| Elemento | Qué hace |
+|---|---|
+| **Recientes** | Tus últimas 5 llamadas atendidas o hechas. Al tocar una, el número pasa al teclado. Si la lista no carga, muestra "No pudimos cargar tus llamadas recientes." y **Reintentar**. |
+| **Equipo** | Tu equipo con el estado de cada persona. Solo se puede llamar a quien está en **Disponible**; la pestaña muestra cuántas personas están disponibles. La llamada entre compañeros es interna y no usa un número saliente. |
+| **Teclado** | Campo "Ingresá un número…", teclado 0 a 9, asterisco y numeral, y el botón **Llamar**. Enter también llama. |
+| **Sale desde** | El número que ve la persona a la que llamás. Está en el pie de la ventana. Si tu organización tiene más de un número, se despliega la lista agrupada, con alias o **Sin alias**. La elección se recuerda en este navegador. |
+
+<Steps>
+  <Step title="Elegí desde qué número salir">
+    Revisá el número del pie de la ventana. Si el rol de tu usuario limita los números que podés presentar (permiso `outgoing_number.read`), la lista solo muestra esos.
+  </Step>
+  <Step title="Cargá el número">
+    Escribilo en el teclado, tocá una llamada en **Recientes** o usá el botón **Call** del panel de contacto en Mensajes. Ese botón abre el softphone con el número cargado y lo conecta si estaba desconectado. Nunca marca solo: siempre confirmás con **Llamar**.
+  </Step>
+  <Step title="Llamá">
+    Hacé clic en **Llamar**. Mientras la lista de números carga, el botón dice **Preparando…**. La pantalla pasa a **Calling** con **Ringing...** y el botón **Cancel** hasta que atienden.
+  </Step>
+</Steps>
+
+Si la llamada no se puede completar, el softphone muestra uno de estos mensajes.
+
+| Mensaje | Qué significa |
+|---|---|
+| Ocupado — el número está en otra llamada | El destino dio ocupado. |
+| Sin respuesta | Nadie atendió y el destino dejó de sonar. |
+| Llamada rechazada | El destino rechazó la llamada. |
+| Número inválido — verificá el número | El número no existe o está incompleto. Reintentar no sirve: corregí el número, incluido el código de país. |
+| Llamada cancelada | Cortaste antes de que atendieran. |
+| No se pudo completar la llamada | Cualquier otra falla. Probá de nuevo o consultá a soporte. |
+
+## Recibir una llamada
+
+Recibís llamadas solo si el softphone está **En línea** y tu estado es **Disponible**. La ventana se abre sola, suena un tono y, si la pestaña no está visible, el navegador muestra la notificación "Incoming call".
+
+La pantalla **Incoming call** muestra el nombre del contacto o el número, el país del número (bandera y nombre), el canal (**Teléfono**, **WhatsApp** o **Interna**), de qué número a qué número entra, el nombre de la cola y, si un agente de IA transfirió la llamada, un panel con el contexto que reunió. Las opciones son **Answer** y **Decline**. **Decline** solo aparece si tu rol tiene el permiso `softphone.decline`.
+
+- Si rechazás, la pantalla dice **Call rejected**. La cola te vuelve a ofrecer esa llamada recién después del **Cooldown de rechazo** configurado en la cola (30 s por defecto).
+- Si no atendés durante el tiempo de timbre de la cola (**Timbra a cada agente durante**, 20 s por defecto), la pantalla dice **Missed call** y la cola sigue con otro agente según su estrategia.
+- Mientras estás en una llamada, el softphone rechaza automáticamente cualquier otra llamada entrante.
+
+{/* clip: images/contact-center/softphone-llamada-es.mp4 | Llamada entrante: atender, poner en espera, transferir con consulta y tipificar | app: Softphone */}
+
+## Durante la llamada
+
+La pantalla **Connected** muestra el nombre o número, la duración y el canal. Debajo están los controles.
+
+| Control | Qué hace |
+|---|---|
+| **Mute** / **Unmute** | Silencia tu micrófono. La otra persona deja de oírte. |
+| **Hold** / **Resume** | Pone la llamada en espera y la retoma. |
+| **DTMF keypad** | Abre un teclado compacto para enviar tonos, por ejemplo para navegar el menú de otra central. |
+| **Transfer call** | Abre la lista de compañeros disponibles y de colas para transferir. |
+| **Hang up** | Corta la llamada. |
+
+En la barra superior hay dos botones más: **Ver contacto** / **Ocultar contacto** para el panel lateral, y **Ver notas** / **Ocultar notas** para las notas de la llamada.
+
+## Transferir
+
+<Steps>
+  <Step title="Abrí el selector">
+    Hacé clic en **Transfer call**. La lista **Transfer to** muestra solo a los compañeros en **Disponible**. Debajo, en **Queues**, están las colas de la organización.
+  </Step>
+  <Step title="Elegí el destino y el modo">
+    Al tocar a una persona se abre **Transfer call** con dos opciones. Al tocar una cola se abre **Transfer to queue** con una sola.
+  </Step>
+  <Step title="Confirmá">
+    Con **Direct transfer** salís de la llamada en el acto. Con **Consult first** hablás primero y después confirmás con **Confirm transfer** o volvés con **Back to call**.
+  </Step>
+</Steps>
+
+| Modo | Cómo funciona | Destinos |
+|---|---|---|
+| **Direct transfer** ("Hand off now — you leave the call") | Transferencia ciega. La llamada pasa al destino y vos quedás libre. El aviso dice "Transferring to …" y luego "Transferred to …". | Persona o cola. Al transferir a una cola, la cola vuelve a repartir la llamada entre sus agentes. |
+| **Consult first** ("Talk privately, then confirm the transfer") | Transferencia atendida. La llamada original queda **On hold**, suena el compañero (**Ringing…**) y hablás con él (**Talking**). **Confirm transfer** se habilita cuando atiende. Si no atiende en 30 s, la consulta se cancela y volvés con la persona que esperaba. | Solo personas. |
+
+Una llamada transferida aparece en Monitoreo en vivo y en Actividad de colas con la marca "Transferida por …", porque las skills de la cola solo se evalúan en la primera asignación.
+
+## Panel de contacto
+
+Durante una llamada entrante, en curso o en consulta, la ventana se ensancha con un panel a la derecha. Si el número pertenece a un contacto, muestra su ficha; si no, ofrece crearlo. El botón **Ver contacto** / **Ocultar contacto** lo esconde.
+
+{/* captura: images/contact-center/softphone-panel-contacto-es.png | Panel de contacto durante la llamada con la pestaña Resumen, un ticket abierto y el comentario rápido | app: Softphone → llamada en curso */}
+
+Con contacto conocido:
+
+- Nombre y teléfono. Con el permiso `contacts.update` podés editar el nombre y el correo en el lugar (**Agregar nombre**, **Editar nombre**, **Agregar correo**, **Editar correo**).
+- Botones **Copiar teléfono**, **Copiar email**, **Comentario rápido** y **Ver contacto completo**, que abre la ficha en otra pestaña.
+- **Comentario rápido**: un campo "Anotá algo durante la llamada…" y el botón **Comentar**. El comentario queda en la ficha del contacto ("Comentario agregado al contacto").
+- Pestaña **Resumen**: correo, **Asignado a**, **Última llamada** con su dirección, etiquetas y **Propiedades** con los campos personalizados que tengan valor.
+
+Con Freshdesk conectado y un contacto con correo o teléfono, aparece además la pestaña **Tickets**:
+
+- **Resumen** muestra arriba **Tickets abiertos** con hasta dos tickets en estado Abierto o Pendiente.
+- **Tickets** lista los de los **Últimos 3 días** con su estado: **Abierto**, **Pendiente**, **Resuelto** o **Cerrado**. Cada ticket abre su detalle con los **Últimos mensajes** y el enlace **Abrir en Freshdesk**.
+- El botón **Editar contacto en Freshdesk** abre el contacto en tu portal de Freshdesk.
+
+Con un número desconocido, el panel dice "Este número no está en tus contactos". Escribí un nombre en "Nombre (opcional)" y hacé clic en **Crear contacto**. El contacto se crea con ese número, el aviso dice "Contacto creado" y el panel pasa a mostrar la ficha nueva. Si no ponés nombre, el contacto se guarda con el número como nombre.
+
+## Notas y tipificación
+
+**Notas de la llamada**: con el botón **Ver notas** se abre un campo "Escribí notas… se guardan al terminar la llamada". Está disponible desde que atendés y sigue editable durante **Tipificación**. Un borrador se guarda en tu navegador mientras escribís, y las notas se envían asociadas a la llamada cuando termina la interacción. Aplica a llamadas de cola y a llamadas recibidas por transferencia.
+
+**Tipificación del resultado**: al cortar una llamada completada con un contacto conocido, el panel lateral muestra **Llamada finalizada** con la duración y tres resultados: **Resuelto**, **Sigue abierto** y **Volver a llamar**. Elegí uno, agregá contexto en "Agregá contexto (opcional)…" y hacé clic en **Guardar**. Se guarda como comentario en la ficha del contacto, con la duración y el resultado en la primera línea. **Omitir** cierra el panel sin guardar. Si no hacés nada, el panel se cierra solo a los 45 s.
+
+Esta tipificación del resultado es independiente del estado **Tipificación**: el estado lo define la cola con **Tiempo de tipificación** y bloquea llamadas nuevas; el panel de resultado solo registra qué pasó.
+
+## Una sola pestaña
+
+El softphone funciona en una sola pestaña por navegador. Si lo abrís en otra, esa pestaña muestra "El softphone está abierto en otra pestaña" y el botón **Usar en esta pestaña**. Al tomar el control, la pestaña anterior avisa "El softphone se activó en otra pestaña." y deja de sonar.
+
+Si la otra pestaña tiene una llamada sonando o en curso, la app no deja cambiar y explica por qué: "La otra pestaña tiene una llamada sonando. Atendela ahí: si cambiás ahora, se pierde." o "La otra pestaña tiene una llamada en curso. Terminala ahí antes de cambiar."
+
+En otro navegador o computadora, la última conexión se queda con el interno y la anterior deja de recibir llamadas.
+
+## Audio y dispositivos
+
+El botón de ajustes de la barra superior abre el menú de audio con **Microphone** y **Speaker**. Elegí el dispositivo con el que trabajás; la elección se recuerda. Si el navegador no expone dispositivos, el menú dice "No microphones available" o "No speakers available".
+
+**Probar mi audio** ("Te llama un eco para escucharte a vos mismo.") aparece solo en línea y sin llamada. Marca una línea de eco: hablá y escuchá tu propia voz para confirmar micrófono y parlante.
+
+## Qué no existe todavía
+
+- Solo se transfiere a personas de tu organización o a colas. No hay transferencia a un número externo, y la consulta previa (**Consult first**) no existe para colas.
+- Un supervisor puede escuchar tu llamada desde Monitoreo en vivo. Susurrar e interrumpir figuran como **Pronto**.
+- **En llamada** y **Tipificación** no se pueden elegir a mano, y los estados del sistema no se renombran.
+
+## Problemas frecuentes
+
+| Mensaje | Causa | Qué hacer |
+|---|---|---|
+| Registration failed: … / Could not obtain an extension | No se pudo registrar tu interno. | Hacé clic en **Go Online** de nuevo. Si persiste, contactá a soporte. |
+| Tu organización no tiene números para llamar. Pedí que agreguen uno en Cuenta → Mis números. | No hay números salientes verificados. | Un administrador verifica o compra un número en **Mis números**. |
+| No pudimos cargar tus números. Las llamadas salen igual, con el número por defecto. | La lista de números no respondió. | Podés llamar igual; el número lo decide la organización. **Reintentar** vuelve a cargar la lista. |
+| No pudimos fijar el número de salida. | No se pudo reservar el número elegido antes de marcar. | **Reintentar**, o **Llamar con …** para salir con el número por defecto. |
+| No se pudo recuperar la presencia del softphone. | La conexión con las colas se perdió y no se restableció sola. | **Desconectarme** y **Go Online** otra vez. |
+| El softphone está abierto en otra pestaña | Otra pestaña tiene el softphone. | **Usar en esta pestaña**, o seguí en la otra. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué no me suenan las llamadas de la cola?">
+    Revisá tres cosas. El softphone tiene que decir **En línea** (punto verde) y tu estado tiene que ser **Disponible**: cualquier otro estado te saca de la cola. Además tenés que ser miembro de la cola, por skill o por lista, según cómo esté configurada en [Colas y skills](/es/contact-center/colas-y-skills). Si otra pestaña tiene el softphone, las llamadas suenan ahí.
+  </Accordion>
+  <Accordion title="¿Por qué mi estado sigue en «En llamada» después de colgar?">
+    **En llamada** lo pone y lo saca el sistema. En una llamada de cola, al colgar pasás a **Tipificación** o a **Disponible** en unos segundos. Si queda trabado, hacé clic en **Desconectarme** y volvé a conectarte con **Go Online**.
+  </Accordion>
+  <Accordion title="¿Puedo cambiar de estado durante una llamada?">
+    No: mientras dura la llamada el selector queda bloqueado en **En llamada**. Durante **Tipificación** sí podés elegir cualquier estado, por ejemplo pasar a **Ausente** sin pasar por **Disponible**.
+  </Accordion>
+  <Accordion title="¿Qué número ve la persona a la que llamo?">
+    El que muestra **Sale desde**, en el pie de la ventana. Si no elegís ninguno, sale el número por defecto de la organización. Los números se administran en [Mis números](/es/llamadas/mis-numeros).
+  </Accordion>
+  <Accordion title="¿Dónde quedan la tipificación y las notas?">
+    El resultado (**Resuelto**, **Sigue abierto** o **Volver a llamar**) y el contexto se guardan como comentario en la ficha del contacto. Las notas de la llamada se envían asociadas a la llamada cuando termina la interacción.
+  </Accordion>
+  <Accordion title="¿Puedo usar el softphone en dos pestañas o en dos computadoras?">
+    En un mismo navegador funciona en una sola pestaña, y la app te ofrece **Usar en esta pestaña** para cambiar. Entre computadoras, la última conexión se queda con el interno.
+  </Accordion>
+  <Accordion title="¿Cómo sé si mi micrófono funciona?">
+    Abrí el menú de audio y usá **Probar mi audio**. Te llama una línea de eco y escuchás tu propia voz. Si no te escuchás, cambiá el dispositivo en **Microphone** o **Speaker**.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Colas y skills](/es/contact-center/colas-y-skills)
+- [Monitoreo en vivo](/es/contact-center/monitoreo-en-vivo)
+- [Mis números](/es/llamadas/mis-numeros)
+- [Freshdesk](/es/integraciones/freshdesk)

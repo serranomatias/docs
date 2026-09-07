@@ -1,0 +1,62 @@
+---
+title: "Teams and sub-teams"
+description: "Organize people into teams, configure leaders, default roles and calendars. Understand inheritance and what changes when members move."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Organization → Teams" permission="teams.read" />
+
+Teams group people and can contain sub-teams. They support filtering, access scopes and work organization. Each person retains an individual role and can belong to more than one team.
+
+## Create and organize
+
+1. In **Teams**, click **New team**.
+2. Enter a name and optional description.
+3. Choose a **Parent team**, or leave it unset for a root team.
+4. Review the **Default role**, create the team and add existing organization members.
+
+Creating requires `teams.create`; editing, `teams.update`; deleting, `teams.delete`. The **Members** tab lists direct members, not people in sub-teams.
+
+## Roles and leaders
+
+| Setting | Effect |
+|---|---|
+| Default role | Applies to future members; does not change existing members |
+| Apply a role to this team | Changes selected direct members' roles; excludes sub-teams |
+| Leader | Identifies team leadership; does not grant administrator permissions by itself |
+| Remove from team | Removes membership without removing the organization account |
+
+When adding people, review the warning if a default role will replace another role. Bulk role application skips the owner and your own account.
+
+## Working hours, holidays and time zone
+
+The **Team calendar** defines working hours, holidays and time zone. Without its own calendar, a team inherits from its parent or organization. The routing clock uses this calendar.
+
+## Move or delete
+
+**Move** changes the parent and moves sub-teams with it. A team cannot move inside its own subtree.
+
+The app blocks deletion while sub-teams or role-scope references depend on the team. Resolve the listed dependencies before trying again. Deleting a team does not delete its members or change their roles by itself.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why are sub-team members missing from Members?">
+    The list shows direct members only. Select a sub-team to view its own list.
+  </Accordion>
+  <Accordion title="Does changing the default role update everyone?">
+    No. It affects new memberships. Use the role-application action for current members and review the recipients.
+  </Accordion>
+  <Accordion title="Why can I see a team but not its members’ names?">
+    Viewing teams and viewing organization members require different permissions. Ask an administrator to review member read access.
+  </Accordion>
+  <Accordion title="Does every team need its own calendar?">
+    No. Teams inherit from their parent or organization when no calendar is configured. Use a separate calendar for different hours or time zones.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Roles and permissions](/en/organization/roles-and-permissions)
+- [Members](/en/organization/members)
+- [Lead routing](/en/lead-routing/how-it-works)

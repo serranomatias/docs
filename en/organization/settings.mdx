@@ -1,0 +1,49 @@
+---
+title: "Settings and profile"
+description: "Separate personal account data from organization settings. Review time zones, general information and assignment protection."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → My Account / Organization" />
+
+**Profile** contains your personal information. **Organization → General** contains shared settings for the active organization. Changing one does not replace the other's configuration.
+
+## Personal profile
+
+In **Settings → My Account → Profile**, review your name, email, phone, time zone, occupation and avatar. Password settings belong to your account.
+
+Use your working time zone and review agent, channel or team time zones when their schedules differ. Do not assume editing your profile reconfigures every calendar.
+
+## Organization information
+
+**Settings → Organization → General** shows the organization's name, email, industry and country. You can also check its identifier and available account information.
+
+Viewing this section requires `organization.read`; changes require organization editing access. Check the active organization before saving.
+
+## Assignment protection
+
+When available, conversation assignment protection restricts assignee changes in the inbox. It works alongside conversation-claim permissions and channel assignment rules. Configuration requires `organization.update`.
+
+## Not yet available
+
+The **Appearance** and **Notifications** settings sections are disabled. This does not disable tag or channel notifications: configure those in their respective modules.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does changing my profile change the company name?">
+    No. Edit the shared name in **Organization → General**. Your personal name belongs to **Profile**.
+  </Accordion>
+  <Accordion title="Where is the organization ID requested by support?">
+    Check the active organization’s general settings. Send the affected organization ID, not an API key.
+  </Accordion>
+  <Accordion title="Why can’t I change a conversation’s assignee?">
+    Check assignment protection and your permissions for that conversation. An administrator can review your role and channel rules.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Roles and permissions](/en/organization/roles-and-permissions)
+- [Channel settings](/en/messages/channel-settings)
+- [Support](/en/get-started/support)

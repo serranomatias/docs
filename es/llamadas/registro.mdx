@@ -1,0 +1,53 @@
+---
+title: "Registro y detalle de llamadas"
+description: "Filtrá llamadas, revisá transcripciones y análisis y exportá resultados."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Llamadas" permission="calls.read" />
+
+## Encontrar una llamada
+
+Abrí **Llamadas** y combiná los filtros de fecha, tipo, estado, quién atendió, etiquetas y campos dinámicos. Quitá filtros si no aparece un registro esperado y comprobá la organización activa.
+
+| Estado | Interpretación |
+|---|---|
+| `completed` | La llamada terminó; revisá el análisis para saber si cumplió el objetivo. |
+| `pending` | Está pendiente de procesamiento o ejecución. |
+| `no_answer` | No hubo respuesta. |
+| `voice_mail` | Se detectó buzón de voz. |
+| `incomplete` | La ejecución quedó incompleta. |
+| `failed` | Se produjo un fallo; abrí el detalle para investigar. |
+
+## Revisar el detalle
+
+1. Abrí la llamada. Confirmá contacto, agente, fecha, duración y tipo.
+2. En **Transcripción**, leé el intercambio y las invocaciones de herramientas. Una herramienta invocada no demuestra por sí sola que la operación externa terminó bien: revisá su resultado.
+3. En **Análisis**, consultá resumen, sentimiento, cumplimiento del objetivo, motivo de desconexión y los campos que configuraste para extraer.
+4. Revisá los criterios de evaluación, la calificación humana y las etiquetas de llamada. Si necesitás cambiar lo que se analiza en futuras llamadas, editá el agente.
+5. Consultá el costo desglosado cuando esté disponible. El tiempo de conversación y el importe no son la misma métrica.
+
+El análisis puede aparecer después de terminar la conversación. Una llamada completada no equivale a una venta ni a una evaluación aprobada. `max_duration_reached` indica un corte por duración; `call_transfer`, una transferencia.
+
+## Exportar
+
+Usá la exportación de la lista en **XLSX** o **CSV** después de aplicar los filtros. Conservá el rango y los filtros usados al comparar el archivo con otro reporte. Para compartir un incidente con soporte, alcanza con el ID de llamada y el comportamiento esperado; evitá enviar transcripciones completas si no son necesarias.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué todavía no hay análisis?">
+    Puede seguir procesándose o no haber conversación suficiente. Revisá el estado y volvé a abrir el registro.
+  </Accordion>
+  <Accordion title="¿Las etiquetas son las del contacto?">
+    No. Las etiquetas de llamada clasifican llamadas; las de contacto clasifican registros del CRM.
+  </Accordion>
+  <Accordion title="¿Dónde veo errores de entrega a mi sistema?">
+    En **Llamadas → Webhooks**. El resultado de la llamada y la entrega del webhook son independientes.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Webhooks](/es/llamadas/webhooks)
+- [Dashboard](/es/reportes/dashboard)

@@ -1,0 +1,121 @@
+---
+title: 'Cómo funciona el inbox'
+description: 'El modelo de Mensajes (canal, conversación, contacto), quién responde (agente de IA, persona o equipo), los estados Open y Closed, la ventana de 24 horas de WhatsApp y qué incluye cada plan.'
+sidebarTitle: 'Cómo funciona el inbox'
+tag: 'Nuevo'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="conversation.read" route="Mensajes" status="nuevo" />
+
+**Mensajes** es la bandeja de entrada de ContactShip. Recibe las conversaciones de tus canales de WhatsApp Business, las asocia a un contacto y decide si las atiende un agente de IA, una persona o un equipo. Todo tu equipo trabaja sobre la misma lista, en tiempo real.
+
+{/* captura: images/mensajes/inbox-vista-general-es.png | Mensajes con la lista de conversaciones, una conversación abierta y el panel de contacto a la derecha | app: /inbox */}
+
+## El modelo: canal, conversación, mensajes
+
+| Elemento | Qué es | Dónde se administra |
+|---|---|---|
+| Canal | Un número de WhatsApp Business conectado a tu organización. Cada canal tiene sus propias reglas de asignación, horario y webhook. | **Ajustes → Inbox → Canales** |
+| Conversación | El hilo entre un contacto y un canal. Un contacto tiene como máximo una conversación por canal. | **Mensajes** |
+| Contacto | La persona que escribe. La conversación se vincula al contacto por su número de teléfono, y la ficha del contacto reúne sus llamadas y conversaciones. | **Contactos** |
+| Mensaje | Cada texto, archivo, plantilla, nota interna o reacción dentro de una conversación. | **Mensajes** |
+
+Los tipos de canal que existen en los datos son `WABA` (WhatsApp Business API), `WAWEB` (WhatsApp Web), `MESSENGER` e `INSTAGRAM`. Hoy solo se puede conectar WhatsApp Business API. Instagram y Facebook Messenger figuran como **Próximamente** en el diálogo **Nuevo canal**.
+
+Cada mensaje tiene un rol: `user` es el contacto, `agent` es un agente de IA, `human` es una persona de tu equipo, `system` es la plataforma y `note` es una nota interna. En la conversación, los mensajes del contacto se ven en blanco, los de tu equipo en azul y los de la IA en verde.
+
+## Quién responde
+
+Cada conversación tiene un asignado: un agente de texto (IA), una persona o nadie (**Unassigned**).
+
+1. **Asignación automática.** Cuando llega una conversación nueva, el canal evalúa sus reglas en orden y asigna según la primera que coincide. Una regla puede apuntar a **IA**, **Una persona** o **Un equipo**. Con **Un equipo**, la conversación se reparte entre personas con una estrategia: **Por turnos** (`round_robin`), **Menos ocupado** (`least_load`) o **Por peso** (`weighted`). Se configura en [Configurar un canal](/es/mensajes/configurar-canal).
+2. **Asignación manual.** Desde el encabezado de la conversación, cualquier persona con permiso elige un agente, una persona o **Unassigned**.
+3. **Take Over.** Si la conversación está asignada a un agente de IA, el compositor se reemplaza por un aviso con el botón **Take Over**. Al tomarla, la IA deja de responder y la conversación pasa a la persona.
+
+Con **Proteger la asignación de conversaciones** activo en **Ajustes → Organización → General**, reasignar depende de los permisos del rol: `conversation.assign` para reasignar a cualquiera, `conversation.claim_unassigned` para tomar una sin asignar y `conversation.take_from_ai` para tomarla de la IA. El detalle de los tres modos está en [Trabajar en la bandeja](/es/mensajes/bandeja).
+
+## Estados de una conversación
+
+La bandeja expone dos estados: **Open** y **Closed**. El botón **Solve** cierra la conversación y **Re-open** la vuelve a abrir. El filtro de estado ofrece **All**, **Open** y **Closed**. Una conversación cerrada muestra un candado en la lista con el texto **Conversation solved**.
+
+En los datos existe un tercer estado, `snoozed`, pero la app no lo muestra ni tiene filtro para él.
+
+Cada conversación también es leída o no leída. Un punto azul marca las no leídas. Abrirla la marca como leída. Con clic derecho sobre la tarjeta, **Mark as read** la marca sin abrirla.
+
+## La ventana de 24 horas
+
+Meta permite responder libremente durante 24 horas desde el último mensaje del contacto. La tarjeta de cada conversación muestra la cuenta regresiva (`23h`, `45m`, `9m 30s`) y después **Expired**. Cuando la ventana vence en un canal de WhatsApp Business API, el compositor se pone en rojo con el aviso **Conversation Expired** y solo permite enviar una [plantilla aprobada](/es/mensajes/plantillas). Las notas internas siguen disponibles. Cuando el contacto vuelve a escribir, la ventana se abre de nuevo.
+
+## Qué incluye tu plan
+
+- El acceso al inbox y a los agentes de texto depende de la configuración de la organización. Soporte puede desactivarlo para una organización puntual; en ese caso, **Mensajes** muestra la pantalla **CRM Multicanal** con el botón **Solicitar Acceso**.
+- La cantidad de canales de WhatsApp depende del plan. La tabla de **Planes** no muestra ese número. Al llegar al límite, la app avisa: "Has alcanzado el límite de canales de WhatsApp permitidos en tu plan".
+- Tres funciones dentro del inbox pertenecen a add-ons que se activan a pedido desde soporte: las [automatizaciones](/es/mensajes/automatizaciones) (**Automation Rules** en Ajustes), la pestaña **Gestión** del panel de contacto (add-on **Enrutamiento de leads**) y el botón **Call** del panel de contacto (softphone del add-on **Contact center**).
+
+<Info>Los permisos del inbox se configuran en **Ajustes → Organización → Roles y Permisos**. Para ver **Mensajes** en el menú hace falta `messages.read` o `conversation.read`. Para abrir la bandeja hace falta `conversation.read`; para escribir, `messages.create`; para ver los canales en Ajustes, `channels.read`.</Info>
+
+## Primeros pasos
+
+<Steps>
+  <Step title="Conectá un número de WhatsApp Business">
+    Desde **Ajustes → Inbox → Canales**, con el registro integrado de Facebook. Guía: [Conectar WhatsApp Business](/es/mensajes/conectar-whatsapp).
+  </Step>
+  <Step title="Creá un agente de texto">
+    Es quien responde cuando una regla asigna a **IA**. Guía: [Crear un agente de texto](/es/agentes-de-texto/crear).
+  </Step>
+  <Step title="Configurá el canal">
+    Definí las reglas de asignación, el horario de atención, el saludo y las alertas. Guía: [Configurar un canal](/es/mensajes/configurar-canal).
+  </Step>
+  <Step title="Probá el canal">
+    En **Configuración del canal → Avanzado → Enviar mensaje de prueba**, escaneá el QR y escribí desde tu teléfono. La conversación aparece en **Mensajes**.
+  </Step>
+  <Step title="Trabajá desde la bandeja">
+    Filtros, asignación, notas internas, plantillas, respuestas rápidas y panel de contacto. Guía: [Trabajar en la bandeja](/es/mensajes/bandeja).
+  </Step>
+</Steps>
+
+{/* captura: images/mensajes/inbox-canal-asignacion-es.png | Pestaña Asignación de un canal con una regla en horario, una regla de equipo y el respaldo | app: /settings/inbox/channels/[id] */}
+
+## Qué no existe todavía
+
+- Instagram y Facebook Messenger figuran como **Próximamente** en el diálogo **Nuevo canal**.
+- La configuración manual con Phone Number ID, Access Token y Business Account ID muestra "Configuración manual próximamente".
+- No hay canales de SMS ni de correo electrónico.
+- La bandeja de ContactShip trabaja con conversaciones individuales; no ofrece gestión de grupos ni comunidades de WhatsApp.
+- El estado `snoozed` no tiene filtro ni acción en la interfaz.
+- No hay traducción automática, sugerencias de respuesta con IA ni menciones a compañeros en las notas.
+- No hay notificaciones del navegador para mensajes nuevos. Hay sonido y avisos dentro de la app.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué no veo Mensajes en el menú?">
+    Tu rol necesita el permiso `messages.read` o `conversation.read`. Pedile a un administrador que lo revise en **Ajustes → Organización → Roles y Permisos**. Si ves la pantalla **CRM Multicanal** con el botón **Solicitar Acceso**, el inbox está desactivado para tu organización y tenés que contactar a soporte.
+  </Accordion>
+  <Accordion title="¿Los planes incluyen WhatsApp?">
+    Sí. El inbox y los agentes de texto están abiertos para todas las organizaciones, sin add-on. Lo que cambia con el plan es la cantidad de canales de WhatsApp que podés conectar. Ese número no aparece en la tabla de **Planes**; si tenés dudas, consultá a soporte.
+  </Accordion>
+  <Accordion title="¿Qué canales puedo conectar?">
+    Hoy, solo WhatsApp Business API con el registro integrado de Facebook. Instagram y Facebook Messenger aparecen como **Próximamente** en el diálogo **Nuevo canal**. No hay canales de SMS ni de correo electrónico. Guía: [Conectar WhatsApp Business](/es/mensajes/conectar-whatsapp).
+  </Accordion>
+  <Accordion title="¿Por qué solo tengo 24 horas para responder?">
+    Es una regla de Meta: la ventana de atención dura 24 horas desde el último mensaje del contacto. Pasado ese plazo, solo se pueden enviar plantillas aprobadas. La tarjeta de la conversación muestra el tiempo restante y el compositor te ofrece elegir una plantilla cuando la ventana venció. Guía: [Plantillas de WhatsApp](/es/mensajes/plantillas).
+  </Accordion>
+  <Accordion title="¿Puedo atender grupos o comunidades de WhatsApp?">
+    No. La API oficial de WhatsApp Business no permite grupos ni comunidades. El inbox trabaja solo con conversaciones individuales entre un contacto y tu número.
+  </Accordion>
+  <Accordion title="¿Las conversaciones se relacionan con las llamadas?">
+    Sí. Todo se asocia al contacto por su número de teléfono. En el panel de contacto de la bandeja, la pestaña **Calls** lista las llamadas de ese contacto y abre su detalle. En **Contactos**, la ficha muestra llamadas, conversaciones, comentarios, notas y tareas.
+  </Accordion>
+  <Accordion title="¿Puedo usar un agente de IA distinto por canal?">
+    Sí. Cada canal tiene sus propias reglas de asignación. En **Configuración del canal → Asignación**, elegí **IA** como destino de una regla y seleccioná el agente de texto. Podés combinarlo con horarios: IA en horario de atención y un equipo el fin de semana. Guía: [Configurar un canal](/es/mensajes/configurar-canal).
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Conectar WhatsApp Business](/es/mensajes/conectar-whatsapp)
+- [Configurar un canal](/es/mensajes/configurar-canal)
+- [Trabajar en la bandeja](/es/mensajes/bandeja)
+- [Crear un agente de texto](/es/agentes-de-texto/crear)

@@ -1,0 +1,150 @@
+---
+title: 'Tu primera llamada con IA'
+description: 'Paso a paso para una cuenta nueva: crear la organización, elegir plan o prueba gratuita, crear un agente de voz desde una plantilla, probarlo, verificar o comprar un número, asignarlo y revisar la primera llamada.'
+sidebarTitle: 'Primera llamada con IA'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read" route="Inicio → Progreso de configuración" />
+
+Esta guía va desde el registro hasta la primera llamada real atendida por un agente de voz. Sigue el mismo orden que la sección **Progreso de configuración** de **Inicio**: agente, número, contactos, campaña, primera llamada. Cada paso enlaza a la página que lo explica en detalle.
+
+<Steps>
+  <Step title="Creá tu cuenta y tu organización">
+    Registrate en [app.contactship.ai](https://app.contactship.ai). El onboarding tiene tres pasos:
+
+    1. **Crea el espacio de trabajo de tu organización**: nombre, sector y país.
+    2. **Queremos conocerte mejor**: tu nombre, teléfono, puesto y cómo nos conociste.
+    3. **Elige tu plan**: elegís un plan pago o seguís con la prueba gratuita.
+
+    La organización es el espacio de trabajo donde viven agentes, contactos, números y créditos. Después podés invitar a tu equipo desde **Ajustes → Organización → Miembros del Equipo**. Ver [Miembros e invitaciones](/es/organizacion/miembros).
+  </Step>
+  <Step title="Elegí un plan o continuá gratis">
+    En el paso **Elige tu plan** podés comparar starter, pro y growth, o hacer clic en **Continuar con el plan gratuito**. El plan gratuito es una prueba de 7 días, no requiere tarjeta de crédito y tiene funciones limitadas. Al entrar a la app aparece el aviso **Te hemos regalado $5 en créditos**: esos 5 USD alcanzan para las primeras llamadas de prueba.
+
+    {/* captura: images/comenzar/onboarding-elegir-plan-es.png | Paso Elige tu plan con el botón Continuar con el plan gratuito y la nota de 7 días sin tarjeta | app: /onboarding */}
+
+    Podés cambiar de plan en cualquier momento desde **Planes**. Ver [Planes y límites](/es/facturacion/planes).
+  </Step>
+  <Step title="Creá un agente de voz desde una plantilla">
+    Andá a **Agentes** y hacé clic en **Nuevo agente** (atajo: Shift+N). El diálogo **Crea un nuevo agente** pregunta primero el **Tipo de agente**: elegí **Agente de voz**. Después elegís **Empezar desde cero** o una de las **Plantillas**; cada plantilla tiene una vista previa de la voz y crea el agente con nombre, idioma, voz e instrucciones ya cargadas.
+
+    {/* captura: images/comenzar/nuevo-agente-plantillas-es.png | Diálogo Crea un nuevo agente con el tipo Agente de voz y la lista de plantillas | app: /agents */}
+
+    El editor tiene cinco pestañas: **General**, **Instrucciones**, **Herramientas**, **Avanzado** y **Conocimiento**. Los cambios se guardan solos en un borrador y no afectan las llamadas en curso hasta que hacés clic en **Publicar**. Ver [Crear un agente de voz](/es/agentes-de-voz/crear) y [Versiones, publicación y pruebas](/es/agentes-de-voz/versiones-y-pruebas).
+  </Step>
+  <Step title="Probá el agente desde el panel de pruebas">
+    En el editor, abrí **Probar agente**. El panel tiene dos pestañas:
+
+    | Pestaña | Qué hace | Requiere |
+    |---|---|---|
+    | **Web** | Hablás con el agente desde el navegador con el micrófono. | Micrófono. Consume créditos. |
+    | **Teléfono** | El agente llama a un número real que escribís en **Llamar a**. | Un número saliente verificado en **Llamar desde**. Consume créditos. |
+
+    Las pruebas usan la versión publicada del agente. Si acabás de editar las instrucciones, publicá antes de probar. Las pruebas recientes quedan en **Llamadas de prueba recientes** con grabación y transcripción.
+
+    {/* captura: images/comenzar/probar-agente-telefono-es.png | Panel Probar agente en la pestaña Teléfono con Llamar desde, Llamar a e Iniciar llamada | app: /agents */}
+
+    La duración máxima de una llamada de prueba depende del plan:
+
+    | Plan | Límite |
+    |---|---|
+    | Prueba gratuita | 3 min |
+    | Starter | 7 min |
+    | Pro | 30 min |
+    | Growth | 60 min |
+    | Enterprise | 60 min |
+  </Step>
+  <Step title="Hacé tu primera llamada real desde Inicio">
+    Mientras la organización no tiene llamadas, **Inicio** muestra el bloque **Hacé tu primera llamada**: elegís un agente, escribís un nombre y un **Número a llamar** y hacés clic en **Llamar ahora**. Si todavía no tenés un número propio, la app avisa: "Usamos un número de prueba compartido para esta primera llamada". Si ya verificaste uno, la llamada sale desde tu número.
+
+    Esta llamada consume créditos. Si ves "No tenés créditos suficientes", recargá desde **Facturación**.
+  </Step>
+  <Step title="Verificá o comprá un número">
+    Andá a **Mis Números**. Hay dos tipos de número:
+
+    | Tipo | Para qué sirve | Cómo se obtiene |
+    |---|---|---|
+    | **Saliente** | Es el número que ve la persona cuando el agente la llama (caller ID) y el que se usa en campañas. | **Agregar nuevo número** → **Verificar número**: recibís una llamada y escribís el código que aparece en pantalla. |
+    | **Entrante** | Es un número propio para recibir llamadas, atendido por un agente. | **Comprar Número**: elegís país y número. Se cobra como suscripción mensual. |
+
+    Países disponibles para comprar:
+
+    | País | Precio |
+    |---|---|
+    | Argentina | 10 USD/mes |
+    | México | 10 USD/mes |
+    | Estados Unidos | 10 USD/mes |
+    | Canadá | 10 USD/mes |
+    | Colombia | 15 USD/mes |
+
+    Si tu país no aparece, el diálogo de compra tiene un formulario de solicitud. Ver [Mis números](/es/llamadas/mis-numeros).
+  </Step>
+  <Step title="Asigná el agente al número entrante">
+    En la tarjeta del número entrante hacé clic en **Gestionar Agente**, elegí el agente en **Seleccionar Agente** y confirmá con **Asignar agente**. Desde ese momento, cada llamada a ese número la atiende ese agente con su versión publicada. Llamá al número desde tu teléfono para comprobarlo.
+
+    {/* captura: images/comenzar/mis-numeros-gestionar-agente-es.png | Tarjeta de un número entrante con el diálogo Gestionar Agente abierto | app: /account/my-numbers */}
+  </Step>
+  <Step title="Revisá la llamada en Llamadas">
+    Cada llamada aparece en **Llamadas** con grabación, transcripción y análisis: resumen, sentimiento, si fue exitosa, datos extraídos y criterios de evaluación. Podés filtrar por tipo, estado, fecha, agente y etiquetas, y exportar lo que ves en XLSX o CSV. Ver [Registro y detalle de llamadas](/es/llamadas/registro).
+  </Step>
+</Steps>
+
+## Qué sigue
+
+- Importá tu base y organizala en tableros: [Importar contactos](/es/contactos/importar) y [Tableros y etapas](/es/contactos/tableros).
+- Poné al agente a llamar a una lista: [Campañas de llamadas](/es/llamadas/campanas).
+- Recibí llamadas desde tu sitio web: [Widget de llamada web](/es/llamadas/widget).
+- Atendé WhatsApp con un agente de texto: [Tu primer agente de WhatsApp](/es/comenzar/primer-whatsapp).
+
+## Qué no existe todavía
+
+- Sin un número verificado o comprado, la llamada desde **Inicio** sale desde un número de prueba compartido de ContactShip. Algunas centrales telefónicas rechazan llamadas de números extranjeros; la solución es comprar un número local.
+- No hay portabilidad de números ni conexión SIP de autoservicio. Los números entrantes se compran en la app.
+- Solo se compran números de Argentina, México, Estados Unidos, Canadá y Colombia. Para otros países hay un formulario de solicitud.
+- Las pruebas no usan el borrador del agente: siempre corren con la versión publicada.
+
+## Problemas frecuentes
+
+| Mensaje en pantalla | Causa | Solución |
+|---|---|---|
+| No tenés créditos suficientes. | La organización no tiene créditos para iniciar la llamada. | **Facturación → Comprar créditos**. El monto mínimo es 10 USD. |
+| Todavía no hay números verificados | La pestaña **Teléfono** necesita un número saliente. | **Mis Números → Agregar nuevo número** y verificalo. |
+| Número no disponible | El número no se puede registrar como saliente. | Probá con otro número. |
+| Verificación Fallida | Código incorrecto o la llamada de verificación no se atendió. | **Intentar de nuevo** y escribí el código que muestra la pantalla. |
+| Este número no está permitido | El número está restringido. | Usá otro número o escribí a soporte. |
+| Demasiados intentos | Superaste el límite de intentos de verificación en poco tiempo. | Esperá unos minutos y volvé a intentar. |
+| No se pudo iniciar la llamada. Probá de nuevo. | Error al iniciar la llamada desde **Inicio**. | Reintentá. Si persiste, escribí a soporte con la hora y el agente. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Cuánto dura una llamada de prueba?">
+    Depende del plan: 3 minutos en la prueba gratuita, 7 en starter, 30 en pro y 60 en growth y enterprise. El panel de pruebas avisa cuando se acerca el límite. Para llamadas reales, la duración máxima se configura en la pestaña **Avanzado** del agente, con el mismo tope por plan. Ver [Avanzado](/es/agentes-de-voz/avanzado).
+  </Accordion>
+  <Accordion title="¿Las llamadas de prueba consumen créditos?">
+    Sí, tanto la llamada web como la telefónica. El panel lo indica en cada pestaña. Los 5 USD de bienvenida están pensados para estas primeras pruebas. Ver [Créditos y pagos](/es/facturacion/creditos-y-pagos).
+  </Accordion>
+  <Accordion title="Cambié las instrucciones y el agente sigue igual en la prueba, ¿por qué?">
+    Las pruebas usan la versión publicada, no el borrador. Hacé clic en **Publicar** en el encabezado del editor y volvé a probar. El encabezado muestra si estás viendo una versión publicada o un borrador. Ver [Versiones, publicación y pruebas](/es/agentes-de-voz/versiones-y-pruebas).
+  </Accordion>
+  <Accordion title="¿Necesito un número para empezar?">
+    No para la llamada web ni para la primera llamada desde **Inicio**, que sale desde un número compartido. Sí necesitás un número saliente verificado para la pestaña **Teléfono** y para campañas, y un número entrante comprado para recibir llamadas. Ver [Mis números](/es/llamadas/mis-numeros).
+  </Accordion>
+  <Accordion title="¿Cuánto cuesta un número y cómo se cobra?">
+    Argentina, México, Estados Unidos y Canadá cuestan 10 USD/mes; Colombia, 15 USD/mes. Se cobra como una suscripción mensual con la tarjeta cargada en **Facturación**. Verificar un número saliente propio no tiene costo.
+  </Accordion>
+  <Accordion title="¿Puedo usar mi número actual?">
+    Como saliente sí: lo verificás con el código y el agente lo muestra como identificador al llamar. Como entrante no: no hay portabilidad, así que para recibir llamadas comprás un número nuevo y, si querés, desviás tu número actual hacia él desde tu operador.
+  </Accordion>
+  <Accordion title="¿Por qué fallan las llamadas a ciertos números o regiones?">
+    Sin un número local, la llamada sale desde un número compartido y algunas centrales lo rechazan. Comprá un número del país al que llamás y usalo como número visible. En campañas salientes grandes conviene rotar varios números. Ver [Campañas de llamadas](/es/llamadas/campanas).
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Crear un agente de voz](/es/agentes-de-voz/crear)
+- [Mis números](/es/llamadas/mis-numeros)
+- [Registro y detalle de llamadas](/es/llamadas/registro)
+- [Conceptos clave](/es/comenzar/conceptos)

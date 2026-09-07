@@ -1,0 +1,44 @@
+---
+title: "Widget de llamada web"
+description: "Agregá un agente de voz a tu sitio con el código de inserción del widget."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Widgets" permission="widgets.read / widgets.create" />
+
+El widget permite conversar con un agente de voz desde el navegador. Necesita permiso de micrófono y consume créditos de la organización.
+
+## Crear e insertar
+
+1. Abrí **Widgets** y creá uno para tu sitio.
+2. Elegí el agente de voz y configurá los campos disponibles: ícono, color, idioma, modo oscuro y duración máxima.
+3. Si necesitás identificar al visitante, configurá el formulario con nombre y correo. Revisá qué campos pedís antes de compartirlo.
+4. Guardá y copiá el código que genera el configurador. Usá ese código completo: contiene los identificadores y la configuración del widget.
+5. Insertalo en el lugar correspondiente de tu sitio y probá desde la página publicada con un micrófono autorizado.
+
+La integración ofrece el componente `contactship-widget` y una vista de inserción del widget. Si tu constructor bloquea scripts o iframes, revisá sus opciones de código personalizado.
+
+## Probar la experiencia
+
+Revisá cómo se abre el widget, la selección del agente, el formulario, el acceso al micrófono y el final de la llamada. Comprobá el registro de llamadas del widget y el análisis del agente. Una previsualización correcta no demuestra que el sitio permita audio o contenido incrustado.
+
+La duración máxima está limitada por el plan. El widget atiende una conversación de voz web; no crea por sí mismo un canal de WhatsApp ni una bandeja de chat de texto.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué no se oye mi voz?">
+    Revisá permisos del navegador, micrófono seleccionado y restricciones de audio del sitio.
+  </Accordion>
+  <Accordion title="¿Dónde veo las conversaciones?">
+    Abrí las llamadas del widget o el registro general de Llamadas.
+  </Accordion>
+  <Accordion title="¿Necesito un número telefónico entrante?">
+    Para conversar por voz desde el navegador, el widget usa la llamada web.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Crear agente](/es/agentes-de-voz/crear)
+- [Llamadas](/es/llamadas/registro)

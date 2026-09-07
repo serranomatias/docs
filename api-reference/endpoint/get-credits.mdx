@@ -1,33 +1,24 @@
 ---
-title: 'Get Credits'
-openapi: 'GET /v1/credits'
+title: "Get Credits"
+api: "GET /v1/credits"
+description: "Retrieve the organization\u2019s current credit balance."
 ---
 
-<Endpoint
-  method="GET"
-  path="/v1/credits"
-  description="Retrieve the number of credits available"
->
-  <RequestHeaders>
-    <RequestHeader
-      name="x-api-key"
-      description="API key for authentication"
-      required
-      schemaType="string"
-    />
-  </RequestHeaders>
-  <ResponseFields>
-    <ResponseField
-      status="200"
-      description="Credits response"
-      contentType="application/json"
-      schemaRef="#/components/schemas/CreditsResponse"
-    />
-    <ResponseField
-      status="400"
-      description="Unexpected error"
-      contentType="application/json"
-      schemaRef="#/components/schemas/Error"
-    />
-  </ResponseFields>
-</Endpoint>
+Retrieve the organization’s current credit balance.
+
+## Authentication
+
+<ParamField header="x-api-key" type="string" required>Organization API key. Keep it on your server or in a credential store.</ParamField>
+
+This read-only request is useful for checking authentication before configuring write operations.
+
+```bash
+curl 'https://api.contactship.ai/v1/credits'   -H 'x-api-key: YOUR_API_KEY'
+```
+
+## Response
+
+<ResponseField name="statusCode" type="number">200 on success.</ResponseField>
+<ResponseField name="data.credits" type="number">Current credit balance returned for the organization.</ResponseField>
+
+The balance is not a remaining-minute count. Actual consumption depends on the product and applicable rate. Review usage and payments in [Billing](/en/billing/credits-and-payments).

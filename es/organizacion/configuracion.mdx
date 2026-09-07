@@ -1,0 +1,49 @@
+---
+title: "Configuración y perfil"
+description: "Separá los datos de tu cuenta y de la organización. Revisá zona horaria, datos generales y protección de asignación."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Ajustes → Mi Cuenta / Organización" />
+
+**Perfil** contiene tus datos personales. **Organización → General** contiene los datos compartidos de la organización activa. Cambiar uno no reemplaza la configuración del otro.
+
+## Perfil personal
+
+En **Ajustes → Mi Cuenta → Perfil** revisá nombre, correo, teléfono, zona horaria, ocupación y avatar. La configuración de contraseña pertenece a tu cuenta.
+
+Usá tu zona horaria de trabajo y revisá las zonas configuradas en agentes, canales o equipos cuando sus horarios difieran. No asumas que editar el perfil reconfigura todos esos calendarios.
+
+## Datos de la organización
+
+En **Ajustes → Organización → General** se muestran nombre, correo, sector y país. También podés consultar el identificador de la organización y los datos disponibles de su cuenta.
+
+Ver esta sección requiere `organization.read`; las modificaciones necesitan acceso de edición de la organización. Verificá el nombre de la organización activa antes de guardar.
+
+## Protección de asignación
+
+Cuando está disponible, **Proteger asignación de conversaciones** limita cambios de responsable en el inbox. Se combina con los permisos de tomar conversaciones y las reglas de asignación del canal. Configurar esta protección requiere `organization.update`.
+
+## Qué no existe todavía
+
+Las secciones **Apariencia** y **Notificaciones** de ajustes aparecen deshabilitadas. Eso no significa que las notificaciones específicas de etiquetas o canales estén deshabilitadas: se configuran en su propio módulo.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Cambiar mi perfil cambia el nombre de la empresa?">
+    No. El nombre compartido se modifica en **Organización → General**. Tu nombre personal se administra en **Perfil**.
+  </Accordion>
+  <Accordion title="¿Dónde encuentro el ID que me pide soporte?">
+    Revisá los datos de la organización activa en sus ajustes generales. Enviá el identificador de la organización afectada, no una clave API.
+  </Accordion>
+  <Accordion title="¿Por qué no puedo cambiar al responsable de una conversación?">
+    Revisá la protección de asignación y tus permisos en esa conversación. Un administrador puede comprobar el rol y las reglas del canal.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Roles y permisos](/es/organizacion/roles-y-permisos)
+- [Configurar un canal](/es/mensajes/configurar-canal)
+- [Soporte](/es/comenzar/soporte)

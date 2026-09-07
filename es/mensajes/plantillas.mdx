@@ -1,0 +1,220 @@
+---
+title: 'Plantillas de WhatsApp'
+description: 'Cómo crear, validar y editar plantillas de WhatsApp en Ajustes → Inbox → Plantillas: los siete estados, categorías Marketing y Utilidad, variables posicionales o nombradas, encabezado, botones, límites de Meta y cómo enviarlas desde la bandeja o una campaña.'
+tag: 'Nuevo'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="channels.read" route="Ajustes → Inbox → Plantillas" status="nuevo" />
+
+Una plantilla es un mensaje de WhatsApp que Meta revisa y aprueba antes de que puedas enviarlo. Es obligatoria en dos situaciones: cuando pasaron más de 24 horas desde el último mensaje del contacto y cuando enviás una campaña de mensajes. Dentro de esa ventana de 24 horas podés escribir texto libre desde la bandeja. Cada plantilla pertenece a un canal de WhatsApp Business y se gestiona desde **Ajustes → Inbox → Plantillas**.
+
+{/* captura: images/mensajes/plantillas-lista-es.png | Lista de plantillas de un canal con las columnas Nombre, Categoría, Idioma, Formato de parámetros y Estado | app: /settings/inbox/templates */}
+
+## La lista de plantillas
+
+Elegí el canal en el selector **Canal**. Solo aparecen canales de WhatsApp Business; si no tenés ninguno, la pantalla muestra **Sin canales de WhatsApp** y el botón **Ir a Canales**. La tabla muestra las plantillas de ese canal con las columnas **Nombre**, **Categoría**, **Idioma**, **Formato de parámetros** y **Estado**, y un buscador **Buscar plantillas...**.
+
+Cada fila tiene dos acciones:
+
+- **Vista previa**: abre la plantilla tal como se ve en un teléfono.
+- **Editar plantilla**: solo con el permiso `channels.update`. Si el lápiz está deshabilitado, el tooltip explica el motivo: **Solo se pueden editar plantillas aprobadas o rechazadas. Meta las bloquea mientras están en revisión.** o **Las plantillas de autenticación usan otro formato y no se editan desde aquí.**
+
+El botón **Nueva plantilla** también requiere `channels.update`.
+
+## Estados
+
+El estado lo asigna Meta. La app lo muestra tal cual y no lo cambia por su cuenta.
+
+| Estado | Clave | Qué significa |
+|---|---|---|
+| **Aprobada** | `APPROVED` | Meta la aprobó. Es la única que se puede enviar desde la bandeja o usar en campañas. Se puede editar. |
+| **Rechazada** | `REJECTED` | Meta la rechazó. Se puede editar y volver a enviar a revisión. |
+| **Pendiente** | `PENDING` | En revisión de Meta. No se puede editar ni enviar. |
+| **En apelación** | `IN_APPEAL` | Estado que asigna Meta cuando se apela un rechazo. No se puede editar desde la app. |
+| **Pendiente de eliminación** | `PENDING_DELETION` | Meta la está eliminando. |
+| **Deshabilitada** | `DISABLED` | Meta la deshabilitó por calidad muy baja o por incumplir sus políticas. Creá una plantilla nueva con el contenido revisado. |
+| **Pausada** | `PAUSED` | Meta la pausó por bajo rendimiento. No se puede usar ni editar hasta que Meta la reactive. |
+
+<Note>
+La app no muestra cuánto tarda la revisión. El tiempo de aprobación depende de Meta. Mientras la plantilla está **Pendiente**, no aparece en el selector de campañas y el botón **Send** de la bandeja queda deshabilitado.
+</Note>
+
+## Categorías
+
+| Categoría | Clave | Para qué sirve |
+|---|---|---|
+| **Marketing — promociones y ofertas** | `MARKETING` | Contenido promocional. Es la categoría por defecto al crear una plantilla. |
+| **Utilidad — avisos de pedidos y cuenta** | `UTILITY` | Avisos transaccionales: estado de un pedido, cambios en la cuenta, recordatorios. |
+| **Autenticación** | `AUTHENTICATION` | Códigos de verificación. Aparece en la lista si ya existe en tu cuenta de WhatsApp, pero no se crea ni se edita desde la app. |
+
+## Formato de variables
+
+Las variables son los fragmentos del mensaje que cambian en cada envío. Se eligen en el campo **Formato de variables** y el formato no se puede cambiar una vez creada la plantilla.
+
+| Formato | Cómo se escribe | Ejemplo |
+|---|---|---|
+| **Posicional** (`POSITIONAL`) | Números entre llaves dobles, en orden y empezando por 1. | `Hola {{1}}, tu pedido {{2}} ya está en camino.` |
+| **Nombrado** (`NAMED`) | Un nombre entre llaves dobles: minúsculas, números y guiones bajos. | `Hola {{nombre_cliente}}, tu pedido {{numero_pedido}} ya está en camino.` |
+
+Mientras el mensaje tenga variables, el selector de formato queda bloqueado con el aviso **Quita las variables del mensaje para poder cambiarlo.**
+
+## El editor, sección por sección
+
+**Nueva plantilla** abre el editor. Si entrás sin canal elegido, primero te pide seleccionar uno. La vista previa del teléfono se actualiza mientras escribís; en pantallas chicas se abre con el ícono de teléfono.
+
+{/* captura: images/mensajes/plantillas-editor-es.png | Editor de plantilla con las secciones Datos básicos, Encabezado, Mensaje, Pie y Botones, y la vista previa a la derecha | app: /settings/inbox/templates/new */}
+
+### Datos básicos
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Nombre** | Identifica la plantilla en Meta. La app convierte espacios en guiones bajos y quita todo lo que no sea minúscula, número o guion bajo. No se puede cambiar una vez creada. | Hasta 512 caracteres | Vacío |
+| **Idioma** | Código de idioma de Meta. No se puede cambiar una vez creada. | Por ejemplo `es`, `es_AR`, `es_MX`, `en_US`, `pt_BR` | `es` |
+| **Categoría** | Cómo la clasifica Meta para la revisión. | Marketing, Utilidad | Marketing |
+| **Formato de variables** | Cómo se escriben las variables. No se puede cambiar una vez creada. | Posicional, Nombrado | Posicional |
+
+### Encabezado
+
+Opcional. Elegí uno de **Ninguno**, **Texto**, **Imagen**, **Vídeo** o **Documento**.
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Texto del encabezado** | Título sobre el mensaje. Admite una sola variable. | Hasta 60 caracteres | Vacío |
+| **Valor de ejemplo del encabezado** | Aparece solo si el texto tiene una variable. Meta revisa la plantilla con este ejemplo. | Texto | Vacío |
+| **Archivo de ejemplo** | Para Imagen, Vídeo o Documento. Solo se usa como ejemplo para la revisión de Meta; el archivo real se elige en cada envío. | Imagen: JPG o PNG. Vídeo: MP4 o 3GPP. Documento: PDF, DOC o DOCX | Ninguno |
+
+### Mensaje
+
+El contenido principal. Es obligatorio y admite hasta 1.024 caracteres y hasta 10 variables.
+
+- **Añadir variable** inserta la siguiente variable en el cursor. En formato posicional agrega el próximo número; en formato nombrado pide el **Nombre de la variable** y lo inserta con **Insertar**.
+- Las variables se agregan y quitan editando el texto. Por cada variable aparece un campo en **Valores de ejemplo**, obligatorio: Meta revisa la plantilla con esos valores.
+- Las variables posicionales tienen que ir numeradas en orden desde 1, sin saltos.
+- El mensaje no puede ser solo variables y Meta rechaza las plantillas con una variable al principio o al final del texto. Escribí `Hola {{1}}, bienvenido` en vez de `{{1}}, bienvenido`.
+
+### Pie
+
+Texto pequeño opcional debajo del mensaje, de hasta 60 caracteres. No admite variables.
+
+### Botones
+
+Opcional, hasta 10 botones. **Añadir botón** agrega una fila; con **Subir** y **Bajar** cambiás el orden y con **Quitar botón** la eliminás.
+
+| Tipo | Clave | Campos | Reglas |
+|---|---|---|---|
+| **Respuesta rápida** | `QUICK_REPLY` | **Etiqueta** | El contacto responde con ese texto al tocarlo. Las respuestas rápidas tienen que ir juntas, sin mezclarse con los otros tipos. |
+| **Enlace** | `URL` | **Etiqueta**, **URL** | La URL debe empezar con `http://` o `https://` y admite hasta 2.000 caracteres. Máximo 2 botones de enlace. |
+| **Llamada** | `PHONE_NUMBER` | **Etiqueta**, **Teléfono** | Número en formato internacional, por ejemplo `+34600000000`. Máximo 1 botón de llamada. |
+
+La **Etiqueta** de cualquier botón admite hasta 25 caracteres y no acepta variables.
+
+## Validar y guardar
+
+<Steps>
+<Step title="Validá la plantilla">
+Hacé clic en **Validar**. La app revisa la plantilla contra las reglas de Meta sin enviarla. Si todo está bien ves **La plantilla se ve bien**. Si hay errores, cada campo muestra el suyo y arriba aparece el panel **Esta plantilla todavía no se puede enviar**. Los avisos que no bloquean aparecen bajo **Conviene revisar**.
+</Step>
+<Step title="Guardá">
+**Guardar** repite la validación y, si pasa, envía la plantilla a Meta. Si no pasa, ves **Corrige los errores antes de guardar**. Al terminar aparece **Plantilla enviada a revisión** y volvés a la lista con la plantilla en estado **Pendiente**.
+</Step>
+<Step title="Esperá la revisión de Meta">
+Meta cambia el estado a **Aprobada** o **Rechazada**. La app no promete un plazo. Volvé a la lista para ver el estado actualizado.
+</Step>
+</Steps>
+
+## Editar una plantilla existente
+
+Solo se editan plantillas **Aprobada** o **Rechazada** de categoría Marketing o Utilidad. En el editor, **Nombre**, **Idioma** y **Formato de variables** quedan bloqueados con un candado: Meta no permite cambiarlos después de creada la plantilla. Todo lo demás se puede modificar.
+
+Los cambios vuelven a Meta y pasan de nuevo por revisión. Al guardar ves **Plantilla actualizada y enviada a revisión** y la plantilla vuelve a **Pendiente** hasta que Meta la apruebe.
+
+Si abrís una plantilla que no corresponde, la app muestra **Esta plantilla no se puede editar aquí**: o pertenece a otro canal, o su estado actual no permite editarla.
+
+## Enviar una plantilla desde la bandeja
+
+En una conversación de WhatsApp, el compositor tiene el botón **Templates** (esta parte de la app está en inglés). Abre el diálogo **Select a Template** con las plantillas del canal de la conversación.
+
+- Si la plantilla no tiene variables ni archivo en el encabezado, el botón **Send** la envía tal cual.
+- Si tiene variables o un encabezado de imagen, vídeo o documento, el botón es **Configure**. Abre **Configure Template**, donde completás cada variable, subís el archivo del encabezado y ves la vista previa antes de tocar **Send**. Si falta un valor, la app avisa **Please fill in all parameters**.
+- **Send** y **Configure** quedan deshabilitados si la plantilla no está **Aprobada**.
+
+Cuando pasaron más de 24 horas desde el último mensaje del contacto, el compositor muestra **Conversation Expired** y el texto **Click here to select a template**: la plantilla es la única forma de retomar la conversación. La lista de conversaciones muestra el tiempo restante de la ventana con un reloj y, cuando se venció, **Expired**.
+
+{/* captura: images/mensajes/plantillas-composer-es.png | Diálogo Select a Template en el compositor de la bandeja con una plantilla Aprobada y los botones Send y Configure | app: /inbox */}
+
+## Usar plantillas en campañas
+
+Las campañas de mensajes solo listan plantillas **Aprobada** del canal elegido. Las plantillas con variables o encabezado multimedia aparecen con la marca **Dinámica** y se completan en el paso **Plantilla** del asistente, donde podés insertar campos del contacto en cada variable. El detalle está en [Campañas de mensajes](/es/mensajes/campanas).
+
+## Qué no existe todavía
+
+- No se crean ni se editan plantillas de **Autenticación** desde la app. Si ya existen en tu cuenta de WhatsApp, aparecen en la lista solo para consulta.
+- No hay botones de copiar código, de flujo, de catálogo ni de llamada por WhatsApp. Solo **Respuesta rápida**, **Enlace** y **Llamada**.
+- Los botones de **Enlace** no admiten variables (URL dinámica).
+- No hay encabezado de ubicación.
+- No se pueden eliminar plantillas desde la app.
+- La app no muestra el motivo del rechazo de Meta ni la calificación de calidad de la plantilla.
+
+## Problemas frecuentes
+
+Errores propios del editor:
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| **Numera las variables en orden, empezando por 1** | En formato posicional hay un salto, por ejemplo `{{1}}` y `{{3}}`. | Renumerá las variables sin saltos. |
+| **Usa como máximo 10 variables** | El mensaje tiene más de 10 variables. | Reducí la cantidad de variables. |
+| **Mantén juntas las respuestas rápidas, sin mezclarlas con los demás botones** | Hay un botón de enlace o llamada entre dos respuestas rápidas. | Reordená los botones con **Subir** y **Bajar**. |
+| **Escribe el número en formato internacional, por ejemplo +34600000000** | El teléfono del botón de llamada no tiene código de país. | Escribilo con `+` y código de país. |
+| **Escribe una URL http o https válida** | La URL del botón no empieza con `http://` o `https://`. | Corregí la URL. |
+| **Sube un archivo de ejemplo** | Elegiste encabezado de imagen, vídeo o documento sin subir el archivo. | Subí un archivo de ejemplo del tipo indicado. |
+| **Añade un valor de ejemplo** | Una variable no tiene valor de ejemplo. | Completá **Valores de ejemplo**. |
+| **No se pudo validar la plantilla** | La validación no pudo ejecutarse. | Volvé a intentar. Si persiste, contactá a soporte. |
+
+Rechazos de Meta al guardar. Estos códigos son de Meta y aparecen en el mensaje de error:
+
+| Código | Qué significa | Qué hacer |
+|---|---|---|
+| 132001 | Ya existe una plantilla con ese nombre e idioma en la cuenta de WhatsApp. | Usá otro nombre u otro idioma, o editá la existente. |
+| 132005 | El contenido no cumple las políticas de Meta. | Revisá URLs sospechosas, lenguaje promocional en categoría Utilidad o contenido prohibido. |
+| 132007 | Violación de formato: variables mal formadas, cuatro o más espacios seguidos, saltos de línea consecutivos, tabulaciones o emojis en botones. | Limpiá el formato del texto y de las etiquetas de los botones. |
+| 132012 | El formato o la cantidad de variables no coincide con los ejemplos. | Revisá que cada variable tenga su ejemplo y que las posicionales sean secuenciales desde 1. |
+| 132015 | La plantilla está pausada por bajo rendimiento. | Esperá a que Meta la reactive o creá una nueva. |
+| 132016 | La plantilla fue deshabilitada por Meta. | Creá una plantilla nueva con contenido revisado. |
+| 190 | El token del canal expiró o fue revocado. | Reconectá el canal en [Conectar WhatsApp Business](/es/mensajes/conectar-whatsapp). |
+| 4 | Se superó el límite de creación de plantillas: 100 por hora por cuenta de WhatsApp. | Esperá unos minutos antes de crear más. |
+
+Si Meta responde que una variable está al principio o al final del texto, movela para que quede rodeada de texto fijo.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+<Accordion title="¿Cuánto tarda Meta en aprobar una plantilla?">
+Depende de Meta. La app no muestra una estimación ni promete un plazo. Mientras el estado sea **Pendiente**, la plantilla no se puede editar, no aparece en el asistente de campañas y el botón **Send** de la bandeja queda deshabilitado. Cuando Meta resuelve, el estado pasa a **Aprobada** o **Rechazada**.
+</Accordion>
+<Accordion title="¿Por qué no puedo editar mi plantilla?">
+Solo se editan plantillas **Aprobada** o **Rechazada** de categoría Marketing o Utilidad, y siempre desde el canal al que pertenecen. Si está **Pendiente**, Meta la bloquea durante la revisión. Si es de **Autenticación**, la app no la edita. Además necesitás el permiso `channels.update`.
+</Accordion>
+<Accordion title="¿Puedo cambiar el nombre, el idioma o el formato de variables de una plantilla?">
+No. Meta no permite renombrar ni cambiar el idioma una vez creada, y la app tampoco deja cambiar el formato de variables. Creá una plantilla nueva con los valores correctos.
+</Accordion>
+<Accordion title="¿Para qué sirve el archivo de ejemplo si en cada envío mando un archivo distinto?">
+Meta revisa la plantilla con ese ejemplo. El archivo real se elige en cada envío: en la bandeja lo subís en **Configure Template** y en una campaña en el paso **Plantilla**. Podés subir un archivo o pegar una URL pública.
+</Accordion>
+<Accordion title="¿Qué diferencia hay entre Marketing y Utilidad?">
+Marketing es para promociones y ofertas; Utilidad para avisos de pedidos y cuenta. Meta revisa el contenido según la categoría: un texto promocional en una plantilla de Utilidad puede rechazarse por políticas de contenido (código 132005). Meta también limita los mensajes de marketing que recibe cada usuario; en campañas ese límite aparece como código 131049.
+</Accordion>
+<Accordion title="¿Puedo usar una plantilla Pendiente en una campaña?">
+No. El paso **Plantilla** del asistente solo lista plantillas **Aprobada**. Si no hay ninguna, la pantalla muestra **No hay plantillas aprobadas**.
+</Accordion>
+<Accordion title="¿Por qué una plantilla aparece en un canal y no en otro?">
+Las plantillas pertenecen a la cuenta de WhatsApp Business de cada canal. La lista se carga por canal con el selector **Canal**, y una campaña o una conversación solo puede usar las plantillas de su propio canal.
+</Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Trabajar en la bandeja](/es/mensajes/bandeja)
+- [Campañas de mensajes](/es/mensajes/campanas)
+- [Conectar WhatsApp Business](/es/mensajes/conectar-whatsapp)
+- [Configurar un canal](/es/mensajes/configurar-canal)

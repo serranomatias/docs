@@ -1,0 +1,64 @@
+---
+title: "Agenda"
+description: "Organizá recursos, servicios y turnos. Revisá disponibilidad, estados, recordatorios y permisos de la agenda."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Agenda" permission="agenda.read" addon="Agenda" />
+
+La **Agenda** administra turnos y disponibilidad de recursos. Es un módulo que se activa por organización. Se diferencia de conectar Google Calendar o Cal.com como herramienta de un agente.
+
+## Preparar la agenda
+
+Configurá recursos, servicios, ubicaciones y horarios antes de ofrecer turnos. Un recurso representa lo que se reserva, como una persona o un espacio. Un servicio define la atención, su duración y los tiempos de separación.
+
+| Configuración | Qué revisar |
+|---|---|
+| Recursos | Quién o qué puede atender y en qué horario |
+| Servicios | Duración, buffers y recursos compatibles |
+| Ubicaciones | Lugar de atención |
+| Modalidad | Presencial o remota según el servicio |
+| Excepciones | Días u horarios que cambian la disponibilidad habitual |
+| Campos | Información necesaria para la reserva |
+
+## Consultar y gestionar turnos
+
+Abrí **Agenda**, elegí el período y filtrá los recursos o la ubicación. Tu alcance puede limitar la vista a recursos asociados a tu usuario.
+
+| Acción | Permiso |
+|---|---|
+| Consultar | `agenda.read` |
+| Crear turno | `agenda.create` |
+| Modificar | `agenda.update` |
+| Cancelar | `agenda.delete` |
+
+Los estados de reserva incluyen pendiente, confirmada, completada, no asistió y cancelada. Revisá el estado y la hora del turno después de crear, mover o cancelar.
+
+## Recordatorios y agentes
+
+La configuración de avisos permite confirmaciones y recordatorios por los canales disponibles, como email o WhatsApp. Verificá destinatario, horario y conexión antes de dar el aviso por entregado.
+
+Los agentes pueden reservar con las herramientas de agenda correspondientes. Configurá la consulta de servicios y disponibilidad antes de permitir crear reservas. El preset de recepcionista es un punto de partida y necesita adaptarse al negocio.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Agenda es lo mismo que Google Calendar?">
+    No. La agenda es un módulo de ContactShip. La [integración de Google Calendar](/es/integraciones/google-calendar) conecta un calendario externo.
+  </Accordion>
+  <Accordion title="¿Por qué no aparece un horario libre?">
+    Revisá horario del recurso, duración del servicio, buffers, reservas existentes y excepciones. También comprobá el recurso y la ubicación seleccionados.
+  </Accordion>
+  <Accordion title="¿Por qué veo solo mis recursos?">
+    Tu rol puede tener alcance propio. Un administrador puede revisar los permisos y el alcance de agenda.
+  </Accordion>
+  <Accordion title="¿La IA puede ofrecer cualquier horario?">
+    Debe consultar la disponibilidad configurada y confirmar el resultado de la reserva. Agregar instrucciones sin herramientas no crea turnos.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Roles y permisos](/es/organizacion/roles-y-permisos)
+- [Google Calendar](/es/integraciones/google-calendar)
+- [Cal.com](/es/integraciones/cal-com)

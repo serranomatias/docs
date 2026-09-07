@@ -1,0 +1,52 @@
+---
+title: "Webhooks de llamadas"
+description: "Configurá la entrega y diagnosticá eventos pendientes o fallidos."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Llamadas → Webhooks" permission="calls.read" />
+
+Un webhook envía datos de una llamada a tu sistema mediante una solicitud **POST**. La llamada puede terminar correctamente aunque tu endpoint no reciba el evento.
+
+## Configurar y probar
+
+1. Abrí el agente de voz y entrá a **Avanzado → Post llamada**.
+2. Configurá la URL del webhook de salida. El webhook de entrada sirve para aportar contexto al agente y cumple otra función.
+3. Guardá y publicá la configuración del agente.
+4. Hacé una llamada controlada desde **Probar agente** y esperá el análisis.
+5. Revisá el cuerpo recibido y la respuesta HTTP en tu receptor y en **Llamadas → Webhooks**.
+
+El editor actual no ofrece un botón de prueba con un payload de ejemplo. Las pruebas de llamada pueden disparar acciones reales en tu receptor.
+
+## Diagnosticar la entrega
+
+En **Llamadas → Webhooks**, abrí un evento para consultar su URL, estado, intentos, respuesta HTTP, datos crudos y llamada asociada.
+
+| Estado | Qué hacer |
+|---|---|
+| Entregado | Comprobá que tu aplicación procesó el contenido, además de responder al envío. |
+| Pendiente | Revisá de nuevo antes de disparar una recuperación manual. |
+| Fallido | Leé el código y el mensaje de respuesta, corregí el receptor y usá **Reintentar** cuando esté disponible. |
+
+Guardá el ID de evento junto con el ID de llamada en tus registros. Hacé que tu receptor tolere entregas repetidas: un reintento no debe crear dos tickets ni duplicar una operación.
+
+No confundas estos envíos con los webhooks de canales de mensajes, las automatizaciones del inbox o los eventos del enrutamiento. Tienen configuración y contenido propios.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Reintentar vuelve a llamar?">
+    No. Reintenta la entrega del evento. Tu receptor puede ejecutar acciones otra vez si no controla duplicados.
+  </Accordion>
+  <Accordion title="¿El webhook de entrada es el mismo?">
+    No. El de entrada obtiene contexto antes de conversar; el de salida entrega información de la llamada.
+  </Accordion>
+  <Accordion title="¿Qué envío a soporte?">
+    ID de evento, ID de llamada, fecha y respuesta HTTP, sin secretos del receptor.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Registro de llamadas](/es/llamadas/registro)
+- [Post llamada](/es/agentes-de-voz/post-llamada)

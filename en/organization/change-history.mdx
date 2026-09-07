@@ -1,0 +1,50 @@
+---
+title: "Change history"
+description: "Find who created, edited or deleted records. Filter change history by period, action and record type."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Organization → Team Members → History" permission="audit.read" addon="Change history" />
+
+Change history records changes in audited organization features. It is enabled on request and requires `audit.read`. It does not recover changes made before the module was enabled.
+
+## Review changes
+
+1. Open **Team Members** and select **History**.
+2. Choose the last 7, 30 or 90 days. The initial period is 30 days.
+3. Filter by record type and action: create, update or delete.
+4. Review when, who, what and changed fields. Use pagination for more results.
+
+The type filter includes members, roles, teams, invitations, agents, numbers, channels, inbox tags, quick replies, text agents and message campaigns. This does not mean every platform activity is recorded.
+
+## Interpret results
+
+The change column shows fields recorded for that modification. Actions can come from a person, an integration or the system; not every action has a person as its author.
+
+Empty results can reflect the period, filters, no changes or changes made before activation. They do not prove that a record was never modified.
+
+## What this screen does not provide
+
+History is not a trash bin or an undo function. It does not replace call logs, conversations or automation execution history.
+
+If history fails to load, reload and keep the organization, filters and error time for support.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why is History missing?">
+    The organization needs the module enabled and your role must include `audit.read`. Access to members alone is insufficient.
+  </Accordion>
+  <Accordion title="Can I see changes made before activation?">
+    History begins when the module is enabled. It does not automatically reconstruct previous changes.
+  </Accordion>
+  <Accordion title="Can I restore a deleted record here?">
+    This screen displays changes and does not offer restoration. Check recovery options in the relevant feature.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Members](/en/organization/members)
+- [Roles and permissions](/en/organization/roles-and-permissions)
+- [Support](/en/get-started/support)

@@ -1,0 +1,66 @@
+---
+title: "Inbox automations"
+description: "Build event-driven rules, inspect execution history, and retry failed steps."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Inbox → Automation Rules" addon="Automation Rules" />
+
+Automation Rules is an organization add-on. A rule combines **WHEN** (trigger), optional **IF** conditions, and ordered **THEN** actions. Enable it only when its actions are ready to run on real events.
+
+## Create a rule
+
+Choose **New Rule**, select a preset or start from scratch, name it, and select a trigger and channel scope. Add conditions and at least one action, inspect **Rule Preview**, and save with **Create Rule** or **Save Changes**. Use **Active/Inactive** to control execution.
+
+Triggers include `thread.closed`, `thread.opened`, `thread.updated`, `message.new`, `contact.created`, `call.finished`, `call.started`, and `schedule`. The schedule option has no frequency editor yet. Channel choices beyond WhatsApp do not imply those channels can currently be connected.
+
+Conditions include message count, spam status, contact tags, thread duration, and channel. Multiple conditions use AND. The current editor does not preserve the selected operator on save/reopen: it returns to **is**. Do not rely on an alternative operator without verifying the saved rule and actual execution.
+
+## Actions
+
+| Group | Actions and configuration |
+|---|---|
+| Freshdesk | Sync contact, create ticket, add conversation note. Ticket settings include priority/status, custom fields, assignment, history, and duplicate handling. |
+| AI | Analyze the conversation into text, number, boolean, or enum fields. |
+| Conversation | Send a message in the current thread and channel. |
+| Organize | Add conversation/contact tags; add, move, or remove a contact’s board card. |
+| People | Assign conversation or contact to a specific user, round robin, or least busy. |
+| Calls | Outbound AI call with agent, phone number, delay, and optional context. |
+| Flow | Wait, capped at five minutes even though the unit picker includes hours. |
+| Developer | Webhook with POST, PUT, or PATCH; optional headers and JSON body template. |
+| Google Sheets | Add a row or update a matched row using column mappings. |
+
+Freshdesk and Sheets require connected integrations. Actions run top to bottom. **Continue if this action fails** allows later steps to run after a failure; consider whether those steps depend on missing output.
+
+Template values include `{{thread.id}}`, `{{contact.full_name}}`, `{{contact.phone_number}}`, `{{contact.email}}`, `{{system.now}}`, and `{{system.rule_id}}`. AI outputs such as `{{ai.summary}}` exist only after an analysis step in the same rule. Freshdesk note steps can use the created ticket’s ID and URL.
+
+The three new-rule presets are Basic Freshdesk Ticket, WhatsApp High Priority, and AI-Powered Ticket. The separate **Templates** tab is disabled.
+
+## Inspect and replay
+
+**Run History** lists executions with success, partial success, failed, crashed, running, or skipped status. Open a run for its trigger payload, each step’s output, duration, and error. **Metrics** summarizes the last seven days.
+
+**Replay** can repeat all steps or only failed/skipped steps. It can send messages, place calls, or create records again. Inspect completed effects first and use duplicate handling where supported. Replay is not an undo action.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does connecting Freshdesk create tickets automatically?">
+    No. Configure and activate a rule with the relevant actions.
+  </Accordion>
+  <Accordion title="Why is an AI variable empty?">
+    An earlier analysis step must produce it in the same execution. Check the output and step order.
+  </Accordion>
+  <Accordion title="Can I schedule an hourly rule here?">
+    The schedule trigger appears, but this editor has no frequency configuration yet.
+  </Accordion>
+  <Accordion title="Is replay safe from duplicates?">
+    Do not assume so. Review the actions and external results before replaying; the dialog flags actions that can repeat effects.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Freshdesk](/en/integrations/freshdesk)
+- [Google Sheets](/en/integrations/google-sheets)
+- [Quick replies and tags](/en/messages/quick-replies-and-tags)

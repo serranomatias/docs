@@ -1,0 +1,69 @@
+---
+title: "Post-call: extraction, boards, and webhooks"
+description: "Configure structured extraction, evaluations, board placement, tags, and outgoing notifications."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Agents → Voice" permission="agents.read; agents.update to edit" />
+
+Open **Advanced → Post-call**. The five sections are analysis data, evaluation criteria, contact board, call tags, and webhooks.
+
+| Configuration | When it applies |
+|---|---|
+| Analysis extraction fields and outgoing webhook | After publishing the draft. |
+| Evaluation assignments, board, and call tags | Immediately for subsequent calls. |
+
+## Extract structured data
+
+Choose **Add field** or open the full field list. The panel previews up to five fields and supports editing the complete array as JSON.
+
+| Field setting | Rules |
+|---|---|
+| Type | Text (`string`), Options (`enum`), Yes/No (`boolean`), or Number (`number`). |
+| Name | Unique lowercase key using letters, numbers, and underscores, beginning with a letter. |
+| What to extract | A concrete instruction of up to 300 characters. |
+| Choices | For enums: at least two distinct, nonempty choices. |
+| Required | Requests a value on every analyzed call; it does not create evidence absent from the conversation. |
+
+For example, extract `requested_service` as text and `appointment_confirmed` as a boolean, explaining that merely discussing a time is not a confirmed booking. Review the transcript and tool result before interpreting extracted values as completed external actions.
+
+**Edit as JSON** accepts an array with `type`, `name`, `description`, `required`, and enum `choices`. Valid edits update the draft. **Copy example for AI** provides the expected format for preparing fields elsewhere. Removing a field stops future extraction after publication and preserves previously collected data.
+
+## Attach evaluations
+
+Select active organization criteria from **Connected N/15**. An agent supports up to 15. Connecting or disconnecting requires `evaluation_criteria.update` as well as `agents.update` and applies immediately. Archived criteria are excluded from the picker. Evaluation results include success, failure, or unknown with supporting evidence.
+
+## Assign a board and tags
+
+Select one contact board or **No board**. After analysis of a call with an associated contact, the platform places its card on the assigned board and determines the stage from the transcript. Calls without a contact do not move a card. This section does not expose explicit stage-selection conditions.
+
+Call tags classify the analyzed call using their descriptions and can notify selected members by email. They save immediately and are separate from contact tags.
+
+## Configure the outgoing webhook
+
+Enter an HTTPS URL that accepts POST, publish, then make a controlled test call and inspect **Calls → Webhooks**. The current editor has no sample-webhook test button. Outgoing agent notifications are delivered after analysis; there is no event selector for subscribing to call-start events here.
+
+Inbound context webhooks live in **Advanced → Inbound context** and are used before the conversation. Do not configure them as outgoing notifications.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Where are extracted values?">
+    Open the call’s Analysis → Extracted data. They also appear in outgoing call data.
+  </Accordion>
+  <Accordion title="Do evaluation assignments require publication?">
+    No. They save immediately, as do tags and board assignments.
+  </Accordion>
+  <Accordion title="Can I extract a date as a special type?">
+    There is no date type. Use text with an explicit requested format and handle missing or ambiguous information.
+  </Accordion>
+  <Accordion title="Why is my receiver getting no data?">
+    Check the published URL, whether the call finished analysis, and delivery details in Calls → Webhooks.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Call tags](/en/voice-agents/call-tags)
+- [Evaluations](/en/reports/evaluations)
+- [Webhook reference](/api-reference/webhooks)

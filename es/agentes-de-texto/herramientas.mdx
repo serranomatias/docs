@@ -1,0 +1,112 @@
+---
+title: 'Herramientas del agente de texto'
+description: 'Configurá las once herramientas de texto: delegación, etiquetas, tableros, notas, documentos, API externa, archivos, transferencia y actualización de contactos.'
+tag: 'Nuevo'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read; agents.update para editar" route="Agentes → Texto → Tools" status="nuevo" />
+
+Las herramientas permiten actuar sobre la conversación y consultar sistemas. La IA decide cuándo invocarlas usando sus descripciones y las instrucciones del agente. Agregar una herramienta no garantiza que se ejecute en cada mensaje.
+
+## Agregar y guardar
+
+<Steps>
+  <Step title="Abrí Tools">
+    Entrá al agente de texto y seleccioná **Tools → Agregar**. Buscá una herramienta en el catálogo.
+  </Step>
+  <Step title="Configurá sus datos">
+    Completá el nombre, la descripción y los destinos, campos o archivos que correspondan. La descripción explica cuándo usarla.
+  </Step>
+  <Step title="Guardá la pestaña">
+    Confirmá el diálogo y guardá **Tools**. Los cambios de herramientas se aplican al guardar esta pestaña.
+  </Step>
+  <Step title="Comprobá la decisión de la IA">
+    Abrí **Probar agente**. Escribí una solicitud que deba activar la herramienta y revisá los argumentos simulados.
+  </Step>
+</Steps>
+
+## Catálogo
+
+| Herramienta | Qué hace | Qué preparar |
+|---|---|---|
+| Delegar conversación | Asigna a tu equipo con reglas por canal y grupos de distribución | Destinos, disponibilidad y respaldo |
+| Etiquetar conversación | Aplica etiquetas del inbox sin duplicarlas | Etiquetas habilitadas e instrucción para cada una |
+| Mover contacto en tablero | Mueve al contacto entre etapas habilitadas | Tablero, etapas y criterio por etapa |
+| Agregar nota | Deja una nota interna para el equipo | Instrucciones sobre qué información registrar |
+| Buscar documentos | Consulta documentos y archivos cargados | Documentos relevantes |
+| Base de conocimiento | Busca información en la base de conocimiento | Contenido vigente y reglas de consulta |
+| API externa | Envía una solicitud HTTP a tu sistema | Endpoint y parámetros que debe extraer la IA |
+| Enviar imagen | Envía una imagen predefinida | JPG o PNG de hasta 5 MB |
+| Enviar PDF | Envía un PDF predefinido | Archivo PDF de hasta 10 MB |
+| Transferir a agente | Pasa la conversación a otro agente de IA | Destino fijo o agentes con criterios de selección |
+| Actualizar contacto | Actualiza los campos habilitados del contacto | Campos permitidos e instrucciones de extracción |
+
+## Delegar a una persona
+
+Las reglas de delegación se configuran por canal y pueden distribuir entre varias personas. Revisá la disponibilidad, las cuotas y el destino de respaldo.
+
+| Estrategia del grupo | Criterio |
+|---|---|
+| Por turnos (`round_robin`) | Reparte por turnos entre los miembros elegibles |
+| Por turnos ponderados (`weighted_round_robin`) | Reparte por turnos considerando los pesos |
+| Menor carga activa (`least_active_load`) | Prioriza la menor carga activa |
+| Orden de prioridad (`priority_order`) | Sigue el orden configurado |
+
+No confundas esta delegación con **Transferir a agente**: esa herramienta elige otra IA. En modo directo seleccionás un agente fijo. En modo inteligente agregás destinos y describís cuándo usar cada uno. También podés configurar respuesta automática y nota del sistema.
+
+## Etiquetas, etapas y datos del contacto
+
+En **Etiquetar conversación**, activá al menos una etiqueta y explicá cuándo aplicarla. Las etiquetas deben existir en los ajustes del inbox.
+
+En **Mover contacto en tablero**, elegí un tablero y habilitá etapas con instrucciones. Si activás notificación por email al llegar a una etapa, elegí destinatarios.
+
+En **Actualizar contacto**, habilitá solamente los campos que el agente deba escribir. La herramienta actualiza durante la conversación sin pedir una confirmación adicional. Usá instrucciones que eviten reemplazar información confirmada por suposiciones.
+
+## API externa
+
+El configurador solicita una **URL del endpoint** y una descripción de cuándo usar la herramienta. Agregá los parámetros que la IA debe extraer y marcá los obligatorios.
+
+El endpoint recibe un POST con el contexto del thread y los argumentos. En **Probar**, completá los valores, revisá **Ver payload** y usá **Enviar request de prueba**.
+
+<Warning>
+La prueba HTTP del configurador envía una solicitud al endpoint. Puede producir cambios en tu sistema. Usá datos y un endpoint de prueba. El chat sandbox, en cambio, presenta ejecuciones simuladas.
+</Warning>
+
+## Problemas frecuentes
+
+| Mensaje o síntoma | Causa y solución |
+|---|---|
+| Sin tools conectadas | Agregá una herramienta y guardá **Tools**. |
+| Selecciona al menos una etiqueta | Habilitá una etiqueta y completá su instrucción. |
+| Este board no tiene etapas. | Creá etapas en el tablero antes de configurar la herramienta. |
+| No hay otros agentes disponibles | Creá otro agente de texto o comprobá su disponibilidad en la organización. |
+| Solo se permiten imágenes JPG o PNG | Convertí el archivo a un formato admitido y verificá el límite de 5 MB. |
+| No se pudo conectar | Revisá el endpoint; en la prueba del navegador, comprobá también que acepte CORS. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Es suficiente escribir «enviá el catálogo» en las instrucciones?">
+    Necesitás agregar **Enviar imagen** o **Enviar PDF**, cargar el archivo y describir cuándo enviarlo. Después guardá **Tools** y probá esa solicitud en el [sandbox](/es/agentes-de-texto/sandbox).
+  </Accordion>
+  <Accordion title="¿Las etiquetas del contacto y de la conversación son las mismas?">
+    No. **Etiquetar conversación** usa etiquetas del inbox. Las etiquetas del contacto se administran por separado en [Etiquetas de contacto](/es/contactos/etiquetas).
+  </Accordion>
+  <Accordion title="¿La herramienta puede modificar todos los datos del contacto?">
+    Solo habilitá los campos que necesitás en su configuración. Revisá la instrucción de cada campo y comprobá sus argumentos antes de usar el agente con clientes.
+  </Accordion>
+  <Accordion title="¿El sandbox comprueba que mi API funciona?">
+    El sandbox muestra qué habría ejecutado la IA. Para comprobar la conexión real usá la pestaña **Probar** de la herramienta HTTP con un entorno de prueba.
+  </Accordion>
+  <Accordion title="¿Por qué no se guardó una herramienta que agregué?">
+    Confirmar el diálogo prepara el cambio. Guardá la pestaña **Tools** y comprobá que el estado indique cambios guardados.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Instrucciones](/es/agentes-de-texto/instrucciones)
+- [Probar en el sandbox](/es/agentes-de-texto/sandbox)
+- [Configurar un canal](/es/mensajes/configurar-canal)
+- [Contactos y propiedades](/es/contactos/contactos-y-propiedades)

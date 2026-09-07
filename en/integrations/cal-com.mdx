@@ -1,0 +1,47 @@
+---
+title: "Cal.com"
+description: "Connect Cal.com with its API key and assign it to a voice agent scheduling tool."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Integrations → Cal.com" permission="integrations.read; integrations.create" />
+
+The Cal.com integration makes its scheduling available through agent tools. You need an account with the event types and availability you want to offer.
+
+## Configure
+
+1. Open **Integrations → Cal.com**.
+2. Enter the Cal.com API key. The form expects a `cal_` prefix.
+3. Save the connection and check its status.
+4. Add a Cal.com tool to the voice agent and select its connection and event configuration.
+5. Explain when to check availability and when to book in the instructions.
+6. Test with controlled data and verify the resulting event.
+
+Cal.com and ContactShip keys are different credentials. Do not interchange them or place them in prompts.
+
+## Missing availability
+
+Review the event type, availability and time zone. Check that the connection belongs to the intended account. Valid credentials do not guarantee an available slot matching the request.
+
+## Scope
+
+Connecting Cal.com does not configure Google Calendar or ContactShip Agenda. Choose the tool for the system where you want bookings created.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Which key belongs here?">
+    Use the Cal.com API key in the format shown by the form. A ContactShip API key does not authenticate that account.
+  </Accordion>
+  <Accordion title="Does connecting create the agent tool?">
+    No. Add and configure the tool on the agent that will book appointments.
+  </Accordion>
+  <Accordion title="What should I check if the agent does not book?">
+    Check the connection, event, availability and instructions. Review the tool result before repeating a booking.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Voice tools](/en/voice-agents/tools)
+- [Google Calendar](/en/integrations/google-calendar)

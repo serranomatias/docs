@@ -1,0 +1,65 @@
+---
+title: "WhatsApp templates"
+description: "Create and validate templates, fill variables, and follow approval status."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Inbox → Templates" permission="channels.read; channels.update to create or edit" />
+
+Templates provide approved messages for inbox and campaign use. Select the channel before creating one. ContactShip displays Meta’s approval state; local validation does not constitute approval.
+
+## Create a template
+
+1. Choose **New template** and enter its name, language, category, and variable format.
+2. Add an optional text, image, video, or document header.
+3. Write the required message body and example values for variables.
+4. Add an optional footer and supported buttons.
+5. Use **Validate**, resolve errors, and **Save** to submit for review.
+6. Return to the list to check approval before sending.
+
+Name, language, and variable format cannot change after creation. Categories created here are **Marketing** and **Utility**. Existing Authentication templates can be listed but not created or edited here.
+
+## Editor limits
+
+| Part | Rules |
+|---|---|
+| Name | Up to 512 characters; lowercase letters, digits, underscores. |
+| Text header | Up to 60 characters and one variable, with an example. |
+| Message body | Up to 1,024 characters and 10 variables; examples required. |
+| Footer | Up to 60 characters; no variables. |
+| Buttons | Up to 10, with labels up to 25 characters and no label variables. |
+
+Positional variables use consecutive numbers starting with `{{1}}`. Named variables use lowercase names such as `{{customer_name}}`. Provide surrounding text instead of a body made only of variables. The format selector is locked while the message contains variables.
+
+Supported buttons are **Quick reply**, **URL**, and **Phone number**. Keep quick-reply buttons together. At most two URL buttons and one phone button are allowed. URLs must be valid HTTP(S) addresses; phone numbers use international format. Dynamic button URLs, location headers, flow/catalog buttons, and deletion are not offered here.
+
+Header uploads are review examples; choose the actual media at send time.
+
+## Approval and sending
+
+Only `APPROVED` templates can be sent. `PENDING` means under review. `REJECTED` can be edited and resubmitted. Other visible states include `IN_APPEAL`, `PENDING_DELETION`, `DISABLED`, and `PAUSED`. The app allows editing approved or rejected templates, excluding Authentication.
+
+From the inbox, select a template, fill every variable and media field, inspect the preview, and send. Campaigns use the same approved-template requirement. Approval timing, detailed rejection reasons, and template quality are not supplied by this editor.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does Validate submit to Meta?">
+    No. Save validates again and submits when the form is valid.
+  </Accordion>
+  <Accordion title="Why is a template absent from campaigns?">
+    Check the selected channel and ensure the template is approved.
+  </Accordion>
+  <Accordion title="Can I rename an existing template?">
+    Name, language, and variable format are immutable after creation.
+  </Accordion>
+  <Accordion title="Can I use the review example image for every recipient automatically?">
+    The example is for review; inspect and choose the actual media during sending.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Inbox](/en/messages/inbox)
+- [Message campaigns](/en/messages/campaigns)
+- [Connect WhatsApp](/en/messages/connect-whatsapp)

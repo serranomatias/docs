@@ -1,0 +1,152 @@
+---
+title: 'Create a text agent'
+description: 'Create a WhatsApp text agent from scratch or a template, configure its model and identity, save each tab and assign conversations through a channel.'
+tag: 'New'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" permission="agents.read" route="Agents → Text" status="nuevo" />
+
+A text agent replies to written inbox conversations. WhatsApp Business is currently the connectable messaging channel. Configure the agent under **Agents → Text**; it handles conversations assigned through a channel. Availability depends on your organization configuration. Contact support if the option is missing.
+
+## Where it works
+
+- WhatsApp Business channels. Instagram and Facebook Messenger are marked as coming soon in the new-channel dialog.
+- `agents.read` allows viewing; `agents.update` allows editing; `agents.delete` allows deletion.
+- Text agents do not make or receive voice calls. Use voice agents for those interactions.
+
+## Create the agent
+
+<Steps>
+  <Step title="Open the creation dialog">
+    In **Agents**, click **New agent** or press Shift+N.
+  </Step>
+  <Step title="Choose the type">
+    Select **Text agent**. If text agents are disabled for the organization, the type step is unavailable and only voice agents are created.
+  </Step>
+  <Step title="Choose a starting point">
+    Start from scratch or select a template. Search templates by name or description.
+  </Step>
+  <Step title="Complete the details">
+    From scratch, enter a name and description; both are required. Defaults are GPT-4o mini, temperature 0.7 and follow-ups off. For a template, review its configuration and prompt. Click **Create agent**.
+  </Step>
+  <Step title="Configure the agent">
+    The editor opens on **General**. Continue with instructions, tools and advanced settings.
+  </Step>
+</Steps>
+
+| Starting point | Included configuration | When to use it |
+|---|---|---|
+| From scratch | Name and description; no instructions or tools; GPT-4o mini, temperature 0.7 and follow-ups off | You already have a prompt or want to define the configuration |
+| Template | Template name, description, prompt, model, temperature, features and time zone | You want a starting point to adapt |
+
+<Note>
+ContactShip publishes the templates. The app does not provide custom template creation. Agents created from templates can be edited normally.
+</Note>
+
+## The agent editor
+
+Click the header name to rename the agent; this saves immediately. **Test agent** opens the [sandbox](/en/text-agents/sandbox). Tabs are **General**, **Instructions**, **Tools**, **Advanced** and **Knowledge**.
+
+### Saving
+
+Each configuration tab has its own **Save** button, also accessible with Ctrl+Enter. Saving sends that tab's fields only. The bottom bar reports unsaved, saving, saved or failed states. **Knowledge** saves its changes immediately and does not have a separate Save button.
+
+Text agents do not have drafts or a publication step. Saved settings are used in conversations.
+
+## General settings
+
+| Field | Purpose | Values | Default |
+|---|---|---|---|
+| Agent name | Identifies the agent to your team | Required text | Name entered at creation |
+| Description | Short note about its purpose | Free text | Creation description |
+| Model | Model handling the conversation | An available selector option | GPT-4o mini from scratch; template model otherwise |
+| Temperature | Lower values favor predictable replies; higher values allow more variation | 0–2, in 0.1 steps | 0.7 |
+| Time zone | Resolves dates and times mentioned by the agent | Searchable time-zone selection | Empty from scratch; template value otherwise |
+
+### Available models
+
+The selector groups models by provider:
+
+| Model | Identifier |
+|---|---|
+| GPT-4.1 Mini | `gpt-4.1-mini` |
+| GPT-4o mini | `gpt-4o-mini` |
+| GPT-4o | `gpt-4o` |
+| Gemini 3 Flash Preview | `gemini-3-flash-preview` |
+| Gemini 3 Pro | `gemini-3-pro-latest` |
+| Claude 4.5 Haiku | `claude-4.5-haiku` |
+
+This reflects the ContactShip selector, not each provider's complete model catalog.
+
+<Tip>
+Compare the same scenarios in the sandbox after changing models. Identical instructions can produce different results.
+</Tip>
+
+## Assign the agent to a channel
+
+Assignment is configured in the channel:
+
+1. Open **Messages**, select a channel and open its settings.
+2. In **Assignment**, automatic rules run in order. The first matching rule wins.
+3. Choose when the rule applies, always or during a schedule, and choose AI, a person or a team. For AI, select the text agent.
+
+Several channels can use the same agent. To transfer between AI agents during a conversation, use the transfer tool. See [Channel settings](/en/messages/channel-settings) and [Tools](/en/text-agents/tools).
+
+## Read-only access
+
+Without `agents.update`, the editor displays read-only access. Fields are disabled and Save is unavailable. Ask an administrator to review [Roles and permissions](/en/organization/roles-and-permissions).
+
+## Duplicate and delete
+
+- Duplicate creates a `Name (Copy)` agent with its configuration and tools. Check the result for any tool-copy failures.
+- Delete, from the list or the Advanced danger zone, removes the agent, tools and configuration. It requires `agents.delete` and cannot be undone.
+
+## Not yet available
+
+- Instagram and Facebook Messenger are marked as coming soon.
+- Drafts, versions and publication are features of voice agents, not text agents.
+- The app does not offer custom template creation.
+- Channel assignment is configured in channel settings, not in the agent editor.
+- The documented inbox handles individual conversations; there is no group or community agent configuration.
+
+## Common problems
+
+| Problem | Cause | Solution |
+|---|---|---|
+| Name or description required | Creation fields are empty | Complete both fields |
+| Templates fail to load | The gallery could not load | Retry or start from scratch |
+| Text agents unavailable | Organization configuration restricts access | Contact support |
+| Agent not found | Deleted agent or a different organization | Return to the list and check organization |
+| Validation failure | A field is missing or invalid | Correct highlighted fields and save |
+| Save failed | The server rejected the change | Review the error detail and retry |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can the same agent serve several channels?">
+    Yes. Each channel has its own assignment rules. Use separate agents when you need different behavior; see [Channel settings](/en/messages/channel-settings).
+  </Accordion>
+  <Accordion title="How is a text agent different from a voice agent?">
+    Text agents handle written inbox messages and save by tab without publication. Voice agents handle calls with voices, languages and published versions. Both can use organization knowledge.
+  </Accordion>
+  <Accordion title="Should instructions be in Spanish or English?">
+    Either is supported. Specify the response language and verify behavior through tests. See [Instructions](/en/text-agents/instructions).
+  </Accordion>
+  <Accordion title="Do changes take effect without publishing?">
+    Yes. Saving a tab updates the agent's configuration. Use the sandbox with saved settings to review behavior.
+  </Accordion>
+  <Accordion title="Which model should I start with?">
+    GPT-4o mini is the default when starting from scratch. Compare replies and tools against your own sandbox scenarios before selecting another model.
+  </Accordion>
+  <Accordion title="Can the agent handle WhatsApp groups or communities?">
+    The ContactShip inbox documented here handles individual conversations. It does not offer group or community agent configuration.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Instructions](/en/text-agents/instructions)
+- [Tools](/en/text-agents/tools)
+- [Channel settings](/en/messages/channel-settings)
+- [First WhatsApp agent](/en/get-started/first-whatsapp)

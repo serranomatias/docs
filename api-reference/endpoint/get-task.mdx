@@ -1,0 +1,38 @@
+---
+title: "Get Task"
+api: "GET /v1/tasks/{id}"
+description: "Retrieve a task by its ID."
+---
+
+Retrieve a task by its ID.
+
+## Authentication
+
+<ParamField header="x-api-key" type="string" required>Organization API key. Keep it on your server or in a credential store.</ParamField>
+
+## Path
+
+<ParamField path="id" type="string" required>Task ID returned by creation or listing. Use an ID belonging to your organization.</ParamField>
+
+## Response
+
+<ResponseField name="statusCode" type="number">HTTP response status.</ResponseField>
+<ResponseField name="data.id" type="string">Task UUID.</ResponseField>
+<ResponseField name="data.type" type="string">`custom`, `AI`, `system`, or `automatization`.</ResponseField>
+<ResponseField name="data.brief" type="string">Short task description.</ResponseField>
+<ResponseField name="data.details" type="string">Detailed task text.</ResponseField>
+<ResponseField name="data.status" type="string">`backlog`, `todo`, `in_progress`, `done`, `blocked`, or `canceled`.</ResponseField>
+<ResponseField name="data.priority" type="string">`low`, `medium`, or `high`.</ResponseField>
+<ResponseField name="data.assigned_to" type="string[]">Assigned user IDs. Creation accepts emails, but the stored response uses IDs.</ResponseField>
+<ResponseField name="data.created_by" type="object | string | null">Creator information or reference, depending on the returned record.</ResponseField>
+<ResponseField name="data.additional_data" type="object">Optional custom data.</ResponseField>
+<ResponseField name="data.created_at" type="string">Creation timestamp.</ResponseField>
+<ResponseField name="data.updated_at" type="string">Last update timestamp.</ResponseField>
+
+## Example
+
+```bash
+curl 'https://api.contactship.ai/v1/tasks/TASK_ID'   -H 'x-api-key: YOUR_API_KEY'
+```
+
+See [List tasks](/api-reference/endpoint/list-tasks) and [Create task](/api-reference/endpoint/create-task).

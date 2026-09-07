@@ -1,0 +1,56 @@
+---
+title: "Catálogo de integraciones"
+description: "Elegí entre Cal.com, Google Calendar, Google Sheets, Freshdesk y Make. Distinguí conexión, herramientas y automatizaciones."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Integraciones" permission="integrations.read" />
+
+Las integraciones conectan cuentas externas con tu organización. Conectar una cuenta prepara las credenciales; después configurás la herramienta o automatización que va a usarla.
+
+| Integración | Conexión | Uso en ContactShip |
+|---|---|---|
+| Cal.com | Clave API de Cal.com | Herramientas de agenda del agente |
+| Google Calendar | Conectar con Google | Consultar disponibilidad y agendar con herramientas |
+| Google Sheets | Conectar con Google | Acciones de filas en automatizaciones |
+| Freshdesk | Subdominio y clave API | Contactos, tickets y notas mediante acciones configuradas |
+| Make | Enlace de instalación | Escenarios externos conectados a la API |
+
+## Conectar una cuenta
+
+1. Abrí **Integraciones** y seleccioná el servicio.
+2. Revisá la cuenta y organización que querés conectar.
+3. Completá el acceso requerido. Crear una conexión necesita `integrations.create`.
+4. Verificá el estado y configurá la acción que utilizará esa conexión.
+5. Probá con un registro controlado y comprobá el resultado en ambos sistemas.
+
+Una conexión activa no equivale a una sincronización configurada. Si una acción falla, revisá tanto las credenciales como los parámetros de esa acción.
+
+## Otras formas de integrar
+
+Para sistemas que no están en el catálogo, podés usar herramientas HTTP, la API pública, webhooks o n8n. Cada vía tiene su propia configuración de autenticación y eventos.
+
+## Qué no está disponible en el catálogo
+
+Calendly, Gmail y Zapier no figuran entre las integraciones conectables actuales. WhatsApp Business se conecta como canal desde los ajustes del inbox.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Conectar Google hace que todo se sincronice?">
+    No. Elegí la herramienta o automatización y sus datos de destino. Cada conexión habilita las acciones que configures.
+  </Accordion>
+  <Accordion title="¿Dónde conecto WhatsApp?">
+    En [Conectar WhatsApp Business](/es/mensajes/conectar-whatsapp), dentro de canales del inbox.
+  </Accordion>
+  <Accordion title="¿Puedo conectar un sistema propio?">
+    Sí, mediante una API o herramienta HTTP compatible con tu flujo. Definí primero los datos que querés consultar o enviar.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Google Calendar](/es/integraciones/google-calendar)
+- [Google Sheets](/es/integraciones/google-sheets)
+- [Freshdesk](/es/integraciones/freshdesk)
+- [Claves API](/es/organizacion/claves-api)

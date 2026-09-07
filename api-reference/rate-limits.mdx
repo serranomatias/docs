@@ -1,136 +1,30 @@
 ---
-title: 'Rate Limits'
-description: 'Request limits per organization, the headers that report them and how to handle 429 responses'
+title: "Rate Limits and Retries"
+description: "Handle request throttling, pagination, and uncertain write results."
 ---
 
-The API limits how many requests each organization can make per minute, so a runaway integration cannot degrade the platform for everyone else. Limits are counted per **organization** (the owner of the API key), not per key: rotating your API key does not reset your budget.
+Request capacity depends on the deployed API configuration and any gateway limits. Do not assume one fixed budget applies to every endpoint or organization. Contact support for capacity planning for your integration.
 
-## Limits
+## Handle 429 responses
 
-| Scope | Limit | Applies to |
-|---|---|---|
-| Organization | **120 requests / minute** | Every authenticated endpoint |
-| Organization — listing endpoints | **20 requests / minute** | `GET /v1/contacts`, `GET /v1/calls` |
-| IP address | **600 requests / minute** | Every request, including unauthenticated ones |
+If a request returns **429 Too Many Requests**, stop issuing requests in a tight loop. Use `Retry-After` when present. It can describe a delay in seconds or an HTTP date. If absent, use bounded exponential backoff with jitter and reduce concurrency.
 
-Limits use a fixed 60-second window. Once a limit is exceeded, requests in that scope are rejected until the window resets — the `Retry-After` header tells you how long to wait. The listing budget is counted **in addition to** the organization budget: a call to `GET /v1/contacts` consumes one request from both.
+When rate-limit headers are returned, interpret them according to the gateway contract for that endpoint. Do not assume `X-RateLimit-Reset` is always a duration rather than a timestamp, or that all responses include the same header family.
 
-<Note>
-  Listing endpoints also cap `limit` at **1000** records per page. Send `limit` and `offset` together and iterate using `pagination.total_rows` from the response.
-</Note>
+## Paginate reads
 
-## Response headers
+Send `limit` and `offset` together on endpoints that support them. Begin with a modest positive page size and offset zero. Keep filtering and ordering consistent and use the returned pagination values to determine completion. Pagination parameters are not supported by every list endpoint.
 
-Every response includes the state of your organization budget:
+## Retry according to the operation
 
-| Header | Meaning |
+| Operation | Recovery |
 |---|---|
-| `X-RateLimit-Limit` | Requests allowed per window |
-| `X-RateLimit-Remaining` | Requests left in the current window |
-| `X-RateLimit-Reset` | Seconds until the window resets |
+| Read-only GET | Retry transient failures with bounded backoff. |
+| Validation or authentication error | Correct the request or credentials first. |
+| Create a call, message, task, or comment | Check whether the first request succeeded before repeating it. |
+| Agent update | Read the current configuration before resubmitting an uncertain update. |
+| Incoming webhook | Accept repeated delivery without duplicating your business action. |
 
-On listing endpoints the same headers are also reported for the listing budget with the `-heavy` suffix (`X-RateLimit-Limit-heavy`, `X-RateLimit-Remaining-heavy`, `X-RateLimit-Reset-heavy`), and the IP budget uses the `-ip` suffix.
+Keep a log of request time, endpoint, status, and your own correlation identifier. Remove API keys and unnecessary personal data from logs shared with support.
 
-## When a limit is exceeded
-
-The API responds with `429 Too Many Requests` and a `Retry-After` header (in seconds):
-
-```http
-HTTP/1.1 429 Too Many Requests
-Retry-After: 37
-X-RateLimit-Limit: 120
-X-RateLimit-Remaining: 0
-X-RateLimit-Reset: 37
-Content-Type: application/json
-
-{
-  "statusCode": 429,
-  "message": "Rate limit exceeded: 120 requests per 60s. Retry in 37s."
-}
-```
-
-Wait for `Retry-After` seconds before retrying. Retrying immediately does not help: the request is rejected again and the window does not reset any sooner.
-
-## Best practices
-
-- **Honor `Retry-After`.** Treat `429` as a signal to pause, not as an error to retry in a tight loop.
-- **Paginate with `limit=1000`.** A full export of 100,000 contacts is 100 requests — about five minutes at the listing rate — and only needs to run once.
-- **Poll on a schedule** (for example every few minutes) instead of continuously, and only ask for what changed when the endpoint supports it.
-- **Batch on your side.** If several systems need the same data, fetch it once and share it rather than having each of them call the API.
-
-If your integration needs higher limits, contact [support@contactship.ai](mailto:support@contactship.ai) with your organization name and expected volume.
-
-## Handling 429 in code
-
-<CodeGroup>
-
-```javascript JavaScript
-const API_KEY = 'your-api-key';
-
-async function apiGet(path, attempt = 0) {
-  const response = await fetch(`https://api.contactship.ai${path}`, {
-    headers: { 'x-api-key': API_KEY },
-  });
-
-  if (response.status === 429 && attempt < 5) {
-    const retryAfter = Number(response.headers.get('retry-after') ?? '1');
-    await new Promise((resolve) => setTimeout(resolve, retryAfter * 1000));
-    return apiGet(path, attempt + 1);
-  }
-
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  return response.json();
-}
-
-// Export every contact, one page at a time
-async function exportContacts() {
-  const pageSize = 1000;
-  const contacts = [];
-
-  for (let offset = 0; ; offset += pageSize) {
-    const page = await apiGet(`/v1/contacts?limit=${pageSize}&offset=${offset}`);
-    contacts.push(...page.data);
-    if (contacts.length >= page.pagination.total_rows) break;
-  }
-
-  return contacts;
-}
-```
-
-```python Python
-import time
-import requests
-
-API_KEY = "your-api-key"
-BASE_URL = "https://api.contactship.ai"
-
-
-def api_get(path, attempt=0):
-    response = requests.get(f"{BASE_URL}{path}", headers={"x-api-key": API_KEY})
-
-    if response.status_code == 429 and attempt < 5:
-        retry_after = int(response.headers.get("Retry-After", "1"))
-        time.sleep(retry_after)
-        return api_get(path, attempt + 1)
-
-    response.raise_for_status()
-    return response.json()
-
-
-def export_contacts():
-    page_size = 1000
-    contacts = []
-    offset = 0
-
-    while True:
-        page = api_get(f"/v1/contacts?limit={page_size}&offset={offset}")
-        contacts.extend(page["data"])
-        if len(contacts) >= page["pagination"]["total_rows"]:
-            return contacts
-        offset += page_size
-```
-
-</CodeGroup>
+See [API introduction](/api-reference/introduction), [List contacts](/api-reference/endpoint/get-contacts), and [Call webhooks](/api-reference/webhooks).

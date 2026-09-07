@@ -1,0 +1,83 @@
+---
+title: "Voice-agent tools"
+description: "Configure transfers, agent handoffs, HTTP requests, knowledge retrieval, and calendars."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Agents → Voice" permission="agents.read; agents.update to edit" />
+
+Tools let the agent act during a conversation. Add them in **Tools**, then describe when to use them in the tool description and prompt. Names must be unique, contain no spaces, and use up to 64 letters, digits, hyphens, or underscores. Descriptions support up to 2,000 characters.
+
+| Tool | Purpose | Instances |
+|---|---|---|
+| Call transfer | Transfer to a phone number or SIP URI. | Multiple |
+| Agent handoff | Continue the same call with another voice agent. | Multiple |
+| Custom | Send a POST request to your endpoint. | Multiple |
+| Knowledge base | Search bases connected in Knowledge. | One |
+| Cal.com | Book an event type from a connected account. | One |
+| Google Calendar | Check availability and create events. | One |
+
+Transfers, handoffs, custom tools, and retrieval belong to the draft. Calendar tools apply immediately and require an active integration.
+
+## Call transfer
+
+Choose a fixed international phone number or SIP URI, or let the agent choose a destination from routing instructions of up to 500 characters. For inferred SIP destinations, enable the SIP option.
+
+**Cold transfer** connects directly. **Warm transfer** can wait for a person, provide a generated or exact introduction, and keep that introduction private to the recipient. Human-detection timeout ranges from 10–300 seconds; ringing timeout from 5–90 seconds. Controls display 30 seconds when no custom value is set. Hold choices include silence, ringtone, relaxing sound, and upbeat music.
+
+Advanced options select the caller ID presented to the destination and custom SIP headers. SIP keys must start with `X-` or be `User-to-User`. A SIP transfer destination does not provide self-service SIP-trunk setup.
+
+## Agent handoff
+
+Choose another voice agent in the organization and explain the handoff condition. Choose whether post-call analysis covers both agents or only the destination. A handoff retains the same call. The transfer tool’s destinations are phone numbers or SIP URIs, not contact-center users or queues.
+
+## Custom HTTP tool
+
+Set a full public endpoint URL, description, headers, and parameters. Options control speaking while running, speaking after the response, and a typing sound.
+
+The visual parameter builder supports string, number, boolean, array, and object values, with required fields and one level of nesting. Use **Raw** for deeper JSON schemas. Headers accept key/value entries, a JSON object, or one header per line in Raw mode.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "order_number": {"type": "string", "description": "Order identifier supplied by the customer"}
+  },
+  "required": ["order_number"]
+}
+```
+
+**Test endpoint** sends a real POST using the configured headers and editable example body. It displays status, duration, response headers, and body. Tests time out after 10 seconds, truncate bodies at 10 KB, do not follow redirects, and cannot target local/private addresses. They are not agent calls and do not consume call credits, but the endpoint can perform real actions.
+
+The custom-tool form has no query-parameter or execution-timeout control; existing values are preserved. Return concise, useful data and describe how the agent should handle errors instead of claiming success.
+
+## Knowledge and calendars
+
+Retrieval needs connected bases and a published **Knowledge base** tool. Its prompt name is `knowledge-base`.
+
+For Cal.com, choose an event type and time zone. For Google Calendar, set the time zone, event duration (minimum five minutes, default 30), maximum concurrent events (minimum one, default one), and working hours (default 09:00–18:00). End time must follow start time. Confirm booking information before invoking creation.
+
+Native SMS, WhatsApp, and email tools are not in this voice catalog. Use a custom endpoint connected to your system when required.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does testing the endpoint call the agent?">
+    No. It sends a real HTTP request independently. Use a destination prepared for test data.
+  </Accordion>
+  <Accordion title="Why can’t I add a calendar?">
+    Connect Cal.com or Google Calendar in Integrations and verify its active status.
+  </Accordion>
+  <Accordion title="Why does the agent not call a tool?">
+    Check its published configuration, description, exact name in the prompt, and required data.
+  </Accordion>
+  <Accordion title="Can I use the same tool name twice?">
+    No. Names must be unique and cannot use reserved tool names.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Instructions](/en/voice-agents/instructions)
+- [Knowledge bases](/en/voice-agents/knowledge-base)
+- [Integrations](/en/integrations/overview)

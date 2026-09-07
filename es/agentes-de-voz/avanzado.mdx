@@ -1,0 +1,187 @@
+---
+title: 'Avanzado: voz, manual y contexto'
+description: 'La pestaña Avanzado del agente de voz: velocidad, expresividad y volumen; rapidez de respuesta, interrupciones, retardo de apertura, duración máxima por plan y palabras reforzadas; contexto de entrada con webhook propio, voces de respaldo y los 10 interruptores del Manual del agente.'
+sidebarTitle: 'Avanzado'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read" route="Agentes → Voz → Avanzado" />
+
+La pestaña **Avanzado** agrupa lo que cambia cómo suena y cómo se comporta el agente por fuera del prompt. Tiene un índice **Secciones** a la derecha con este orden: **Voz**, **Conversación**, **Post llamada**, **Contexto de entrada**, **Voces de respaldo**, **Manual del agente** y, si tenés el permiso `agents.delete`, **Zona de peligro**. Esta página cubre todo menos **Post llamada**, que tiene su propia página en [Post llamada: datos, tablero y webhooks](/es/agentes-de-voz/post-llamada).
+
+Todo lo que cambiás en estas secciones se guarda en el borrador y se aplica cuando publicás. Editar requiere el permiso `agents.update`; sin él, la pestaña se ve en modo solo lectura.
+
+{/* captura: images/agentes-de-voz/avanzado-voz-conversacion-es.png | Secciones Voz y Conversación con los deslizadores y los botones de Rapidez de respuesta | app: /agents/voice/[id]?activeTab=advanced */}
+
+## Voz
+
+"Cómo suena el agente una vez elegida la voz." La voz y el sonido de fondo se eligen en [General](/es/agentes-de-voz/general). Acá se ajusta cómo se reproduce esa voz. Cada deslizador muestra el valor actual con dos decimales.
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Velocidad** | "Lo rápido que habla el agente." | 0.75 a 1.25, en pasos de 0.05 | 1.00 |
+| **Expresividad** | "Los valores altos varían más la entonación entre frases." | 0.00 a 2.00, en pasos de 0.05 | 1.00 |
+| **Volumen** | Volumen de la voz del agente. | 0.5 a 1.5, en pasos de 0.1 | 1.00 |
+| **Volumen del fondo** | "Cuánto suena el ambiente por debajo de la voz." Solo aparece si el agente tiene un **Sonido de fondo** elegido en General. | 0.00 a 2.00, en pasos de 0.05 | 1.00 |
+
+## Conversación
+
+"Tiempos y turnos de palabra." Los tres primeros campos son botones con valores fijos, no deslizadores.
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Rapidez de respuesta** | "Con cuánta prontitud responde el agente cuando el interlocutor calla." Con valores bajos espera más antes de hablar, lo que ayuda con personas que hacen pausas largas. | 0, 0.25, 0.5, 0.75, 1 | 1 |
+| **Sensibilidad a interrupciones** | "Con cuánta facilidad deja de hablar el agente al ser interrumpido." Con valores bajos hace falta más para cortarlo. | 0, 0.25, 0.5, 0.75, 1 | 1 |
+| **Retardo de apertura** | "Pausa antes de que el agente diga sus primeras palabras." | 0s, 1s, 2s, 3s, 4s, 5s | 0s |
+| **Duración máxima de la llamada** | "La llamada termina automáticamente al alcanzarla." | De 1 min hasta el tope de tu plan, en pasos de 1 min | 30 min, o el tope del plan si es menor |
+| **Palabras reforzadas** | "Palabras que el agente debe reconocer mejor, como nombres de producto o de lugar." | Texto libre. Escribís una palabra y presionás `Enter`. No admite repetidas. Cada palabra se quita con su `x`. | vacío |
+
+### Tope de duración por plan
+
+Debajo del deslizador de duración la app muestra el plan y su tope, por ejemplo "starter · máx. 7 min". El tope depende del plan de la organización:
+
+<Info>
+| Plan | Duración máxima |
+|---|---|
+| free | 3 min |
+| starter | 7 min |
+| pro | 30 min |
+| growth | 60 min |
+| enterprise | 60 min |
+</Info>
+
+Si el agente tenía guardado un valor más alto que el tope, por ejemplo después de bajar de plan, el editor lo baja al tope al abrir la pestaña y lo marca como cambio sin publicar. Cuando una llamada llega al máximo, termina y en el detalle de la llamada el motivo de desconexión es **Duración máxima alcanzada** (`max_duration_reached`).
+
+## Post llamada
+
+Datos de análisis, criterios de evaluación, tablero de contactos, etiquetas de llamada y webhook de salida. Está documentado en [Post llamada: datos, tablero y webhooks](/es/agentes-de-voz/post-llamada).
+
+## Contexto de entrada
+
+"Qué sabe el agente cuando alguien llama." Precarga datos del contacto que llama y de sus llamadas anteriores antes de que el agente atienda. Es una sección marcada como **Nuevo**.
+
+{/* captura: images/agentes-de-voz/avanzado-contexto-de-entrada-es.png | Contexto de entrada con Activar contexto encendido, Personalizar desplegado y los cuatro bloques con sus variables | app: /agents/voice/[id]?activeTab=advanced */}
+
+El interruptor **Activar contexto** ("Precarga los datos del contacto y sus últimas llamadas al recibir una llamada.") enciende de una vez **Información del contacto**, **Propiedades del contacto** en modo **Todas** y **Historial de llamadas** con 3 llamadas de los últimos 30 días, entrantes y salientes. **Transcripción de la última llamada** queda apagada hasta que la actives a mano, porque es el bloque que más espacio ocupa. Apagar el interruptor conserva la configuración de los bloques para cuando lo vuelvas a encender.
+
+Debajo, **Personalizar** despliega los cuatro bloques. Cada uno muestra la variable que alimenta. "Estas casillas ya están referenciadas en el prompt del agente: con encenderlas alcanza." No hace falta escribir `{{contact_info}}` en las instrucciones para que el agente reciba el bloque; escribí la variable solo si querés ubicar ese dato en un lugar puntual del prompt.
+
+| Bloque | Qué recibe el agente | Variable | Ajustes |
+|---|---|---|---|
+| **Información del contacto** | "Nombre, email y país de quien llama." | `{{contact_info}}` y `{{contact_name}}` | — |
+| **Propiedades del contacto** | "Las propiedades personalizadas que tenga cargadas, más una variable por cada una. Si no tiene alguna, llega vacía." | `{{contact_properties}}`, más una variable por propiedad con su mismo nombre, por ejemplo `{{monto_adeudado}}` | **Todas**, **Todas excepto…** o **Solo estas**. En los dos últimos modos elegís propiedades de una lista con casillas; con más de 8 propiedades aparece un buscador. Hasta 50 propiedades marcadas. |
+| **Historial de llamadas** | "Fecha, dirección, resultado, duración y resumen de cada llamada anterior." | `{{call_history}}` | **Cantidad de llamadas** 0 a 6 (por defecto 3). **Días hacia atrás** 1 a 90 (por defecto 30). **Qué llamadas**: Entrantes y salientes, Solo entrantes, Solo salientes. |
+| **Transcripción de la última llamada** | "La conversación completa de la última llamada que tenga transcripción." | `{{last_transcript}}` | **Máximo de caracteres** 500 a 20.000 (por defecto 4.000). "Ocupa mucho espacio en el prompt. Se recorta al límite, conservando el final." |
+
+Un valor fuera de rango muestra `Tiene que estar entre {min} y {max}.` debajo del campo, la barra inferior pasa a **Hay un valor fuera de rango** y no se puede publicar hasta corregirlo. El borrador tampoco se guarda mientras el valor sea inválido, así que el último borrador válido queda en el servidor.
+
+### Ejemplo: qué sabe el agente cuando llama un contacto conocido
+
+Marta González ya figura en Contactos con email, país y la propiedad personalizada `plan_contratado`. Hace dos días llamó para pedir una cotización. Con **Información del contacto**, **Propiedades del contacto** e **Historial de llamadas** activos, el agente atiende sabiendo:
+
+- que quien llama se llama Marta González, su email y su país;
+- que `plan_contratado` vale "Pro", y puede usarlo con `{{plan_contratado}}` en el prompt;
+- que hubo una llamada entrante hace dos días, cuánto duró, cómo terminó y su resumen.
+
+Con eso puede saludar por el nombre y retomar la cotización sin volver a preguntar todo. Si además activás **Transcripción de la última llamada**, recibe la conversación completa de esa llamada, recortada al máximo de caracteres que definas.
+
+### Webhook propio
+
+Está fuera del interruptor **Activar contexto** y funciona aunque el contexto nativo esté apagado. "Se llama al recibir la llamada. Lo que devuelva se suma como variables, y tiene prioridad sobre las de arriba."
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Webhook propio** | URL de tu sistema que recibe una petición `POST` cuando entra una llamada. Las claves del JSON que devuelva se convierten en variables del prompt. Si una clave coincide con una variable del contexto nativo, gana la del webhook. | URL, por ejemplo `https://tu-dominio.com/contexto` | vacío |
+| **Tiempo de espera (ms)** | Cuánto espera la plataforma la respuesta antes de seguir sin ella. | 1.000 a 7.000 ms | 3.000 ms |
+
+Para usar una clave puntual, escribí su nombre entre llaves dobles en las instrucciones, por ejemplo `{{saldo}}` si tu endpoint devuelve `"saldo"`. El detalle de lo que recibe y debe devolver el endpoint está en la [referencia de webhooks](/api-reference/webhooks).
+
+<Tip>
+Devolvé desde el webhook solo lo que el agente necesita decir o decidir, con claves cortas y en minúsculas. Si el endpoint tarda más que el tiempo de espera, la llamada sigue sin esas variables y el prompt debe contemplar que lleguen vacías.
+</Tip>
+
+## Voces de respaldo
+
+"Se usan si la voz principal no está disponible. Deben ser de un proveedor distinto al de la voz principal." Es una sección marcada como **Nuevo**.
+
+**Añadir voz de respaldo** abre el mismo selector de voces de General en modo de selección múltiple. Cada voz elegida aparece como una ficha con su nombre; **Quitar** la saca de la lista. Sin voces de respaldo, la sección muestra "No hay voces de respaldo". La app no fija un máximo de voces de respaldo ni permite reordenarlas.
+
+## Manual del agente
+
+"Ajustes de comportamiento que se aplican sobre tu prompt." Son diez interruptores, todos apagados por defecto. No reemplazan a las instrucciones: se suman a ellas. Es una sección marcada como **Nuevo**.
+
+{/* captura: images/agentes-de-voz/avanzado-manual-del-agente-es.png | Los diez interruptores del Manual del agente con Tono conversacional activo y Personalidad por defecto apagado | app: /agents/voice/[id]?activeTab=advanced */}
+
+| Interruptor | Qué cambia en la práctica | Clave |
+|---|---|---|
+| **Revelar que es una IA** | "El agente dice que es una IA cuando se le pregunta." Sin este interruptor, la respuesta depende de lo que digan tus instrucciones. | `ai_disclosure` |
+| **Tono conversacional** | "Expresiones más sueltas y cercanas." Excluyente con Personalidad por defecto. | `conversational_personality` |
+| **Personalidad por defecto** | "La persona base estándar." Excluyente con Tono conversacional. | `default_personality` |
+| **Repetir para confirmar** | "El agente repite los datos antes de actuar sobre ellos." Útil antes de agendar, transferir o guardar un dato: repite el número, la fecha o el nombre y espera el sí. | `echo_verification` |
+| **Empatía alta** | "Reconoce cómo se siente la persona antes de continuar." | `high_empathy` |
+| **Alfabeto fonético OTAN** | "Deletrea las letras como Alfa, Bravo, Charlie." Sirve para códigos, patentes o emails con letras que se confunden. | `nato_phonetic_alphabet` |
+| **Muletillas naturales** | "Añade pequeñas dudas para que no suene recitado." | `natural_filler_words` |
+| **No salirse del tema** | "Rechaza peticiones fuera de su propósito." Reduce las respuestas inventadas ante preguntas ajenas al objetivo del agente. | `scope_boundaries` |
+| **Coincidencia flexible** | "Tolera pequeñas diferencias al reconocer nombres y valores." Por ejemplo, acepta "Jimenez" cuando el dato guardado es "Giménez". | `smart_matching` |
+| **Normalización del habla** | "Lee números, fechas y monedas como los diría una persona." | `speech_normalization` |
+
+"Solo uno de Tono conversacional y Personalidad por defecto puede estar activo a la vez." Al encender uno, el otro se apaga solo.
+
+<Note>
+Los interruptores del manual son genéricos. Para casos concretos, por ejemplo cómo leer un número de teléfono de tu país, una sección **Formatos de respuesta** en las instrucciones da mejores resultados. Ver la [Guía de prompts](/es/agentes-de-voz/guia-de-prompts).
+</Note>
+
+## Zona de peligro
+
+Solo aparece con el permiso `agents.delete`. "Las acciones de esta sección son permanentes y no se pueden deshacer." **Eliminar agente** "elimina el agente junto con su borrador y todas sus versiones publicadas". El diálogo **¿Eliminar agente de voz?** pide confirmación y muestra el ID del agente. Después de eliminar, la app vuelve a la lista de agentes.
+
+## Qué no existe todavía
+
+- No se puede superar el tope de duración del plan desde el editor. Para llamadas más largas hay que cambiar de plan; enterprise también tiene tope de 60 min.
+- La velocidad no admite valores fuera de 0.75 a 1.25, ni el volumen fuera de 0.5 a 1.5.
+- No hay vista previa de la voz con estos ajustes aplicados: la única forma de escucharlos es una llamada de prueba.
+- Las voces de respaldo no tienen orden de prioridad configurable.
+- El contexto de entrada no se puede limitar por número entrante ni por horario: aplica a todas las llamadas que atiende el agente.
+- El Manual del agente no tiene texto editable: son interruptores fijos.
+
+## Problemas frecuentes
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| `Tiene que estar entre {min} y {max}.` | Un campo numérico de **Contexto de entrada** tiene un valor fuera de rango. | Corregí el número. Mientras esté fuera de rango no se guarda el borrador ni se puede publicar. |
+| "Hay un valor fuera de rango" (barra inferior) | Igual que el anterior, visto desde la barra de publicación. | Buscá el campo marcado en rojo dentro de Contexto de entrada. |
+| "No se pudo guardar" | El servidor rechazó el guardado automático o se cortó la conexión. | Revisá la conexión y presioná `Cmd+S` o `Ctrl+S` para reintentar. El detalle del error aparece debajo del estado. |
+| "Esta organización todavía no tiene propiedades de contacto." | Elegiste **Todas excepto…** o **Solo estas** sin propiedades personalizadas creadas. | Creá las propiedades en [Contactos y propiedades](/es/contactos/contactos-y-propiedades) o dejá el modo **Todas**. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué la duración máxima no me deja pasar de 7 minutos?">
+    Tu organización está en el plan starter, cuyo tope es 7 min. El deslizador nunca supera el tope del plan: free 3 min, starter 7, pro 30, growth 60, enterprise 60. Para llamadas más largas, cambiá de plan en [Planes y límites](/es/facturacion/planes).
+  </Accordion>
+  <Accordion title="¿Qué pasa cuando una llamada llega a la duración máxima?">
+    La llamada se corta en ese momento, aunque el agente esté hablando. En Llamadas, el detalle muestra el motivo de desconexión **Duración máxima alcanzada** (`max_duration_reached`). Si te pasa seguido, revisá que el prompt tenga un cierre claro y subí el máximo dentro del tope del plan.
+  </Accordion>
+  <Accordion title="¿Tengo que escribir {{contact_info}} en el prompt para que funcione?">
+    No. Los cuatro bloques del contexto de entrada ya están referenciados en el prompt que arma la plataforma: con encender la casilla alcanza. Solo escribís la variable a mano cuando querés ese dato en un lugar puntual, o cuando usás una propiedad personalizada o una clave devuelta por tu webhook propio, porque esas no se pueden referenciar de antemano.
+  </Accordion>
+  <Accordion title="¿El contexto de entrada sirve para llamadas salientes?">
+    Está pensado para cuando alguien llama al agente: precarga los datos "al recibir una llamada". En las llamadas salientes el agente ya recibe los datos del contacto al que llama, con sus propiedades, como parte de la llamada. Ver [Campañas de llamadas](/es/llamadas/campanas).
+  </Accordion>
+  <Accordion title="¿Por qué no veo Volumen del fondo?">
+    Solo aparece cuando el agente tiene un **Sonido de fondo** distinto de Ninguno en la pestaña General. Elegí uno y el deslizador aparece en Voz.
+  </Accordion>
+  <Accordion title="¿Puedo activar Tono conversacional y Personalidad por defecto a la vez?">
+    No. Son excluyentes: al encender uno, el otro se apaga. El resto de los interruptores del Manual del agente se puede combinar libremente.
+  </Accordion>
+  <Accordion title="¿Los cambios de Avanzado se aplican de inmediato?">
+    No. Se guardan solos en el borrador y las llamadas siguen usando la versión publicada hasta que presionás **Publicar**. Ver [Versiones, publicación y pruebas](/es/agentes-de-voz/versiones-y-pruebas).
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [General: nombre, idiomas y voz](/es/agentes-de-voz/general)
+- [Post llamada: datos, tablero y webhooks](/es/agentes-de-voz/post-llamada)
+- [Versiones, publicación y pruebas](/es/agentes-de-voz/versiones-y-pruebas)
+- [Guía de prompts](/es/agentes-de-voz/guia-de-prompts)

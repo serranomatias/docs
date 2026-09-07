@@ -1,0 +1,35 @@
+---
+title: "List Tasks"
+api: "GET /v1/tasks"
+description: "List tasks for the organization identified by the API key."
+---
+
+List tasks for the organization identified by the API key.
+
+## Authentication
+
+<ParamField header="x-api-key" type="string" required>Organization API key. Keep it on your server or in a credential store.</ParamField>
+
+## Query parameters
+
+<ParamField query="limit" type="integer">Page size. Send a positive limit together with offset.</ParamField>
+<ParamField query="offset" type="integer">Nonnegative number of records to skip; begin at zero.</ParamField>
+<ParamField query="orderBy" type="string">Field to sort, for example `created_at`. Pair with orderDirection.</ParamField>
+<ParamField query="orderDirection" type="string">`ASCENDENT` or `DESCENDENT`.</ParamField>
+<ParamField query="filters" type="string">URL-encoded JSON array of field/operator/value conditions, for example a status filter using `EQUAL`.</ParamField>
+
+## Example
+
+```bash
+curl --get 'https://api.contactship.ai/v1/tasks'   -H 'x-api-key: YOUR_API_KEY'   --data-urlencode 'limit=20'   --data-urlencode 'offset=0'   --data-urlencode 'orderBy=created_at'   --data-urlencode 'orderDirection=DESCENDENT'   --data-urlencode 'filters=[{"field":"status","operator":"EQUAL","value":"todo"}]'
+```
+
+## Response
+
+<ResponseField name="statusCode" type="number">HTTP status.</ResponseField>
+<ResponseField name="data" type="object[]">Task records with the fields documented in [Get task](/api-reference/endpoint/get-task).</ResponseField>
+<ResponseField name="pagination.page" type="number">Current page.</ResponseField>
+<ResponseField name="pagination.total_rows" type="number">Total matching records.</ResponseField>
+<ResponseField name="pagination.total_pages" type="number">Total pages.</ResponseField>
+
+Keep filters and ordering consistent while advancing offset. This list describes task records; a task’s existence does not prove a message was sent or a call was placed.

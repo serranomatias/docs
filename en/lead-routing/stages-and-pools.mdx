@@ -1,0 +1,56 @@
+---
+title: "Configure stages and pools"
+description: "Define entry, owners, deadlines, assignment, and journey outcomes."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Organization → Lead routing" permission="lead_routing_config.update" addon="Lead routing" />
+
+Each column in the selected board has its own configuration. Open it from **Journey**; a board column’s menu also links to these settings.
+
+## Define entry and outcomes
+
+Enable the new-lead entry option on the entry stage. Restrict it by channel and conditions based on information available when the card is created. For the AI handoff destination, choose a stage with owners and a deadline. Leaving it in an unmeasured column can leave a contact without an advisor or clock.
+
+Mark final stages as **Won** or **Lost**. An intermediate stage does not count as a conversion merely because of its name; its outcome configuration matters.
+
+## Owners and distribution
+
+Enable **Deadline and automatic reassignment** and add at least one team. Review direct members, included subteams, people eligible to receive leads, and personal caps. Team membership and receiving leads are separate settings.
+
+| Visible strategy | Distribution |
+|---|---|
+| Least active load | Prioritizes lower active workload. |
+| Round robin | Rotates among eligible people. |
+| By percentage | Compensates for actual distribution against configured shares; it is not a simple random draw. |
+
+Configure each advisor’s cap, attempts within the pool, and a pool-specific deadline if needed. Without its own deadline, a pool uses the column deadline. Without a pool-entry condition, it accepts any eligible card reaching it.
+
+## Timing and escalation
+
+Choose minutes and either **24/7** or **Business hours**. Review team schedules, holidays, and time zones in team settings. Alerts use consumed-time percentages: 50 and 80 mean halfway through and 80% consumed.
+
+Define handling requirements and what happens when they are met. Then review attempts within each pool, escalation to the next eligible pool, and the destination after exhaustion. Leaving a card in place without an owner requires human intervention.
+
+For WhatsApp, the expired-window option can reassign anyway, retain the advisor until the customer replies, or move the card while retaining its advisor. Choose behavior your team can carry out.
+
+Save each stage and test a controlled contact from entry to outcome.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Are actions required without conditions?">
+    No. An empty group is satisfied by the card being in the stage. Define requirements to measure handling.
+  </Accordion>
+  <Accordion title="Can a pool have no eligible advisors?">
+    Cards will wait and follow retry/escalation rules. Review the roster and caps.
+  </Accordion>
+  <Accordion title="Does the advisor cap limit the whole team?">
+    The advisor cap limits each person’s active cards; also review individual overrides.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [How it works](/en/lead-routing/how-it-works)
+- [Teams](/en/organization/teams)

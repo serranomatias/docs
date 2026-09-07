@@ -29,16 +29,12 @@ This endpoint allows you to create a new contact in your organization's database
   The full name of the contact
 </ParamField>
 
-<ParamField body="country" type="string">
+<ParamField body="country" type="string" required>
   The country of the contact
 </ParamField>
 
 <ParamField body="email" type="string">
   The email address of the contact
-</ParamField>
-
-<ParamField body="description" type="string">
-  Optional description or notes about the contact
 </ParamField>
 
 <ParamField body="additional_data" type="array">
@@ -58,9 +54,7 @@ This endpoint allows you to create a new contact in your organization's database
 
 ## Response
 
-<ResponseField name="status code" type="number">
-  201 on successful creation
-</ResponseField>
+The response is `{ "statusCode": number, "data": object }`. The fields below describe `data`.
 
 <ResponseField name="id" type="string">
   The unique identifier of the created contact (UUID format)
@@ -129,7 +123,6 @@ curl -X POST "https://api.contactship.ai/v1/contacts" \
     "full_name": "Juan Pérez",
     "country": "México",
     "email": "juan@ejemplo.com",
-    "description": "Lead from LinkedIn campaign",
     "additional_data": [
       {
         "type": "location",
@@ -163,7 +156,7 @@ const createContact = async (contactData) => {
       throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorData.message || 'Unknown error'}`);
     }
     
-    const newContact = await response.json();
+    const { data: newContact } = await response.json();
     console.log('Contact created:', newContact);
     return newContact;
   } catch (error) {
@@ -177,7 +170,6 @@ const contactData = {
   full_name: 'Juan Pérez',
   country: 'México',
   email: 'juan@ejemplo.com',
-  description: 'Lead from LinkedIn campaign',
   additional_data: [
     {
       type: 'location',
@@ -212,7 +204,6 @@ contact_data = {
     "full_name": "Juan Pérez",
     "country": "México",
     "email": "juan@ejemplo.com",
-    "description": "Lead from LinkedIn campaign",
     "additional_data": [
         {
             "type": "location",
@@ -236,7 +227,7 @@ response = requests.post(
 
 # Check if the request was successful
 if response.status_code == 201:
-    new_contact = response.json()
+    new_contact = response.json()["data"]
     print(f"Contact created successfully with ID: {new_contact['id']}")
     print(f"Created at: {new_contact['created_at']}")
 elif response.status_code == 409:
@@ -250,26 +241,29 @@ else:
 <ResponseExample>
 ```json Example Response
 {
-  "id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
-  "created_at": "2023-01-01T12:00:00Z",
-  "phone_number": "+12124567890",
-  "full_name": "Juan Pérez",
-  "country": "México",
-  "email": "juan@ejemplo.com",
-  "description": "Lead from LinkedIn campaign",
-  "additional_data": [
-    {
-      "type": "location",
-      "field": "dirección",
-      "value": "Av. Insurgentes 123"
-    },
-    {
-      "type": "text",
-      "field": "notas",
-      "value": "Cliente potencial para servicio premium"
-    }
-  ],
-  "organization_id": "org123456"
+  "statusCode": 201,
+  "data": {
+    "id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
+    "created_at": "2023-01-01T12:00:00Z",
+    "phone_number": "+12124567890",
+    "full_name": "Juan Pérez",
+    "country": "México",
+    "email": "juan@ejemplo.com",
+    "description": "Lead from LinkedIn campaign",
+    "additional_data": [
+      {
+        "type": "location",
+        "field": "dirección",
+        "value": "Av. Insurgentes 123"
+      },
+      {
+        "type": "text",
+        "field": "notas",
+        "value": "Cliente potencial para servicio premium"
+      }
+    ],
+    "organization_id": "org123456"
+  }
 }
 ```
 </ResponseExample>

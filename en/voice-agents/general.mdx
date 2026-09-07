@@ -1,0 +1,57 @@
+---
+title: "General: names, languages, and voice"
+description: "Configure agent identity, language selection, time zone, voice, and background sound."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Agents → Voice → General" permission="agents.read; agents.update to edit" />
+
+**General** controls agent identity and sound. Except for the internal name, changes belong to the draft and require publishing.
+
+| Field | Behavior |
+|---|---|
+| Agent name | Internal identifier used in lists, campaigns, and reports. Cannot be empty. Saves on blur or Enter; Esc cancels editing. |
+| Agent name in calls | Name used to introduce the agent; separate from its internal name. |
+| Languages | One language, up to five selected languages, or the exclusive Spanish + English multilingual preset. |
+| Time zone | Interprets dates and times in the conversation. Calendar tools have their own time zone. |
+| Voice | Catalog voice with preview and filters. |
+| Background sound | None, coffee shop, convention hall, summer outdoors, mountain outdoors, static noise, or call center. |
+
+## Select languages
+
+Open **Speaking language** and switch between single and multiple selection. In multiple selection, the counter shows `n/5`; you cannot remove the final selected language. The first language is primary and is used by prompt generation. Returning to single selection keeps only that primary language.
+
+**Multilingual (Spanish + English)** replaces other selections. Use only languages relevant to your contacts and test recognition with representative audio. Language labels include regional variants, such as Latin American and Spain Spanish, US and UK English, and Brazilian and European Portuguese.
+
+## Choose a voice
+
+Select **Change voice**. Search by name and filter by gender or accent. Playback provides a recorded sample; selecting a row applies that voice to the draft. A sample does not include your advanced speed and volume settings: test a call to hear the final behavior.
+
+Voice speed, expressiveness, volume, background volume, and fallback voices are in **Advanced**. With background sound enabled, General links to its volume control.
+
+## Keep identity consistent
+
+Use an internal name describing the job, such as “Reception · appointments”, and a short in-call name. Check that the prompt’s introduction agrees with the in-call name. Choose the time zone relevant to the people the agent serves, then check calendar-tool time zones separately.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does changing the internal name require publishing?">
+    No. It saves immediately on blur or Enter. The in-call name does require publishing.
+  </Accordion>
+  <Accordion title="Can the agent speak more than five selected languages?">
+    The multiple-selection control accepts at most five. The Spanish + English preset is a separate exclusive option.
+  </Accordion>
+  <Accordion title="Where is voice volume?">
+    In Advanced → Voice. General provides a shortcut.
+  </Accordion>
+  <Accordion title="Why did changing the voice not affect a test?">
+    Confirm the draft was saved and published; tests use the published agent.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Advanced](/en/voice-agents/advanced)
+- [Instructions](/en/voice-agents/instructions)
+- [Versions and tests](/en/voice-agents/versions-and-testing)

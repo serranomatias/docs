@@ -1,0 +1,49 @@
+---
+title: "Reportes a medida"
+description: "Elegí qué medir, qué llamadas incluir y cómo agrupar los resultados."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Reportes → Personalizar → Agregar widget → Reporte a medida" permission="reports.read" />
+
+El constructor responde preguntas sobre **llamadas** y guarda el resultado como un widget personal. Usa el rango del dashboard.
+
+## Armar una pregunta
+
+1. Entrá a **Personalizar → Agregar widget → Reporte a medida** y poné un nombre descriptivo.
+2. En **Mostrar**, elegí cantidad, porcentaje condicionado, contactos distintos, duración, costo o un campo numérico del análisis. Podés agregar varias medidas.
+3. En **Solo las llamadas que**, agregá los filtros que definen el conjunto: agente, campaña, resultado, dirección o datos del análisis, entre otros. Los operadores disponibles dependen del tipo de campo.
+4. En **Separado por**, elegí hasta dos agrupaciones, como agente y período. Sin agrupación obtenés un total.
+5. Activá la comparación si necesitás el período anterior de igual duración. Elegí una visualización compatible o dejá **Auto**.
+6. Revisá la vista previa y **Cómo se calcula**, y agregalo al dashboard.
+
+## Ejemplo: porcentaje de llamadas transferidas
+
+Elegí **Porcentaje de llamadas que…** y dentro de esa medida, la condición de transferencia que querés evaluar. Separá por agente. Si además filtrás todo el reporte por una campaña, el denominador son las llamadas de esa campaña, no todas las de la organización.
+
+El promedio, la mediana y el p90 responden preguntas distintas. La mediana divide las duraciones en dos mitades; p90 muestra el valor por debajo del que queda el 90 % de las llamadas.
+
+## Revisar y exportar
+
+Usá **Ver llamadas** o la acción de una celda para inspeccionar los registros que forman el resultado. Desde esa lista podés exportar llamadas. La comparación usa un rango anterior del mismo largo, inmediatamente previo al seleccionado; no es la comparación entre mitades de los indicadores del dashboard.
+
+Si un campo dejó de existir, abrí **Configurar** y reemplazalo. Un resultado vacío puede deberse al rango o a filtros demasiado restrictivos.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Puedo consultar contactos sin llamadas?">
+    La fuente del constructor es llamadas. Contactos distintos cuenta los contactos de esas llamadas.
+  </Accordion>
+  <Accordion title="¿Qué zona horaria usa?">
+    La del reporte; revisá el rango que muestra la vista previa.
+  </Accordion>
+  <Accordion title="¿Cambiar el widget afecta a mis compañeros?">
+    Es parte de tu dashboard personal por organización.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Dashboard](/es/reportes/dashboard)
+- [Registro](/es/llamadas/registro)

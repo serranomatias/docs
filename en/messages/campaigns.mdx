@@ -1,0 +1,48 @@
+---
+title: "Message campaigns"
+description: "Prepare a WhatsApp campaign with a template, recipients, and follow-up."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Campaigns → Messages" permission="campaigns.read / campaigns.create" />
+
+Message campaigns send a template through a WhatsApp channel. You need a connected channel, an approved template, and recipients appropriate for the message.
+
+## Prepare and publish
+
+1. Create a message campaign and enter its name, description, and channel.
+2. Choose a date or the immediate-start option shown in the form. Publishing begins preparation; do not assume every message is sent at that instant.
+3. Add contacts from a CSV or the contact picker. Review column mappings and phone numbers.
+4. Select a channel template and fill its variables. Use the preview to check that recipient data is neither missing nor misplaced.
+5. Review the recipient count and publish. This authorizes real messages.
+
+## States and results
+
+Campaign states include `DRAFT`, `UPLOADING_CONTACTS`, `PUBLISHED`, `ACTIVE`, `PAUSED`, and `COMPLETED`. Wait for contact upload to finish before interpreting the total.
+
+The detail view shows **sent**, **delivered**, **read**, **replied**, and **failed** counts. These are different stages: sent does not prove delivery, and delivery does not prove reading or a reply. Inspect each recipient’s status and error when investigating failures.
+
+Response analysis helps review outcomes and prepare a follow-up campaign when that option is available. Always inspect its recipients and template before publishing; it should not be treated as an unchecked automatic continuation.
+
+## Handle failures
+
+Read the WhatsApp error code and message in the detail view. Check the current template status, channel connection, recipient data, and variables. Avoid republishing the entire campaign to fix one recipient: you could repeat messages already delivered.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can I send free-form campaign text?">
+    This flow uses channel templates. Prepare and obtain approval for the template before publishing.
+  </Accordion>
+  <Accordion title="Does pausing remove sent messages?">
+    No. Review recorded results and the current state before resuming.
+  </Accordion>
+  <Accordion title="Does completed mean everyone read the message?">
+    No. Review delivery, read, and reply metrics separately.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Templates](/en/messages/templates)
+- [Inbox](/en/messages/inbox)

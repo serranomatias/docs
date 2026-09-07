@@ -1,0 +1,206 @@
+---
+title: 'Guía de prompts'
+description: 'Cómo escribir las instrucciones de un agente de voz: cómo las lee el agente, el esqueleto recomendado (Rol, Contexto, Objetivo, Flujo, Herramientas, Formatos de respuesta, Límites, Cierre), secciones editables, menciones de herramientas con @, variables, instrucciones frente a base de conocimiento, agentes especializados con triage, pruebas en tres fases y errores comunes, con un ejemplo completo.'
+sidebarTitle: 'Guía de prompts'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read" route="Agentes → Voz → Instrucciones" />
+
+Las instrucciones son la parte del agente que más pesa en el resultado. Esta guía explica cómo el agente las lee, qué estructura funciona mejor en voz y cómo probarlas. Los campos de la pestaña, el editor y sus atajos están en [Instrucciones](/es/agentes-de-voz/instrucciones); esta página es sobre qué escribir.
+
+## Cómo lee el prompt el agente
+
+Lo que escribís en **Instrucciones** no viaja solo. En cada llamada la plataforma arma el prompt final con, en este orden: el **Objetivo** de la pestaña Instrucciones, el nombre en llamadas, tus instrucciones, los datos del contacto y la fecha y hora actual, los bloques de [Contexto de entrada](/es/agentes-de-voz/avanzado#contexto-de-entrada) que hayas encendido, el idioma o idiomas del agente y unas pautas de estilo fijas: ser conciso, no repetir lo dicho, hablar de forma conversacional, mantenerse en el rol y tolerar errores de transcripción sin mencionarlos. Encima de todo eso actúan los interruptores del [Manual del agente](/es/agentes-de-voz/avanzado#manual-del-agente).
+
+De ahí salen tres reglas:
+
+- No repitas en el prompt lo que la plataforma ya pone: ni "sé breve", ni "no repitas". Usá el espacio para lo que solo vos sabés del negocio.
+- Todo lo que el agente genera se convierte en voz. Escribí para el oído: nada de símbolos, siglas sin explicar, listas con viñetas ni signos de exclamación de apertura, que meten una pausa.
+- El agente no recuerda llamadas anteriores por sí solo. Si necesita historial, encendé **Historial de llamadas** en Contexto de entrada.
+
+Las instrucciones admiten hasta 28.000 caracteres. Podés escribirlas en español o inglés; configurá los idiomas en General y probá cómo responde el agente.
+
+## Esqueleto recomendado
+
+Ocho bloques, con un título Markdown cada uno. No todos son obligatorios, pero el orden ayuda: el agente lee de arriba hacia abajo y lo primero pesa más.
+
+| Bloque | Qué va | Ejemplo de una línea |
+|---|---|---|
+| **Rol** | Quién es, para qué empresa habla, tono y forma de dirigirse al cliente. | "Eres la recepcionista de Clínica Dental Sonrisa. Cálida, breve, con trato formal." |
+| **Contexto** | Qué sabe al empezar: si la llamada es entrante o saliente, qué variables recibe y qué hacer si llegan vacías. | "Si `{{contact_name}}` llega vacío, no preguntes el nombre hasta que haga falta para agendar." |
+| **Objetivo** | Una sola definición de llamada exitosa. | "Éxito: el paciente sale con un turno confirmado con fecha y hora." |
+| **Flujo de la conversación** | Los pasos, uno por turno, con una sola pregunta por paso y qué esperar antes de seguir. | "1. Saludar. 2. Preguntar el motivo. 3. Ofrecer como máximo dos horarios…" |
+| **Herramientas y cuándo usarlas** | Para cada herramienta, en qué momento se usa, qué necesita antes y qué se hace con la respuesta. | "Usa `consultar_disponibilidad` solo después de tener el servicio y el día." |
+| **Formatos de respuesta** | Cómo leer teléfonos, precios, fechas, horas, emails, URLs y siglas, con ejemplos. | "Precio 4500: 'cuatro mil quinientos pesos', nunca '4.500'." |
+| **Límites** | Qué no hace, qué no dice, cómo responde fuera de tema y cuándo pasa a una persona. | "No diagnostiques. Si preguntan por un dolor, ofrece un turno de urgencia." |
+| **Cierre** | Cómo confirma y cómo se despide. | "Repite fecha y hora una vez, pregunta si necesita algo más y despídete en una frase." |
+
+### Secciones editables para lo que cambia seguido
+
+Envolvé un bloque entre `[[Nombre]]` y `[[/Nombre]]`, cada marcador en su propia línea, y el editor lo convierte en una tarjeta del panel **Secciones editables**. Desde ahí alguien del equipo puede actualizar horarios, promociones o precios sin tocar el resto del prompt. **Agregar sección** crea una al final; **Convertir en sección** transforma el texto seleccionado. El título no puede tener corchetes, saltos de línea ni empezar con `/`.
+
+Usalas para **Horarios y servicios**, **Promociones vigentes** o **Preguntas frecuentes del negocio**: todo lo que cambia cada semana.
+
+### Mencionar herramientas con @
+
+Escribí `@` en el editor y aparece **Tools del agente** con las herramientas conectadas en la pestaña Herramientas. Al elegir una, el editor inserta su nombre entre acentos graves, por ejemplo `` `consultar_disponibilidad` ``. Nombrar la herramienta exactamente así en el bloque **Herramientas y cuándo usarlas** evita que el agente confunda dos herramientas parecidas. Ver [Herramientas](/es/agentes-de-voz/herramientas).
+
+### Variables
+
+Las variables se escriben entre llaves dobles y se reemplazan en cada llamada. Las que muestra la app en **Contexto de entrada** son `{{contact_info}}`, `{{contact_name}}`, `{{contact_properties}}`, `{{call_history}}` y `{{last_transcript}}`; además, cada propiedad personalizada del contacto viaja con su propio nombre, por ejemplo `{{plan_contratado}}`, y cada clave que devuelva tu **Webhook propio** también. En las llamadas de prueba, las **Variables dinámicas** del panel llegan con la clave que escribas.
+
+Los cuatro bloques de Contexto de entrada ya están referenciados en el prompt final: solo escribís la variable cuando querés ese dato en un lugar puntual. Siempre indicá qué hacer si la variable llega vacía.
+
+## El truco de "Formatos de respuesta"
+
+La causa más común de una voz que suena mal no es la voz: son los números. Un bloque con ejemplos concretos de "cuando leas X, decí Y" corrige teléfonos, precios, fechas, horas, emails, URLs y siglas. El interruptor **Normalización del habla** del Manual del agente ayuda en general; los ejemplos ganan en los casos de tu país.
+
+```markdown
+## Formatos de respuesta
+- Teléfonos: de a dos o tres cifras, con pausas. "11 5555 1234" se dice "once, cincuenta y cinco, cincuenta y cinco, doce, treinta y cuatro".
+- Precios: en palabras y con la moneda. 4500 se dice "cuatro mil quinientos pesos". Nunca "4.500" ni "$".
+- Fechas: día de la semana y número. "2026-09-14" se dice "el lunes catorce de septiembre".
+- Horas: "15:30" se dice "tres y media de la tarde".
+- Emails: "nombre punto apellido arroba dominio punto com". No deletrees salvo que te lo pidan.
+- URLs: "sonrisa punto com barra turnos". Sin "https" ni "www".
+- Siglas: "IVA" se dice "iva"; "DNI" se dice "de ene i".
+```
+
+Tres hábitos más que cambian mucho en voz:
+
+- Sin signos de exclamación de apertura: un saludo simple sin puntuación enfática. El signo mete una pausa.
+- Sin enumeraciones: las opciones van en una sola frase hablada. "Tenemos limpieza, blanqueamiento y ortodoncia, ¿cuál le interesa?" en lugar de una lista.
+- Sin parafrasear al usuario: "Ingresa a la página y elige Recuperar contraseña" en lugar de "Claro, quieres recuperar tu contraseña, para eso…".
+
+## Instrucciones o base de conocimiento
+
+Poné en las instrucciones todo lo que el agente debe saber en todo momento: quién es, qué vende, precios base, horarios, políticas cortas. Es lo más rápido y lo más fiable, porque el agente lo tiene delante en cada turno.
+
+La [base de conocimiento](/es/agentes-de-voz/base-de-conocimiento) sirve cuando el contenido no entra en el prompt: catálogos largos, manuales, reglamentos. El agente no la tiene delante; la consulta con la herramienta **Base de conocimiento** cuando decide que la necesita, y eso agrega una búsqueda a mitad de la conversación. Decile en las instrucciones cuándo consultarla ("si preguntan por un tratamiento que no está en Horarios y servicios, busca en la base de conocimiento antes de responder") y qué hacer si no encuentra nada.
+
+Regla práctica: si cabe en una sección editable, va en el prompt. Si son documentos, va en la base de conocimiento.
+
+## Agentes especializados en lugar de un mega-agente
+
+Un solo agente con ventas, soporte, cobranzas y agenda en el mismo prompt se equivoca más, porque cada bloque compite por su atención. Funciona mejor un agente de triage corto, que detecta la intención en una o dos preguntas y deriva con la herramienta **Traspaso de agente**, y un agente por tarea con su propio prompt, sus herramientas y sus etiquetas.
+
+El agente de triage necesita solo: rol, las intenciones que reconoce, a qué agente pasa cada una y qué hace si no entiende. Cada agente especializado empieza sabiendo que ya fue derivado, así no vuelve a preguntar el motivo. Ver [Herramientas](/es/agentes-de-voz/herramientas).
+
+## Probar en tres fases
+
+<Steps>
+  <Step title="Llamadas web desde el panel">
+    Publicá y abrí **Probar agente**. Cargá **Datos de contacto** y **Variables dinámicas** con casos reales. Leé la transcripción en vivo y, al terminar, abrí la llamada en **Llamadas de prueba recientes** para revisar cada marcador **Usó herramienta** con sus argumentos y su resultado. Corregí el prompt, publicá con una nota y repetí. Probá también los caminos malos: número equivocado, cliente que no quiere nada, silencio.
+  </Step>
+  <Step title="Llamadas telefónicas a tu propio número">
+    En la pestaña **Teléfono**, llamate a vos y a dos personas del equipo. Escuchá el ritmo, los números, las pausas y los cortes. Ajustá **Velocidad**, **Rapidez de respuesta** y **Sensibilidad a interrupciones** en Avanzado antes de tocar el prompt.
+  </Step>
+  <Step title="Volumen real, poco al principio">
+    Poné el agente en producción con pocas llamadas y crecé de a poco. Activá **Etiquetas de llamada** para lo que querés detectar, **Datos de análisis** para lo que querés medir y **Criterios de evaluación** para calificar cada llamada. Revisá **Llamadas** todos los días la primera semana. Si una publicación empeora las cosas, **Restaurar esta versión** vuelve atrás en un clic.
+  </Step>
+</Steps>
+
+Ver [Versiones, publicación y pruebas](/es/agentes-de-voz/versiones-y-pruebas).
+
+## Errores comunes
+
+| Error | Qué pasa | Cómo corregirlo |
+|---|---|---|
+| Varias preguntas en un turno | La persona responde una y el agente pierde las otras. | Una pregunta por paso y "espera la respuesta" antes del siguiente. |
+| Instrucciones contradictorias | "Sé breve" al principio y "explica en detalle" al final: el comportamiento puede ser inconsistente. | Una sola regla por tema; borrá la versión vieja al cambiar de idea. |
+| Precios y horarios sueltos en la prosa | Cambian y nadie los encuentra en 28.000 caracteres. | Sección editable **Horarios y servicios**. |
+| Datos inventados | El agente ofrece un horario o un precio que no existe. | "Los horarios salen solo de `consultar_disponibilidad`. Si la herramienta no devuelve nada, no ofrezcas ninguno." |
+| Variable vacía leída en voz alta | El agente dice "hola, contact name". | Indicá qué hacer si la variable llega vacía y nunca leer texto entre llaves. |
+| Herramienta repetida | Agenda dos turnos porque la persona confirmó dos veces. | "Llama a `agendar_turno` una sola vez por pedido. Si ya respondió con éxito, no la vuelvas a llamar." |
+| Sin cierre | La llamada se estira hasta la duración máxima. | Un bloque **Cierre** con la despedida y la instrucción de terminar. |
+| Probar el borrador | Cambiás el prompt y "no pasa nada". | Las pruebas usan la versión publicada: publicá antes de probar. |
+
+## Ejemplo completo: recepcionista de una clínica dental
+
+Un agente entrante para la ficticia Clínica Dental Sonrisa. Usa dos herramientas personalizadas creadas en la pestaña Herramientas, `consultar_disponibilidad` y `agendar_turno`, la variable `{{contact_name}}` del contexto de entrada y una sección editable para lo que cambia seguido.
+
+```markdown
+## Rol
+Eres Ana, recepcionista de Clínica Dental Sonrisa. Hablas en español neutro, con trato de usted, cálida y breve. Suenas como alguien que trabaja en la clínica, no como un contestador. Máximo dos frases por turno y una sola pregunta por turno.
+
+## Contexto
+Atiendes llamadas entrantes. Si `{{contact_name}}` tiene valor, saluda por el nombre; si llega vacío, saluda sin nombre y pregunta el nombre solo cuando vayas a agendar. Nunca leas en voz alta texto entre llaves ni nombres de herramientas.
+
+## Objetivo
+Llamada exitosa: la persona sale con un turno confirmado con servicio, fecha y hora, o con su duda resuelta.
+
+## Flujo de la conversación
+1. Saluda: "Clínica Dental Sonrisa, buenas tardes, habla Ana, ¿en qué le puedo ayudar?" y espera la respuesta.
+2. Identifica la intención: agendar, cambiar o cancelar un turno, o una consulta.
+3. Si agenda: pregunta el servicio y luego el día preferido, de a una pregunta.
+4. Con servicio y día, usa `consultar_disponibilidad` y ofrece como máximo dos horarios en una sola frase.
+5. Antes de agendar, repite servicio, fecha y hora y espera el sí.
+6. Con el sí, usa `agendar_turno` una sola vez.
+7. Confirma con lo que devolvió la herramienta y pasa al cierre.
+
+## Herramientas y cuándo usarlas
+- `consultar_disponibilidad`: solo después de tener servicio y día. Los horarios salen únicamente de esta herramienta; nunca ofrezcas uno que no devolvió.
+- `agendar_turno`: una sola vez por pedido, después de la confirmación. Si ya respondió con éxito, no la vuelvas a llamar aunque la persona repita el sí. Si falla, pide disculpas y ofrece que la clínica devuelva el llamado.
+
+## Formatos de respuesta
+- Fechas: día de la semana y número, "el jueves diecisiete".
+- Horas: "diez y media de la mañana", nunca "10:30".
+- Precios: en palabras y con moneda, "ocho mil pesos".
+- Teléfonos: de a dos cifras con pausas.
+- Sin listas: las opciones van en una frase.
+
+[[Horarios y servicios]]
+Atendemos de lunes a viernes de nueve a dieciocho y sábados de nueve a trece.
+Servicios: limpieza (cuarenta minutos, ocho mil pesos), blanqueamiento (una hora, veinticinco mil pesos), consulta de ortodoncia (treinta minutos, sin cargo).
+[[/Horarios y servicios]]
+
+## Límites
+- No diagnostiques ni recomiendes medicación. Si describen dolor, ofrece un turno de urgencia para hoy o mañana.
+- No hables de tratamientos que no estén en Horarios y servicios; di que lo consulta con el odontólogo.
+- Si preguntan si eres una IA, dilo con naturalidad y sigue ayudando.
+- Si piden hablar con una persona, toma nombre y motivo y avisa que la clínica devuelve el llamado.
+
+## Cierre
+Repite una sola vez fecha y hora del turno, pregunta "¿Le ayudo en algo más?" y despídete en una frase: "Perfecto, lo esperamos el jueves. Que tenga buen día."
+```
+
+Para adaptarlo: cambiá el rol y la sección editable, conectá tus herramientas en Herramientas y mencionalas con `@` para que los nombres queden exactos, y agregá en **Contexto de entrada** los bloques que quieras que el agente reciba.
+
+{/* captura: images/agentes-de-voz/guia-de-prompts-editor-es.png | Editor de instrucciones con el prompt de ejemplo, el panel Secciones editables mostrando Horarios y servicios y una mención de herramienta | app: /agents/voice/[id]?activeTab=instructions */}
+
+## Qué no existe todavía
+
+- No hay un evaluador de prompts previo a la llamada: la única prueba es una llamada de prueba con la versión publicada.
+- Las plantillas de prompt se eligen al [crear el agente](/es/agentes-de-voz/crear); no se puede aplicar una plantilla a un agente existente.
+- No hay biblioteca de secciones compartida entre agentes: cada prompt tiene sus propias secciones editables.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Escribo las instrucciones en español o en inglés?">
+    Podés usar cualquiera de los dos; verificá el resultado con llamadas representativas. El agente habla en los idiomas configurados en General, no en el idioma del prompt.
+  </Accordion>
+  <Accordion title="¿Cuánto puede medir el prompt?">
+    Hasta 28.000 caracteres, con contador en el editor. Antes de llegar al límite, mové a la base de conocimiento lo que sea documento y dejá en el prompt solo lo que el agente necesita en todo momento.
+  </Accordion>
+  <Accordion title="¿Cómo evito que el agente invente datos?">
+    Tres capas: en **Límites** decí qué no sabe y qué responde fuera de tema; en **Herramientas** aclará que los datos salen solo de las herramientas; y activá **No salirse del tema** en el Manual del agente. Para negocios con varias tareas, agentes especializados con triage se equivocan menos que un mega-agente.
+  </Accordion>
+  <Accordion title="¿Cómo corrijo que lea mal un teléfono, un precio o una fecha?">
+    Agregá un bloque **Formatos de respuesta** con el ejemplo exacto: "cuando leas X, decí Y". Funciona para teléfonos, precios, correos, URLs, fechas, horas y siglas. Activar **Normalización del habla** en el Manual del agente ayuda, pero el ejemplo concreto siempre gana.
+  </Accordion>
+  <Accordion title="¿Tengo que escribir {{contact_info}} para que el agente sepa quién llama?">
+    No. Con encender el bloque en **Contexto de entrada** alcanza: ya está referenciado en el prompt final. Escribí la variable solo si querés ese dato en un lugar puntual, por ejemplo en el saludo, o si usás una propiedad personalizada o una clave de tu webhook propio.
+  </Accordion>
+  <Accordion title="¿Conviene un agente único o varios?">
+    Varios agentes especializados por tarea con un agente de triage que deriva con **Traspaso de agente**. Un mega-agente con todo en el mismo prompt se confunde más. Ningún agente acierta el 100 % de las veces: por eso conviene medir con etiquetas, datos de análisis y criterios de evaluación.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Instrucciones](/es/agentes-de-voz/instrucciones)
+- [Herramientas](/es/agentes-de-voz/herramientas)
+- [Base de conocimiento](/es/agentes-de-voz/base-de-conocimiento)
+- [Versiones, publicación y pruebas](/es/agentes-de-voz/versiones-y-pruebas)

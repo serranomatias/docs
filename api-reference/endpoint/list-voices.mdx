@@ -1,0 +1,33 @@
+---
+title: "List Voices"
+api: "GET /v1/agents/voices"
+description: "Retrieve available voice records and IDs for voice-agent configuration."
+---
+
+Retrieve available voice records and IDs for voice-agent configuration.
+
+## Authentication
+
+<ParamField header="x-api-key" type="string" required>Organization API key. Keep it on your server or in a credential store.</ParamField>
+
+## Example
+
+```bash
+curl 'https://api.contactship.ai/v1/agents/voices'   -H 'x-api-key: YOUR_API_KEY'
+```
+
+## Response
+
+<ResponseField name="statusCode" type="number">200 on success.</ResponseField>
+<ResponseField name="data" type="object[]">Available voice records.</ResponseField>
+<ResponseField name="data[].id" type="string">Voice ID to pass as `voice_id` when creating or updating an agent.</ResponseField>
+<ResponseField name="data[].name" type="string">Display name.</ResponseField>
+<ResponseField name="data[].language" type="string">Language metadata.</ResponseField>
+<ResponseField name="data[].accent" type="string">Accent metadata.</ResponseField>
+<ResponseField name="data[].gender" type="string">Gender metadata.</ResponseField>
+<ResponseField name="data[].age" type="string">Age metadata.</ResponseField>
+<ResponseField name="data[].description" type="string">Voice description.</ResponseField>
+<ResponseField name="data[].preview_url" type="string">Audio preview when available.</ResponseField>
+<ResponseField name="data[].avatar_url" type="string">Avatar when available.</ResponseField>
+
+Treat catalog values as current response data rather than hardcoding a sample voice ID. Preview metadata may be absent. A voice record’s ID is distinct from an agent ID. See [Create agent](/api-reference/endpoint/create-agent).

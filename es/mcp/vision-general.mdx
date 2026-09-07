@@ -11,7 +11,7 @@ En vez de entrar a la plataforma, buscar el agente, editar el prompt, configurar
 
 > "Creame un agente de cobranzas para México que suene profesional. Que extraiga si el cliente se comprometió a pagar y el monto."
 
-Y listo. 30 segundos.
+Revisá el cambio propuesto y el resultado de la herramienta para confirmar que se aplicó.
 
 Eso es **ContactShip MCP**: un puente que conecta tu cuenta de ContactShip con asistentes de IA como Claude, Cursor o Claude Code. Vos hablás en lenguaje natural, y la IA se encarga de todo lo técnico.
 
@@ -33,7 +33,7 @@ Eso es **ContactShip MCP**: un puente que conecta tu cuenta de ContactShip con a
     Ver qué números telefónicos tenés disponibles para hacer llamadas salientes.
   </Card>
   <Card title="Revisar resultados de llamadas" icon="chart-bar">
-    Pedile a tu IA que revise todos los resultados de tus agentes de voz a escala — encontrá patrones, controlá calidad, obtuné resúmenes — sin escuchar grabaciones una por una.
+    Pedile a tu IA que revise todos los resultados de tus agentes de voz a escala — encontrá patrones, controlá calidad, obtené resúmenes — sin escuchar grabaciones una por una.
   </Card>
 </CardGroup>
 
@@ -46,7 +46,7 @@ Eso es **ContactShip MCP**: un puente que conecta tu cuenta de ContactShip con a
     Funciona con Claude (web, desktop y Code), Cursor, y cualquier app compatible con MCP.
   </Step>
   <Step title="Conectá tu cuenta">
-    Pegás tu API key de ContactShip y listo. La conexión se hace en menos de 2 minutos.
+    Pegás tu API key de ContactShip y listo. Seguí los pasos de conexión del cliente que uses.
   </Step>
   <Step title="Hablale a tu IA">
     Pedile lo que necesites en lenguaje natural. La IA entiende el contexto y ejecuta las acciones por vos.
@@ -89,13 +89,21 @@ Pedile a tu IA que:
 - **Obtenga detalles completos** — transcripción, variables extraídas, duración, grabación
 - **Encuentre patrones** — qué llamadas tuvieron éxito, cuáles tuvieron objeciones, qué dijeron más los clientes
 
-Las transcripciones usan el **formato TOON** (Turn-Oriented Optimized Notation), una representación compacta diseñada para procesamiento eficiente por IA. Esto permite que tu IA pueda leer y razonar sobre grandes cantidades de transcripciones de forma rápida y precisa.
+El asistente procesa los resultados que devuelven las herramientas. Revisá sus filtros y la cobertura de datos antes de interpretar un resumen como completo.
 
 ---
 
+## Herramientas y publicación
+
+Para resumir volumen y resultados, usá `summarize_calls`; para buscar menciones, `search_calls`. `list_calls` devuelve una lista compacta y `get_call` permite leer una llamada en detalle.
+
+Los agentes de voz permiten cambios en borrador con `update_agent_draft` y publicación explícita con `publish_agent`. `update_agent` publica directamente y puede rechazar la operación si existe un borrador abierto. Indicá si querés preparar un borrador o aplicar un cambio a las llamadas nuevas.
+
+El servidor también incluye herramientas de contactos, tableros, tareas y WhatsApp. Las de agentes de texto, conversaciones y analítica dependen de los servicios habilitados. Revisá las herramientas que muestra tu cliente conectado para confirmar cuáles están disponibles.
+
 ## Requisitos
 
-<Check>Una cuenta en ContactShip con suscripción Starter ($30 USD/mes) o superior</Check>
+<Check>Una cuenta en ContactShip con un plan con acceso a la API</Check>
 <Check>Tu API key — generala desde [Settings > API Keys](https://app.contactship.ai/es/organization/api-keys)</Check>
 <Check>Un asistente de IA compatible (Claude, Cursor, u otro con soporte MCP)</Check>
 
@@ -123,5 +131,5 @@ Cada API key corresponde a una sola organización. Si manejás varias, mirá [Va
 </CardGroup>
 
 <Tip>
-¿No tenés tu API key? Generala desde [app.contactship.ai/es/organization/api-keys](https://app.contactship.ai/es/organization/api-keys). Necesitás la suscripción Starter o superior.
+¿No tenés tu API key? Generala desde [app.contactship.ai/es/organization/api-keys](https://app.contactship.ai/es/organization/api-keys). Necesitás un plan con acceso a la API.
 </Tip>

@@ -1,0 +1,69 @@
+---
+title: "Configure a channel"
+description: "Set assignment, hours, greetings, inactivity alerts, and conversation webhooks."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Inbox → Channels → Channel settings" permission="channels.update" />
+
+Configure each channel independently. Review all changes and use **Save changes**; the WhatsApp calling toggle is an immediate exception.
+
+## Assignment
+
+Rules are evaluated in order. Put specific schedules above an always-matching default. Choose **Always** or a schedule with days, start/end times, and time zone. A range ending before its start crosses midnight.
+
+Targets are an AI text agent, a person, or a rotation labeled **Team**. This rotation selects people; it is not the organization’s team hierarchy.
+
+| Rotation setting | Behavior |
+|---|---|
+| Round robin | Assigns to the next eligible person. |
+| Least busy | Uses assignments over a 1–30 day window, default 7. |
+| Weighted | Uses member weights, from 1–100 when selecting people. |
+| Members | All eligible people with exclusions, or a selected list. |
+| Online only | Excludes people without the app open. |
+| Fallback | Required for a rotation; choose AI or a person when no member is eligible. |
+
+A rule pointing to AI needs an agent. Complete every schedule and fallback before saving.
+
+## Replies and operating hours
+
+Choose the channel time zone and weekly windows. Presets replace existing windows, so review them before saving. The default schedule is Monday–Friday 09:00–18:00 in America/Mexico_City. Holidays and exceptions are full dates.
+
+The out-of-hours message is sent while AI replies are held until service hours resume. Human composers are not blocked by the operating schedule. An optional out-of-hours POST webhook provides `thread_id`, `from`, `message`, and `timestamp`.
+
+Automatic greetings can run on the first agent response, the first response each day, or after inactivity of at least one hour. Choose to prepend the greeting to the AI reply or send a fixed greeting without an AI reply. Review the preview and interaction with working hours.
+
+## Alerts, connection, and calling
+
+Inactivity alerts take a positive value in minutes, hours, or days. Duplicate durations are rejected. Connection settings show the channel connection and name.
+
+The calling section displays number eligibility and messaging tier. The inbound WhatsApp calling toggle saves immediately and is disabled for an ineligible number. A displayed calling option does not guarantee every channel can use it.
+
+## Advanced conversation webhook
+
+Choose the URL and events: `INSERT` for conversation creation, `UPDATE` for changes, and `DELETE` for deletion. These are conversation events, distinct from outgoing call webhooks and automation rules. Verify the actual received payload for your integration.
+
+Use the test-message QR/link to open the channel from a phone and send a controlled message. Check both assignment and reply behavior after saving.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why did a conversation go to the wrong person?">
+    Check the first matching rule, schedule time zone, eligible people, and fallback.
+  </Accordion>
+  <Accordion title="Does the operating schedule block humans?">
+    No. It controls AI/out-of-hours behavior; human composers remain available subject to the WhatsApp reply window.
+  </Accordion>
+  <Accordion title="Why won’t the settings save?">
+    Look for an incomplete AI target, missing rotation fallback, incomplete schedule, or invalid alert duration.
+  </Accordion>
+  <Accordion title="Does enabling WhatsApp calling need Save changes?">
+    The calling toggle applies immediately.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Connect WhatsApp](/en/messages/connect-whatsapp)
+- [Inbox](/en/messages/inbox)
+- [Automations](/en/messages/automations)

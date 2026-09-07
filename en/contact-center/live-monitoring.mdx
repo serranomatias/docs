@@ -1,0 +1,52 @@
+---
+title: "Live monitoring"
+description: "Monitor waiting, ringing and connected calls. Review delays and listen through the softphone."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Live monitoring" permission="reports.read; contact_center.read" addon="Contact center" />
+
+Live monitoring shows current contact center operations. It requires the module enabled plus reports and contact center permissions.
+
+## What to review
+
+| Indicator | Purpose |
+|---|---|
+| Waiting | Find calls awaiting service |
+| Ringing | See connection attempts to agents |
+| Connected | Identify active calls |
+| Longest wait | Prioritize the longest delay |
+
+Visual wait alerts use 30 seconds for warning and 60 seconds for critical. These are separate from a queue's maximum waiting time.
+
+## Listen to a call
+
+1. Find an active call in the table.
+2. Choose **Listen**.
+3. Answer the supervision connection in your softphone and check listening status.
+4. End listening when finished.
+
+If connection fails, check the softphone and whether the call is still active. A call can end between selection and connection.
+
+## Not yet available
+
+Whisper and barge options are marked as coming soon. Listening is available. Use **Queue activity** for historical periods.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does the 60-second warning end the call?">
+    No. It is a visual threshold. Maximum wait and fallback depend on the queue.
+  </Accordion>
+  <Accordion title="Can I speak only to the advisor?">
+    Whisper is marked as coming soon. The available function is listening.
+  </Accordion>
+  <Accordion title="Why did a call disappear?">
+    The view shows current activity. Find completed calls in Queue activity or the call log.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Queue activity](/en/contact-center/queue-activity)
+- [Softphone](/en/contact-center/softphone)

@@ -1,0 +1,112 @@
+---
+title: 'Text agent tools'
+description: 'Configure eleven text tools for delegation, tags, boards, notes, documents, external APIs, files, agent transfers and contact updates.'
+tag: 'New'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" permission="agents.read; agents.update to edit" route="Agents → Text → Tools" status="nuevo" />
+
+Tools act on conversations and query other systems. The AI decides when to invoke them using tool descriptions and agent instructions. Adding a tool does not make it run on every message.
+
+## Add and save
+
+<Steps>
+  <Step title="Open Tools">
+    Open the text agent and select **Tools → Add**. Find a tool in the catalog.
+  </Step>
+  <Step title="Configure its fields">
+    Complete its name, description and applicable destinations, fields or files. The description explains when to use it.
+  </Step>
+  <Step title="Save the tab">
+    Confirm the dialog and save **Tools**. Tool changes take effect when you save this tab.
+  </Step>
+  <Step title="Check the AI’s decision">
+    Open **Test agent**. Write a request that should trigger the tool and inspect its simulated arguments.
+  </Step>
+</Steps>
+
+## Catalog
+
+| Tool | Purpose | Preparation |
+|---|---|---|
+| Delegate conversation | Assigns to your team using channel rules and distribution pools | Destinations, availability and fallback |
+| Tag conversation | Applies inbox tags without duplicates | Enabled tags and an instruction for each |
+| Move contact in board | Moves a contact between enabled stages | Board, stages and a criterion for each |
+| Add note | Leaves an internal note for your team | Instructions on what to record |
+| Search documents | Queries uploaded documents and files | Relevant documents |
+| Knowledge base | Searches the knowledge base | Current content and search instructions |
+| External API | Sends an HTTP request to your system | Endpoint and parameters for the AI to extract |
+| Send image | Sends a predefined image | JPG or PNG up to 5 MB |
+| Send PDF | Sends a predefined PDF | PDF file up to 10 MB |
+| Transfer to agent | Passes the conversation to another AI agent | Fixed destination or agents with selection criteria |
+| Update contact | Updates enabled contact fields | Allowed fields and extraction instructions |
+
+## Delegate to a person
+
+Delegation rules are configured by channel and can distribute across several people. Review availability, quotas and fallback destinations.
+
+| Pool strategy | Criterion |
+|---|---|
+| Round robin (`round_robin`) | Takes turns among eligible members |
+| Weighted round robin (`weighted_round_robin`) | Takes turns considering configured weights |
+| Least active load (`least_active_load`) | Prioritizes the lowest active workload |
+| Priority order (`priority_order`) | Follows the configured order |
+
+This is different from **Transfer to agent**, which selects another AI. Direct transfer uses one fixed destination. Smart transfer uses a list of agents with descriptions explaining when to select each. You can also configure an automatic reply and system note.
+
+## Tags, stages and contact data
+
+In **Tag conversation**, enable at least one tag and explain when to apply it. Create tags in inbox settings first.
+
+In **Move contact in board**, select a board and enable stages with instructions. If you enable email notifications for a stage, choose recipients.
+
+In **Update contact**, enable only the fields the agent needs to write. The tool updates during the conversation without an additional confirmation. Write instructions that prevent replacing confirmed information with guesses.
+
+## External API
+
+The configurator requests an endpoint URL and a description of when to use the tool. Add parameters for the AI to extract and mark required fields.
+
+The endpoint receives a POST containing thread context and arguments. In **Test**, enter sample values, inspect the payload and send a test request.
+
+<Warning>
+The HTTP configurator sends a real request to your endpoint. It can change your system. Use test data and a test endpoint. The chat sandbox displays simulated tool executions instead.
+</Warning>
+
+## Common problems
+
+| Message or symptom | Cause and solution |
+|---|---|
+| No tools connected | Add a tool and save **Tools**. |
+| At least one tag is required | Enable a tag and complete its instruction. |
+| The board has no stages | Create stages before configuring the tool. |
+| No other agents available | Create another text agent or check its availability in the organization. |
+| Unsupported image type | Use JPG or PNG and stay within 5 MB. |
+| Connection failure | Check the endpoint; browser-based tests also require compatible CORS settings. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Is writing ‘send the catalog’ in the instructions enough?">
+    Add **Send image** or **Send PDF**, upload the file and describe when to send it. Save **Tools** and test the request in the [sandbox](/en/text-agents/sandbox).
+  </Accordion>
+  <Accordion title="Are contact tags and conversation tags the same?">
+    No. **Tag conversation** uses inbox tags. Manage contact tags separately under [Contact tags](/en/contacts/tags).
+  </Accordion>
+  <Accordion title="Can the tool change all contact information?">
+    Enable only the fields you need in its configuration. Review each field instruction and inspect arguments before using the agent with customers.
+  </Accordion>
+  <Accordion title="Does the sandbox verify that my API works?">
+    It shows what the AI would have executed. Check the actual connection using the HTTP tool's **Test** tab against a test environment.
+  </Accordion>
+  <Accordion title="Why was a tool I added not saved?">
+    Confirming its dialog stages the change. Save **Tools** and check the save status.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Instructions](/en/text-agents/instructions)
+- [Test in the sandbox](/en/text-agents/sandbox)
+- [Channel settings](/en/messages/channel-settings)
+- [Contacts and properties](/en/contacts/contacts-and-properties)

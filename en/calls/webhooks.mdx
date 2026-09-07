@@ -1,0 +1,52 @@
+---
+title: "Call webhooks"
+description: "Configure delivery and investigate pending or failed events."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Calls → Webhooks" permission="calls.read" />
+
+A webhook sends call data to your system through a **POST** request. A call can finish successfully even if delivery to your endpoint fails.
+
+## Configure and test
+
+1. Open the voice agent and go to **Advanced → Post-call**.
+2. Set the outgoing webhook URL. The inbound webhook supplies agent context and serves a different purpose.
+3. Save and publish the agent configuration.
+4. Make a controlled call through **Test agent** and wait for analysis.
+5. Inspect the received body and HTTP response in your receiver and in **Calls → Webhooks**.
+
+The current editor has no sample-payload test button. Test calls can trigger real actions in your receiver.
+
+## Investigate delivery
+
+Open an event in **Calls → Webhooks** to inspect its URL, status, attempts, HTTP response, raw data, and associated call.
+
+| Status | Next step |
+|---|---|
+| Delivered | Confirm that your application processed the content as well as acknowledging delivery. |
+| Pending | Check again before starting manual recovery. |
+| Failed | Read the response code and message, fix the receiver, and select **Retry** when available. |
+
+Store the event ID alongside the call ID in your logs. Make your receiver tolerate repeated deliveries: a retry must not create duplicate tickets or repeat an operation.
+
+These deliveries are separate from messaging channel webhooks, inbox automations, and lead-routing events. Each has its own configuration and content.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does retrying place another call?">
+    No. It retries event delivery. Your receiver may repeat actions unless it handles duplicates.
+  </Accordion>
+  <Accordion title="Is the inbound webhook the same?">
+    No. The inbound webhook obtains context before the conversation; the outgoing webhook delivers call information.
+  </Accordion>
+  <Accordion title="What should I send support?">
+    The event ID, call ID, date, and HTTP response, with receiver secrets removed.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Call log](/en/calls/call-log)
+- [Post-call](/en/voice-agents/post-call)

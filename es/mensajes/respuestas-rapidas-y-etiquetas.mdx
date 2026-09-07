@@ -1,0 +1,146 @@
+---
+title: 'Respuestas rápidas y etiquetas'
+description: 'Respuestas rápidas del inbox (un solo campo Content, se insertan desde el botón Quick Replies del compositor) y etiquetas de conversación (nombre, descripción, color, avisos por email a usuarios, contador de conversaciones) y en qué se diferencian de las etiquetas de contacto y de llamada.'
+tag: 'Nuevo'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="quick-replies.read y tags.read" route="Ajustes → Inbox → Respuestas Rápidas · Etiquetas" status="nuevo" />
+
+Las respuestas rápidas son textos guardados que insertás en el compositor de la bandeja con un clic. Las etiquetas de conversación clasifican cada conversación del inbox y pueden avisar por email a las personas que elijas. Se administran en **Ajustes → Inbox → Respuestas Rápidas** y **Ajustes → Inbox → Etiquetas**. Las dos pantallas están en inglés en la app: acá se nombran los botones y campos tal como aparecen.
+
+## Respuestas rápidas
+
+La pantalla **Quick Replies** lista las respuestas de toda la organización. Cualquier miembro con `quick-replies.read` las ve y las usa desde la bandeja. No hay respuestas privadas por usuario.
+
+{/* captura: images/mensajes/respuestas-rapidas-lista-es.png | Pantalla Quick Replies con tres respuestas en tarjetas y el botón New Quick Reply | app: /settings/inbox/quick-replies */}
+
+### Crear, editar y borrar
+
+<Steps>
+<Step title="Hacé clic en New Quick Reply">
+Requiere el permiso `quick-replies.create`. Se abre el diálogo **New Quick Reply**.
+</Step>
+<Step title="Escribí el texto en Content">
+Es el único campo. Es obligatorio: si lo dejás vacío, la app muestra **Content is required**. Podés usar varias líneas.
+</Step>
+<Step title="Confirmá con Create Quick Reply">
+La respuesta aparece como tarjeta con las primeras tres líneas del texto y la fecha **Updated At**.
+</Step>
+</Steps>
+
+Al pasar el cursor sobre una tarjeta aparecen dos botones: el lápiz abre **Edit Quick Reply** (permiso `quick-replies.update`) y el tacho abre **Delete Quick Reply?** (permiso `quick-replies.delete`). Borrar es definitivo: **This action cannot be undone.**
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Content** | Texto que se inserta en el compositor. | Texto libre, obligatorio, sin límite de longitud en la app | Vacío |
+
+### Insertar una respuesta desde la bandeja
+
+En una conversación, con el compositor en modo **Responder**, hacé clic en **Quick Replies** (en pantallas chicas es solo el ícono). Se abre la lista con el texto de cada respuesta; al hacer clic en una, el texto se inserta en la posición del cursor y podés editarlo antes de enviar. El botón **New** del panel abre la pantalla de ajustes en otra pestaña.
+
+Dos detalles:
+
+- No hay atajo de teclado ni comando con `/`. La única forma de insertar una respuesta es el botón **Quick Replies**.
+- En WhatsApp, si pasaron más de 24 horas desde el último mensaje del contacto, el botón queda deshabilitado. Ahí solo podés enviar una [plantilla](/es/mensajes/plantillas).
+
+{/* captura: images/mensajes/respuestas-rapidas-composer-es.png | Panel Quick Replies abierto sobre el compositor de una conversación | app: /inbox */}
+
+## Etiquetas de conversación
+
+La pantalla **Inbox Tags** administra las etiquetas que se aplican a conversaciones del inbox. Son distintas de las etiquetas de contacto y de las etiquetas de llamada (ver más abajo).
+
+{/* captura: images/mensajes/etiquetas-inbox-lista-es.png | Pantalla Inbox Tags en vista de tabla con las columnas Name, Description, Conversations y Created | app: /settings/inbox/tags */}
+
+### Crear una etiqueta
+
+**New Tag** (permiso `tags.create`) abre el diálogo **New Tag** con estos campos:
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Name** | Nombre visible en la bandeja. Obligatorio. | Texto | Vacío |
+| **Description** | Texto de ayuda que se ve en la lista. Opcional. | Hasta 255 caracteres | Vacío |
+| **Email Notifications** | Envía un email cuando se asigna esta etiqueta a una conversación. | Activado, desactivado | Desactivado |
+| **Notify Users** | Aparece al activar **Email Notifications**. Miembros que reciben el email. | Uno o más miembros de la organización | Ninguno |
+| **Color** | Color de la etiqueta en la bandeja. | 12 colores pastel | Azul (el primero) |
+
+**Create Tag** guarda. Para modificar una etiqueta usá el lápiz (**Edit Tag**, permiso `tags.update`) y para borrarla el tacho (**Delete Tag?**, permiso `tags.delete`). Borrar es definitivo.
+
+### La lista
+
+- **Search tags** busca por nombre y descripción, sin distinguir acentos. El atajo `/` lleva el foco al buscador.
+- **Sort by**: **Created date**, **Name** o **Conversations**, en orden **Descending** o **Ascending**.
+- Dos vistas: **Cards** (tarjetas con el color, la descripción y el contador) y **Table** (columnas **Name**, **Description**, **Conversations**, **Created**). Se alternan con el botón de vista o la tecla `V`.
+- La columna **Conversations** indica cuántas conversaciones tienen la etiqueta aplicada. Si muestra **—**, el contador todavía no está disponible para tu organización.
+
+### Dónde se usan las etiquetas de conversación
+
+- **En la conversación abierta**: el botón **Tags** de la cabecera abre la lista para aplicar o quitar etiquetas. Las etiquetas aplicadas se ven en el botón y en la tarjeta de la conversación en la lista.
+- **En el filtro de la bandeja**: el ícono de etiquetas de la barra de filtros deja elegir hasta 4 etiquetas a la vez. El panel avisa: **Due to browser limitations, you can only select up to 4 tags.**
+- **En automatizaciones**: la acción **Add Tag to Conversation** aplica etiquetas cuando se cumple una regla. Ver [Automatizaciones del inbox](/es/mensajes/automatizaciones).
+- **En agentes de texto**: la herramienta de etiquetas deja que el agente clasifique la conversación aplicando tus etiquetas del inbox según lo que dice el cliente. Ver [Herramientas de agentes de texto](/es/agentes-de-texto/herramientas).
+- **En campañas de mensajes**: el filtro **Etiquetas de inbox** del asistente selecciona contactos por las etiquetas de sus conversaciones. Ver [Campañas de mensajes](/es/mensajes/campanas).
+- **En reportes**: el reporte **Etiquetas de conversación** muestra cómo quedan clasificadas las conversaciones del período. Ver [Reportes de mensajería](/es/reportes/mensajeria).
+
+### Tres tipos de etiqueta
+
+| Tipo | Se aplica a | Dónde se crea | Avisos por email |
+|---|---|---|---|
+| Etiqueta de conversación | Conversaciones del inbox | **Ajustes → Inbox → Etiquetas** | Sí, a los usuarios elegidos |
+| [Etiqueta de contacto](/es/contactos/etiquetas) | Contactos | **Ajustes → Gestión de Contactos → Etiquetas de Contactos** | No |
+| [Etiqueta de llamada](/es/agentes-de-voz/etiquetas-de-llamada) | Llamadas, aplicadas por el agente de voz | Configuración del agente de voz | Sí, a los usuarios elegidos |
+
+Las tres listas son independientes: crear una etiqueta de conversación no crea una de contacto con el mismo nombre.
+
+## Qué no existe todavía
+
+- Las respuestas rápidas no tienen título, categoría, atajo de teclado ni variables como el nombre del contacto. Editá el texto en el compositor antes de enviar.
+- Las respuestas rápidas no admiten adjuntos: solo texto.
+- No hay respuestas rápidas privadas por usuario. Todas son de la organización.
+- Las etiquetas de conversación no tienen jerarquía ni se combinan.
+- Ninguna de las dos pantallas exporta ni importa datos.
+
+## Problemas frecuentes
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| **Content is required** | Intentaste guardar una respuesta rápida sin texto. | Escribí el contenido. |
+| **Name is required** | Intentaste guardar una etiqueta sin nombre. | Escribí el nombre. |
+| **Description must be less than 255 characters** | La descripción supera 255 caracteres. | Acortá la descripción. |
+| **Error loading quick replies** o **Error loading tags** | La lista no pudo cargarse. | Hacé clic en **Try again**. |
+| **No quick replies found** en el compositor | La organización no tiene respuestas rápidas. | Creá una desde **Create a quick reply** o desde Ajustes. |
+
+Si quitás una etiqueta de una conversación, la lista de conversaciones de otras pestañas abiertas puede seguir mostrándola hasta que las recargues.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+<Accordion title="¿Quién ve mis respuestas rápidas?">
+Todos los miembros de la organización con el permiso `quick-replies.read`. No hay respuestas privadas. Para crear, editar o borrar se necesitan `quick-replies.create`, `quick-replies.update` y `quick-replies.delete`, que se asignan en [Roles y permisos](/es/organizacion/roles-y-permisos).
+</Accordion>
+<Accordion title="¿Puedo insertar una respuesta rápida escribiendo / en el compositor?">
+No. El compositor no tiene comandos con `/`. Hacé clic en **Quick Replies**, elegí la respuesta y el texto se inserta donde está el cursor.
+</Accordion>
+<Accordion title="¿Puedo poner el nombre del contacto en una respuesta rápida?">
+No hay variables en las respuestas rápidas. Insertá el texto y completá el nombre a mano antes de enviar. Si necesitás mensajes con variables, usá una [plantilla de WhatsApp](/es/mensajes/plantillas).
+</Accordion>
+<Accordion title="¿A quién le llega el email cuando se aplica una etiqueta?">
+A los miembros elegidos en **Notify Users**, siempre que **Email Notifications** esté activado en esa etiqueta. El aviso se envía cada vez que la etiqueta se asigna a una conversación, sea a mano, por una automatización o por un agente de texto.
+</Accordion>
+<Accordion title="¿Por qué la columna Conversations muestra un guion?">
+El contador de conversaciones todavía no está disponible para tu organización. La etiqueta funciona igual; solo falta el número.
+</Accordion>
+<Accordion title="¿Qué diferencia hay entre una etiqueta de conversación y una de contacto?">
+La etiqueta de conversación marca una conversación del inbox y puede avisar por email. La etiqueta de contacto marca al contacto en toda la plataforma y se administra en [Etiquetas de contacto](/es/contactos/etiquetas). Un mismo contacto puede tener varias conversaciones con etiquetas distintas.
+</Accordion>
+<Accordion title="¿La IA puede etiquetar conversaciones sola?">
+Sí, de dos formas. Un agente de texto con la herramienta de etiquetas aplica tus etiquetas del inbox según lo que dice el cliente. Una automatización con la acción **Add Tag to Conversation** las aplica cuando se cumple una regla, por ejemplo al cerrar la conversación.
+</Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Trabajar en la bandeja](/es/mensajes/bandeja)
+- [Plantillas de WhatsApp](/es/mensajes/plantillas)
+- [Etiquetas de contacto](/es/contactos/etiquetas)
+- [Automatizaciones del inbox](/es/mensajes/automatizaciones)

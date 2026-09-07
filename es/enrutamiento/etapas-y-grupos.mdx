@@ -1,0 +1,56 @@
+---
+title: "Configurar etapas y grupos"
+description: "Definí entrada, responsables, plazos, reparto y desenlaces del recorrido."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Ajustes → Organización → Enrutamiento de contactos" permission="lead_routing_config.update" addon="Enrutamiento de leads" />
+
+Cada columna del tablero elegido tiene su propia configuración. Abrila desde **Recorrido**; el menú de una columna del tablero también lleva a estos ajustes.
+
+## Definir la entrada y el desenlace
+
+Activá **¿Los leads nuevos entran acá?** en la puerta de entrada. Podés limitarla por canal y condiciones de datos disponibles al crear la tarjeta. En **Cuando la IA lo entrega, mover a**, elegí una etapa que tenga responsables y plazo. Si lo dejás en una columna sin medición, el contacto puede quedar sin asesor ni reloj.
+
+Marcá las etapas finales como **Sí — ganada** o **Sí — perdida**. Una etapa intermedia no representa una conversión por su nombre: importa su configuración de desenlace.
+
+## Responsables y reparto
+
+Activá **Plazo y reasignación automática** y agregá al menos un equipo en **¿Quién lo atiende?**. Revisá miembros directos y subequipos incluidos, quiénes reciben leads y los topes personales. Pertenecer al equipo y recibir leads son ajustes diferentes.
+
+| Estrategia visible | Cómo reparte |
+|---|---|
+| Al que menos tenga | Prioriza menor carga activa. |
+| Por turno | Alterna entre personas elegibles. |
+| Por porcentaje | Compensa el reparto frente a las cuotas configuradas; no es un sorteo simple. |
+
+Definí el **Tope por asesor**, **Intentos acá** y, si hace falta, un **Plazo de esta filial**. Sin plazo propio se usa el de la columna. Sin condiciones de entrada al grupo, acepta cualquier tarjeta elegible que llegue.
+
+## Tiempo y escalamiento
+
+Elegí minutos y reloj **24/7** o **Sólo en horario laboral**. Revisá jornada, feriados y zona horaria de los equipos en sus ajustes. Configurá avisos como porcentajes de tiempo consumido: 50 y 80 significan a la mitad y cuando se consumió el 80 %.
+
+Definí los requisitos de gestión y qué ocurre al cumplirlos. Después revisá intentos dentro de cada grupo, paso al siguiente grupo elegible y el destino al agotarlos. **Dejarla acá, sin dueño** exige intervención humana.
+
+Para WhatsApp, **Si al vencer ya no se le puede escribir** permite reasignar igual, mantener al asesor hasta que el cliente responda o mover conservando al asesor. Elegí el comportamiento que pueda ejecutar tu equipo.
+
+Guardá cada etapa y probá un contacto controlado de entrada a desenlace.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Sin condiciones se exige gestión?">
+    No. Un grupo vacío se cumple con la tarjeta en la etapa. Definí requisitos si querés medir gestión.
+  </Accordion>
+  <Accordion title="¿Puedo dejar un grupo sin asesores elegibles?">
+    La tarjeta esperará y seguirá la política de reintentos y escalamiento. Revisá la nómina y topes.
+  </Accordion>
+  <Accordion title="¿El tope limita cuánto recibe el equipo en total?">
+    El tope por asesor limita tarjetas activas de cada persona; revisá también los topes individuales.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Cómo funciona](/es/enrutamiento/como-funciona)
+- [Equipos](/es/organizacion/equipos)

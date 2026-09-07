@@ -1,0 +1,57 @@
+---
+title: "ContactShip concepts"
+description: "Understand how organizations, agents, channels, contacts, conversations, calls and campaigns fit together."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="ContactShip" />
+
+ContactShip connects AI agents and people through calls and messages. These concepts help you configure the platform and interpret records without confusing features.
+
+## How records relate
+
+| Concept | Meaning | Relationship |
+|---|---|---|
+| Organization | Workspace with data, members and settings | Check which one is active before working |
+| Member | Person with app access | Their role determines actions and scope |
+| Voice agent | AI that handles calls | Uses voice, instructions, tools and versions |
+| Text agent | AI that handles written conversations | Receives conversations through channel assignment |
+| Channel | Messaging connection | Contains rules and conversations |
+| Contact | Person's CRM record | Collects information and associated activity |
+| Conversation | Exchange of messages in a channel | Has a status and assignee |
+| Call | One voice interaction | Has a record, transcript and analysis when available |
+| Campaign | Operation over a contact list | Can use calls or messages |
+
+## From contact to service
+
+A contact can have several calls and conversations. AI or a person handles them according to interaction type and assignment settings. History shows what happened without creating a new contact for every interaction.
+
+A board represents contact progress through stages. A queue distributes calls among people. A team groups members. They can work together, but configuring one does not create the others.
+
+## Three access controls
+
+Availability determines whether a module is enabled for the organization. The plan defines access and limits. A person's role and scope determine what they can do. Check all three when a feature is missing.
+
+## Instructions, tools and knowledge
+
+Instructions explain how to act. Tools execute actions or queries. Knowledge supplies business information. A prompt that says “book an appointment” also needs a configured booking tool.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can a text agent also handle calls?">
+    They are separate types with different settings. Create the type needed for the interaction you want to handle.
+  </Accordion>
+  <Accordion title="Is a conversation the same as a contact?">
+    No. A contact represents a person and can have several associated conversations and calls.
+  </Accordion>
+  <Accordion title="Does a team replace a role?">
+    No. Teams group people; roles define permissions. See [Teams](/en/organization/teams).
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Glossary](/en/get-started/glossary)
+- [Contacts](/en/contacts/contacts-and-properties)
+- [Roles and permissions](/en/organization/roles-and-permissions)

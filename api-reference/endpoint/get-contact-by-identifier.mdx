@@ -36,9 +36,7 @@ This endpoint allows you to retrieve a specific contact using different types of
 
 ## Response
 
-<ResponseField name="status code" type="number">
-  200 on success
-</ResponseField>
+The response is `{ "statusCode": number, "data": object }`. The fields below describe `data`.
 
 <ResponseField name="id" type="string">
   The unique identifier of the contact (UUID format)
@@ -134,7 +132,7 @@ const getContactById = async (contactId) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     
-    const contact = await response.json();
+    const { data: contact } = await response.json();
     console.log('Contact retrieved:', contact);
     return contact;
   } catch (error) {
@@ -165,7 +163,7 @@ const getContactByEmail = async (email) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     
-    const contact = await response.json();
+    const { data: contact } = await response.json();
     console.log('Contact retrieved:', contact);
     return contact;
   } catch (error) {
@@ -196,7 +194,7 @@ const getContactByPhone = async (phoneNumber) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     
-    const contact = await response.json();
+    const { data: contact } = await response.json();
     console.log('Contact retrieved:', contact);
     return contact;
   } catch (error) {
@@ -249,7 +247,7 @@ def get_contact_by_phone(phone_number):
 # Helper function to process the response
 def process_response(response):
     if response.status_code == 200:
-        contact = response.json()
+        contact = response.json()["data"]
         print(f"Contact found: {contact['full_name']}")
         print(f"Phone: {contact['phone_number']}")
         print(f"Email: {contact['email']}")
@@ -284,26 +282,29 @@ get_contact_by_phone(phone_number)
 <ResponseExample>
 ```json Example Response
 {
-  "id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
-  "created_at": "2023-01-01T12:00:00Z",
-  "phone_number": "+12124567890",
-  "full_name": "Juan Pérez",
-  "country": "México",
-  "email": "juan@ejemplo.com",
-  "description": "Lead from LinkedIn campaign",
-  "additional_data": [
-    {
-      "type": "location",
-      "field": "dirección",
-      "value": "Av. Insurgentes 123"
-    },
-    {
-      "type": "text",
-      "field": "notas",
-      "value": "Cliente potencial para servicio premium"
-    }
-  ],
-  "organization_id": "org123456"
+  "statusCode": 200,
+  "data": {
+    "id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
+    "created_at": "2023-01-01T12:00:00Z",
+    "phone_number": "+12124567890",
+    "full_name": "Juan Pérez",
+    "country": "México",
+    "email": "juan@ejemplo.com",
+    "description": "Lead from LinkedIn campaign",
+    "additional_data": [
+      {
+        "type": "location",
+        "field": "dirección",
+        "value": "Av. Insurgentes 123"
+      },
+      {
+        "type": "text",
+        "field": "notas",
+        "value": "Cliente potencial para servicio premium"
+      }
+    ],
+    "organization_id": "org123456"
+  }
 }
 ```
 </ResponseExample>

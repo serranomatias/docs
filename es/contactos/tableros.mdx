@@ -1,0 +1,57 @@
+---
+title: "Tableros y etapas"
+description: "Organizá contactos por etapas, mové tarjetas y diferenciá el avance comercial de la asignación, los SLA y las tareas."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Contactos → Tablero" permission="contact_board.read" />
+
+Un tablero organiza contactos en etapas de un proceso. Cada tarjeta representa un contacto dentro de ese tablero. Las etapas pueden representar, por ejemplo, Nuevo, Contactado y Calificado; adaptalas a tu operación.
+
+## Trabajar con el tablero
+
+1. Abrí **Contactos**, elegí la vista de tablero y seleccioná el tablero que querés consultar.
+2. Revisá las etapas y los contactos que contiene cada una.
+3. Abrí una tarjeta para consultar la ficha del contacto.
+4. Para actualizar el avance, mové la tarjeta a la etapa que corresponda. Necesitás permiso para modificar el tablero.
+
+Desde la tabla también podés seleccionar contactos y ejecutar el movimiento masivo a una etapa. Revisá el trabajo en segundo plano antes de repetirlo.
+
+## Automatizar movimientos
+
+Los agentes pueden mover contactos si configuraste la herramienta correspondiente. En un agente de texto elegí el tablero, habilitá etapas y describí cuándo usar cada una.
+
+Los agentes de voz tienen configuración posterior a la llamada para el tablero. Las automatizaciones del inbox también pueden agregar, mover o quitar contactos de etapas.
+
+Evitá configurar reglas contradictorias que muevan al mismo contacto ante el mismo evento.
+
+## Etapa, responsable y plazo
+
+| Concepto | Qué representa |
+|---|---|
+| Etapa | Avance del contacto en el proceso |
+| Asignado | Persona responsable del registro o conversación |
+| SLA | Plazo de atención cuando está habilitado |
+| Tarea | Trabajo pendiente asociado al proceso |
+
+Mover una tarjeta no equivale por sí solo a asignar una persona, programar una llamada o crear una tarea. Si usás enrutamiento o SLA, revisá sus reglas para esa etapa.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Un tablero de contactos es lo mismo que uno de tareas?">
+    No. Organizan entidades diferentes. Para trabajo pendiente revisá [Tareas](/es/contactos/tareas).
+  </Accordion>
+  <Accordion title="¿Por qué la IA no mueve al contacto?">
+    Revisá el tablero y las etapas habilitadas en su herramienta. Guardá los cambios y probá el criterio que debe disparar el movimiento.
+  </Accordion>
+  <Accordion title="¿Mover una tarjeta activa un plazo automáticamente?">
+    Solo si tu organización tiene la función disponible y hay reglas configuradas. Consultá [Enrutamiento](/es/enrutamiento/como-funciona).
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Contactos y propiedades](/es/contactos/contactos-y-propiedades)
+- [Herramientas de texto](/es/agentes-de-texto/herramientas)
+- [Enrutamiento](/es/enrutamiento/como-funciona)

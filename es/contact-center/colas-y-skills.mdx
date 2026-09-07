@@ -1,0 +1,55 @@
+---
+title: "Colas y skills"
+description: "Definí quién recibe llamadas, la estrategia de distribución, los tiempos de espera y el destino cuando nadie atiende."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Ajustes → Telefonía → Contact Center → Colas" permission="contact_center.read" addon="Contact center" />
+
+Las colas distribuyen llamadas entre personas elegibles. El módulo Contact center necesita activación por organización. Para crear o configurar colas necesitás permisos de creación o edición del módulo.
+
+## Crear una cola
+
+1. Abrí **Colas → Nueva cola** y asignale un nombre.
+2. Elegí quién atiende: **Por skills** o **Lista de agentes**.
+3. Elegí la estrategia de distribución.
+4. Revisá tiempo máximo de espera, tiempo de repique y tipificación.
+5. Configurá qué ocurre cuando nadie atiende y guardá.
+6. Conectá una regla de enrutamiento a la cola y comprobá una llamada de prueba.
+
+## Miembros y distribución
+
+| Opción | Qué hace |
+|---|---|
+| Por skills | Busca personas con las skills requeridas |
+| Lista de agentes | Usa las personas que elegiste explícitamente |
+| A todos a la vez | Hace sonar los teléfonos elegibles al mismo tiempo |
+| Por turnos | Ofrece a una persona por vez y rota |
+| Al que lleva más tiempo libre | Prioriza a quien hace más tiempo que no atiende |
+
+Las skills se asignan en **Agentes y skills**. Son capacidades del equipo humano, no herramientas del agente de IA. Ser miembro no alcanza: el softphone debe estar conectado y en **Disponible** para recibir llamadas de cola.
+
+## Espera y respaldo
+
+El tiempo máximo en cola y el tiempo que suena cada intento son distintos. El selector de repique ofrece 15, 20, 25, 30, 45 y 60 segundos.
+
+Como respaldo podés cortar la llamada, enviarla a buzón o derivarla a un agente de IA. Si elegís IA, completá un destino disponible. La tipificación da tiempo de trabajo después de la llamada antes de recibir otra.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué no suena el teléfono de un miembro?">
+    Comprobá elegibilidad por skills o lista, conexión del softphone y estado Disponible. Revisá también que la llamada entre a esa cola.
+  </Accordion>
+  <Accordion title="¿Una skill de soporte activa herramientas de IA?">
+    No. Las skills se asignan a personas para determinar qué colas pueden atender.
+  </Accordion>
+  <Accordion title="¿Por qué termina en buzón?">
+    Revisá el respaldo y el tiempo de espera. También comprobá si había personas elegibles disponibles.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Softphone](/es/contact-center/softphone)
+- [Enrutamiento](/es/contact-center/reglas-de-enrutamiento)

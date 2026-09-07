@@ -1,0 +1,70 @@
+---
+title: "Advanced voice settings"
+description: "Adjust conversation timing, voice controls, input context, fallback voices, and agent guidelines."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Agents → Voice → Advanced" permission="agents.read; agents.update to edit" />
+
+Most advanced settings save to the draft and require publishing. Board assignments, call tags, and evaluation connections in the post-call section save immediately.
+
+## Voice
+
+| Control | Editor range | Default |
+|---|---|---|
+| Speed | 0.75–1.25, steps of 0.05 | 1 |
+| Expressiveness | 0–2, steps of 0.05 | 1 |
+| Voice volume | 0.5–1.5, steps of 0.1 | 1 |
+| Background volume | 0–2, steps of 0.05; shown when a background is selected | 1 |
+
+Recorded catalog previews do not demonstrate these settings. Publish and test to hear them.
+
+## Conversation
+
+**Response speed** and **Interruption sensitivity** offer 0, 0.25, 0.5, 0.75, and 1, defaulting to 1. Lower response speed waits longer before answering; lower interruption sensitivity makes it harder to interrupt the agent. Change one control at a time and test realistic pauses.
+
+**Opening delay** ranges from 0 to 5 seconds in one-second steps. **Maximum call duration** starts at one minute and cannot exceed the plan cap: Free 3, Starter 7, Pro 30, Growth and Enterprise 60 minutes. **Boosted words** lists product or place names the agent should recognize; Enter adds a word.
+
+## Inbound context
+
+| Block | Configuration |
+|---|---|
+| Contact information | Name, email, and country; `{{contact_info}}` and `{{contact_name}}`. |
+| Contact properties | All, all except selected, or only selected; up to 50 selections. Each property also has its own variable. |
+| Call history | 0–6 calls, default 3; 1–90 days back, default 30; inbound, outbound, or both. |
+| Last transcript | 500–20,000 characters, default 4,000; keeps the end when truncating. |
+
+The optional inbound webhook obtains context through POST. Its returned keys become prompt variables and override matching native context keys. Timeout is 1,000–7,000 ms, default 3,000; the call continues without that response if the timeout is reached. This is separate from outgoing post-call notifications.
+
+Invalid numeric context values prevent saving and publishing until corrected.
+
+## Fallback voices and agent guidelines
+
+Choose fallback voices for voice availability problems; the editor has no configurable fallback priority order.
+
+Guideline switches cover AI disclosure when asked, conversational or default personality, confirmation by repetition, empathy, NATO phonetic spelling, natural filler words, scope boundaries, flexible matching, and speech normalization. Conversational and default personality are mutually exclusive. These are fixed switches; business-specific rules belong in the prompt.
+
+**Danger zone** contains permanent agent deletion for roles with `agents.delete`.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can Enterprise exceed 60 minutes?">
+    The editor’s Enterprise cap is 60 minutes. It does not allow overriding the plan limit.
+  </Accordion>
+  <Accordion title="Why won’t the draft save?">
+    Check red numeric fields in Inbound context and resolve the out-of-range value.
+  </Accordion>
+  <Accordion title="Does the agent remember earlier calls automatically?">
+    Enable and configure call history or the last transcript when the agent needs that context.
+  </Accordion>
+  <Accordion title="Can I set context for one inbound number only?">
+    The editor configures it for the agent; it has no per-number or per-schedule context setting.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [General](/en/voice-agents/general)
+- [Post-call](/en/voice-agents/post-call)
+- [Versions and tests](/en/voice-agents/versions-and-testing)

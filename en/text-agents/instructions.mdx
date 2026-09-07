@@ -1,0 +1,100 @@
+---
+title: 'Text agent instructions'
+description: 'Define your WhatsApp agent’s objective, conversation rules and handoff criteria. Save and check changes in the sandbox.'
+tag: 'New'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" permission="agents.read; agents.update to edit" route="Agents → Text → Instructions" status="nuevo" />
+
+Instructions define how the agent replies and when it uses tools. They apply to conversations assigned to that agent. The description in **General** identifies the agent; write its conversation rules in **Instructions**.
+
+## Write and save
+
+<Steps>
+  <Step title="Open Instructions">
+    Select an agent in **Agents → Text** and open **Instructions**. Organize the text with headings and lists.
+  </Step>
+  <Step title="Define a specific task">
+    Explain what to resolve, which information to collect and when the task is complete. Specify how to handle missing information.
+  </Step>
+  <Step title="Connect rules to tools">
+    Explain when to search documents, update a contact or delegate. Configure those actions in **Tools**: mentioning them does not create them.
+  </Step>
+  <Step title="Save and test">
+    Click **Save** on this tab. Open **Test agent** and check the replies and simulated tool calls.
+  </Step>
+</Steps>
+
+Each tab saves separately. If you changed **Tools** as well as the prompt, save that tab too.
+
+## Recommended structure
+
+| Section | What to write | Example |
+|---|---|---|
+| Role and objective | One specific responsibility | Help with orders and delegate complaints |
+| Required information | Information to request before acting | Ask for the order number |
+| Sources | Where to find information | Search the shipping documents |
+| Tools | When to use them and how to handle failures | Check the status before confirming a date |
+| Handoff | Situations requiring a person | Delegate when the customer requests human support |
+| Style | Language, length and question format | Keep replies short; ask one question per message |
+| Boundaries | Claims and actions to avoid | Do not invent prices or confirm unverified changes |
+
+Use this example as a starting point. Adjust tool references to match the tools you added:
+
+```text
+# Objective
+Help the customer check their order status.
+
+# Conversation
+Ask for the order number if you do not have it.
+Check the status using the configured order tool.
+Answer using the result of that query.
+
+# Missing information
+Do not invent delivery dates or statuses.
+If the query fails, explain that you could not verify the order.
+Offer human support using the delegation tool.
+
+# Human support
+Delegate when requested or when you cannot resolve the complaint.
+Do not say the handoff is complete before receiving its result.
+```
+
+## Business information
+
+Use instructions for permanent rules and decision criteria. Upload longer documents in **Knowledge** and configure their tools in **Tools**. Avoid conflicting prices in prompts and documents.
+
+**Global contact context**, in **Advanced**, adds contact history and lifecycle state. Enabling it does not replace instructions or configure a tool.
+
+## Common problems
+
+| Message or symptom | What to check |
+|---|---|
+| Read-only access | Ask an administrator for permission to edit the agent. |
+| Unsaved changes | Save the tab you edited. |
+| Save failure | Check highlighted fields and try again; keep a copy of the prompt if it persists. |
+| The agent promises an action but does not execute it | Check that the tool is added, configured and saved. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Do instructions have to be in English?">
+    You can write them in Spanish or English. Specify the reply language and check it with realistic messages in the [sandbox](/en/text-agents/sandbox).
+  </Accordion>
+  <Accordion title="Why does the agent ignore the handoff instruction?">
+    The instruction needs a configured delegation tool with an available destination. Check its rules in [Tools](/en/text-agents/tools) and save the **Tools** tab.
+  </Accordion>
+  <Accordion title="Does saving Instructions save the other tabs?">
+    No. Each tab saves its own fields. Check the save status before testing.
+  </Accordion>
+  <Accordion title="Where do I prevent follow-ups after an order is confirmed?">
+    Use the custom follow-up instructions in **Advanced → Follow-up messages**. These rules control when follow-ups must not be sent; see [Follow-ups](/en/text-agents/follow-ups).
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Tools](/en/text-agents/tools)
+- [Follow-ups, hours and closing](/en/text-agents/follow-ups)
+- [Test in the sandbox](/en/text-agents/sandbox)

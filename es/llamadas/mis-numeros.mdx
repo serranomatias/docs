@@ -1,0 +1,176 @@
+---
+title: 'Mis números'
+description: 'Números salientes verificados por código de llamada y números entrantes comprados en Argentina, México, Estados Unidos, Canadá y Colombia: verificación, compra con Stripe, asignación de agente, alias, transferencia entre organizaciones y estados.'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="outgoing_number.read" route="Organización → Mis Números" />
+
+**Mis Números** reúne los números telefónicos de tu organización. Hay dos tipos: los números **Saliente**, que verificás para que aparezcan como identificador cuando un agente llama, y los números **Entrante**, que comprás para recibir llamadas. Desde acá también asignás el agente que atiende cada número entrante, editás alias, transferís números a otra organización y los eliminás.
+
+{/* captura: images/llamadas/mis-numeros-lista-es.png | Lista de números con una tarjeta Saliente y una Entrante | app: /account/my-numbers */}
+
+## Dos tipos de número
+
+| Tipo | Qué es | Cómo se obtiene | Para qué sirve |
+|---|---|---|---|
+| **Saliente** | Un número que ya es tuyo y verificaste con un código. | **Agregar nuevo número**. Sin costo. | Aparece como número visible en campañas y llamadas salientes. |
+| **Entrante** | Un número nuevo que pertenece a tu organización mientras pagues la suscripción. | **Comprar Número**. Suscripción mensual con Stripe. | Recibe llamadas y las atiende el agente asignado. |
+
+Cada tarjeta muestra la bandera del país, el alias, el número, la etiqueta **Saliente** o **Entrante**, el estado y las fechas **Creado** y **Actualizado**. Los números entrantes muestran además el agente asignado o **Sin agente asignado**.
+
+## Verificar un número saliente
+
+Necesitás el permiso `outgoing_number.create`. El número tiene que poder recibir una llamada en ese momento.
+
+<Steps>
+  <Step title="Hacé clic en Agregar nuevo número">
+    Ingresá el número completo con código de país. La app acepta entre 11 y 16 dígitos, con o sin el signo `+`.
+  </Step>
+  <Step title="Hacé clic en Continuar">
+    En pantalla aparece el código de validación y un contador de 3 minutos.
+  </Step>
+  <Step title="Atendé la llamada y marcá el código">
+    Vas a recibir una llamada en el número ingresado. Marcá con el teclado del teléfono el código que ves en pantalla.
+  </Step>
+  <Step title="Esperá la confirmación">
+    La app consulta el estado cada 10 segundos. Cuando el código coincide, muestra **Número Validado con Éxito** y el número queda listo para usar.
+  </Step>
+</Steps>
+
+{/* captura: images/llamadas/mis-numeros-verificacion-es.png | Pantalla Validar numero de telefono con el código y el contador de 3 minutos | app: /account/my-numbers */}
+
+Si el contador llega a cero sin un código correcto, la app muestra **Verificación Fallida** y podés **Intentar de nuevo**.
+
+<Info>
+La cantidad de números salientes depende del plan (característica **Números salientes** en la tabla de planes). Al superarla, la app muestra: "Has alcanzado el límite de números de salida permitidos en tu plan. Para agregar más números, por favor, revisa las opciones de actualización." Ver [Planes y límites](/es/facturacion/planes).
+</Info>
+
+## Comprar un número entrante
+
+Necesitás el permiso `outgoing_number.create` y una tarjeta cargada en Facturación (o agregarla durante la compra).
+
+| País | Precio |
+|---|---|
+| Argentina | 10 USD/mes |
+| México | 10 USD/mes |
+| Estados Unidos | 10 USD/mes |
+| Canadá | 10 USD/mes |
+| Colombia | 15 USD/mes |
+
+<Steps>
+  <Step title="Hacé clic en Comprar Número">
+    Se abre el diálogo **Comprar Número**.
+  </Step>
+  <Step title="Seleccioná un país">
+    Elegí entre Argentina, México, Estados Unidos, Canadá y Colombia.
+  </Step>
+  <Step title="Seleccioná un número">
+    La lista muestra hasta 50 números con ciudad, región, código postal y precio. Podés buscar por ciudad o por dígitos (**Buscar por ciudad o dígitos…**). En **Filtros avanzados** están **Código de área** (por ejemplo 626) y **Región / Estado** (por ejemplo CA). Los números marcados con **Requiere domicilio** exigen una dirección registrada ante el regulador local.
+  </Step>
+  <Step title="Hacé clic en Proceder al pago">
+    En **Confirmar compra** elegí una tarjeta guardada o agregá una nueva. El resumen muestra el número y el total mensual. El pago se procesa con Stripe.
+  </Step>
+  <Step title="Hacé clic en Comprar Número">
+    La app muestra **Procesando Pago**, después **Procesando Número** y por último **Pago Procesado**. La página se recarga sola y aparece **Número comprado con éxito**.
+  </Step>
+</Steps>
+
+{/* clip: images/llamadas/comprar-numero-es.mp4 | Compra de un número: país, número, pago y confirmación | app: /account/my-numbers */}
+
+Si tu país no aparece en las opciones, completá [este formulario](https://forms.gle/EEEniw1BnhWtreRh7) y el equipo se pone en contacto.
+
+<Warning>
+El número se cobra como suscripción mensual desde la compra. Eliminar el número cancela la suscripción y libera el número. No se puede recuperar.
+</Warning>
+
+## Activar un número entrante
+
+Un número recién comprado queda **Offline** hasta que le asignás un agente. La confirmación de compra lo dice así: "Para activar este número inbound, debes asignarle un agente."
+
+<Steps>
+  <Step title="Hacé clic en Gestionar Agente en la tarjeta del número">
+    El botón solo aparece en números entrantes.
+  </Step>
+  <Step title="Elegí un agente en Seleccionar Agente">
+    La lista incluye todos los agentes de voz de la organización y la opción **Sin agente**.
+  </Step>
+  <Step title="Hacé clic en Asignar agente">
+    El número pasa a **Online** y el agente atiende cada llamada entrante. Con **Sin agente** vuelve a **Offline**.
+  </Step>
+</Steps>
+
+{/* captura: images/llamadas/mis-numeros-gestionar-agente-es.png | Diálogo Gestionar Agente con el selector de agentes | app: /account/my-numbers */}
+
+## Estados
+
+| Estado | Tipo | Significado |
+|---|---|---|
+| **Success** | Saliente | "Este número está activo y listo para usar en llamadas". |
+| **Pending** | Saliente | "Este número está siendo procesado y estará disponible pronto". |
+| **Failed** | Saliente | "Este número encontró un error durante la configuración". |
+| **Online** | Entrante | Tiene un agente asignado y atiende llamadas. |
+| **Offline** | Entrante | No tiene agente asignado. Las llamadas no se atienden. |
+
+## Alias, transferencia y eliminación
+
+- **Alias**: con el permiso `outgoing_number.update`, hacé clic en el ícono de lápiz junto al alias, escribí el nombre y confirmá con Enter. Un alias vacío muestra "El alias no puede estar vacío".
+- **Compartir número**: el ícono de compartir abre **Transferir número**. Elegí una organización en **Seleccionar una organización** y confirmá. El número deja de estar en la organización actual y aparece en la otra. La opción solo existe si tu usuario pertenece a más de una organización.
+- **Eliminar número**: con el permiso `outgoing_number.delete`, el ícono de papelera elimina el número sin pedir confirmación.
+- Si tu organización tiene un número de prueba de ContactShip, aparece con la etiqueta **Prueba** y no se puede editar, transferir ni eliminar.
+
+## Qué no existe todavía
+
+- La app no conecta centrales telefónicas (PBX) ni troncales SIP. Para proyectos enterprise, contactá a soporte.
+- No hay portabilidad de números desde otro proveedor.
+- No se pueden comprar números fuera de los cinco países de la lista. Pedilos con el formulario.
+- El proceso de compra no pide una dirección para los números marcados con **Requiere domicilio**. Si necesitás uno de esos números, contactá a soporte.
+- Un número no se edita: se elimina y se agrega de nuevo.
+
+## Problemas frecuentes
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| **Número no disponible** | El número ya está registrado o no se puede usar como saliente. | Probá con otro número. |
+| **Verificación Fallida** | Código incorrecto, llamada no atendida o pasaron los 3 minutos. | Hacé clic en **Intentar de nuevo** con el teléfono a mano. |
+| **Este número no está permitido** | El número está restringido. | Usá otro número o contactá a soporte. |
+| **Acceso restringido** | La cuenta quedó bloqueada por múltiples intentos fallidos. | Contactá a soporte. |
+| **Tu cuenta ha sido bloqueada** | Bloqueo de seguridad de la cuenta. | Contactá a soporte. |
+| **Demasiados intentos** | Superaste el límite de intentos en poco tiempo. | Esperá unos minutos y volvé a intentar. |
+| **No pudimos verificar tu número** | Error no clasificado durante la verificación. | Intentá de nuevo. Si persiste, contactá a soporte. |
+| **No se encontraron tarjetas** | La organización no tiene método de pago. | Agregá una tarjeta desde el mismo diálogo o en [Créditos y pagos](/es/facturacion/creditos-y-pagos). |
+| **Error al comprar número** | El pago fue rechazado. | Revisá la tarjeta o usá otra. |
+| **No hay números disponibles para el país seleccionado.** | No hay stock con esos filtros. | Cambiá el código de área o la región. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué mi número entrante aparece Offline?">
+    No tiene agente asignado. Hacé clic en **Gestionar Agente**, elegí un agente y confirmá con **Asignar agente**. El estado pasa a **Online** de inmediato.
+  </Accordion>
+  <Accordion title="¿Puedo usar un número comprado como número visible en una campaña?">
+    Sí. El selector **Número Visible en Llamadas** de la campaña lista todos los números de **Mis Números**, salientes y entrantes. Ver [Campañas de llamadas](/es/llamadas/campanas).
+  </Accordion>
+  <Accordion title="¿Cuánto cuesta un número y cómo lo pago?">
+    Argentina, México, Estados Unidos y Canadá cuestan 10 USD/mes. Colombia cuesta 15 USD/mes. Es una suscripción mensual con tarjeta a través de Stripe, separada de los créditos de llamadas.
+  </Accordion>
+  <Accordion title="¿Cómo cancelo la suscripción de un número?">
+    Eliminá el número desde su tarjeta. La eliminación cancela la suscripción y libera el número. No hay pausa ni recuperación.
+  </Accordion>
+  <Accordion title="¿Venden números en mi país?">
+    Compra directa en Argentina, México, Estados Unidos, Canadá y Colombia. Para otros países, completá el formulario que aparece en el diálogo **Comprar Número**.
+  </Accordion>
+  <Accordion title="¿Puedo conectar mi central telefónica o mi troncal SIP?">
+    No desde la app. Solo se evalúa en proyectos enterprise, a través de soporte.
+  </Accordion>
+  <Accordion title="¿Por qué fallan las llamadas a ciertos números?">
+    Algunas centrales rechazan llamadas con un identificador de otro país. Comprá un número local del país de tus contactos y usalo como número visible.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Campañas de llamadas](/es/llamadas/campanas)
+- [Crear un agente de voz](/es/agentes-de-voz/crear)
+- [Planes y límites](/es/facturacion/planes)
+- [Créditos y pagos](/es/facturacion/creditos-y-pagos)

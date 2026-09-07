@@ -1,0 +1,53 @@
+---
+title: "Call log and details"
+description: "Filter calls, inspect transcripts and analysis, and export results."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Calls" permission="calls.read" />
+
+## Find a call
+
+Open **Calls** and combine date, type, status, handler, tag, and dynamic-field filters. Clear filters if an expected record is missing and check the active organization.
+
+| Status | Meaning |
+|---|---|
+| `completed` | The call ended; inspect its analysis to determine whether it met the objective. |
+| `pending` | Processing or execution is pending. |
+| `no_answer` | Nobody answered. |
+| `voice_mail` | Voicemail was detected. |
+| `incomplete` | Execution was incomplete. |
+| `failed` | An error occurred; open the details to investigate. |
+
+## Inspect the details
+
+1. Open the call. Confirm its contact, agent, date, duration, and type.
+2. Read the conversation and tool invocations in **Transcript**. An invocation alone does not prove an external operation succeeded; inspect the tool result.
+3. In **Analysis**, review the summary, sentiment, objective completion, disconnection reason, and configured extraction fields.
+4. Review evaluation criteria, human ratings, and call tags. Edit the agent to change what future calls analyze.
+5. Inspect the cost breakdown when available. Conversation duration and charges are different measures.
+
+Analysis may appear after the conversation ends. A completed call does not necessarily mean a sale or a passing evaluation. `max_duration_reached` indicates a duration cutoff; `call_transfer` indicates a transfer.
+
+## Export
+
+Apply filters, then export the list as **XLSX** or **CSV**. Keep the date range and filters when comparing the file with another report. To report an incident, share the call ID and expected behavior; avoid sending full transcripts unless needed.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why is analysis missing?">
+    Processing may still be underway, or there may be insufficient conversation. Check the status and reopen the record.
+  </Accordion>
+  <Accordion title="Are these contact tags?">
+    No. Call tags classify calls; contact tags classify CRM records.
+  </Accordion>
+  <Accordion title="Where can I inspect delivery failures to my system?">
+    In **Calls → Webhooks**. Call outcomes and webhook delivery are independent.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Webhooks](/en/calls/webhooks)
+- [Dashboard](/en/reports/dashboard)

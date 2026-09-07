@@ -1,0 +1,70 @@
+---
+title: "Claves API"
+description: "Generá y administrá la clave de tu organización. Revisá acceso por plan, permisos y conexión de integraciones."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Claves API" permission="organization.create para generar" plan="Plan con acceso a API" />
+
+La clave API identifica a tu organización ante la API pública de ContactShip. La app admite una clave por organización. El plan debe incluir acceso a la API; un permiso administrativo no reemplaza ese requisito.
+
+## Generar y usar
+
+1. Elegí la organización con la que va a trabajar tu integración.
+2. Abrí **Claves API** y usá el botón para generar la clave.
+3. Copiala y guardala en la configuración privada de tu servidor o herramienta de automatización.
+4. Enviá el valor en el encabezado `x-api-key` de las solicitudes a la API.
+
+```bash
+curl 'https://api.contactship.ai/v1/credits'   -H 'x-api-key: YOUR_API_KEY'
+```
+
+Reemplazá `YOUR_API_KEY` en tu entorno privado. No incluyas la clave en páginas web públicas, URLs, capturas ni tickets de soporte.
+
+## Permisos y disponibilidad
+
+| Requisito | Aplicación |
+|---|---|
+| Acceso API del plan | Necesario para generar la clave |
+| `organization.create` | Generar |
+| `organization.delete` | Eliminar desde el menú de la clave |
+| Organización activa | Determina a qué organización pertenece la clave |
+
+La pantalla no ofrece claves individuales con permisos o alcances personalizados. No asumas que una clave tiene el mismo alcance restringido que un miembro humano.
+
+## Eliminar o reemplazar
+
+<Warning>
+Eliminar la clave interrumpe las integraciones que la usan. Identificá los sistemas dependientes antes de reemplazarla y actualizá sus credenciales.
+</Warning>
+
+Si necesitás reemplazarla, coordiná la eliminación, generación y actualización de los sistemas que la consumen. No se documenta un período de coexistencia entre claves.
+
+## Problemas frecuentes
+
+| Situación | Qué revisar |
+|---|---|
+| Ya existe una clave para la organización | Revisá la tarjeta existente; la app no genera una segunda clave simultánea. |
+| La app muestra un límite de plan | Comprobá el acceso API en **Planes**. |
+| No aparece el botón para generar | Revisá `organization.create`. |
+| La integración recibe un error de autenticación | Comprobá encabezado, clave vigente y organización. No compartas el secreto con soporte. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Puedo usar una clave para varias organizaciones?">
+    Cada clave pertenece a una organización. Configurá credenciales separadas para trabajar con organizaciones diferentes.
+  </Accordion>
+  <Accordion title="¿Hay claves con permisos solo de lectura?">
+    El configurador actual no ofrece alcances por clave. No la uses como si fuera una credencial de solo lectura.
+  </Accordion>
+  <Accordion title="¿Qué le envío a soporte si falla una solicitud?">
+    Enviá método, ruta, hora y código de respuesta. Reemplazá la clave y otros secretos por valores ocultos.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [API Reference](/api-reference/introduction)
+- [Roles y permisos](/es/organizacion/roles-y-permisos)
+- [Planes y límites](/es/facturacion/planes)

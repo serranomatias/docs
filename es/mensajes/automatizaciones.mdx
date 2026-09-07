@@ -1,0 +1,269 @@
+---
+title: 'Automatizaciones del inbox'
+description: 'Reglas de automatización (Automation Rules) del inbox: los ocho disparadores, condiciones y operadores, alcance por canal, las 17 acciones agrupadas (Freshdesk, IA, conversación, organizar, personas, llamadas, espera, webhook, Google Sheets), variables de plantilla, presets, historial de ejecuciones con replay y métricas.'
+tag: 'Nuevo'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" addon="Automation Rules" route="Ajustes → Inbox → Automation Rules" status="nuevo" />
+
+Las automatizaciones ejecutan acciones cuando pasa algo en ContactShip: se cierra una conversación, entra un mensaje, termina una llamada o se crea un contacto. Una regla tiene tres partes: un disparador (**WHEN**), condiciones opcionales (**IF**) y una lista de acciones que corren en orden (**THEN**). Se activa a pedido por organización; cuando está activa aparece **Automation Rules** en **Ajustes → Inbox**. Toda la pantalla está en inglés: acá se nombran los botones y campos tal como se ven.
+
+{/* captura: images/mensajes/automatizaciones-lista-es.png | Pestaña Rules con las tarjetas Total rules, Active e Inactive y la tabla de reglas | app: /settings/inbox/automations */}
+
+## La pantalla
+
+La página **Automation Rules** tiene cuatro pestañas:
+
+| Pestaña | Qué muestra |
+|---|---|
+| **Rules** | Tarjetas **Total rules**, **Active** e **Inactive**; buscador **Search rules...**; filtro **All** / **Active** / **Inactive**; tabla con **Name**, **Trigger**, **Actions** y **Status**. |
+| **Templates** | Deshabilitada. |
+| **Run History** | Cada ejecución de una regla, con su estado y sus pasos. |
+| **Metrics** | Indicadores de los últimos 7 días. |
+
+En la tabla de reglas, el menú de cada fila ofrece **Edit**, **Enable** o **Disable**, y **Delete**. Borrar pide confirmación en **Delete Rule?** y no se puede deshacer. Debajo del nombre, un chip indica el canal de la regla (**All** cuando aplica a todos).
+
+## Crear una regla
+
+<Steps>
+<Step title="Hacé clic en New Rule">
+Se abre **Start with a template**. Elegí un preset (ver más abajo) o **or start from scratch**.
+</Step>
+<Step title="Poné un nombre y elegí el disparador">
+Escribí el nombre en **Rule name…**. En la sección **01 WHEN · Trigger event** elegí el **Trigger** y el **Channel**.
+</Step>
+<Step title="Agregá condiciones si hacen falta">
+En **02 IF · Conditions**, **Add condition** agrega una fila campo · operador · valor. Sin condiciones, la regla corre para todos los eventos del disparador.
+</Step>
+<Step title="Agregá acciones">
+En **03 THEN · Actions**, **Add action** abre el catálogo **Add Action**. Las acciones corren de arriba hacia abajo; con las flechas cambiás el orden. Cada acción se expande para configurar sus campos.
+</Step>
+<Step title="Guardá">
+**Create Rule** guarda una regla nueva; **Save Changes** una existente. La regla necesita nombre y al menos una acción; si falta algo ves **Rule needs a name and at least one action.** El interruptor **Active** / **Inactive** de la cabecera define si la regla corre.
+</Step>
+</Steps>
+
+La barra **Rule Preview** de la derecha resume la regla y, arriba del editor, una frase la lee en voz alta: **When … on … , then run … actions.**
+
+{/* captura: images/mensajes/automatizaciones-editor-es.png | Editor de una regla con las secciones WHEN, IF y THEN y la barra Rule Preview | app: /settings/inbox/automations/new */}
+
+## Disparadores
+
+| Grupo | Disparador | Clave | Cuándo dispara |
+|---|---|---|---|
+| Conversation | **Conversation Closed** | `thread.closed` | Al cerrar una conversación. Es el valor por defecto. |
+| Conversation | **Conversation Opened** | `thread.opened` | Al abrir o reabrir una conversación. |
+| Conversation | **Conversation Updated** | `thread.updated` | Al cambiar datos de la conversación. |
+| Message | **New Message** | `message.new` | Al entrar un mensaje nuevo. |
+| Contact | **Contact Created** | `contact.created` | Al crearse un contacto. |
+| Call | **Call Finished** | `call.finished` | Al terminar una llamada. |
+| Call | **Call Started** | `call.started` | Al iniciar una llamada. |
+| Time | **Schedule** | `schedule` | Por horario. El editor no tiene todavía un campo para configurar la frecuencia. |
+
+## Alcance por canal
+
+El selector **Channel** limita la regla a un tipo de canal: **All channels**, **WhatsApp**, **Instagram**, **Messenger**, **Web Chat** o **Email**. Hoy solo se pueden conectar canales de WhatsApp Business; los demás figuran en el selector pero no tienen conversaciones. La elección se guarda como condición `channel_type`.
+
+## Condiciones
+
+Cada condición tiene un campo, un operador y un valor. Varias condiciones se combinan con **AND**.
+
+| Campo | Qué evalúa |
+|---|---|
+| `message_count` | Cantidad de mensajes de la conversación. |
+| `thread.is_spam` | Si la conversación está marcada como spam. |
+| `contact.tags` | Etiquetas del contacto. |
+| `thread.duration` | Duración de la conversación. |
+| `channel` | Canal de la conversación. |
+
+Operadores: **is**, **is not**, **greater than**, **less than** y **contains**. Al guardar, el editor conserva el campo y el valor de cada condición; al reabrir la regla, el operador vuelve a **is**.
+
+## Acciones
+
+El catálogo **Add Action** agrupa las acciones en este orden. Las de Freshdesk y Google Sheets requieren la integración conectada: si no lo está, aparecen con la marca **CONNECT** y al elegirlas la app avisa **Connect Freshdesk in Settings → Integrations first** (o **Connect Google Sheets…**). Las acciones marcadas **AI** usan inteligencia artificial.
+
+### Freshdesk
+
+| Acción | Clave | Campos |
+|---|---|---|
+| **Sync Contact** | `freshdesk.sync_contact` | Busca o crea el contacto en Freshdesk con nombre, email y teléfono. Muestra los campos de contacto de tu cuenta de Freshdesk (**Required Fields** y **Optional Fields**) para completarlos con valores fijos o variables (**Use variable...**). Sin conexión, acepta **Custom Fields (JSON)**. |
+| **Create Ticket** | `freshdesk.create_ticket` | **Subject** (vacío usa el asunto por defecto; admite variables), **Priority** (Low, Medium, High, Urgent; por defecto Medium), **Status** (Open, Pending, Resolved, Closed; por defecto Open), **Tags** (separadas por coma). En **Advanced settings**: **Description**, **Ticket Type**, **Include conversation history** (activado por defecto), **History Limit**, **Dedup Window (hours)**, **Dedup Strategy** (Update existing ticket, Skip if duplicate), **Assign to Agent**, **Assign to Group**, **Attach conversation media** (hasta 15 archivos, 20 MB) con **Attachment Scan Limit**, y **Ticket Custom Fields**. |
+| **Add Conversation Note** | `freshdesk.add_thread_note` | **Note body**: nota interna en el ticket vinculado, visible solo para agentes. Vacío deja el enlace al ticket por defecto. Admite `{{contact.*}}`, `{{thread.*}}`, `{{ai.*}}`, `{{freshdesk.ticket_id}}` y `{{freshdesk.ticket_url}}`, con **Preview**. |
+
+### AI
+
+| Acción | Clave | Campos |
+|---|---|---|
+| **AI Conversation Analysis** | `ai.analyze_thread` | **Add extraction** agrega un dato a extraer: nombre (queda disponible como `{{ai.nombre}}` en las acciones siguientes), tipo (**Text**, **Number**, **Yes/No**, **Enum** con **Options**) y la instrucción para la IA. **AI Provider** y **Model** vienen preconfigurados. |
+
+### Conversation
+
+| Acción | Clave | Campos |
+|---|---|---|
+| **Send Message** | `message.send` | **Message body**: mensaje que se envía en la misma conversación y por el mismo canal. Admite variables. |
+
+### Organize
+
+| Acción | Clave | Campos |
+|---|---|---|
+| **Add Tag to Conversation** | `tag.add_thread` | **Tags to add**: una o más etiquetas de conversación. Si la etiqueta no existe, se crea. |
+| **Add Tag to Contact** | `tag.add_contact` | **Tags to add**: una o más etiquetas de contacto. Podés crear una nueva desde el mismo selector. |
+| **Add to Board** | `board.add` | **Board** e **Initial stage (optional)**; sin etapa, entra en la primera. Si el contacto ya está en el tablero, no hace nada. |
+| **Move to Stage** | `board.move_stage` | **Board** y **Stage**. |
+| **Remove from Board** | `board.remove` | **Board**. Quita la tarjeta del contacto. |
+
+### People
+
+| Acción | Clave | Campos |
+|---|---|---|
+| **Assign Conversation to User** | `user.assign_thread` | **Strategy**: **Specific user** (elegís el **User**), **Round robin** o **Least busy**. |
+| **Assign Contact to User** | `user.assign_contact` | Los mismos campos, aplicados al contacto. |
+
+### Calls
+
+| Acción | Clave | Campos |
+|---|---|---|
+| **Outbound AI Call** | `call.outbound` | **AI Agent** (agente de voz), **Phone number** (uno de tus números o un valor manual como `{{contact.phone_number}}`), **Delay before call** en segundos y **Context / Instructions (optional)** para el agente, por ejemplo `{{ai.summary}}`. |
+
+### Flow
+
+| Acción | Clave | Campos |
+|---|---|---|
+| **Wait / Delay** | `wait` | **Duration** y **Unit** (**Seconds**, **Minutes**, **Hours**). Pausa la regla antes de la siguiente acción. Máximo 5 minutos. |
+
+### Developer
+
+| Acción | Clave | Campos |
+|---|---|---|
+| **Send Webhook** | `webhook.send` | **URL**, **Method** (**POST**, **PUT**, **PATCH**), **Headers (JSON, optional)** y **Body template (JSON, optional)**. Si el cuerpo queda vacío, se envía el contexto completo del evento. |
+
+### Google Sheets
+
+| Acción | Clave | Campos |
+|---|---|---|
+| **Add Row to Sheet** | `google_sheets.add_row` | **Spreadsheet** (de la lista o **Enter ID manually**), **Sheet name** y **Column mapping**: por cada columna de la hoja, el valor o variable que se escribe. Las columnas vacías se omiten. |
+| **Update Sheet Row** | `google_sheets.update_row` | Los mismos campos más **Match column** y **Match value**: busca la fila cuyo valor coincide y la actualiza. |
+
+Todas las acciones tienen el interruptor **Continuar si esta acción falla**. Activado, las acciones siguientes corren aunque esta falle; la tarjeta muestra la marca **Continúa si falla**.
+
+## Variables de plantilla
+
+Los campos de texto de las acciones aceptan variables entre llaves dobles. El panel **Template variables reference** del editor lista las disponibles:
+
+| Grupo | Variables |
+|---|---|
+| Conversation | `{{thread.id}}`, `{{thread.channel}}`, `{{thread.message_count}}`, `{{thread.duration}}`, `{{thread.is_spam}}` |
+| Contact | `{{contact.full_name}}`, `{{contact.phone_number}}`, `{{contact.email}}`, `{{contact.tags}}` |
+| AI | `{{ai.summary}}`, `{{ai.sentiment}}`, `{{ai.status}}` y cualquier `{{ai.nombre}}` que definas en **AI Conversation Analysis** |
+| System | `{{system.now}}`, `{{system.rule_id}}` |
+
+Las notas de Freshdesk suman `{{freshdesk.ticket_id}}` y `{{freshdesk.ticket_url}}`; el cuerpo del webhook admite `{{trigger.event}}`. Una variable `ai.*` solo tiene valor si antes corrió **AI Conversation Analysis** en la misma regla.
+
+## Presets
+
+Al crear una regla, **Start with a template** ofrece tres puntos de partida. Todos usan el disparador **Conversation Closed** y requieren Freshdesk conectado.
+
+| Preset | Qué arma |
+|---|---|
+| **Basic Freshdesk Ticket** | **Sync Contact** + **Create Ticket** (prioridad Medium, estado Open, etiqueta `contactship`) + **Add Conversation Note**. |
+| **WhatsApp High Priority** | Lo mismo, limitado al canal **WhatsApp** y con prioridad High y etiquetas `contactship` y `whatsapp`. |
+| **AI-Powered Ticket** | **Sync Contact** + **AI Conversation Analysis** (extrae `summary` y `sentiment` con opciones Positive, Neutral, Negative, Urgent) + **Create Ticket** con asunto `{{ai.summary}}` + **Add Conversation Note**. |
+
+## Run History
+
+La pestaña **Run History** lista las ejecuciones con **Status**, **Rule**, **Trigger**, **Started**, **Duration** y **Steps** (pasos completados sobre el total), de a 25 por página y con filtro por estado. Si todavía no corrió ninguna regla, muestra **No hay runs todavía**.
+
+| Estado | Clave | Qué significa |
+|---|---|---|
+| **Success** | `success` | Todas las acciones terminaron bien. |
+| **Partial** | `partial_success` | La regla terminó, pero alguna acción falló. |
+| **Failed** | `failed` | La ejecución falló. |
+| **Crashed** | `crashed` | La ejecución se cortó por un error inesperado. |
+| **Running** | `running` | Está en curso. |
+| **Skipped** | `skipped` | La regla no se ejecutó. |
+
+Al abrir una ejecución ves cada paso con su estado, duración, **Output** y, si falló, el detalle del error; y el **Trigger Payload** con los datos del evento.
+
+El botón **Replay** vuelve a ejecutar la regla sobre el mismo evento. El diálogo **Replay run** ofrece **Replay all steps** o **Replay only failed/skipped steps**. Si la ejecución incluye acciones que no conviene repetir, avisa **This run includes non-idempotent actions** y las lista.
+
+<Warning>
+Repetir una ejecución con **Replay all steps** vuelve a correr acciones como **Send Message** o **Outbound AI Call**: el contacto puede recibir el mensaje o la llamada por segunda vez. Usá **Replay only failed/skipped steps** salvo que quieras repetir todo.
+</Warning>
+
+{/* captura: images/mensajes/automatizaciones-runs-es.png | Detalle de una ejecución con sus pasos, el estado de cada uno y el botón Replay | app: /settings/inbox/automations/runs */}
+
+## Metrics
+
+La pestaña **Metrics** muestra **Total Runs (7d)**, **Success Rate**, **Avg Duration** y **Failed Runs**; el gráfico **Runs per Day** (ejecuciones exitosas y fallidas por día); y las tablas **Top Failing Rules** y **Top Failing Actions**.
+
+## Tres ejemplos
+
+<Steps>
+<Step title="Crear un ticket en Freshdesk cuando se cierra una conversación">
+Conectá Freshdesk en [Integraciones](/es/integraciones/freshdesk). En **New Rule** elegí el preset **Basic Freshdesk Ticket**: ya trae **Conversation Closed** como disparador y las acciones **Sync Contact**, **Create Ticket** y **Add Conversation Note**. Ajustá **Priority**, **Status** y **Tags** del ticket y hacé clic en **Create Rule**.
+</Step>
+<Step title="Agregar una fila a Google Sheets cuando termina una llamada">
+Conectá Google Sheets en [Integraciones](/es/integraciones/google-sheets). Creá una regla desde cero con el disparador **Call Finished**. Agregá la acción **Add Row to Sheet**, elegí el **Spreadsheet** y el **Sheet name**, y en **Column mapping** completá por ejemplo la columna A con `{{contact.full_name}}`, la B con `{{contact.phone_number}}` y la C con `{{system.now}}`. Guardá con **Create Rule**.
+</Step>
+<Step title="Llamar a un lead con IA 10 minutos después de crearlo">
+Creá una regla con el disparador **Contact Created**. Agregá **Outbound AI Call**, elegí el **AI Agent** y el **Phone number** de salida, y escribí `600` en **Delay before call** (10 minutos en segundos). Si querés que el agente sepa de dónde viene el lead, agregalo en **Context / Instructions**. Guardá con **Create Rule**.
+</Step>
+</Steps>
+
+<Tip>
+Para esperar entre dos acciones de la misma regla usá **Wait / Delay**, que admite hasta 5 minutos. Para esperas más largas antes de una llamada, usá **Delay before call** de **Outbound AI Call**, que se expresa en segundos.
+</Tip>
+
+## Qué no existe todavía
+
+- La pestaña **Templates** está deshabilitada.
+- El disparador **Schedule** no tiene campo para configurar la frecuencia.
+- Las condiciones solo se combinan con **AND**; no hay **OR** ni grupos.
+- Los operadores **is not**, **greater than**, **less than** y **contains** no se conservan al guardar: la condición vuelve a **is**.
+- No hay acciones para Cal.com, Make ni n8n. Para esos servicios usá **Send Webhook**.
+- No hay modo de prueba: la única forma de ver una regla en acción es que ocurra el evento, y después revisar **Run History**.
+- Solo hay canales de WhatsApp conectables. **Instagram**, **Messenger**, **Web Chat** y **Email** figuran en el selector sin conversaciones.
+
+## Problemas frecuentes
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| **Rule needs a name and at least one action.** | Intentaste guardar sin nombre o sin acciones. | Completá **Rule name…** y agregá una acción. |
+| **Connect Freshdesk in Settings → Integrations first** | Elegiste una acción de Freshdesk sin la integración conectada. | Conectá [Freshdesk](/es/integraciones/freshdesk) y volvé a agregar la acción. Lo mismo con Google Sheets. |
+| **Failed to create rule** / **Failed to update rule** | La regla no pudo guardarse. | Volvé a intentar. Si persiste, contactá a soporte. |
+| **Failed to load runs** / **Failed to load metrics** | El historial o las métricas no cargaron. | Recargá la página. |
+| Una acción aparece en rojo en **Run History** | La acción falló; el detalle del paso muestra el error. | Corregí la configuración y usá **Replay only failed/skipped steps**. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+<Accordion title="No veo Automation Rules en Ajustes. ¿Por qué?">
+Las automatizaciones se activan a pedido por organización. Si no aparece **Automation Rules** en **Ajustes → Inbox**, contactá a soporte.
+</Accordion>
+<Accordion title="¿Cómo pruebo una regla antes de activarla?">
+No hay modo de prueba. Guardala como **Active**, provocá el evento (por ejemplo, cerrá una conversación de prueba) y revisá **Run History**: cada paso muestra su **Output** o su error. Si algo falló, corregí la regla y usá **Replay**.
+</Accordion>
+<Accordion title="¿Qué pasa si una acción falla a mitad de la regla?">
+Por defecto la regla se detiene y la ejecución queda como **Failed**. Si activás **Continuar si esta acción falla** en esa acción, las siguientes corren igual y la ejecución queda como **Partial**.
+</Accordion>
+<Accordion title="¿Puedo usar los datos que extrae la IA en un ticket o en una hoja?">
+Sí. Agregá primero **AI Conversation Analysis** con una extracción, por ejemplo `resumen`, y en las acciones siguientes usá `{{ai.resumen}}` en el asunto del ticket, en una columna de Google Sheets o en el cuerpo de un webhook.
+</Accordion>
+<Accordion title="¿Cuánto puede esperar una regla entre acciones?">
+**Wait / Delay** admite hasta 5 minutos. Para programar una llamada más tarde, usá **Delay before call** en **Outbound AI Call**, que se define en segundos.
+</Accordion>
+<Accordion title="¿La regla corre para las conversaciones que ya existían?">
+No. Las reglas reaccionan a eventos nuevos desde que están **Active**. Para actuar sobre una conversación anterior, provocá el evento (por ejemplo, cerrala) o usá **Replay** sobre una ejecución previa.
+</Accordion>
+<Accordion title="¿Puedo enviar una plantilla de WhatsApp desde una automatización?">
+La acción **Send Message** envía un mensaje de texto por el mismo canal de la conversación. Para enviar plantillas a muchos contactos usá una [campaña de mensajes](/es/mensajes/campanas).
+</Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Freshdesk](/es/integraciones/freshdesk)
+- [Google Sheets](/es/integraciones/google-sheets)
+- [Respuestas rápidas y etiquetas](/es/mensajes/respuestas-rapidas-y-etiquetas)
+- [Tableros y etapas](/es/contactos/tableros)

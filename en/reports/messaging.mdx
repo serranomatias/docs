@@ -1,0 +1,50 @@
+---
+title: "Messaging reports"
+description: "Review volume, human response, response times, tags, and topics."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Reports → Messaging → View details" permission="reports.read" />
+
+Messaging widgets appear when the organization has inbox enabled. Add them through **Customize → Add widget**, then use **View details** for tables and **XLSX** export.
+
+| Widget | What to inspect |
+|---|---|
+| Messaging overview | Conversations, messages, AI/human handling, and channel distribution. |
+| Human agent performance | Handled, assigned, closed, escalated, and unanswered conversations. |
+| Response times | Mean, median, p90, and response-time extremes. |
+| Conversation tags | Inbox tag classification and applications within the range. |
+| Conversation topics | Fixed categories based on the first substantive message. |
+
+## Interpret the numbers
+
+- **Handled** means the agent sent at least one message. They may have handled conversations that were never assigned to them.
+- **Response rate** divides handled by assigned and can exceed 100%. It is not the percentage of customers replying to a campaign.
+- **Without response** identifies assigned conversations whose last message came from the customer.
+- **Response time** measures the interval between a customer message and an agent reply. Gaps over 24 hours are excluded. Averages are weighted by response count.
+- **Waiting for a response now** is a live figure, unaffected by the historical range. The pending-conversation detail respects your role’s scope.
+
+Use the same time zone and range when comparing reports. Messaging’s hourly distribution uses the report time zone. For tags, distinguish tags on conversations active in the range from tag applications that occurred within the range.
+
+## Investigate a change
+
+Check channel and dates first, then agent details. If waiting increases, inspect pending conversations before attributing it to volume or performance. Preserve the filters with the exported file.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why is the rate over 100%?">
+    The agent replied to conversations not assigned to them, so handled can exceed assigned.
+  </Accordion>
+  <Accordion title="Why don’t pending counts change with the date?">
+    Waiting for a response now describes the current situation.
+  </Accordion>
+  <Accordion title="Are topics my tags?">
+    No. Topics are fixed classification categories; inbox tags are managed separately.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Inbox](/en/messages/inbox)
+- [Dashboard](/en/reports/dashboard)

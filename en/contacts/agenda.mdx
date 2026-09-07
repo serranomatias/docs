@@ -1,0 +1,64 @@
+---
+title: "Agenda"
+description: "Configure resources, services and bookings. Review availability, statuses, reminders and agenda permissions."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Agenda" permission="agenda.read" addon="Agenda" />
+
+**Agenda** manages bookings and resource availability. It is enabled per organization. It is separate from connecting Google Calendar or Cal.com as an agent tool.
+
+## Prepare the agenda
+
+Configure resources, services, locations and schedules before offering appointments. A resource represents what gets booked, such as a person or room. A service defines the appointment, its duration and buffer time.
+
+| Setting | What to review |
+|---|---|
+| Resources | Who or what can provide service and when |
+| Services | Duration, buffers and compatible resources |
+| Locations | Service location |
+| Mode | Onsite or remote, depending on the service |
+| Exceptions | Days or hours that override normal availability |
+| Fields | Information needed for the booking |
+
+## View and manage bookings
+
+Open **Agenda**, choose a period and filter resources or location. Your scope may limit the view to resources associated with your user.
+
+| Action | Permission |
+|---|---|
+| View | `agenda.read` |
+| Create booking | `agenda.create` |
+| Modify | `agenda.update` |
+| Cancel | `agenda.delete` |
+
+Booking statuses include pending, confirmed, completed, no-show and canceled. Check the status and appointment time after creating, moving or canceling a booking.
+
+## Reminders and agents
+
+Notification settings support confirmations and reminders through available channels such as email or WhatsApp. Check the recipient, schedule and connection before assuming delivery.
+
+Agents can book through the corresponding agenda tools. Configure service and availability lookups before allowing booking creation. The receptionist preset is a starting point that needs adaptation to your business.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Is Agenda the same as Google Calendar?">
+    No. Agenda is a ContactShip module. The [Google Calendar integration](/en/integrations/google-calendar) connects an external calendar.
+  </Accordion>
+  <Accordion title="Why is a free time slot missing?">
+    Check resource hours, service duration, buffers, existing bookings and exceptions. Also verify the selected resource and location.
+  </Accordion>
+  <Accordion title="Why do I only see my resources?">
+    Your role may have an own-only scope. An administrator can review agenda permissions and scope.
+  </Accordion>
+  <Accordion title="Can the AI offer any time?">
+    It should check configured availability and confirm the booking result. Instructions without tools do not create appointments.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Roles and permissions](/en/organization/roles-and-permissions)
+- [Google Calendar](/en/integrations/google-calendar)
+- [Cal.com](/en/integrations/cal-com)

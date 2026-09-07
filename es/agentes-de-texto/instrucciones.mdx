@@ -1,0 +1,100 @@
+---
+title: 'Instrucciones del agente de texto'
+description: 'Escribí el objetivo, las reglas y los criterios de derivación de tu agente de WhatsApp. Guardá y comprobá los cambios en el sandbox.'
+tag: 'Nuevo'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read; agents.update para editar" route="Agentes → Texto → Instrucciones" status="nuevo" />
+
+Las instrucciones definen cómo responde el agente y cuándo usa sus herramientas. Se aplican a las conversaciones que tiene asignadas. La descripción de **General** identifica al agente; escribí sus reglas de conversación en **Instrucciones**.
+
+## Escribir y guardar
+
+<Steps>
+  <Step title="Abrí Instrucciones">
+    Elegí el agente en **Agentes → Texto** y abrí **Instrucciones**. Podés organizar el texto con títulos y listas.
+  </Step>
+  <Step title="Definí una tarea concreta">
+    Indicá qué debe resolver, qué datos necesita y cuándo termina su trabajo. Especificá cómo actuar ante información faltante.
+  </Step>
+  <Step title="Conectá las reglas con las herramientas">
+    Explicá cuándo consultar documentos, actualizar un contacto o delegar. Configurá esas acciones en **Tools**: mencionarlas en el texto no las crea.
+  </Step>
+  <Step title="Guardá y probá">
+    Hacé clic en **Guardar** en esta pestaña. Abrí **Probar agente** y comprobá las respuestas y las herramientas simuladas.
+  </Step>
+</Steps>
+
+Cada pestaña se guarda por separado. Si modificaste **Tools** además del prompt, guardá también esa pestaña.
+
+## Estructura recomendada
+
+| Sección | Qué escribir | Ejemplo |
+|---|---|---|
+| Rol y objetivo | Una responsabilidad concreta | Orientar sobre pedidos y derivar reclamos |
+| Información necesaria | Datos que debe pedir antes de actuar | Solicitar el número de pedido |
+| Fuentes | Dónde buscar la información | Consultar los documentos de envíos |
+| Herramientas | Cuándo usarlas y qué hacer si fallan | Consultar el estado antes de confirmar una fecha |
+| Derivación | Situaciones que requieren una persona | Delegar si el cliente solicita atención humana |
+| Estilo | Idioma, extensión y forma de preguntar | Responder brevemente y hacer una pregunta por mensaje |
+| Límites | Afirmaciones y acciones que debe evitar | No inventar precios ni confirmar cambios sin resultado |
+
+Este ejemplo es un punto de partida. Ajustá las referencias a las herramientas que agregaste:
+
+```text
+# Objetivo
+Ayudá al cliente a consultar el estado de su pedido.
+
+# Conversación
+Pedí el número de pedido si todavía no lo tenés.
+Consultá el estado con la herramienta configurada para pedidos.
+Respondé usando el resultado de esa consulta.
+
+# Si falta información
+No inventes fechas de entrega ni estados.
+Si la consulta falla, explicá que no pudiste verificar el pedido.
+Ofrecé derivar a una persona mediante la herramienta de delegación.
+
+# Atención humana
+Delegá cuando el cliente lo solicite o cuando no puedas resolver el reclamo.
+No digas que la derivación terminó antes de conocer el resultado.
+```
+
+## Información del negocio
+
+Usá las instrucciones para reglas permanentes y criterios de decisión. Cargá documentos extensos en **Conocimiento** y configurá su consulta en **Tools**. Evitá mantener precios contradictorios en el prompt y los documentos.
+
+El **Contexto global del contacto**, en **Avanzado**, incorpora historial y estado del contacto. Activarlo no reemplaza las instrucciones ni configura una herramienta.
+
+## Problemas frecuentes
+
+| Mensaje o síntoma | Qué revisar |
+|---|---|
+| Tienes acceso de solo lectura | Pedí a un administrador acceso de edición del agente. |
+| Cambios sin guardar | Guardá la pestaña donde editaste. |
+| No se pudo guardar | Revisá los campos marcados y volvé a guardar; conservá una copia del prompt si persiste. |
+| El agente promete una acción pero no la ejecuta | Revisá que la herramienta esté agregada, configurada y guardada. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Tengo que escribir las instrucciones en inglés?">
+    Podés escribirlas en español o inglés. Indicá el idioma de respuesta y comprobalo con mensajes reales de prueba en el [sandbox](/es/agentes-de-texto/sandbox).
+  </Accordion>
+  <Accordion title="¿Por qué el agente no deriva aunque se lo pida en el prompt?">
+    La instrucción necesita una herramienta de delegación configurada, con un destino disponible. Revisá sus reglas en [Herramientas](/es/agentes-de-texto/herramientas) y guardá **Tools**.
+  </Accordion>
+  <Accordion title="¿Guardar Instrucciones guarda también las otras pestañas?">
+    No. Cada pestaña guarda sus propios campos. Revisá el estado de guardado antes de iniciar una prueba.
+  </Accordion>
+  <Accordion title="¿Dónde configuro que no insista después de confirmar un pedido?">
+    En **Avanzado → Mensajes de seguimiento → Instrucciones personalizadas de seguimiento**. Esas reglas controlan cuándo no debe enviar seguimientos; ver [Seguimientos](/es/agentes-de-texto/seguimientos).
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Herramientas](/es/agentes-de-texto/herramientas)
+- [Seguimientos, horarios y cierre](/es/agentes-de-texto/seguimientos)
+- [Probar en el sandbox](/es/agentes-de-texto/sandbox)

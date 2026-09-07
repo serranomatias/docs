@@ -20,7 +20,7 @@ Permanently deletes an agent from your organization. This action cannot be undon
 
 ## Response
 
-Returns `true` on successful deletion.
+Returns `{ "statusCode": 200, "data": true }` on successful deletion.
 
 ## Error Codes
 
@@ -32,12 +32,12 @@ Returns `true` on successful deletion.
 
 <RequestExample>
 ```bash cURL
-curl -X DELETE "https://api.contactship.ai/v1/agents/agent-a1b2c3d4-e5f6-7890-abcd-ef1234567890" \
+curl -X DELETE "https://api.contactship.ai/v1/agents/a1b2c3d4-e5f6-4890-abcd-ef1234567890" \
   -H "x-api-key: your-api-key"
 ```
 
 ```javascript JavaScript
-const agentId = 'agent-a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+const agentId = 'a1b2c3d4-e5f6-4890-abcd-ef1234567890';
 const response = await fetch(
   `https://api.contactship.ai/v1/agents/${agentId}`,
   {
@@ -45,23 +45,26 @@ const response = await fetch(
     headers: { 'x-api-key': 'your-api-key' },
   }
 );
-const success = await response.json(); // true
+const { data: success } = await response.json(); // true
 ```
 
 ```python Python
 import requests
 
-agent_id = 'agent-a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+agent_id = 'a1b2c3d4-e5f6-4890-abcd-ef1234567890'
 response = requests.delete(
     f'https://api.contactship.ai/v1/agents/{agent_id}',
     headers={'x-api-key': 'your-api-key'},
 )
-print(response.json())  # True
+print(response.json()["data"])  # True
 ```
 </RequestExample>
 
 <ResponseExample>
 ```json Example Response
-true
+{
+  "statusCode": 200,
+  "data": true
+}
 ```
 </ResponseExample>

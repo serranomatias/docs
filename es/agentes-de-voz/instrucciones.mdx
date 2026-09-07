@@ -1,0 +1,182 @@
+---
+title: 'Instrucciones'
+description: 'La pestaña Instrucciones del agente de voz: objetivo de la conversación de hasta 2.900 caracteres, prompt de hasta 28.000 caracteres, Generar con IA, los tres modos de apertura, el editor markdown con menciones @ a herramientas y secciones editables, y las variables de contexto.'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read" route="Agentes → Voz → Instrucciones" />
+
+La pestaña **Instrucciones** contiene el prompt: las instrucciones completas que sigue el agente durante la llamada. También define el objetivo de la conversación y quién habla primero. Esta página describe los campos y el editor. Cómo escribir un buen prompt está en la [Guía de prompts](/es/agentes-de-voz/guia-de-prompts).
+
+{/* captura: images/agentes-de-voz/instrucciones-es.png | Pestaña Instrucciones con el editor de prompt, el contador de caracteres, el objetivo y el selector Cómo empieza la llamada | app: /agents/voice/[id]?activeTab=instructions */}
+
+## Campos
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Objetivo de la conversación** | "Una línea sobre qué es una llamada exitosa." Es la base de **Generar con IA** y aparece en la lista como **Propósito de conversación**. | Texto, hasta 2.900 caracteres | vacío, o el de la plantilla |
+| **Prompt** | "Las instrucciones completas que sigue el agente durante la llamada." | Markdown, hasta 28.000 caracteres. El contador muestra el máximo vigente para tu organización. | vacío, o el de la plantilla |
+| **Cómo empieza la llamada** | "Quién habla primero y si el saludo es fijo." | Esperar a quien llama (user_initiates), El agente saluda con sus palabras (ai_dynamic), El agente lee un saludo fijo (ai_defined) | El agente saluda con sus palabras |
+| **Frase de apertura** | El saludo exacto que lee el agente. Solo aparece con **El agente lee un saludo fijo**. | Texto | vacío |
+
+Los cuatro campos forman parte del borrador. Se aplican cuando publicás.
+
+## Objetivo y prompt
+
+El contador de cada campo cambia a ámbar al pasar el 90 % del máximo y a rojo al llegar al máximo. El editor no acepta más caracteres que el máximo.
+
+- **Generar con IA** aparece en el pie del editor solo cuando el prompt está vacío y el objetivo tiene texto. Genera un prompt a partir del nombre del agente, la voz, el idioma principal y el objetivo, y lo deja en el editor para que lo ajustes. Al terminar muestra "Prompt generado".
+- **Copiar prompt** copia el texto completo al portapapeles.
+
+<Tip>
+Escribí el objetivo antes que el prompt. Un objetivo concreto, por ejemplo "Agendar una visita al showroom y confirmar el correo del cliente", produce un prompt generado mucho más útil que "Atender clientes".
+</Tip>
+
+## Cómo empieza la llamada
+
+| Opción (clave) | Qué pasa al conectar |
+|---|---|
+| **Esperar a quien llama** (user_initiates) | El agente no dice nada hasta que la otra persona habla. Útil en llamadas salientes, donde quien atiende suele hablar primero. |
+| **El agente saluda con sus palabras** (ai_dynamic) | El agente habla primero e improvisa el saludo según el prompt. |
+| **El agente lee un saludo fijo** (ai_defined) | El agente habla primero y lee la **Frase de apertura** tal cual. Ejemplo de la app: "Hola, gracias por llamar. ¿En qué puedo ayudarte?" |
+
+La pausa antes de las primeras palabras se configura en **Avanzado → Conversación → Retardo de apertura**, de 0 a 5.000 ms, por defecto 0. Ver [Avanzado](/es/agentes-de-voz/avanzado). Si cambiás de modo, la **Frase de apertura** no se borra: vuelve a aparecer si volvés a **El agente lee un saludo fijo**.
+
+## El editor de prompts
+
+El prompt se escribe en markdown y se guarda como texto. El editor resalta títulos, listas, citas, negrita, cursiva, código en línea, menciones a herramientas y marcadores de sección.
+
+| Control de la barra | Qué hace |
+|---|---|
+| **Título 1**, **Título 2**, **Título 3** | Convierte la línea en un título (`#`, `##`, `###`). Volver a hacer clic lo quita. |
+| **Lista con viñetas**, **Lista numerada** | Convierte las líneas seleccionadas en lista. `Enter` continúa la lista y `Enter` en un ítem vacío la termina. |
+| **Negrita (Ctrl+B)**, **Cursiva (Ctrl+I)**, **Código en línea** | Envuelve la selección con `**`, `*` o acentos graves. |
+| **Buscar (Ctrl+F)** | Abre el buscador **Buscar en las instrucciones**. `Enter` va a la siguiente coincidencia, `Shift+Enter` a la anterior y `Esc` cierra. Muestra "n/m" o "Sin coincidencias". |
+| **Tabla de contenidos** | Lista los títulos y las secciones editables. Un clic lleva a esa línea. Vacía dice "Aún no hay títulos ni secciones". |
+
+Al seleccionar texto aparece una barra flotante con **Negrita**, **Cursiva**, **Código en línea** y **Convertir en sección**. La primera vez que abrís el editor, un recorrido de dos pasos explica la barra, las menciones y las secciones.
+
+## Mencionar herramientas con @
+
+{/* captura: images/agentes-de-voz/instrucciones-mencion-es.png | Menú Tools del agente abierto al escribir @ dentro del prompt, con el buscador y la lista de herramientas | app: /agents/voice/[id]?activeTab=instructions */}
+
+Escribí `@` al inicio de una palabra para abrir el menú **Tools del agente**, con el buscador **Buscar tools…**. Al elegir una, el editor inserta su nombre entre acentos graves, por ejemplo `` `transfer_to_sales` ``, que es el nombre exacto con el que la IA conoce la herramienta. La mención queda resaltada y, al pasar el mouse, muestra el nombre y la descripción de la herramienta. El menú lista las herramientas que ya agregaste en **Herramientas**: personalizadas, transferencias, traspasos y la base de conocimiento, que aparece como **Base de conocimiento** con el nombre `knowledge-base`. Si el agente no tiene herramientas, el menú no se abre.
+
+## Secciones editables
+
+{/* captura: images/agentes-de-voz/instrucciones-secciones-es.png | Panel Secciones editables a la derecha del editor con dos tarjetas y el botón Agregar sección | app: /agents/voice/[id]?activeTab=instructions */}
+
+Envolvé una parte del prompt entre `[[Nombre]]` y `[[/Nombre]]`, cada marcador en su propia línea, y esa parte se convierte en una tarjeta del panel **Secciones editables**. Sirve para lo que cambia seguido: promociones, horarios, prioridades. Quien mantiene esa información edita solo su tarjeta, sin tocar el resto del prompt.
+
+```markdown
+[[Promociones vigentes]]
+2x1 en limpieza dental hasta el 31/08.
+[[/Promociones vigentes]]
+```
+
+- El panel aparece a la derecha del editor en pantallas anchas. En pantallas chicas es un botón **Secciones editables** con la cantidad, que abre el panel lateral.
+- Cada tarjeta muestra el título y un extracto del contenido. Un clic abre **Editar sección** con **Título** y **Contenido**: "Los cambios se escriben de vuelta en el prompt entre los marcadores de la sección." El contenido admite markdown y puede quedar vacío.
+- El ícono del ojo, **Ver en el prompt**, lleva a los marcadores dentro del editor.
+- **Agregar sección** abre **Nueva sección editable** y la agrega al final del prompt.
+- **Buscar secciones…** filtra por título o contenido.
+- **Convertir en sección** de la barra flotante abre **Convertir en sección editable**: si la selección empieza con un título markdown, el título pasa a ser el nombre y el contenido llega hasta el siguiente título. "Nada cambia hasta que aceptes."
+
+Reglas: el título no puede contener corchetes ni saltos de línea, ni empezar con `/`. Dos secciones con el mismo nombre se distinguen con un número. Las secciones no se anidan. El prompt sigue siendo la única fuente de verdad: editar la tarjeta o el texto da el mismo resultado.
+
+## Variables
+
+Las variables se escriben entre llaves dobles y se reemplazan al iniciar la llamada. Las nativas se activan en **Avanzado → Contexto de entrada**, que precarga datos del contacto y sus últimas llamadas al recibir una llamada. La app aclara: "Estas casillas ya están referenciadas en el prompt del agente: con encenderlas alcanza." Escribir la variable en el prompt sirve para ubicar ese dato en un lugar puntual.
+
+| Variable | Qué inyecta | Dónde se activa |
+|---|---|---|
+| `{{contact_info}}` | Nombre, email y país de quien llama | **Información del contacto** |
+| `{{contact_name}}` | Solo el nombre del contacto | **Información del contacto** |
+| `{{contact_properties}}` | Las propiedades personalizadas del contacto, según el modo **Todas**, **Todas excepto…** o **Solo estas** | **Propiedades del contacto** |
+| `{{nombre_de_la_propiedad}}` | Una propiedad puntual. Cada propiedad viaja como variable propia. Si el contacto no la tiene, llega vacía. | **Propiedades del contacto** |
+| `{{call_history}}` | Fecha, dirección, resultado, duración y resumen de las últimas llamadas: de 0 a 6 llamadas, de 1 a 90 días hacia atrás, entrantes, salientes o ambas | **Historial de llamadas** |
+| `{{last_transcript}}` | La transcripción completa de la última llamada que tenga una, recortada al máximo que definas (de 500 a 20.000 caracteres) conservando el final | **Transcripción de la última llamada** |
+| Claves que devuelve tu webhook | Lo que responda tu endpoint al recibir la llamada. Tienen prioridad sobre las variables de arriba. | **Webhook propio** |
+
+Para llamadas de prueba, el panel **Probar agente** tiene **Variables dinámicas**: pares clave y valor, con claves en minúsculas y guiones bajos como `numero_pedido`. Ver [Versiones, publicación y pruebas](/es/agentes-de-voz/versiones-y-pruebas). El detalle de cada bloque está en [Avanzado](/es/agentes-de-voz/avanzado).
+
+## Ejemplo de esqueleto
+
+Un prompt corto que combina títulos, una sección editable, menciones a herramientas y variables. Sirve como punto de partida; la versión larga está en la [Guía de prompts](/es/agentes-de-voz/guia-de-prompts).
+
+```markdown
+# Identidad
+Eres Ana, asistente de Clínica Norte. Hablas en español, con frases cortas.
+
+# Contexto
+Datos de quien llama: {{contact_info}}
+Llamadas anteriores: {{call_history}}
+
+# Objetivo
+Agendar una consulta. Si preguntan por precios, responde con Promociones vigentes.
+
+[[Promociones vigentes]]
+2x1 en limpieza dental hasta el 31/08.
+[[/Promociones vigentes]]
+
+# Herramientas
+- Si piden hablar con una persona, usa `transfer_to_reception`.
+- Si preguntan por tratamientos o coberturas, consulta `knowledge-base` antes de responder.
+
+# Formatos de respuesta
+- Lee los teléfonos de a un dígito: "cuatro, cinco, seis".
+- Di las horas en formato de 12 horas: "tres de la tarde".
+
+# Límites
+No prometas descuentos que no estén en Promociones vigentes.
+Si no sabes algo, di que lo vas a consultar y ofrece una devolución de llamada.
+```
+
+## Qué no existe todavía
+
+- No se elige el modelo de lenguaje desde esta pestaña. La app lo define.
+- No hay lógica condicional ni plantillas dentro del prompt. Las llaves dobles solo reemplazan variables; el resto es texto que la IA interpreta.
+- No hay vista previa del prompt con las variables ya reemplazadas. Para verlo en acción, hacé una llamada de prueba.
+- El prompt no tiene historial propio. Forma parte de las versiones del agente, ver [Versiones, publicación y pruebas](/es/agentes-de-voz/versiones-y-pruebas).
+
+## Problemas frecuentes
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| "No se pudo generar el prompt" | La generación falló o el objetivo está vacío. | Escribí el **Objetivo de la conversación** y reintentá. |
+| El contador está en rojo y el editor no acepta más texto | Llegaste al máximo de caracteres. | Acortá el prompt o pasá el material de referencia a una [base de conocimiento](/es/agentes-de-voz/base-de-conocimiento). |
+| "El título no puede contener corchetes, saltos de línea ni empezar con /" | El nombre de la sección usa un carácter no permitido. | Cambiá el título. |
+| "La selección se superpone con una sección existente." | Intentaste convertir en sección un texto que ya incluye marcadores. | Seleccioná texto fuera de las secciones existentes. |
+| "El prompt cambió mientras el diálogo estaba abierto. Selecciona el texto e inténtalo de nuevo." | El prompt se modificó, por ejemplo por un autoguardado, mientras el diálogo de conversión estaba abierto. | Volvé a seleccionar el texto y repetí **Convertir en sección**. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Escribo las instrucciones en español o en inglés?">
+    Podés usar cualquiera de los dos. Probá las instrucciones con conversaciones representativas. Lo que importa es que el idioma en que debe hablar el agente esté definido en **General → Idiomas**.
+  </Accordion>
+  <Accordion title="¿Cómo hago para que lea bien números, precios, correos o fechas?">
+    Agregá al prompt una sección "Formatos de respuesta" con ejemplos: "cuando leas un teléfono como X, decilo como Y". Aplica a teléfonos, precios, correos, URLs, fechas, horas y siglas. Además, activá **Normalización del habla** en **Avanzado → Manual del agente**. Ver [Avanzado](/es/agentes-de-voz/avanzado).
+  </Accordion>
+  <Accordion title="¿Qué va en el prompt y qué va en la base de conocimiento?">
+    En el prompt va todo lo que el agente debe saber en todo momento: es más rápido y más preciso. La base de conocimiento es para contenido extenso, porque el agente tiene que ir a buscarlo durante la llamada. Ver [Base de conocimiento](/es/agentes-de-voz/base-de-conocimiento).
+  </Accordion>
+  <Accordion title="¿Cómo evito que el agente invente respuestas?">
+    Escribí límites explícitos: qué no decir y qué responder cuando no tiene la información. Activá **No salirse del tema** en **Avanzado → Manual del agente**. Para procesos distintos, usá varios agentes especializados y un agente de triage con la herramienta **Traspaso de agente**.
+  </Accordion>
+  <Accordion title="¿Los cambios en el prompt se aplican de inmediato?">
+    No. Quedan en el borrador, que se guarda solo mientras escribís. Las llamadas siguen usando la versión publicada hasta que hagas clic en **Publicar**.
+  </Accordion>
+  <Accordion title="¿Puedo pegar un prompt escrito en otra herramienta?">
+    Sí. El editor acepta markdown y texto plano, hasta 28.000 caracteres. Las secciones editables y las menciones son opcionales: podés agregarlas después con **Convertir en sección** y `@`.
+  </Accordion>
+  <Accordion title="¿Qué pasa si uso una propiedad como variable y el contacto no la tiene?">
+    La variable llega vacía. Indicale al agente qué hacer en ese caso, por ejemplo "si no hay número de pedido, pedilo".
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Guía de prompts](/es/agentes-de-voz/guia-de-prompts)
+- [Herramientas](/es/agentes-de-voz/herramientas)
+- [Avanzado: voz, manual y contexto](/es/agentes-de-voz/avanzado)
+- [Versiones, publicación y pruebas](/es/agentes-de-voz/versiones-y-pruebas)

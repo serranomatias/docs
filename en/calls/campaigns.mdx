@@ -1,0 +1,53 @@
+---
+title: "Call campaigns"
+description: "Prepare contacts, an agent, calling hours, and retries for a voice campaign."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Campaigns → Voice" permission="campaigns.read / campaigns.create" />
+
+A campaign organizes outbound calls to a set of contacts. Before publishing, test the agent with your own number and check your balance and caller ID.
+
+## Create the campaign
+
+1. Open **Campaigns**, create a campaign, and select voice when the type picker appears.
+2. In **Details**, enter its name, schedule, calling window, verified caller ID, and retries. The form accepts **1 to 10** retries.
+3. In **Agent**, choose the agent prepared for this operation. Review its instructions, tools, and published version.
+4. In **Contacts**, add recipients from a file, board, or existing campaign. Review numbers and counts before proceeding.
+5. Review the summary and publish when you are ready to place real calls according to the schedule.
+
+The calling window determines when the campaign can operate; it is separate from each call’s duration limit. This form has no concurrency control.
+
+## Track progress
+
+| Status | Meaning |
+|---|---|
+| `PENDING` | Waiting to start. |
+| `ACTIVE` | Running. |
+| `PAUSED` | Paused. |
+| `COMPLETED` | Execution finished. |
+| `CREDITS_REQUIRED` | Credits are needed to continue. |
+| `INCOMPLETE` | Execution is incomplete and needs review. |
+
+The detail view includes metrics, rates, and charts. Open individual calls to distinguish unanswered calls, voicemail, failures, and analysis outcomes. **Completed** describes the campaign; it does not mean every contact answered.
+
+To stop new attempts, use the campaign’s pause action and inspect calls already in progress. Resolve the cause of an interruption before resuming.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can I use any caller ID?">
+    Choose a verified number available to the organization in **My numbers**.
+  </Accordion>
+  <Accordion title="Why did it stop for credits?">
+    Check the balance in Billing and recheck the campaign status after topping up.
+  </Accordion>
+  <Accordion title="Where do I configure simultaneous calls?">
+    The editor does not offer this setting. Contact support if your operation needs specific capacity.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [My numbers](/en/calls/my-numbers)
+- [Import contacts](/en/contacts/import)

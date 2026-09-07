@@ -1,0 +1,46 @@
+---
+title: "Criterios de evaluación"
+description: "Definí criterios para llamadas y entendé aprobación, cobertura y resultados desconocidos."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Ajustes → Organización → Evaluaciones; Reportes" permission="reports.read" />
+
+Los criterios evalúan aspectos concretos de una conversación, como si el agente confirmó el motivo de consulta. Definilos con una regla observable y vinculalos a los agentes que correspondan.
+
+## Crear y vincular
+
+1. Abrí **Administrar evaluaciones** desde el reporte o la configuración de evaluaciones de la organización.
+2. Creá un criterio con nombre, clave y prompt de evaluación. La clave no se cambia después de crearlo.
+3. Elegí **Binario** o **Porcentaje** y describí la rúbrica: qué evidencia cuenta, qué significa cumplir y cómo tratar información insuficiente. Agregá contexto del agente si hace falta.
+4. Guardá y seleccioná el criterio en **Avanzado → Post llamada** del agente de voz. El agente admite hasta 15 criterios.
+5. La conexión del criterio se guarda al instante, sin publicar. Probá con llamadas que deban aprobar y fallar. Conectar criterios requiere `evaluation_criteria.update` y `agents.update`.
+
+## Leer el reporte
+
+El reporte incluye ranking de criterios, veredictos en el tiempo y resultados individuales. Abrí un criterio para filtrar por éxito, falla o desconocido; desde el resultado podés abrir la llamada.
+
+**Pass rate** de un criterio = éxitos ÷ (éxitos + fallas). Los desconocidos quedan fuera del denominador. **Cobertura** indica cuánto material tiene veredictos definitivos. Por eso una aprobación alta con baja cobertura no describe todas las llamadas.
+
+El indicador global cuenta las llamadas cuyos veredictos fueron todos exitosos. Los criterios de porcentaje también muestran distribución y score promedio. Una calificación humana y el veredicto automático son registros diferentes.
+
+Archivá criterios que ya no deban usarse, conservando el contexto necesario para interpretar resultados históricos.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Desconocido cuenta como falla?">
+    No entra en el denominador del pass rate. Revisá cobertura y la llamada.
+  </Accordion>
+  <Accordion title="¿Crear el criterio alcanza?">
+    No. Hay que vincularlo al agente; esa conexión se aplica al instante a las próximas llamadas.
+  </Accordion>
+  <Accordion title="¿La evaluación demuestra que una operación externa ocurrió?">
+    Contrastá el veredicto con el resultado de la herramienta y el sistema de destino.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Post llamada](/es/agentes-de-voz/post-llamada)
+- [Dashboard](/es/reportes/dashboard)

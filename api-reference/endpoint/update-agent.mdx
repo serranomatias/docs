@@ -1,31 +1,64 @@
 ---
-title: 'Update Agent'
-openapi: 'PUT /v1/agents/{agentId}'
+title: "Update Agent"
+api: "PUT /v1/agents/{agentId}"
+description: "Update a voice agent through its draft and publish the resulting configuration."
 ---
 
-<Endpoint
-  method="PUT"
-  path="/v1/agents/{agentId}"
-  description="Update an existing agent's configuration"
->
-  <RequestBody
-    description="Update agent configuration"
-    required
-    contentType="application/json"
-    schemaRef="#/components/schemas/UpdateAgent"
-  />
-  <ResponseFields>
-    <ResponseField
-      status="200"
-      description="Agent updated successfully"
-      contentType="application/json"
-      schemaRef="#/components/schemas/AgentResponse"
-    />
-    <ResponseField
-      status="400"
-      description="Unexpected error"
-      contentType="application/json"
-      schemaRef="#/components/schemas/Error"
-    />
-  </ResponseFields>
-</Endpoint>
+Update a voice agent through its draft and publish the resulting configuration.
+
+## Authentication
+
+<ParamField header="x-api-key" type="string" required>Organization API key. Keep it on your server or in a credential store.</ParamField>
+
+This endpoint publishes the updated configuration. It is not a draft-only save. Retrieve the agent first and send only intended changes. Review open draft work before an API update.
+
+<ParamField path="agentId" type="string" required>Agent ID in your organization.</ParamField>
+
+## Body
+
+All fields are optional. The create-agent fields are accepted, plus `start_speaker` (`agent` or `user`).
+
+<ParamField body="name" type="string">Internal name.</ParamField>
+<ParamField body="voice_id" type="string">ID from List voices.</ParamField>
+<ParamField body="timezone" type="string">IANA time zone, such as `America/Mexico_City`.</ParamField>
+<ParamField body="person_name" type="string">In-call name.</ParamField>
+<ParamField body="language" type="string">Supported language code, such as `en-US`, `es-ES`, `es-419`, or `multi` (Spanish and English).</ParamField>
+<ParamField body="conversation_purpose" type="string">Conversation objective.</ParamField>
+<ParamField body="prompt" type="string">Instructions, up to 28,000 characters.</ParamField>
+<ParamField body="webhook_url" type="string">Outgoing webhook URL.</ParamField>
+<ParamField body="ambient_sound" type="string">`coffee-shop`, `convention-hall`, `summer-outdoor`, `mountain-outdoor`, `static-noise`, or `call-center`.</ParamField>
+<ParamField body="voice_speed" type="number">API range 0.5–2; the app slider exposes a narrower range.</ParamField>
+<ParamField body="voice_temperature" type="number">0–2.</ParamField>
+<ParamField body="volume" type="number">0–2.</ParamField>
+<ParamField body="ambient_sound_volume" type="number">0–2.</ParamField>
+<ParamField body="responsiveness" type="number">0–1.</ParamField>
+<ParamField body="interruption_sensitivity" type="number">0.1–1.</ParamField>
+<ParamField body="begin_message" type="string">Opening phrase, up to 240 characters.</ParamField>
+<ParamField body="begin_message_delay_ms" type="number">0–5,000 milliseconds.</ParamField>
+<ParamField body="max_call_duration_ms" type="number">Requested maximum call duration in milliseconds, subject to plan limits.</ParamField>
+<ParamField body="boosted_keywords" type="string[]">Terms to improve recognition.</ParamField>
+<ParamField body="post_call_analysis_data" type="object[]">Extraction definitions with string, enum, boolean, or number type.</ParamField>
+<ParamField body="tools" type="object[]">Tool definitions: booking, transfer_call, custom, end_call, or agent_swap. Use the schema for the selected tool type; changing an array can replace its configuration.</ParamField>
+
+```bash
+curl -X PUT 'https://api.contactship.ai/v1/agents/AGENT_ID'   -H 'x-api-key: YOUR_API_KEY' -H 'Content-Type: application/json'   -d '{"conversation_purpose":"Help customers choose a showroom appointment."}'
+```
+
+## Response
+
+<ResponseField name="statusCode" type="number">HTTP response status.</ResponseField>
+<ResponseField name="data.id" type="string">ContactShip agent ID, used in agent and call endpoints.</ResponseField>
+<ResponseField name="data.name" type="string">Internal name.</ResponseField>
+<ResponseField name="data.person_name" type="string">In-call name.</ResponseField>
+<ResponseField name="data.prompt" type="string">Instructions.</ResponseField>
+<ResponseField name="data.conversation_purpose" type="string">Conversation objective.</ResponseField>
+<ResponseField name="data.voice_id" type="string">Voice ID.</ResponseField>
+<ResponseField name="data.language" type="string">Configured language code.</ResponseField>
+<ResponseField name="data.timezone" type="string">IANA time zone.</ResponseField>
+<ResponseField name="data.tools" type="object[]">Configured tool definitions.</ResponseField>
+<ResponseField name="data.post_call_analysis_data" type="object[]">Extraction fields.</ResponseField>
+<ResponseField name="data.webhook_url" type="string">Outgoing call webhook URL.</ResponseField>
+<ResponseField name="data.created_at" type="string">Creation timestamp.</ResponseField>
+<ResponseField name="data.updated_at" type="string">Update timestamp.</ResponseField>
+
+The response also includes configured voice/conversation values such as volume, voice_speed, voice_temperature, responsiveness, interruption_sensitivity, ambient_sound, ambient_sound_volume, begin_message, begin_message_delay_ms, max_call_duration_ms, start_speaker, and boosted_keywords.

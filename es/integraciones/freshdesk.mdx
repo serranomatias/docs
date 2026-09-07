@@ -1,0 +1,47 @@
+---
+title: "Freshdesk"
+description: "Conectá Freshdesk con subdominio y clave API. Configurá tickets, contactos y notas en automatizaciones del inbox."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Integraciones → Freshdesk" permission="integrations.read; integrations.create" />
+
+Freshdesk conecta la gestión de tickets con ContactShip. Usá sus acciones para sincronizar contactos, crear tickets y agregar notas con contexto de conversaciones.
+
+## Conectar
+
+1. Abrí **Integraciones → Freshdesk**.
+2. En **Dominio de Freshdesk**, ingresá solo el subdominio: para `tuempresa.freshdesk.com`, escribí `tuempresa`.
+3. Ingresá la clave API de Freshdesk y confirmá la conexión.
+4. Si aparece **Credenciales inválidas. Verifica tu clave API y dominio.**, corregí ambos datos antes de continuar.
+
+## Configurar el trabajo
+
+En las automatizaciones del inbox, elegí el evento y las condiciones. Las acciones disponibles incluyen sincronizar contacto, crear ticket y agregar una nota de conversación.
+
+Conectar Freshdesk no significa que cada conversación cree un ticket. Definí cuándo corresponde, qué información enviar y cómo evitar tickets duplicados al reejecutar una regla.
+
+## Consultar tickets desde el softphone
+
+Con la integración conectada, el panel de un contacto conocido puede mostrar tickets si tiene correo o teléfono. El resumen muestra hasta dos abiertos o pendientes; la pestaña **Tickets** consulta los últimos tres días y permite abrir Freshdesk.
+
+Si no aparecen tickets, comprobá la identidad del contacto, los filtros y la conexión antes de crear uno nuevo.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Ingreso la URL completa de Freshdesk?">
+    No. El formulario pide el subdominio sin `.freshdesk.com`.
+  </Accordion>
+  <Accordion title="¿Por qué no se crea un ticket al cerrar la conversación?">
+    Revisá el disparador, las condiciones y la acción de crear ticket en la automatización. La conexión por sí sola no la configura.
+  </Accordion>
+  <Accordion title="¿Reejecutar una automatización puede duplicar un ticket?">
+    Puede repetir acciones que ya tuvieron éxito. Revisá la ejecución anterior antes de reintentar.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Automatizaciones](/es/mensajes/automatizaciones)
+- [Softphone](/es/contact-center/softphone)

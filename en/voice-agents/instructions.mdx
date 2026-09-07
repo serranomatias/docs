@@ -1,0 +1,75 @@
+---
+title: "Instructions"
+description: "Write the objective and prompt, choose an opening, and use tools, variables, and editable sections."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Agents → Voice → Instructions" permission="agents.read; agents.update to edit" />
+
+Define one clear **Conversation objective**, then write the instructions the agent needs to achieve it. The prompt supports Markdown and up to **28,000 characters**. **Generate with AI** drafts instructions from the objective and agent configuration; review the result before publishing. **Copy prompt** copies the full text.
+
+## Choose how calls begin
+
+| Mode | Behavior |
+|---|---|
+| Wait for the caller (`user_initiates`) | Waits for the other person to speak. |
+| Agent greets in its own words (`ai_dynamic`) | Speaks first using the prompt. |
+| Agent reads a fixed greeting (`ai_defined`) | Reads the configured opening phrase. |
+
+The opening delay is in **Advanced → Conversation**, from 0 to 5 seconds. Switching modes preserves the fixed phrase for later use.
+
+## Work in the editor
+
+The toolbar supports headings, lists, bold, italic, inline code, search, and a table of contents. Search uses `Ctrl+F`; Enter and Shift+Enter move between matches. Select text for the floating formatting toolbar.
+
+Type `@` at the start of a word to select a tool already attached to the agent. The editor inserts its exact name in backticks. A mention does not create or connect a tool.
+
+Use paired markers on separate lines for frequently maintained sections:
+
+```markdown
+[[Business hours]]
+Monday through Friday, nine in the morning to six in the evening.
+[[/Business hours]]
+```
+
+The **Editable sections** panel lets your team update these blocks. Titles cannot contain brackets or newlines or start with `/`. Sections cannot nest. Cards and the prompt edit the same text; this is not a separate shared library.
+
+## Use variables
+
+Enable the relevant blocks in **Advanced → Inbound context**. Their content is already included in the final prompt; insert a variable explicitly when you need it in a particular place.
+
+| Variable | Content |
+|---|---|
+| `{{contact_info}}`, `{{contact_name}}` | Contact information or name. |
+| `{{contact_properties}}` | Selected custom contact properties. |
+| `{{property_name}}` | An individual enabled property; empty when absent. |
+| `{{call_history}}` | Configured recent-call summaries. |
+| `{{last_transcript}}` | Most recent available transcript, truncated to the configured limit. |
+| Inbound webhook keys | Context returned by your endpoint; overlapping keys take precedence. |
+
+Test variables can also be provided in the test panel. Always explain what the agent should do when a value is missing. Double braces substitute values; they do not provide a conditional template language.
+
+Prompt changes autosave to a draft and take effect after publishing. Write in Spanish or English as appropriate, specify spoken languages in General, and verify the result with representative calls.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why does the agent still follow old instructions?">
+    Check for save errors and publish the draft before testing.
+  </Accordion>
+  <Accordion title="How do I improve spoken numbers?">
+    Add concrete examples for phone numbers, prices, dates, and abbreviations, then test them aloud. Speech normalization is also available in Advanced.
+  </Accordion>
+  <Accordion title="Should documents go in the prompt?">
+    Keep essential behavior and short reference facts here. Put long documents in a connected knowledge base and explain when to search it.
+  </Accordion>
+  <Accordion title="Why does @ show no tools?">
+    Add tools in the Tools tab first.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Prompt guide](/en/voice-agents/prompt-guide)
+- [Tools](/en/voice-agents/tools)
+- [Advanced](/en/voice-agents/advanced)

@@ -1,0 +1,61 @@
+---
+title: "Your first WhatsApp agent"
+description: "Connect a channel, prepare a text agent, and test assignment and replies."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Messages / Agents → Text" permission="channels.create / agents.create" />
+
+To answer WhatsApp with AI, you need a connected channel and a text agent assigned through that channel’s rules. Creating either one alone does not complete the setup.
+
+## Connect WhatsApp
+
+Open **Settings → Inbox → Channels → New Channel**, choose WhatsApp Business, and complete the supported Facebook connection flow. You can reuse an organization’s existing business account. Check that the channel is active. Manual credential setup and the Instagram/Messenger options are not available as completed connection flows yet.
+
+## Create the text agent
+
+1. Open **Agents → New agent → Text agent** when enabled for the organization.
+2. Review its name, description, model, and time zone.
+3. Write instructions describing its role, objective, supported information, and handoff behavior.
+4. Add only the tools the agent needs and configure their destinations and required data.
+5. Save each configuration tab. Text-agent settings do not use the voice-agent draft/publication workflow.
+
+## Test before assigning traffic
+
+Use the text-agent sandbox for prompt behavior, missing information, and tool choices. Sandbox tools are simulated; a successful simulation does not prove a real endpoint or integration works. The separate HTTP endpoint test sends a real request.
+
+## Assign the channel
+
+Open the channel’s **Assignment** settings. Add or edit the rule that should apply, select AI and your text agent, and review schedule, time zone, fallback, and order. Save the channel configuration.
+
+Review **Replies** as well: out-of-hours behavior and a fixed greeting can affect whether an AI answer is sent. If a person already owns a conversation, inspect its assignment before expecting the AI to resume.
+
+## Verify with a phone
+
+Open the test QR/link and send a controlled message to the channel. Confirm it arrives in **Messages**, the expected rule assigns it, and the answer follows your instructions. Try a missing-data question and a human-handoff request.
+
+Watch the WhatsApp reply-window indicator. When free-form replies are unavailable, use an approved template through the supported flow. Enable experimental follow-ups only after reviewing their timing, schedule, and behavior.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why is the AI silent?">
+    Check active channel, assignment rule, agent settings, business hours, fixed greetings, and human takeover.
+  </Accordion>
+  <Accordion title="Does saving a voice agent update WhatsApp?">
+    No. WhatsApp assignment uses a text agent; voice and text agents have separate configuration.
+  </Accordion>
+  <Accordion title="Does the sandbox send WhatsApp messages?">
+    No. It simulates the agent conversation and tool effects. Verify the real channel separately.
+  </Accordion>
+  <Accordion title="Why is the Text option missing?">
+    Check organization access with an administrator or support.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Connect WhatsApp](/en/messages/connect-whatsapp)
+- [Text-agent setup](/en/text-agents/create)
+- [Channel settings](/en/messages/channel-settings)
+- [Sandbox](/en/text-agents/sandbox)

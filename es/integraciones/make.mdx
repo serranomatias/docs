@@ -1,0 +1,48 @@
+---
+title: "Make"
+description: "Conectá escenarios de Make con la API de ContactShip y verificá cada operación antes de automatizarla."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Integraciones → Make" permission="integrations.read" />
+
+Make permite conectar eventos de otros sistemas con operaciones de ContactShip. La tarjeta **Make** del catálogo abre el enlace para instalar la integración.
+
+## Configurar un escenario
+
+1. Abrí **Integraciones → Make** y usá **Instalar ContactShip en Make**.
+2. En Make, agregá el módulo de ContactShip disponible para tu escenario.
+3. Configurá la conexión con la clave API de la organización que va a operar.
+4. Elegí una acción y mapeá los datos del evento a sus campos.
+5. Probá con un registro controlado y revisá el resultado en ContactShip antes de activar el escenario.
+
+El acceso API depende del plan de ContactShip. La clave API de ContactShip no es una credencial de Make.
+
+## Diseñar el flujo
+
+Separá el evento que inicia el escenario de la acción que realiza ContactShip. Si una llamada se inicia correctamente, su análisis todavía puede estar pendiente. Para procesar resultados completos, usá el evento de análisis correspondiente.
+
+Antes de reintentar una acción que crea llamadas, contactos o mensajes, comprobá si el intento anterior se procesó. Una repetición del escenario puede repetir la acción.
+
+## Si no encontrás una operación
+
+Compará las operaciones del módulo instalado con la referencia pública de la API. Un módulo puede cubrir solo una parte de la API. No cambies rutas o parámetros suponiendo que son iguales entre integraciones.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Dónde está el enlace de instalación?">
+    En la tarjeta de **Make** dentro de **Integraciones**. Usá el enlace que muestra la app.
+  </Accordion>
+  <Accordion title="¿Qué organización usa el escenario?">
+    La organización a la que pertenece la clave API configurada en la conexión.
+  </Accordion>
+  <Accordion title="¿Puedo usar el resultado de iniciar llamada como análisis final?">
+    No. Son momentos distintos. Esperá el evento de análisis para procesar el resultado completo.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Claves API](/es/organizacion/claves-api)
+- [Webhooks](/es/llamadas/webhooks)

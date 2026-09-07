@@ -1,0 +1,57 @@
+---
+title: "Conceptos de ContactShip"
+description: "Entendé cómo se relacionan organización, agentes, canales, contactos, conversaciones, llamadas y campañas."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="ContactShip" />
+
+ContactShip conecta agentes de IA y personas con llamadas y mensajes. Estos conceptos ayudan a configurar la plataforma y a interpretar los registros sin confundir funciones.
+
+## Cómo se relacionan
+
+| Concepto | Qué representa | Relación |
+|---|---|---|
+| Organización | Espacio de trabajo con datos, miembros y configuración | Verificá cuál está activa antes de trabajar |
+| Miembro | Persona con acceso a la app | Su rol determina acciones y alcance |
+| Agente de voz | IA que atiende llamadas | Usa voz, instrucciones, herramientas y versiones |
+| Agente de texto | IA que responde conversaciones escritas | Recibe conversaciones según asignación del canal |
+| Canal | Conexión de mensajería | Contiene reglas y conversaciones |
+| Contacto | Registro de una persona en el CRM | Reúne datos y actividad asociada |
+| Conversación | Intercambio de mensajes en un canal | Tiene estado y responsable |
+| Llamada | Una interacción de voz | Tiene registro, transcripción y análisis cuando están disponibles |
+| Campaña | Operación sobre una lista de contactos | Puede ser de llamadas o mensajes |
+
+## Del contacto a la atención
+
+Un contacto puede tener varias llamadas y conversaciones. La IA o una persona atiende según el tipo de interacción y la configuración de asignación. El historial permite revisar qué pasó sin crear otro contacto por cada interacción.
+
+Un tablero representa el avance de contactos por etapas. Una cola distribuye llamadas entre personas. Un equipo agrupa miembros. Aunque trabajen juntos, configurar uno no crea los otros.
+
+## Tres controles de acceso
+
+La disponibilidad indica si el módulo está habilitado para la organización. El plan fija acceso y límites. El rol y su alcance determinan lo que puede hacer cada persona. Si falta una función, revisá los tres controles.
+
+## Instrucciones, herramientas y conocimiento
+
+Las instrucciones explican cómo actuar. Las herramientas ejecutan acciones o consultas. El conocimiento aporta información del negocio. Un prompt que dice «agendá» necesita además una herramienta de agenda configurada.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Un agente de texto también atiende llamadas?">
+    Son tipos separados con configuraciones diferentes. Creá el tipo correspondiente a la interacción que querés atender.
+  </Accordion>
+  <Accordion title="¿Una conversación es lo mismo que un contacto?">
+    No. El contacto representa a la persona y puede tener varias conversaciones y llamadas asociadas.
+  </Accordion>
+  <Accordion title="¿Un equipo reemplaza el rol?">
+    No. El equipo agrupa personas; el rol determina sus permisos. Consultá [Equipos](/es/organizacion/equipos).
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Glosario](/es/comenzar/glosario)
+- [Contactos](/es/contactos/contactos-y-propiedades)
+- [Roles y permisos](/es/organizacion/roles-y-permisos)

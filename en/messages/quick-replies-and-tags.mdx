@@ -1,0 +1,57 @@
+---
+title: "Quick replies and conversation tags"
+description: "Maintain shared response text and classify inbox conversations."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Inbox → Quick Replies / Tags" permission="quick-replies.read / tags.read" />
+
+Quick replies insert saved text into the composer. Conversation tags classify inbox threads and can notify selected members. Both resources belong to the organization.
+
+## Quick replies
+
+Open **Quick Replies → New Quick Reply** with `quick-replies.create`. The only field is required **Content**, which accepts multiline text. **Create Quick Reply** saves it. Editing and deletion require the corresponding `quick-replies.update` and `quick-replies.delete` permissions.
+
+In the inbox’s **Reply** mode, select **Quick Replies**, choose an entry, and edit the inserted text before sending. It is inserted at the cursor; it is not sent immediately. The composer has no slash command for quick replies.
+
+Quick replies have no separate title, category, variables, attachments, or private-per-user scope. Fill customer names manually after inserting. When the WhatsApp free-form window is closed, the quick-reply button is disabled; use an approved template.
+
+## Conversation tags
+
+Open **Inbox Tags → New Tag** with `tags.create`. Enter a required name, optional description of up to 255 characters, and a color. Enable **Email Notifications** and select **Notify Users** when appropriate. Editing and deletion use `tags.update` and `tags.delete`.
+
+Search matches name and description. Sort by creation date, name, or conversation count and choose cards or table view. A dash for the conversation count means the count is unavailable; the tag itself still works.
+
+Apply or remove tags from the open conversation’s **Tags** control. The inbox tag filter supports up to four selected tags. Text-agent tools and automations can also apply conversation tags.
+
+| Tag type | Applies to | Managed in |
+|---|---|---|
+| Conversation | An inbox thread | Inbox settings |
+| Contact | A CRM contact | Contact-management settings |
+| Call | A particular analyzed call | Voice-agent settings |
+
+The lists are independent. Creating a conversation tag does not create a contact tag. Other open tabs may need a refresh to reflect a removed conversation tag.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Are quick replies sent immediately?">
+    No. They insert editable text into the composer.
+  </Accordion>
+  <Accordion title="Can I insert a customer-name variable?">
+    Quick replies do not substitute variables. Edit the name manually or use a suitable template.
+  </Accordion>
+  <Accordion title="Who receives tag emails?">
+    Members selected in Notify Users when Email Notifications is enabled.
+  </Accordion>
+  <Accordion title="Can I import or export these resources?">
+    Neither settings screen offers import or export.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Inbox](/en/messages/inbox)
+- [Templates](/en/messages/templates)
+- [Contact tags](/en/contacts/tags)
+- [Automations](/en/messages/automations)

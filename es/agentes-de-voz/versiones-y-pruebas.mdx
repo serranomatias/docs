@@ -1,0 +1,202 @@
+---
+title: 'Versiones, publicación y pruebas'
+description: 'Ciclo de vida del agente de voz (borrador, publicada, archivada), guardado automático, qué se guarda al instante, Publicar con nota de cambios, Descartar borrador, Historial de versiones con Restaurar, y el panel Probar agente con llamadas web y telefónicas, transcripción en vivo y llamadas de prueba recientes.'
+sidebarTitle: 'Versiones y pruebas'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read" route="Agentes → Voz → encabezado del editor" />
+
+Un agente de voz tiene versiones. Editás un **borrador** que se guarda solo; las llamadas usan la **versión publicada**; cada publicación archiva la anterior y podés **restaurar** cualquiera. El panel **Probar agente** hace llamadas web o telefónicas con la versión publicada. Esta página explica el ciclo completo y el panel de pruebas.
+
+{/* captura: images/agentes-de-voz/versiones-encabezado-es.png | Encabezado del editor con la insignia v3, los botones Versiones, Probar agente y Publicar, y el aviso Tus cambios aún no están publicados | app: /agents/voice/[id] */}
+
+## Ciclo de vida de una versión
+
+| Estado | Qué es | Cuántas por agente |
+|---|---|---|
+| **Borrador** (`draft`) | La copia que editás. Se crea sola al abrir el editor con permiso de edición, a partir de la versión publicada. | Como máximo una. |
+| **Publicada** (`published`) | La versión que atiende las llamadas. | Como máximo una. |
+| **Archivada** (`archived`) | Una versión publicada anteriormente. Se conserva para el historial y para restaurarla. | Sin límite. |
+
+Cada versión tiene un número correlativo. El encabezado muestra una insignia **vN** con el número del borrador o, si no hay borrador, de la publicada. Al pasar el cursor dice "vN · borrador" o "vN · publicada". La insignia es azul con cambios sin publicar y verde cuando todo está publicado.
+
+## Qué se guarda solo y qué requiere publicar
+
+Casi todo el editor escribe en el borrador y se aplica al publicar. Algunas cosas se guardan al instante y ya aplican a las próximas llamadas:
+
+| Se guarda en el borrador, se aplica al publicar | Se guarda al instante, sin publicar |
+|---|---|
+| Nombre en llamadas, idiomas, zona horaria, voz y sonido de fondo | **Nombre del agente** (el nombre interno) |
+| Objetivo, instrucciones y cómo empieza la llamada | Herramientas de calendario (Google Calendar y Cal.com): "Las herramientas de calendario se aplican al instante. No forman parte del borrador ni esperan a la publicación." |
+| Herramientas del catálogo del agente | Criterios de evaluación conectados |
+| Voz, Conversación, Contexto de entrada, Voces de respaldo, Manual del agente | Tablero de contactos |
+| Datos de análisis y Webhook de salida | Etiquetas de llamada |
+
+### Guardado automático del borrador
+
+- Cada cambio se guarda solo, menos de un segundo después de que dejás de escribir. `Cmd+S` o `Ctrl+S` guarda en el momento.
+- Al salir del editor se guarda lo pendiente. Si cerrás la pestaña del navegador con un guardado en curso, el navegador pide confirmación.
+- La barra inferior muestra el estado: **Todo publicado**, **Cambios sin publicar**, **Guardando…**, **Borrador guardado**, **No se pudo guardar** (con el detalle del error debajo) o **Hay un valor fuera de rango**.
+- Mientras hay cambios sin publicar, un aviso bajo las pestañas dice **Tus cambios aún no están publicados**. "Las llamadas siguen usando la vN hasta que publiques." Si el agente nunca se publicó: "Este agente no atenderá llamadas hasta que lo publiques."
+
+## Publicar
+
+**Publicar** está en el encabezado y en la barra inferior. Solo se habilita con cambios sin publicar y sin valores fuera de rango.
+
+<Steps>
+  <Step title="Presioná Publicar">
+    Se abre **Publicar cambios**: "Opcionalmente anota qué cambió, para que el historial se lea bien después." El ejemplo del campo es "Saludo más suave, límite de llamada más corto".
+  </Step>
+  <Step title="Confirmá con o sin nota">
+    Con texto, el botón dice **Publicar**; sin texto, **Publicar sin nota**. Mientras tanto, el botón dice **Publicando…**.
+  </Step>
+  <Step title="Verificá el resultado">
+    Aparece "Versión N publicada". El borrador pasa a ser la versión publicada, la publicada anterior queda archivada y la insignia cambia a verde. Las llamadas nuevas usan la versión recién publicada.
+  </Step>
+</Steps>
+
+Publicar sincroniza la configuración con el motor de llamadas. Si la sincronización falla, por ejemplo por una voz inválida, aparece "No se pudo publicar" y las llamadas siguen con la versión publicada anterior.
+
+## Descartar borrador
+
+En la barra inferior, mientras hay cambios sin publicar, **Descartar borrador** abre **¿Descartar este borrador?**: "Se perderán los cambios sin publicar. La versión publicada no cambia." Al confirmar con **Descartar**, el borrador vuelve a tener exactamente la configuración publicada. Si el agente nunca se publicó, no hay versión a la que volver.
+
+## Historial de versiones y restaurar
+
+El botón **Versiones** del encabezado abre **Historial de versiones**: "Todas las versiones publicadas de este agente." Cada entrada muestra **Versión N**, su estado (**Borrador**, **Publicada** o **Archivada**), la nota de publicación o "Sin notas", y la fecha. Sin publicaciones dice "Todavía no hay historial".
+
+{/* captura: images/agentes-de-voz/versiones-historial-es.png | Historial de versiones con una versión publicada, dos archivadas y el botón Restaurar esta versión | app: /agents/voice/[id] */}
+
+Las versiones **Archivadas** tienen el botón **Restaurar esta versión**. Al confirmar **¿Restaurar la versión N?** ("Pasará a ser la versión publicada de inmediato. La actual se archiva, no se elimina."):
+
+- La plataforma publica una versión nueva con la configuración de la versión elegida. La versión nueva lleva el número siguiente y la nota `Rollback to vN`.
+- La versión que estaba publicada pasa a archivada.
+- Aparece "La versión N ya está publicada" con el número de la versión nueva.
+
+<Warning>
+Restaurar sobreescribe el borrador abierto con la configuración de la versión elegida y lo publica. Los cambios sin publicar que tuvieras en el borrador se pierden. Si querés conservarlos, copiá el prompt antes de restaurar.
+</Warning>
+
+## Permisos
+
+- Ver el editor requiere `agents.read`.
+- Editar, publicar, descartar y restaurar requieren `agents.update`. Sin ese permiso el editor muestra "Tienes acceso de solo lectura" y no se crea borrador.
+- Eliminar el agente requiere `agents.delete`.
+
+Los permisos se asignan en [Roles y permisos](/es/organizacion/roles-y-permisos).
+
+## Probar agente
+
+El botón **Probar agente** del encabezado abre el panel de pruebas. En pantallas anchas es una columna fija a la derecha del editor, que se puede contraer; en pantallas angostas es un panel deslizable. Tiene dos pestañas, **Web** y **Teléfono**, y debajo **Llamadas de prueba recientes**.
+
+Las pruebas usan la versión publicada: "Las llamadas usan la versión publicada, así que publica tus cambios antes de probarlos." Un agente nunca publicado no puede probarse.
+
+{/* captura: images/agentes-de-voz/pruebas-panel-web-es.png | Panel Probar agente en la pestaña Web durante una llamada, con la transcripción en vivo y un marcador de herramienta | app: /agents/voice/[id] */}
+
+### Llamada web
+
+"Habla con tu agente desde el navegador."
+
+| Elemento | Qué hace |
+|---|---|
+| **Datos de contacto** | Desplegable opcional con **Nombre** y **Correo electrónico**. "El agente recibe estos datos como contexto de la llamada." |
+| **Variables dinámicas** | Pares clave y valor que también llegan al agente. La clave usa minúsculas y guiones bajos, como `numero_pedido`. Con otro formato: "Usa minúsculas y guiones bajos, como numero_pedido". |
+| Selector de micrófono | Lista los micrófonos del navegador. "La selección se aplica en la próxima llamada." |
+| **Hablar con {nombre}** | Inicia la llamada con el nombre en llamadas del agente. Mientras conecta dice **Conectando...**. |
+| **Transcripción** | Aparece en vivo, con **Agente** y **Tú** en burbujas. |
+| Silenciar micrófono, visualizador de audio y **Terminar** | Controles durante la llamada, con el cronómetro. |
+
+"Las llamadas web consumen créditos." Debajo del botón: "En tu plan las llamadas de prueba terminan a los N min." El límite es la duración máxima del plan: free 3 min, starter 7, pro 30, growth 60, enterprise 60. Un minuto antes aparece "Quedan Ns antes del límite de llamada de tu plan." y al llegar: "Llamada terminada: se alcanzó el límite de N min de tu plan."
+
+### Llamada telefónica
+
+"Haz que el agente llame a un número de teléfono real."
+
+| Campo | Qué hace | Valores |
+|---|---|---|
+| **Nombre del contacto** | Nombre que recibe el agente para esa llamada. | Texto |
+| **Llamar desde** | Número saliente verificado que se muestra a quien recibe la llamada. | Uno de tus números verificados, con alias si lo tiene |
+| **Llamar a** | Número al que llama el agente. | Número con código de país |
+| **Variables dinámicas** | Igual que en la llamada web. | Pares clave y valor |
+
+Sin números verificados, la pestaña muestra "Todavía no hay números verificados" y el botón **Gestionar números**, que lleva a [Mis números](/es/llamadas/mis-numeros). "Las llamadas telefónicas consumen créditos." **Iniciar llamada** confirma con "Llamada iniciada. Tu teléfono sonará en unos segundos."
+
+### Llamadas de prueba recientes
+
+Debajo de las pestañas se listan las últimas 5 llamadas de prueba del agente, web o telefónicas, con el tiempo transcurrido, la duración y un punto de estado. Mientras una llamada no terminó de procesarse dice **Procesando**. Los estados posibles son:
+
+| Estado | Clave |
+|---|---|
+| **Completada** | `completed` |
+| **En curso** | `in_progress` |
+| **Sin respuesta** | `no_answer` |
+| **Ocupado** | `busy` |
+| **Fallida** | `failed` |
+| **Buzón de voz** | `voice_mail` |
+| **Incompleta** | `incomplete` |
+| **Desconocido** | `unknown` |
+
+Al hacer clic en una llamada se abre **Llamada de prueba** con **Estado**, **Duración** y **Sentimiento** (**Positivo**, **Neutral**, **Negativo** o **Sin analizar**), la **Grabación** con reproductor y la **Transcripción**. Cada uso de herramienta aparece como un marcador **Usó {nombre}**; al expandirlo muestra **Argumentos** y **Resultado** en JSON. Hacer clic en una burbuja de la transcripción salta a ese momento de la grabación.
+
+{/* captura: images/agentes-de-voz/pruebas-detalle-llamada-es.png | Diálogo Llamada de prueba con estado, duración, sentimiento, reproductor y transcripción con un marcador de herramienta expandido | app: /agents/voice/[id] */}
+
+Las llamadas de prueba quedan registradas en **Llamadas** como llamadas de prueba, con transcripción, análisis y grabación como cualquier otra. También disparan el webhook de salida, las etiquetas y los datos de análisis del agente.
+
+### Probar desde la lista de agentes
+
+En **Agentes → Voz**, la tarjeta de cada agente tiene el botón **Probar**, que abre **Probar {nombre}**: "Llamada web de prueba en tiempo real con tu agente." Solo permite llamadas web.
+
+## Qué no existe todavía
+
+- No se puede probar el borrador: las llamadas de prueba siempre usan la versión publicada.
+- No hay comparación de diferencias entre dos versiones. El historial muestra número, estado, nota y fecha.
+- No se puede editar la nota de una versión ya publicada, ni eliminar versiones del historial.
+- No hay publicación programada ni publicación por porcentaje de llamadas.
+- Desde la lista de agentes solo hay pruebas web; las llamadas telefónicas de prueba se hacen desde el editor.
+
+## Problemas frecuentes
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| "No se pudo guardar el borrador" / "No se pudo guardar" | Falló el guardado automático. | Revisá la conexión y presioná `Cmd+S` o `Ctrl+S`. El detalle del error aparece debajo del estado. |
+| "Hay un valor fuera de rango" | Un campo numérico de **Contexto de entrada** tiene un valor inválido. | Corregilo; hasta entonces no se guarda ni se publica. Ver [Avanzado](/es/agentes-de-voz/avanzado#contexto-de-entrada). |
+| "No se pudo publicar" | La sincronización con el motor de llamadas falló. | Revisá la voz y las herramientas del agente y volvé a publicar. Si persiste, contactá a soporte. |
+| "No se pudo restaurar esa versión" | Falló la publicación de la versión restaurada. | Reintentá desde **Versiones**. |
+| "No tienes créditos suficientes. Recarga tu cuenta para seguir probando." | La organización no tiene créditos para la llamada de prueba. | Cargá créditos en [Créditos y pagos](/es/facturacion/creditos-y-pagos). |
+| "Se cortó la llamada. Comprueba tu conexión e inténtalo de nuevo." | La llamada web perdió la conexión. | Revisá red y micrófono y volvé a llamar. |
+| "No hay ninguna organización seleccionada. Recarga la página e inténtalo de nuevo." | La sesión perdió la organización activa. | Recargá la página. |
+| "Todavía no hay números verificados" | No hay números salientes verificados para la llamada telefónica. | Verificá uno en [Mis números](/es/llamadas/mis-numeros). |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="Cambié el prompt y el agente sigue diciendo lo de antes, ¿por qué?">
+    Porque las llamadas usan la versión publicada y tu cambio está en el borrador. Fijate en el aviso **Tus cambios aún no están publicados** y presioná **Publicar**. Las llamadas de prueba también usan la versión publicada.
+  </Accordion>
+  <Accordion title="¿Publicar afecta a las llamadas que están en curso?">
+    Las llamadas nuevas usan la versión recién publicada. La app no indica qué pasa con una llamada que ya estaba conectada en ese momento; si querés evitar dudas, publicá fuera del horario de mayor tráfico.
+  </Accordion>
+  <Accordion title="¿Puedo deshacer una publicación?">
+    Sí. Abrí **Versiones**, buscá la versión archivada que funcionaba y presioná **Restaurar esta versión**. Se publica una versión nueva con esa configuración y la actual queda archivada. Tené en cuenta que el borrador abierto se sobreescribe.
+  </Accordion>
+  <Accordion title="¿Las llamadas de prueba consumen créditos?">
+    Sí, tanto las web como las telefónicas. Duran como máximo el tope de tu plan: free 3 min, starter 7, pro 30, growth 60, enterprise 60.
+  </Accordion>
+  <Accordion title="¿Por qué mi llamada de prueba se cortó a los 3 minutos?">
+    Tu organización está en el plan free, cuyo tope de duración es 3 min. El panel avisa 60 segundos antes. Para pruebas más largas cambiá de plan en [Planes y límites](/es/facturacion/planes).
+  </Accordion>
+  <Accordion title="¿Dónde veo la grabación y el análisis de una prueba?">
+    En **Llamadas de prueba recientes**, dentro del panel, hacé clic en la llamada. También aparece en **Llamadas** con su transcripción, análisis, etiquetas y webhook, como cualquier llamada.
+  </Accordion>
+  <Accordion title="¿Cómo pruebo el agente con datos de un contacto real?">
+    Completá **Datos de contacto** y **Variables dinámicas** antes de llamar: el agente recibe esos valores como contexto. Para probar el contexto de entrada de un contacto existente, hacé una llamada telefónica de prueba a un número que ya esté cargado en Contactos.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Instrucciones](/es/agentes-de-voz/instrucciones)
+- [Avanzado: voz, manual y contexto](/es/agentes-de-voz/avanzado)
+- [Mis números](/es/llamadas/mis-numeros)
+- [Roles y permisos](/es/organizacion/roles-y-permisos)

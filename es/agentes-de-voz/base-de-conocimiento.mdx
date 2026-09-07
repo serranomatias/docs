@@ -1,0 +1,133 @@
+---
+title: 'Base de conocimiento'
+description: 'Bases de conocimiento de la organización para agentes de voz: crear una base, conectarla o desconectarla por agente sin publicar, subir hasta 10 archivos PDF, DOCX, XLSX, CSV o TXT por vez o pegar texto, ver y editar fuentes, y cuándo conviene usar el prompt en su lugar.'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read" route="Agentes → Voz → Conocimiento" />
+
+Una base de conocimiento guarda los documentos y notas que el agente consulta antes de responder. Las bases son de la organización: se crean una vez y cualquier agente se conecta a ellas. La pestaña **Conocimiento** del editor muestra todas las bases y cuáles están conectadas a este agente. Todo lo que hacés acá se guarda al instante, sin publicar.
+
+{/* captura: images/agentes-de-voz/conocimiento-es.png | Pestaña Conocimiento con dos bases, una conectada a este agente y otra usada por otros agentes, y el botón Nueva base | app: /agents/voice/[id]?activeTab=resources */}
+
+## Cómo funciona
+
+- La sección se titula **Base de conocimiento**: "Fuentes de las que el agente puede sacar respuestas. Se guarda al instante, sin publicar."
+- Cada fila muestra el nombre de la base y su estado respecto de este agente: "Conectada a este agente", "Sin conectar" o "La usan otros N agentes".
+- El interruptor de la fila conecta o desconecta la base. La app confirma con "Base de conocimiento conectada" o "Base de conocimiento desconectada".
+- El menú de la fila tiene **Gestionar fuentes** y **Eliminar**.
+- Para que el agente busque en las bases conectadas durante la llamada, necesita la herramienta **Base de conocimiento** en la pestaña **Herramientas**. Conectar una base sin esa herramienta no cambia lo que dice el agente. Ver [Herramientas](/es/agentes-de-voz/herramientas).
+
+<Note>
+La misma lista de bases aparece en los agentes de texto. Una base cargada para el agente de WhatsApp sirve también para el de voz, y al revés.
+</Note>
+
+## Crear una base
+
+<Steps>
+  <Step title="Abrí el diálogo">
+    Hacé clic en **Nueva base**. El diálogo dice "Ponle un nombre. Justo después podrás añadir documentos."
+  </Step>
+  <Step title="Poné el nombre">
+    Escribí el **Nombre**, de 1 a 120 caracteres, por ejemplo "Catálogo de producto", y confirmá con **Nueva base**. La app muestra "Base de conocimiento creada".
+  </Step>
+  <Step title="Conectala y cargá fuentes">
+    Activá el interruptor de la fila para conectarla a este agente y abrí **Gestionar fuentes** para agregar contenido.
+  </Step>
+</Steps>
+
+## Fuentes
+
+{/* captura: images/agentes-de-voz/conocimiento-fuentes-es.png | Panel lateral de fuentes de una base con un PDF, un DOCX y una nota de texto, y el botón Añadir fuente | app: /agents/voice/[id]?activeTab=resources */}
+
+**Gestionar fuentes** abre un panel lateral con el nombre de la base: "Documentos y notas que el agente consulta en esta base." **Añadir fuente** pregunta "Elige de dónde sale el contenido."
+
+| Tipo | Qué acepta | Límite |
+|---|---|---|
+| **Subir documentos** | "PDF, DOCX, XLSX, CSV o TXT." Arrastrá los archivos o elegilos desde el explorador. | "Hasta 10 archivos por vez." Podés repetir la carga. |
+| **Escribir texto** | "Pega o escribe el contenido directamente, sin archivo." La app sugiere el formato pregunta y respuesta. | Sin límite indicado en la app |
+
+Cada fuente aparece con su nombre, un ícono según el formato y "Añadida hace…". El menú de la fuente varía según el tipo:
+
+| Acción | Disponible en | Qué hace |
+|---|---|---|
+| **Editar contenido** | Fuentes de texto | Abre el contenido para modificarlo y guardarlo con **Guardar cambios**. Con acceso de solo lectura se llama **Ver contenido**. |
+| **Ver PDF** | Archivos PDF | Muestra el PDF dentro de la app. |
+| **Eliminar** | Todas | Abre **Eliminar fuente**: "«{name}» dejará de estar disponible para cualquier agente conectado a esta base." |
+
+Sin fuentes, el panel dice "Todavía no hay fuentes. Sube archivos PDF, DOCX, XLSX, CSV o TXT, o pega texto directamente. El agente los consulta antes de responder."
+
+## Eliminar una base
+
+**Eliminar** en el menú de la fila abre **Eliminar base de conocimiento**: "«{name}» y todas sus fuentes se eliminarán para toda la organización." Si está conectada, agrega "Está conectada a N agentes, que dejarán de usarla." Confirmá con **Eliminar**.
+
+<Warning>
+Eliminar una base la quita de todos los agentes de la organización, de voz y de texto, y borra todas sus fuentes. No se puede deshacer.
+</Warning>
+
+## Prompt o base de conocimiento
+
+| Situación | Dónde va |
+|---|---|
+| Lo que el agente debe saber en todo momento: quién es, qué ofrece, reglas, tono, precios principales | En el prompt. Es más rápido y más preciso. Ver [Instrucciones](/es/agentes-de-voz/instrucciones). |
+| Contenido extenso que no entra en el prompt: catálogos, políticas completas, preguntas frecuentes largas | En una base de conocimiento. El agente busca lo relevante durante la llamada, lo que agrega una pausa. |
+| Datos que cambian seguido: promociones, horarios | En una sección editable del prompt, o en una fuente de texto de la base si es mucho contenido. |
+
+Recomendaciones que surgen de implementaciones reales:
+
+- Empezá con un documento con la información general del negocio y dos o tres situaciones de manejo mínimas.
+- Preferí texto o Word. Si el origen es una planilla, convertí las filas a texto o JSON antes de subirla: la IA entiende mejor "Producto: X. Precio: Y." que una tabla.
+- Con muchos documentos, dividí el contenido en bases por tema y describí bien cuándo usar cada una en la herramienta **Base de conocimiento**.
+
+## Qué no existe todavía
+
+- No se puede cargar una URL ni rastrear un sitio web. Las fuentes son archivos o texto pegado. Exportá la página a PDF o copiá el texto.
+- Los documentos subidos no se editan dentro de la app. Para actualizar uno, eliminalo y subí la versión nueva. Solo las fuentes de texto tienen **Editar contenido**.
+- No hay bases privadas de un agente. Toda base pertenece a la organización.
+- La app no muestra un límite de tamaño por archivo. Si una carga falla, dividí el documento.
+- No hay un buscador para probar qué devuelve la base. Probalo con una llamada desde **Probar agente**.
+
+## Problemas frecuentes
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| "Sube 10 archivos como máximo." | Seleccionaste más de 10 archivos en una carga. | Quitá archivos y cargá el resto en una segunda tanda. |
+| "Añade al menos un archivo." | Confirmaste **Subir documentos** sin archivos. | Arrastrá o elegí al menos un archivo. |
+| "Escribe el contenido." | Confirmaste **Escribir texto** con el campo vacío. | Pegá o escribí el texto. |
+| "Usa 120 caracteres como máximo." | El nombre de la base es demasiado largo. | Acortá el nombre. |
+| "No se pudo añadir la fuente." | La carga falló. | Verificá que el formato sea PDF, DOCX, XLSX, CSV o TXT y reintentá. |
+| "No se pudo cambiar la conexión" | El cambio del interruptor no se guardó. | Reintentá. Si persiste, recargá la página. |
+| "Sin base de conocimiento conectada" | El aviso aparece en la herramienta **Base de conocimiento** cuando el agente no tiene bases conectadas. | Conectá una con **Conectar base** o desde esta pestaña. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Cómo cargo la base de conocimiento del agente?">
+    Creá una base, conectala al agente y subí un documento con la información general del negocio más dos o tres situaciones de manejo. Ideal en texto o Word. Si tenés una planilla, convertila a texto o JSON antes. Después agregá la herramienta **Base de conocimiento** en **Herramientas**.
+  </Accordion>
+  <Accordion title="¿Cuándo uso el prompt y cuándo la base de conocimiento?">
+    El prompt es para todo lo que el agente debe saber siempre: es más eficiente. La base es para contenido demasiado extenso, porque el agente tiene que ir a buscar la información durante la llamada.
+  </Accordion>
+  <Accordion title="¿Puedo cargar mi sitio web o una URL?">
+    No. Las fuentes son archivos PDF, DOCX, XLSX, CSV o TXT, o texto pegado. Exportá la página a PDF o copiá su contenido en una fuente de texto.
+  </Accordion>
+  <Accordion title="¿Tengo que publicar el agente después de conectar una base?">
+    No. Conectar, desconectar y cargar fuentes se guarda al instante. Sí tenés que publicar si agregaste o cambiaste la herramienta **Base de conocimiento**, porque las herramientas forman parte del borrador.
+  </Accordion>
+  <Accordion title="¿Puedo usar la misma base en varios agentes?">
+    Sí. Las bases son de la organización. La fila muestra "La usan otros N agentes" cuando otros agentes ya la tienen conectada.
+  </Accordion>
+  <Accordion title="¿Mis documentos son privados?">
+    Sí. Los documentos y las instrucciones pertenecen a tu organización y solo los consultan tus agentes.
+  </Accordion>
+  <Accordion title="¿Por qué el agente no encuentra algo que está en el documento?">
+    Revisá que la base esté conectada y que el agente tenga la herramienta **Base de conocimiento** con una descripción clara de cuándo buscar. Si el contenido está en una planilla, convertilo a texto. Hacé una llamada de prueba y mirá en la transcripción si el agente usó la herramienta.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Herramientas](/es/agentes-de-voz/herramientas)
+- [Instrucciones](/es/agentes-de-voz/instrucciones)
+- [Guía de prompts](/es/agentes-de-voz/guia-de-prompts)
+- [Herramientas de agentes de texto](/es/agentes-de-texto/herramientas)

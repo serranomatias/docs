@@ -1,0 +1,65 @@
+---
+title: "How lead routing works"
+description: "Understand boards, stage deadlines, advisor pools, escalation, and outcome reporting."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Organization → Lead routing" permission="lead_routing.read" addon="Lead routing" />
+
+Lead routing is an organization add-on for getting each contact to an eligible advisor within a deadline. The engine works on one selected contact board; each stage can define entry, assignment, requirements, and outcomes.
+
+## Six parts
+
+| Part | Role |
+|---|---|
+| Board | The one contact board selected for the engine. |
+| Stage | A column that can receive new leads, measure handling, or mark an outcome. |
+| Card and clock | A contact with an assignee and a stage deadline. |
+| Pool | A team participating in the stage’s assignment chain. |
+| Strategy | Chooses among eligible people using least load, round robin, or percentages. |
+| Escalation and outcome | Reassigns missed work and records won/lost completion. |
+
+## Example journey
+
+A new conversation creates a card in **New** when entry is enabled and its conditions match. AI qualification hands it to a measured stage such as **Contacted**. The first eligible pool assigns an advisor within their active-card cap and starts the clock.
+
+The advisor sees outstanding requirements in the conversation’s **Management** tab: for example, sending a message, logging a call, and applying a contact tag. Alerts at configured consumed-time percentages explain what is still missing.
+
+Meeting all requirements stops the clock and optionally moves the card. Expiry triggers reassignment within the pool, then escalation to another eligible pool, and eventually the configured exhausted-chain action. Moving into a stage marked **Won** or **Lost** closes the journey.
+
+## Read the clock
+
+The clock shows remaining time, amber when 30% or less remains and red at 15% or less. These colors do not change the deadline. Expired cards show how long overdue they are. Business-hour clocks pause outside the team’s configured working schedule and show their next resume time.
+
+Remaining business time is not wall-clock time. A three-hour deadline created when the team has finished for Friday can remain at three hours until the next working period.
+
+## Who sees it
+
+Advisors use Management to inspect requirements, log a call outcome, apply contact tags, and move their own card to a stage. Board cards show clocks and conversation links. Supervisors use the routing report for compliance, first contact, conversion, and the critical queue.
+
+The add-on enables the feature; `lead_routing.read` controls clock visibility and scope. Configuration editing requires `lead_routing_config.update`, with board access also required. Contact access controls the conversation panel; report access requires `reports.read`.
+
+Configure team schedules, holidays, and time zones in **Organization → Teams**. The current journey settings do not expose event webhook/email configuration; coordinate those requirements with support. The engine supports one board per organization.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why don’t I see clocks?">
+    Check the add-on, lead_routing.read scope, and whether the column measures deadlines.
+  </Accordion>
+  <Accordion title="Does a customer message count as advisor work?">
+    Only if the condition explicitly counts inbound messages. Outbound messages, notes, and logged calls are separate facts.
+  </Accordion>
+  <Accordion title="Can routing manage two boards?">
+    The engine selects one contact board per organization.
+  </Accordion>
+  <Accordion title="What happens when nobody is eligible?">
+    Retry and escalation settings determine how long it waits and which pool follows. Review the final exhausted-chain action and alert recipients.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Stages and pools](/en/lead-routing/stages-and-pools)
+- [Conditions and alerts](/en/lead-routing/conditions-and-notifications)
+- [Routing report](/en/lead-routing/report)

@@ -1,0 +1,61 @@
+---
+title: "My numbers"
+description: "Verify caller IDs, buy inbound numbers, assign agents, and manage number ownership."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Organization → My numbers" permission="outgoing_number.read" />
+
+**My numbers** contains verified outgoing caller IDs and purchased inbound numbers. Outgoing verification confirms a number you control; buying an inbound number starts a monthly subscription.
+
+## Verify an outgoing number
+
+1. With `outgoing_number.create`, select **Add new number**.
+2. Enter the full number with country code. The form accepts 11–16 digits, with or without `+`.
+3. Continue to display a validation code and three-minute countdown.
+4. Answer the call on that number and enter the on-screen code using the phone keypad.
+5. Wait for verification confirmation. The screen checks progress periodically; if it expires, retry with the phone ready.
+
+Outgoing-number capacity depends on the plan. A failed verification can reflect an incorrect code, an unanswered call, a restricted number, or too many attempts. Repeated restrictions should be reviewed with support.
+
+## Buy an inbound number
+
+Use **Buy number**, select an available country, and search by city or digits. Advanced filters include area code and region/state. The direct-purchase country list includes Argentina, Mexico, United States, Canada, and Colombia; availability depends on stock.
+
+Review the selected number’s monthly price in the purchase summary, choose or add a payment card, and confirm only when ready. Number subscriptions are separate from call credits. For numbers marked as requiring an address, contact support because the current purchase flow does not collect that address. Use the request form in the dialog for other countries.
+
+After purchase, choose **Manage agent**, select a voice agent, and **Assign agent**. An unassigned inbound number shows **Offline**; assigning an agent makes it **Online**. **No agent** removes the assignment.
+
+## Manage existing numbers
+
+Outgoing statuses include Success, Pending, and Failed. Cards display alias, number, type, status, and dates; inbound cards also show their assigned agent.
+
+- Edit a nonempty alias with `outgoing_number.update`.
+- **Share/Transfer number** moves the number to another organization you belong to. It does not leave a copy in the original organization.
+- Delete with `outgoing_number.delete`. The current action does not ask for another confirmation. For purchased numbers it cancels the subscription and releases the number; recovery is not offered.
+- Organization trial numbers cannot be edited, transferred, or deleted.
+
+This screen has no self-service number porting, PBX connection, or SIP-trunk setup. Contact support for requirements outside the available purchase and verification flows.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can a purchased number be used as caller ID?">
+    The campaign caller-ID picker includes numbers available in My numbers, both incoming and outgoing.
+  </Accordion>
+  <Accordion title="Why is an inbound number offline?">
+    Check whether a voice agent is assigned using Manage agent.
+  </Accordion>
+  <Accordion title="How do I cancel a number subscription?">
+    Deleting the number cancels its subscription and releases it. This is not a temporary pause.
+  </Accordion>
+  <Accordion title="What if verification is blocked?">
+    Do not repeatedly retry a restricted account. Contact support with the number and visible error.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Campaigns](/en/calls/campaigns)
+- [First call](/en/get-started/first-call)
+- [Plans](/en/billing/plans)

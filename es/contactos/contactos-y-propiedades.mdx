@@ -1,0 +1,66 @@
+---
+title: "Contactos y propiedades"
+description: "Buscá, filtrá y editá contactos. Organizá sus propiedades y consultá llamadas, conversaciones, notas y tareas desde su ficha."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Contactos" permission="contacts.read" />
+
+La ficha del contacto reúne información de la persona y su actividad con tu organización. La tabla permite buscar, filtrar y editar datos sin abrir cada ficha. El acceso depende de tu rol y su alcance.
+
+## Encontrar un contacto
+
+Usá la búsqueda y combiná filtros de país, etiquetas, etapas, responsable y propiedades. Si falta un contacto, quitá los filtros y revisá la organización activa antes de crearlo otra vez.
+
+| Información | Uso |
+|---|---|
+| Nombre, correo y teléfono | Identificar y contactar a la persona |
+| País y origen | Contextualizar el registro |
+| Etiquetas | Clasificar para búsquedas y acciones masivas |
+| Asignado a | Identificar al responsable |
+| Propiedades personalizadas | Registrar información específica del negocio |
+
+## Editar y ampliar la ficha
+
+Con permiso de edición podés modificar celdas de la tabla. Abrí la ficha para revisar sus datos y agregar propiedades. Elegí el tipo de propiedad según el dato que necesitás guardar.
+
+Los tipos disponibles incluyen texto, calendario, fecha, zona horaria, número, ubicación, URL, moneda, empresa, usuario, teléfono, correo, booleano, selección y selección múltiple.
+
+Por ejemplo, usá un número para el presupuesto y una selección para el producto de interés. Los filtros disponibles dependen del tipo: texto contiene, comparaciones numéricas, verdadero/falso o pertenencia a una lista.
+
+## Actividad asociada
+
+Desde la ficha podés consultar llamadas, conversaciones, comentarios, notas y las tareas disponibles. El registro de una llamada tiene su propio detalle de transcripción y análisis.
+
+Los agentes pueden usar propiedades como contexto o actualizarlas mediante herramientas configuradas. Crear una propiedad no instruye por sí solo a la IA para completarla.
+
+## Acciones masivas
+
+Seleccioná contactos y elegí aplicar o quitar etiquetas, mover a una etapa o crear una campaña. Estas operaciones pueden procesarse como trabajos en segundo plano. Revisá el resultado antes de repetir una operación sobre la misma lista.
+
+## Qué no existe todavía
+
+La tabla de contactos no ofrece exportación a CSV. La exportación del registro de llamadas es una función distinta y no equivale a exportar el CRM.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué veo menos contactos que otra persona?">
+    Tu rol puede tener un alcance limitado a registros propios o de tus equipos. Revisá [Roles y permisos](/es/organizacion/roles-y-permisos) antes de asumir que faltan datos.
+  </Accordion>
+  <Accordion title="¿Crear una propiedad hace que la IA la complete?">
+    No. Configurá la herramienta de actualización y explicá qué extraer. Ver [Herramientas de texto](/es/agentes-de-texto/herramientas).
+  </Accordion>
+  <Accordion title="¿Puedo importar una lista que ya tengo?">
+    Sí. Usá el asistente de [Importar contactos](/es/contactos/importar) y su plantilla.
+  </Accordion>
+  <Accordion title="¿Una etiqueta de conversación clasifica también al contacto?">
+    Son etiquetas distintas. Usá [Etiquetas de contacto](/es/contactos/etiquetas) para clasificar el CRM.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Importar](/es/contactos/importar)
+- [Tableros y etapas](/es/contactos/tableros)
+- [Etiquetas](/es/contactos/etiquetas)

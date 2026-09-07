@@ -1,0 +1,35 @@
+export const Availability = ({ lang = 'es', plan, addon, permission, route, status }) => {
+  const L = lang === 'en'
+    ? { plan: 'Plan', addon: 'Add-on', permission: 'Permission', route: 'Where', status: 'Status', addonNote: 'enabled on request', allPlans: 'All plans', beta: 'Beta', nuevo: 'New', soon: 'Coming soon' }
+    : { plan: 'Plan', addon: 'Add-on', permission: 'Permiso', route: 'Dónde', status: 'Estado', addonNote: 'se activa a pedido', allPlans: 'Todos los planes', beta: 'Beta', nuevo: 'Nuevo', soon: 'Próximamente' };
+  const items = [];
+  if (plan) items.push([L.plan, plan]);
+  if (addon) items.push([L.addon, `${addon} · ${L.addonNote}`]);
+  if (permission) items.push([L.permission, permission]);
+  if (route) items.push([L.route, route]);
+  if (status) items.push([L.status, L[status] || status]);
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '6px 22px',
+        padding: '12px 16px',
+        margin: '4px 0 24px',
+        border: '1px solid rgba(2, 82, 255, 0.28)',
+        borderLeft: '3px solid #0252ff',
+        borderRadius: '8px',
+        background: 'rgba(2, 82, 255, 0.05)',
+        fontSize: '13.5px',
+        lineHeight: '1.5',
+      }}
+    >
+      {items.map(([k, v]) => (
+        <div key={k} style={{ display: 'flex', gap: '6px', alignItems: 'baseline' }}>
+          <span style={{ fontSize: '10.5px', fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', opacity: 0.65 }}>{k}</span>
+          <span style={{ fontWeight: 500 }}>{v}</span>
+        </div>
+      ))}
+    </div>
+  );
+};

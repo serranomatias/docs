@@ -1,0 +1,57 @@
+---
+title: "Call Webhooks"
+description: "Receive analyzed-call data, acknowledge delivery, and handle retries."
+---
+
+Configure the voice agent’s outgoing URL in **Advanced → Post-call** and publish it. ContactShip delivers a JSON **POST** after call analysis. This is separate from inbound-context requests, channel conversation events, and lead-routing notifications.
+
+## Delivery contract
+
+The body has a top-level `data` object. It is not an event envelope with a required `event: call_analyzed` property. Internal call lifecycle events do not imply a public subscription to every lifecycle event.
+
+| Path | Content |
+|---|---|
+| `data.agent` | `agent_id`, `name`, `language`, and voice identifier. |
+| `data.organization` | Organization name, email, and country, when available. |
+| `data.call` | Call identifiers, status, transcript, analysis, recording, timing, and type. |
+| `data.contact` | Associated contact details when available. May be omitted. |
+| `data.campaign` | Campaign name, description, schedule, and status for campaign calls; may be empty or absent for other types. |
+
+Call fields include `call_id`, `call_status`, `call_analysis`, `disconnection_reason`, `recording_url`, `start_timestamp`, `end_timestamp`, `transcript`, `transcript_object`, `transcript_with_tool_calls`, `call_type`, and `duration`. Timestamps are Unix milliseconds; duration represents seconds and may be serialized as a string.
+
+Calls with an associated contact can also include `call_result`, `from_number`, `to_number`, and `call_additional_data`. Contact fields include `contact_id`, `full_name`, `phone_number`, `email`, `country`, and `additional_data`; campaign-related contact values may be absent.
+
+Treat missing context as missing data rather than a delivery failure. An empty recording URL or analysis value does not prove that a usable recording or analysis exists.
+
+## Minimal illustrative body
+
+This example intentionally omits optional context and transcript details. It shows the nesting to parse, not a complete result from a real call.
+
+```json
+{
+  "data": {
+    "agent": {"agent_id": "AGENT_ID", "name": "Showroom assistant", "language": "es-419"},
+    "call": {
+      "call_id": "CALL_ID",
+      "call_type": "test_web_call",
+      "duration": "45",
+      "transcript": "Example conversation text",
+      "call_analysis": {}
+    }
+  }
+}
+```
+
+## Acknowledgment and retries
+
+Return an HTTP **2xx** response after accepting the payload. The delivery client uses a 30-second timeout. Queue retries and manual retries can cause repeated delivery, so persist an application-level processing key such as the call ID before creating an external record. Do not assume a separate webhook event ID is included in the HTTP body.
+
+The configured call-webhook sender does not add the lead-routing `x-contactship-signature` header. Do not apply that separate signing contract to these deliveries. If your receiver needs additional verification, agree on a supported mechanism with support before treating a request as authenticated.
+
+Inspect URL, attempts, response, and raw data in **Calls → Webhooks**. Fix the receiver before retrying, and verify whether an earlier delivery already completed its external effect.
+
+## Test
+
+The current voice editor has no sample-payload test button. Publish the URL, make a controlled test call, wait for analysis, and inspect both delivery history and your receiver logs. Tests can produce real webhooks and downstream effects.
+
+See [Call webhooks](/en/calls/webhooks), [Post-call settings](/en/voice-agents/post-call), and [Get call](/api-reference/endpoint/get-call).

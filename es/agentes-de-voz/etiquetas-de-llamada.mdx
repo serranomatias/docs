@@ -1,0 +1,140 @@
+---
+title: 'Etiquetas de llamada'
+description: 'Cómo crear etiquetas de llamada por agente de voz: nombre de hasta 120 caracteres, "Cuándo aplicarla" de 10 a 255, nueve colores, aviso por email a miembros, archivar y restaurar, cómo decide la IA y dónde aparecen las etiquetas en Llamadas.'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read" route="Agentes → Voz → Avanzado → Post llamada → Etiquetas de llamada" />
+
+Las **Etiquetas de llamada** son "etiquetas que el agente aplica a las llamadas automáticamente". Cuando una llamada termina, una IA lee la transcripción completa y aplica las etiquetas cuya descripción coincide con lo que pasó. Sirven para agrupar y filtrar llamadas sin escucharlas una por una y para avisar por email cuando ocurre algo importante: un compromiso de pago, un cliente enojado, una reunión agendada.
+
+Las etiquetas pertenecen a cada agente de voz. Se guardan al instante, sin publicar. También se pueden agregar y quitar a mano desde el detalle de una llamada.
+
+{/* captura: images/agentes-de-voz/etiquetas-de-llamada-lista-es.png | Subsección Etiquetas de llamada con dos etiquetas activas, una con la insignia Notifica, y la sección Archivadas | app: /agents/voice/[id]?activeTab=advanced#advanced-post-call-call-tags */}
+
+## Cómo decide la IA
+
+Cuando una llamada del agente se analiza y el agente tiene al menos una etiqueta activa:
+
+1. Un clasificador lee la transcripción completa, incluidas las herramientas ejecutadas y sus resultados.
+2. Para cada etiqueta activa compara lo que pasó con el texto de **Cuándo aplicarla**. Solo asigna etiquetas con evidencia explícita en la conversación: frases del cliente o del agente, o una herramienta ejecutada con éxito.
+3. Cada asignación se guarda con un motivo y un nivel de confianza entre 0 y 1. Solo se aplican las etiquetas con confianza mayor a 0.5.
+4. Una llamada puede recibir varias etiquetas.
+5. Si la etiqueta tiene **Notificar por email**, cada miembro elegido recibe un email avisando que la etiqueta se aplicó a esa llamada.
+
+Las etiquetas archivadas no participan. Las llamadas sin transcripción, por ejemplo las que caen en buzón de voz, no reciben etiquetas automáticas.
+
+## Crear una etiqueta
+
+<Steps>
+  <Step title="Abrí el agente">
+    En **Agentes → Voz**, entrá al agente y abrí la pestaña **Avanzado**. En el índice **Secciones**, elegí **Post llamada → Etiquetas de llamada**.
+  </Step>
+  <Step title="Presioná Nueva etiqueta">
+    Se abre el diálogo **Nueva etiqueta**: "Describe cuándo debe aplicar el agente esta etiqueta a una llamada."
+  </Step>
+  <Step title="Completá los campos y guardá">
+    El botón **Nueva etiqueta** del diálogo la crea y muestra "Etiqueta creada". Queda activa de inmediato para las próximas llamadas del agente.
+  </Step>
+</Steps>
+
+{/* captura: images/agentes-de-voz/etiquetas-de-llamada-dialogo-es.png | Diálogo Nueva etiqueta con Cuándo aplicarla completado, Notificar por email activo y dos miembros elegidos | app: /agents/voice/[id]?activeTab=advanced#advanced-post-call-call-tags */}
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Nombre** | Cómo se ve la etiqueta en las llamadas. | 1 a 120 caracteres. | vacío |
+| **Cuándo aplicarla** | "El agente lee esto para decidir. Sé concreto sobre qué debe contener la llamada." | 10 a 255 caracteres, con contador. | vacío |
+| **Notificar por email** | "Envía un email cuando una llamada reciba esta etiqueta." | Activado o desactivado | desactivado |
+| **Quién recibe el aviso** | Miembros de la organización que reciben el email. Aparece solo con la notificación activa. | Uno o más miembros, con buscador. Obligatorio si la notificación está activa. | ninguno |
+| **Color** | "Sirve para localizar la etiqueta en listados e informes." | Nueve colores: verde, rojo, rojo oscuro, amarillo, naranja, azul, cian, lima, violeta. | azul |
+
+## Escribir bien "Cuándo aplicarla"
+
+La descripción es lo único que la IA usa para decidir. Cuanto más concreta, menos falsos positivos.
+
+<Tabs>
+  <Tab title="Buen ejemplo">
+    **Nombre**: Compromiso de pago
+
+    **Cuándo aplicarla**: "Aplicala cuando el deudor se comprometa con una fecha concreta para pagar. No cuenta 'voy a ver' ni 'lo pienso'; sí cuenta 'pago el martes 18'."
+  </Tab>
+  <Tab title="Mal ejemplo">
+    **Nombre**: Pago
+
+    **Cuándo aplicarla**: "Cuando hablen de plata."
+
+    Cualquier mención de dinero la dispara, aunque no haya compromiso.
+  </Tab>
+</Tabs>
+
+<Tip>
+Si una etiqueta se aplica de más o de menos, editá la descripción. "Los cambios se aplican a las llamadas etiquetadas a partir de ahora." No hace falta publicar.
+</Tip>
+
+## Editar, archivar y restaurar
+
+Cada etiqueta de la lista muestra su color, su nombre, la insignia **Notifica** si avisa por email y la descripción. El menú de la fila tiene dos acciones:
+
+- **Editar** abre el diálogo con los mismos campos. Al guardar: "Etiqueta actualizada".
+- **Archivar** la saca de las etiquetas activas. Deja de aplicarse a las llamadas nuevas y deja de aparecer en el selector del detalle de llamada. Las llamadas que ya la tenían la conservan. Las etiquetas archivadas se listan al final, en **Archivadas**, atenuadas, con la acción **Restaurar**.
+
+No hay eliminación: archivar es la forma de retirar una etiqueta sin perder el historial.
+
+## Dónde aparecen las etiquetas
+
+- **Llamadas**, en la lista: el filtro **Etiquetas** deja ver solo las llamadas con las etiquetas elegidas.
+- **Llamadas**, en el detalle: el encabezado muestra **Etiquetas de llamada:** con las etiquetas de esa llamada como fichas de color. **Agregar Etiqueta** abre un selector con las etiquetas activas del agente que atendió la llamada; la `x` de cada ficha la quita. Las que agregás a mano quedan registradas como asignación manual. **Gestionar etiquetas** lleva a esta sección del agente.
+- **Contactos**, en la ficha del contacto: el historial de llamadas muestra las etiquetas de cada llamada.
+
+Ver [Registro y detalle de llamadas](/es/llamadas/registro).
+
+## Qué no existe todavía
+
+- No hay etiquetas de llamada compartidas entre agentes: cada etiqueta pertenece a un agente. Para usar la misma en dos agentes hay que crearla dos veces.
+- No se puede eliminar una etiqueta, solo archivarla.
+- Las etiquetas no se aplican durante la llamada, solo al terminar y analizarse.
+- No hay reglas por palabra clave: la única regla es la descripción que lee la IA.
+- El detalle de la llamada no muestra el motivo ni la confianza con que la IA aplicó cada etiqueta.
+- Las etiquetas de llamada son distintas de las [etiquetas de contacto](/es/contactos/etiquetas) y de las etiquetas de conversación del inbox.
+
+## Problemas frecuentes
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| "Escribe un nombre." | Guardaste sin **Nombre**. | Completá el nombre. |
+| "Usa 120 caracteres como máximo." | El nombre es demasiado largo. | Acortalo. |
+| "Usa al menos 10 caracteres para que el agente sepa cuándo aplicarla." | **Cuándo aplicarla** es demasiado corto. | Describí la situación con una oración completa. |
+| "Usa 255 caracteres como máximo." | **Cuándo aplicarla** supera el límite. | Resumí; dejá solo lo que distingue a esta etiqueta. |
+| "Elige al menos un miembro al que avisar." | Activaste **Notificar por email** sin elegir miembros. | Elegí al menos uno en **Quién recibe el aviso** o desactivá la notificación. |
+| "No se pudo guardar la etiqueta." / "No se pudo actualizar la etiqueta" | Falló la petición al servidor. | Reintentá; si persiste, contactá a soporte. |
+| "Este agente todavía no tiene etiquetas. Crealas desde la configuración del agente." (detalle de llamada) | Intentaste agregar una etiqueta a mano a una llamada de un agente sin etiquetas activas. | Creá etiquetas en el agente y volvé al detalle. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Cuántas etiquetas puedo crear por agente?">
+    La app no fija un máximo. Conviene empezar con pocas y bien distintas entre sí: cuantas más etiquetas parecidas haya, más difícil es que la IA elija bien.
+  </Accordion>
+  <Accordion title="¿Una llamada puede tener más de una etiqueta?">
+    Sí. Si en la misma llamada hay evidencia para varias, la IA aplica todas las que superen la confianza mínima. A mano también podés agregar varias.
+  </Accordion>
+  <Accordion title="¿Por qué no se aplicó mi etiqueta si en la llamada pasó eso?">
+    Tres causas habituales: la descripción no dice con claridad qué debe contener la llamada, la confianza de la IA quedó por debajo de 0.5, o la etiqueta estaba archivada al momento de la llamada. Editá **Cuándo aplicarla** con un ejemplo concreto y agregá la etiqueta a mano en esa llamada.
+  </Accordion>
+  <Accordion title="¿Puedo recibir el aviso sin dejar de usar la etiqueta para filtrar?">
+    Sí. **Notificar por email** es independiente de la etiqueta: apagalo y la etiqueta se sigue aplicando y filtrando, pero nadie recibe emails. Si activás la notificación tenés que elegir al menos un miembro.
+  </Accordion>
+  <Accordion title="¿Tengo que publicar el agente para que una etiqueta funcione?">
+    No. Las etiquetas se guardan al instante y aplican a las próximas llamadas. Publicar solo afecta al borrador del agente: prompt, voz, herramientas, datos de análisis y webhooks.
+  </Accordion>
+  <Accordion title="¿Qué pasa con las llamadas viejas cuando cambio una etiqueta?">
+    Nada. La IA solo etiqueta llamadas nuevas. Las llamadas ya etiquetadas conservan sus etiquetas, incluso si después archivás la etiqueta.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Post llamada: datos, tablero y webhooks](/es/agentes-de-voz/post-llamada)
+- [Registro y detalle de llamadas](/es/llamadas/registro)
+- [Etiquetas de contacto](/es/contactos/etiquetas)
+- [Respuestas rápidas y etiquetas](/es/mensajes/respuestas-rapidas-y-etiquetas)

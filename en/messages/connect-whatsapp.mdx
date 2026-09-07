@@ -1,0 +1,57 @@
+---
+title: "Connect WhatsApp Business"
+description: "Connect a Meta business account, select a number, and verify message reception."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Inbox → Channels" permission="channels.read / channels.create" />
+
+You need channel permissions and a Facebook account with appropriate access to the Meta business portfolio. Allow pop-ups so embedded signup can open. If the number is already used in a mobile WhatsApp app, review the eligibility and migration options presented by Meta before changing that account; do not delete it as a troubleshooting step without confirming the supported flow.
+
+## Connect a number
+
+1. Open **Settings → Inbox → Channels → New Channel**, or use the connect action in an empty inbox.
+2. Choose **WhatsApp Business**. Instagram and Messenger are disabled as coming soon.
+3. If the organization already has a connected business account, choose **Use this account**. Otherwise select **Connect with Facebook → Start**.
+4. Complete Facebook’s embedded signup, choose the business account and eligible number, and return to ContactShip.
+5. Select the number and finish connecting. A number labeled already connected should be handled through its existing channel.
+6. Open channel settings to review assignment and reply behavior.
+
+Manual setup displays credential fields but currently returns a coming-soon message instead of creating a channel. Use the supported account connection flow.
+
+## Verify the channel
+
+The channel list shows name, type, response method, active/inactive status, and creation date. **Channel settings** requires `channels.update`; deleting requires `channels.delete`. The Manual/Automatic response-method label is informational here.
+
+Use the channel test QR or link to open a conversation from a phone, then send a test message yourself. Confirm it appears in the inbox and that the expected person or AI receives it. The QR starts a message to the connected channel; it is not a WhatsApp Web pairing QR.
+
+**Connect Meta Ads** associates advertising context so Click-to-WhatsApp conversations can display their originating campaign and ad. It is separate from basic messaging connection.
+
+## Troubleshoot
+
+If the Facebook SDK is not ready, allow its scripts and pop-ups and reload. If no numbers are available, check the selected account, eligible numbers, and existing connections. A plan-limit error requires reviewing channel capacity. Inactive channels are disabled in the inbox selector and may require support to reactivate.
+
+Deleting a channel is permanent and confirmed by a dialog. There is no separate disconnect-without-deleting action in this screen.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can I reuse a connected business account?">
+    Yes. Select Use this account when it appears, then choose an eligible number.
+  </Accordion>
+  <Accordion title="Is the test QR a login QR?">
+    No. It opens a conversation with the channel for sending a test message.
+  </Accordion>
+  <Accordion title="Why is a number already connected?">
+    It already belongs to a channel. Use that channel rather than creating a duplicate.
+  </Accordion>
+  <Accordion title="Where can I inspect Meta quality details?">
+    Those details are not shown in this channel screen; inspect the number in Meta Business.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Channel settings](/en/messages/channel-settings)
+- [Inbox](/en/messages/inbox)
+- [Templates](/en/messages/templates)

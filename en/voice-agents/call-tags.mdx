@@ -1,0 +1,53 @@
+---
+title: "Call tags"
+description: "Classify analyzed calls, configure email notifications, and preserve historical tags."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Agents → Voice → Advanced → Post-call" permission="agents.read; agents.update to edit" />
+
+Call tags classify a voice agent’s calls after analysis. They belong to that agent and save immediately without publishing. They are separate from contact tags and inbox conversation tags.
+
+## Create a tag
+
+1. Open the agent’s call-tag section and choose **New tag**.
+2. Enter a name of 1–120 characters.
+3. Describe **When to apply it** in 10–255 characters. State observable evidence, such as “The customer explicitly asks to speak with a human about a complaint.”
+4. Choose a color. If you enable email notification, select at least one organization member to receive it.
+5. Save. The active tag is available for subsequent calls.
+
+The AI evaluates the description; this is not an exact-keyword rule. Avoid ambiguous labels without instructions. Test positive and negative examples and inspect the actual calls.
+
+## Use tags in call review
+
+Filter the call list by tags. In a call’s detail, **Add tag** lists active tags belonging to the agent that handled it. Remove a tag using its chip’s `x`. Manual additions are recorded as manual assignments.
+
+The contact’s call history also displays call tags. Applying one does not apply a contact tag or conversation tag.
+
+## Edit, archive, and restore
+
+Editing changes the tag’s configuration immediately. Archiving stops new automatic use and removes it from active selectors, while historical calls retain it. Archived tags appear in a separate list with **Restore**. There is no permanent delete action here.
+
+Tags are not shared between agents. To use an equivalent classification on another agent, create it there and keep its description consistent. The call detail does not show a confidence score or explanation for each AI tag.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Do I need to publish tag changes?">
+    No. Tags save immediately and affect subsequent calls.
+  </Accordion>
+  <Accordion title="Why can’t I enable email notification?">
+    Select at least one organization member as a recipient, or turn notification off.
+  </Accordion>
+  <Accordion title="Are tags applied during the call?">
+    Automatic call tagging runs after the conversation is analyzed.
+  </Accordion>
+  <Accordion title="Will archiving erase historical tags?">
+    No. Calls already carrying the tag keep it.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Post-call](/en/voice-agents/post-call)
+- [Versions and tests](/en/voice-agents/versions-and-testing)

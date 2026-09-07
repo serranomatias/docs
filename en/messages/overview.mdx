@@ -1,0 +1,55 @@
+---
+title: "How the inbox works"
+description: "Understand channels, conversations, assignments, and WhatsApp reply windows."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Messages" permission="conversation.read" />
+
+The inbox brings customer conversations into ContactShip so human members and text agents can handle them with shared contact context. Availability follows the organization’s configuration; if you see **Request access**, contact support.
+
+| Item | Meaning |
+|---|---|
+| Channel | A connected WhatsApp number with its own assignment, schedule, and webhook settings. |
+| Conversation | A thread between a contact and a channel; at most one per contact per channel. |
+| Contact | The CRM record linking calls and conversations. |
+| Message | Text, media, a template, internal note, or another item in a thread. |
+
+## Who replies
+
+Channel assignment rules direct conversations to a text agent, person, or configured rotation. Human takeover depends on permissions and organization assignment protection. Merely creating a text agent does not route messages to it: connect the agent in the channel’s assignment settings.
+
+Conversations can be open or closed. Closing preserves history and can trigger automations. **Snoozed** has no filter or action in the current interface.
+
+## WhatsApp reply window
+
+The app tracks the 24-hour window from the customer’s latest message. Free-form replies and quick replies become unavailable when it expires; use an approved template when the composer requires one. An outgoing message alone does not restart the customer-message clock.
+
+## Availability and limits
+
+Channel counts depend on the plan; reaching the limit produces a channel-limit notice. Inbox automation rules, lead-management deadlines, and softphone/contact-center functions have separate organization add-ons.
+
+The new-channel dialog currently connects WhatsApp Business. Instagram and Messenger show **Coming soon**, and manual credential setup does not complete a connection. The inbox supports individual conversations; group and community management is not offered here. SMS, email, translation, AI reply suggestions, and internal mentions are not available in this composer.
+
+Start by connecting WhatsApp, configuring channel assignment, and sending a controlled message to verify the reply path.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why isn’t my text agent answering?">
+    Check that the channel is active, its matching rule points to that agent, business hours permit AI replies, and the conversation has not been taken over by a person.
+  </Accordion>
+  <Accordion title="Does closing erase messages?">
+    No. Use the Closed filter to inspect the thread.
+  </Accordion>
+  <Accordion title="Can I connect Instagram?">
+    The current new-channel dialog marks Instagram and Messenger as Coming soon.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Connect WhatsApp](/en/messages/connect-whatsapp)
+- [Channel settings](/en/messages/channel-settings)
+- [Inbox](/en/messages/inbox)
+- [Text agents](/en/text-agents/create)

@@ -1,0 +1,47 @@
+---
+title: "Google Calendar"
+description: "Conectá tu cuenta de Google y configurá el calendario, duración y horarios de la herramienta del agente."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Integraciones → Google Calendar" permission="integrations.read; integrations.create" />
+
+Google Calendar se conecta mediante **Conectar con Google**. Usá una cuenta que tenga acceso al calendario donde se crearán los eventos.
+
+## Conectar y configurar
+
+1. Abrí **Integraciones → Google Calendar**.
+2. Elegí **Conectar con Google**, seleccioná la cuenta y completá la autorización.
+3. Volvé a ContactShip y comprobá la conexión.
+4. Abrí el agente de voz y agregá la herramienta de Google Calendar.
+5. Seleccioná la conexión y revisá calendario, duración, concurrencia y horario de atención.
+6. Probá una consulta de disponibilidad antes de confirmar una reserva de prueba.
+
+## Separar conexión y disponibilidad
+
+Conectar Google no agrega la herramienta a todos los agentes. La disponibilidad también depende de los horarios y parámetros que configuraste en la herramienta.
+
+Al confirmar una reserva, verificá la fecha, la zona horaria y el resultado devuelto. Una respuesta verbal del agente no reemplaza la confirmación de creación del evento.
+
+## Problemas frecuentes
+
+Si falta el calendario esperado, revisá la cuenta conectada y su acceso. Si la conexión dejó de funcionar, revisá su estado y completá la reconexión cuando corresponda. Si no aparecen horarios, comprobá duración, calendario y jornada configurada.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Necesito una clave API de Google?">
+    La conexión del catálogo usa autorización con Google. No pegues una clave API de ContactShip en ese flujo.
+  </Accordion>
+  <Accordion title="¿Se configura desde Agenda?">
+    La herramienta de Google Calendar se configura en el agente. El módulo Agenda es independiente.
+  </Accordion>
+  <Accordion title="¿Puedo confirmar una cita sin consultar disponibilidad?">
+    Configurá al agente para consultar primero y confirmar solo cuando la herramienta devuelva el resultado de la reserva.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Herramientas de voz](/es/agentes-de-voz/herramientas)
+- [Agenda](/es/contactos/agenda)

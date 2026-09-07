@@ -1,0 +1,53 @@
+---
+title: "Actividad de colas"
+description: "Analizá llamadas y estados de agentes por período, interpretá tiempos de atención y exportá resultados."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Actividad de colas" permission="reports.read; contact_center.read" addon="Contact center" />
+
+**Actividad de colas** permite revisar la operación en un período. Requiere Contact center habilitado y permisos para reportes y contact center.
+
+## Revisar un período
+
+Elegí las fechas y filtros antes de comparar indicadores. Las pestañas de **Llamadas** y **Agentes** responden preguntas distintas: qué pasó con las llamadas y cómo se distribuyó el tiempo de las personas.
+
+| Dato | Qué revisar |
+|---|---|
+| Tiempo en cola | Espera asociada a la entrada |
+| Respuesta / ASA | Tiempo de respuesta promedio según la vista |
+| Conversación | Tiempo hablando |
+| Hold | Tiempo de espera durante la interacción |
+| ACW / Tipificación | Trabajo posterior a la llamada |
+| Tiempo por estado | Distribución de disponibilidad y otros estados del agente |
+
+Leé el nombre y la ayuda de cada indicador. La tarjeta de llamadas rotulada **AHT (talk prom.)** usa conversación promedio; la alerta de AHT de agentes contempla conversación, hold y trabajo posterior. No compares esas medidas como si fueran idénticas.
+
+## Exportar
+
+Las pestañas ofrecen exportación XLSX cuando hay datos. Aplicá filtros y verificá el período antes de descargar. Si la app indica que no hay datos, revisá el rango y la selección.
+
+## Alerta de AHT
+
+En los ajustes de Contact center podés configurar un umbral de AHT en segundos para agentes. Vacío o cero desactiva la alerta. Configurarlo requiere `organization.update`.
+
+Una alerta destaca un valor para revisar; no explica por sí sola su causa. Contrastá el tipo de llamadas y los tiempos desglosados.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Es la misma vista que Monitoreo en vivo?">
+    No. Monitoreo muestra el estado actual; Actividad de colas permite revisar un período.
+  </Accordion>
+  <Accordion title="¿Por qué el export está vacío?">
+    Revisá fechas y filtros de la pestaña seleccionada. La app no exporta si no encuentra registros.
+  </Accordion>
+  <Accordion title="¿Poner la alerta en cero bloquea llamadas?">
+    No. Cero desactiva la alerta de AHT. No modifica el enrutamiento ni la duración de llamadas.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Monitoreo](/es/contact-center/monitoreo-en-vivo)
+- [Colas](/es/contact-center/colas-y-skills)

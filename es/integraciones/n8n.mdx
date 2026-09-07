@@ -1,0 +1,49 @@
+---
+title: "n8n"
+description: "Configurá solicitudes a la API de ContactShip desde n8n con autenticación x-api-key y verificá resultados y reintentos."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="n8n → HTTP Request" />
+
+Podés integrar n8n mediante la API pública de ContactShip. Necesitás una clave de la organización y un plan con acceso API.
+
+## Primera consulta
+
+En un nodo **HTTP Request**, elegí método GET y URL `https://api.contactship.ai/v1/credits`. Configurá una credencial de encabezado con nombre `x-api-key` y el valor de tu clave. Ejecutá la consulta y revisá la respuesta. El nodo permite configurar método, URL y autenticación; consultá la [guía oficial de HTTP Request](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.httprequest/).
+
+Esta consulta lee créditos; no inicia llamadas. Una respuesta de autenticación fallida no confirma que el endpoint consultado exista.
+
+## Pasar a una acción
+
+Elegí el endpoint en la referencia de API y copiá su método, ruta y parámetros. Para crear llamadas, comprobá agente, contacto o teléfono y número de salida según el endpoint. Probá con un destino controlado antes de conectar una lista.
+
+## Procesar resultados
+
+El inicio de una llamada y su análisis son etapas diferentes. Si tu flujo necesita resumen o datos extraídos, procesá el evento de análisis.
+
+Guardá identificadores para reconocer operaciones ya procesadas. No reintentes ciegamente una solicitud que puede haber iniciado una llamada: consultá su estado antes.
+
+## Nodos comunitarios
+
+Si usás un nodo comunitario ya instalado, comprobá sus operaciones y autenticación contra esta referencia. No asumas que todos los nodos cubren los endpoints actuales.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Necesito instalar un nodo comunitario?">
+    Podés usar solicitudes HTTP a la API pública. Si elegís un nodo específico, verificá que su autenticación y sus operaciones estén actualizadas.
+  </Accordion>
+  <Accordion title="¿Uso Bearer o x-api-key?">
+    La API pública documentada aquí recibe la clave en `x-api-key`. No cambies el esquema de autenticación por el de otro servicio.
+  </Accordion>
+  <Accordion title="¿Un error significa que puedo repetir la llamada?">
+    No necesariamente. Comprobá si la operación se creó antes de repetir una solicitud que inicia llamadas.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [API Reference](/api-reference/introduction)
+- [Claves API](/es/organizacion/claves-api)
+- [Webhooks](/es/llamadas/webhooks)

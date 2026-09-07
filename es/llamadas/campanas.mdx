@@ -1,0 +1,53 @@
+---
+title: "Campañas de llamadas"
+description: "Prepará contactos, agente, horarios y reintentos para una campaña de voz."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Campañas → Voz" permission="campaigns.read / campaigns.create" />
+
+Una campaña organiza llamadas salientes a un conjunto de contactos. Antes de publicarla, probá el agente con un número propio y revisá el saldo y el número visible.
+
+## Crear la campaña
+
+1. Entrá a **Campañas**, creá una campaña y elegí voz cuando aparezca el selector de tipo.
+2. En **Detalles**, cargá nombre, programación, rango horario, número visible verificado y reintentos. El formulario admite entre **1 y 10** reintentos.
+3. En **Agente**, elegí el agente preparado para esta operación. Revisá sus instrucciones, herramientas y versión publicada.
+4. En **Contactos**, incorporá destinatarios desde un archivo, un tablero o una campaña existente. Revisá teléfonos y cantidades antes de continuar.
+5. Revisá el resumen y publicá cuando estés listo para iniciar llamadas reales según la programación.
+
+El rango horario define cuándo puede trabajar la campaña; no es el límite de duración de cada llamada. No hay un control de concurrencia en este formulario.
+
+## Seguir el avance
+
+| Estado | Interpretación |
+|---|---|
+| `PENDING` | Pendiente de comenzar. |
+| `ACTIVE` | En ejecución. |
+| `PAUSED` | En pausa. |
+| `COMPLETED` | Terminó su ejecución. |
+| `CREDITS_REQUIRED` | Necesita créditos para continuar. |
+| `INCOMPLETE` | Quedó incompleta y requiere revisión. |
+
+El detalle reúne indicadores, tasas y gráficos. Abrí las llamadas individuales para distinguir no atendidas, buzón, fallos y resultados del análisis. **Completada** describe la campaña, no que todos los contactos hayan respondido.
+
+Si necesitás detener nuevos intentos, usá la pausa disponible en la campaña y revisá las llamadas que ya estaban en curso. Corregí primero el motivo de una interrupción antes de reanudar.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Puedo usar cualquier número visible?">
+    Elegí uno verificado y disponible en la organización desde **Mis números**.
+  </Accordion>
+  <Accordion title="¿Por qué se detuvo por créditos?">
+    Revisá el saldo en Facturación y el estado de la campaña después de recargar.
+  </Accordion>
+  <Accordion title="¿Dónde configuro llamadas simultáneas?">
+    El editor no ofrece ese ajuste. Consultá a soporte si tu operación necesita una capacidad específica.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Mis números](/es/llamadas/mis-numeros)
+- [Importar contactos](/es/contactos/importar)

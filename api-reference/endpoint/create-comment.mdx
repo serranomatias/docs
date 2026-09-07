@@ -1,0 +1,36 @@
+---
+title: "Create Contact Comment"
+api: "POST /v1/comments"
+description: "Add a comment to an existing contact in the API key\u2019s organization."
+---
+
+Add a comment to an existing contact in the API key’s organization.
+
+## Authentication
+
+<ParamField header="x-api-key" type="string" required>Organization API key. Keep it on your server or in a credential store.</ParamField>
+
+## Body
+
+<ParamField body="content" type="string" required>Nonempty comment text.</ParamField>
+<ParamField body="contact_id" type="string" required>Contact UUID belonging to this organization.</ParamField>
+<ParamField body="created_by_type" type="string" required>`USER`, `SYSTEM`, `AI`, or `AUTOMATIZATION`. Values are case-sensitive.</ParamField>
+<ParamField body="created_by" type="string">Required member email for `USER`. Omit it for every other source type; supplying it then is rejected.</ParamField>
+
+## Example
+
+This creates a real contact comment. Replace CONTACT_ID with a contact from your organization.
+
+```bash
+curl -X POST 'https://api.contactship.ai/v1/comments'   -H 'x-api-key: YOUR_API_KEY'   -H 'Content-Type: application/json'   -d '{"content":"Inquiry received through the website.","contact_id":"CONTACT_ID","created_by_type":"AUTOMATIZATION"}'
+```
+
+## Response
+
+<ResponseField name="statusCode" type="number">201 for successful creation.</ResponseField>
+<ResponseField name="data.id" type="string">Comment identifier.</ResponseField>
+<ResponseField name="data.content" type="string">Saved text.</ResponseField>
+<ResponseField name="data.created_by" type="object | string">User information for a user comment, or the source-type string for a system/AI/automation comment.</ResponseField>
+<ResponseField name="data.created_at" type="string">Creation timestamp.</ResponseField>
+
+Use [Get contact comments](/api-reference/endpoint/get-contact-comments) to inspect existing comments before retrying an uncertain creation. The creation route is `/v1/comments`, not `/v1/contacts/{id}/comments`.

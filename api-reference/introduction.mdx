@@ -1,62 +1,38 @@
 ---
-title: 'Introduction'
-description: 'Introduction to the Contactship API for creating call automations with AI Agents'
+title: "API Introduction"
+description: "Authenticate requests and integrate calls, contacts, agents, and supported messaging operations."
 ---
 
-<Note>
-  Note: The Contactship API is currently in beta. It will be continuously improved and updated to add new features.
-</Note>
+The ContactShip API connects your systems to the operations documented in this reference. Most endpoints use `https://api.contactship.ai`; any legacy endpoint with a different host states its full URL on the page.
 
-## Welcome to the Contactship API Documentation
+## Authenticate
 
-Welcome to the Contactship API documentation! Here, you'll find everything you need to know to get started with our API, which allows you to create automations or workflows for making phone calls with our AI Agents.
+Create an organization key in **Organization → API Keys** with a plan that includes API access and the required permissions. The key belongs to one organization. Send it in the `x-api-key` header and keep it in a server-side credential store.
 
-### What is the Contactship API?
+Start with a read-only balance request:
 
-The Contactship API is a powerful tool that enables you to programmatically interact with our AI Agents. You can use it to automate tasks, create call workflows, and integrate our services into your own applications. Whether you need to schedule calls, retrieve call data, or manage your agents, our API has you covered.
-
-### Why Use the Contactship API?
-
-Our API is designed to be powerful yet easy to use. Here are some reasons why you might want to use it:
-
-- **Automation**: Automate repetitive tasks and streamline your call workflows.
-- **Integration**: Seamlessly integrate our AI Agents into your own applications.
-- **Data Access**: Retrieve and manipulate call data programmatically.
-- **Scalability**: Build scalable solutions that can grow with your needs.
-
-### Getting Started
-
-To get started with the Contactship API, follow these simple steps:
-
-1. **Create Your API Key**: 
-   - Go to the "Organizations" section in your Contactship dashboard.
-   - Generate your API Key, which will be used to authenticate your requests.
-
-2. **Authentication**: All API endpoints are authenticated using your API Key. You will need to include your API Key in the header of each request.
-   - Example:
-```json  
-      "headers": {
-        "x-api-key": "YOUR_API_KEY"
-      }
+```bash
+curl 'https://api.contactship.ai/v1/credits' \
+  -H 'x-api-key: YOUR_API_KEY'
 ```
-3. **Making Requests**: Use standard HTTP methods (GET, POST, PUT, DELETE) to interact with the API endpoints. Each endpoint is documented with the required parameters and example responses.
 
-4. **Understanding Responses**: The API will return responses in JSON format. Each response includes relevant data and status codes to indicate the success or failure of the request.
+Do not put organization keys in website JavaScript or public repositories. Rotate a disclosed key and update its integrations.
 
-5. **Rate Limits**: Requests are limited per organization — **120 per minute** across the API and **20 per minute** on the listing endpoints (`GET /v1/contacts`, `GET /v1/calls`). Every response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset` headers; exceeding a limit returns `429 Too Many Requests` with a `Retry-After` header. See [Rate Limits](/api-reference/rate-limits) for details and retry examples.
+## Requests and responses
 
-### Resources
+Use each endpoint’s method, path, and fields. JSON write requests need `Content-Type: application/json`. Path IDs identify different resources: an agent ID is not a voice ID, and a number ID is not a phone-number string.
 
-Our API documentation is divided into several sections, each focusing on different aspects of the API:
+The public API normally wraps successful responses as `statusCode` and `data`; paginated responses also include `pagination`. Legacy integration endpoints can differ. Check the response description on the endpoint you use.
 
-- **Authentication**: Learn how to authenticate your requests.
-- **Endpoints**: Detailed information about each API endpoint, including parameters and example responses.
-- **Error Handling**: Understand the different error codes and how to handle them.
-- **[Rate Limits](/api-reference/rate-limits)**: How many requests you can make, the headers that report your budget and how to handle `429` responses.
-- **Best Practices**: Tips and guidelines for using the API effectively.
+Creation or update can have immediate effects. API voice-agent creation publishes version 1, and updating an agent publishes its result. Call and message requests can contact real people. Confirm destinations and payloads before running examples.
 
-### Support
+## Handle failures
 
-If you have any questions or need assistance, our support team is here to help. Feel free to reach out to us at [support@contactship.ai](mailto:support@contactship.ai).
+- For validation errors, correct the fields rather than retrying unchanged.
+- For authentication failures, check the key, organization, and access.
+- For `429`, honor `Retry-After` when present and reduce request frequency.
+- After a timeout on a write, inspect the resulting resource before repeating it to avoid duplicate calls, comments, or tasks.
 
----
+A `401` response alone does not establish that a URL is a supported endpoint. Use the contracts in this reference.
+
+See [Rate limits](/api-reference/rate-limits), [Webhooks](/api-reference/webhooks), and [API keys](/en/organization/api-keys). Contact [support@contactship.ai](mailto:support@contactship.ai) with the method, endpoint, timestamp, and sanitized response when investigating an integration.

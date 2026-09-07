@@ -1,0 +1,62 @@
+---
+title: "Equipos y subequipos"
+description: "Organizá personas en equipos, configurá líderes, roles por defecto y calendarios. Entendé qué se hereda y qué no cambia al mover miembros."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Ajustes → Organización → Equipos" permission="teams.read" />
+
+Los equipos agrupan personas y pueden contener subequipos. Sirven para filtrar, resolver alcances de acceso y organizar el trabajo. Cada persona mantiene su propio rol y puede pertenecer a más de un equipo.
+
+## Crear y organizar
+
+1. En **Equipos**, hacé clic en **Nuevo equipo**.
+2. Ingresá el nombre y, opcionalmente, una descripción.
+3. Elegí un **Equipo padre** o dejalo sin padre para crear un equipo raíz.
+4. Revisá el **Rol por defecto**, creá el equipo y agregá miembros existentes de la organización.
+
+Crear requiere `teams.create`; editar, `teams.update`; eliminar, `teams.delete`. La pestaña **Miembros** muestra miembros directos, no personas de subequipos.
+
+## Roles y líderes
+
+| Configuración | Efecto |
+|---|---|
+| Rol por defecto | Se aplica a quienes entren después; no cambia a los miembros actuales |
+| Aplicar un rol a este equipo | Cambia el rol de los miembros directos elegidos; no incluye subequipos |
+| Líder | Identifica a quien lidera el equipo; no concede por sí solo permisos de administrador |
+| Quitar del equipo | Quita la pertenencia, sin eliminar la cuenta de la organización |
+
+Al agregar personas, revisá el aviso si el rol por defecto reemplazará un rol distinto. La aplicación masiva omite al propietario y tu propia cuenta.
+
+## Jornada, feriados y zona horaria
+
+El **Calendario de equipo** define jornada, feriados y huso horario. Si no tiene uno propio, hereda el del equipo padre o de la organización. El reloj de enrutamiento usa este calendario.
+
+## Mover o eliminar
+
+**Mover** cambia el padre y lleva también los subequipos. No podés mover un equipo dentro de su propio subárbol.
+
+La app bloquea eliminar un equipo que todavía tiene subequipos o referencias desde alcances de roles. Resolvé las dependencias indicadas antes de volver a intentarlo. Eliminar un equipo no elimina a sus miembros ni cambia por sí mismo sus roles.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué no veo a la gente de los subequipos en Miembros?">
+    La lista muestra solo miembros directos. Seleccioná el subequipo para revisar su propia lista.
+  </Accordion>
+  <Accordion title="¿Cambiar el rol por defecto cambia a todo el equipo?">
+    No. Afecta a nuevas incorporaciones. Para cambiar miembros actuales usá la acción de aplicar un rol y revisá los destinatarios.
+  </Accordion>
+  <Accordion title="¿Por qué veo el equipo pero no los nombres de sus miembros?">
+    Ver equipos y ver miembros de la organización requieren permisos distintos. Pedí que revisen tu permiso de lectura de miembros.
+  </Accordion>
+  <Accordion title="¿Cada equipo necesita su propio calendario?">
+    No. Si no configurás uno, hereda el del padre o la organización. Definí uno propio si la jornada o el huso son distintos.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Roles y permisos](/es/organizacion/roles-y-permisos)
+- [Miembros](/es/organizacion/miembros)
+- [Enrutamiento](/es/enrutamiento/como-funciona)

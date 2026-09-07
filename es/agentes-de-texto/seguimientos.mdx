@@ -1,0 +1,107 @@
+---
+title: 'Seguimientos, horarios y cierre'
+description: 'Configurá los seguimientos experimentales, sus tiempos acumulados, horarios, cancelación, cierre y webhook. Ajustá también contexto y buffer de mensajes.'
+tag: 'Experimental'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read; agents.update para editar" route="Agentes → Texto → Avanzado" status="Experimental" />
+
+**Mensajes de seguimiento** envía recordatorios cuando el contacto deja de responder. Esta función está marcada como **Experimental** en la app. Revisá tiempos, zona horaria y reglas antes de activarla.
+
+## Configurar la secuencia
+
+<Steps>
+  <Step title="Activá Mensajes de seguimiento">
+    Abrí el agente y entrá en **Avanzado**. Activá **Mensajes de seguimiento**.
+  </Step>
+  <Step title="Elegí un punto de partida">
+    Elegí **Suave**, **Balanceado** o **Persistente**. Podés modificar los intervalos o agregar etapas con **Agregar otro seguimiento**.
+  </Step>
+  <Step title="Revisá horarios y excepciones">
+    Abrí **Opciones avanzadas**. Configurá horario de operación, comportamiento fuera de horario y situaciones que deben detener el seguimiento.
+  </Step>
+  <Step title="Definí el cierre y guardá">
+    Elegí si la conversación debe cerrarse al terminar y si necesitás un webhook. Guardá la pestaña **Avanzado**.
+  </Step>
+</Steps>
+
+## Los tiempos se suman
+
+Cada etapa agrega una espera a la anterior. La app muestra el total acumulado desde la última respuesta de la IA.
+
+| Preset | Intervalos | Totales acumulados |
+|---|---|---|
+| Suave | 4 horas | 4 horas |
+| Balanceado | 2 horas y luego 12 horas | 2 y 14 horas |
+| Persistente | 30 minutos, luego 2 horas y luego 8 horas | 30 minutos, 2 h 30 min y 10 h 30 min |
+
+Cada intervalo admite un número entero positivo en minutos u horas. La secuencia necesita al menos una etapa.
+
+<Warning>
+La app indica que los seguimientos de WhatsApp deben enviarse dentro de las 24 horas del último mensaje del usuario. El tiempo acumulado desde la IA no reinicia esa ventana. Una etapa puede quedar fuera aunque su total sea menor a 24 horas.
+</Warning>
+
+## Opciones avanzadas
+
+| Campo | Qué hace | Valores o requisitos |
+|---|---|---|
+| Horario de operación para seguimientos | Define cuándo pueden salir los recordatorios | Zona horaria, días y rangos de inicio y fin |
+| Cancelar seguimiento | Omite el seguimiento que cae fuera de horario | Una de las dos opciones fuera de horario |
+| Posponer al siguiente horario hábil | Reprograma al siguiente período de operación | La nueva hora sigue sujeta a la ventana de WhatsApp |
+| Instrucciones personalizadas de seguimiento | Define cuándo no insistir | Por ejemplo, pedido confirmado o cliente que pidió no recibir recordatorios |
+| Auto-cerrar conversación | Cierra al terminar el proceso | Activado o desactivado |
+| Webhook al cierre | Notifica por decisión de la IA o al completar las etapas | URL y método POST o PUT |
+
+El horario específico reemplaza las reglas de horario del canal o agente solo para los seguimientos. Si no lo activás, se usan esas reglas existentes.
+
+Cada rango requiere al menos un día y una hora de inicio anterior a la de fin. Si configurás un webhook, completá una URL válida.
+
+## Cierre y webhook
+
+Con **Auto-cerrar conversación** desactivado, la conversación queda abierta y se agrega una nota interna al finalizar el proceso. Activado, se cierra automáticamente.
+
+**Webhook al cierre** pertenece al proceso de seguimiento. No es el webhook de llamadas ni el webhook de cambios del canal. No asumas que se dispara ante cualquier cierre manual del inbox.
+
+## Otras opciones de Avanzado
+
+| Opción | Efecto |
+|---|---|
+| Auto-etiquetar conversación | Analiza y etiqueta con IA; revisá el costo adicional mostrado antes de activarla |
+| Contexto global del contacto | Incorpora historial entre canales y estado del contacto |
+| Buffer de mensajes | Espera entre 1 y 10 segundos para agrupar mensajes antes de responder |
+
+## Problemas frecuentes
+
+| Mensaje o síntoma | Causa y solución |
+|---|---|
+| Supera el límite de 24h | Reducí la espera acumulada; verificá también cuándo escribió por última vez el usuario. |
+| Cada horario necesita al menos un día y horas de inicio/fin válidas. | Completá días y horas; el inicio debe ser anterior al fin. |
+| Ingresa una URL de webhook válida. | Completá y corregí la URL si activaste el webhook. |
+| El seguimiento no se envió fuera de horario | Revisá si elegiste cancelar o posponer y comprobá la zona horaria. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Balanceado envía el segundo recordatorio a las 12 horas?">
+    Lo programa a las 14 horas acumuladas: primero espera 2 horas y después otras 12. La columna de total en cada etapa muestra esa suma.
+  </Accordion>
+  <Accordion title="¿Posponer permite enviar fuera de la ventana de WhatsApp?">
+    No. Posponer cambia el horario del intento, pero no amplía la ventana. Revisá también las [plantillas de WhatsApp](/es/mensajes/plantillas) para iniciar una conversación fuera de ella.
+  </Accordion>
+  <Accordion title="¿Puedo dejar abierta la conversación después del último seguimiento?">
+    Sí. Desactivá **Auto-cerrar conversación** y guardá **Avanzado**. Al terminar el proceso se agrega una nota interna.
+  </Accordion>
+  <Accordion title="¿El horario de seguimiento modifica el horario de atención del canal?">
+    No. Solo reemplaza las reglas para los seguimientos. El horario de atención se configura en el [canal](/es/mensajes/configurar-canal).
+  </Accordion>
+  <Accordion title="¿Por qué espera unos segundos antes de responder?">
+    Revisá **Buffer de mensajes**. Su rango de 1 a 10 segundos permite juntar mensajes consecutivos antes de generar una respuesta.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Instrucciones](/es/agentes-de-texto/instrucciones)
+- [Configurar un canal](/es/mensajes/configurar-canal)
+- [Plantillas de WhatsApp](/es/mensajes/plantillas)

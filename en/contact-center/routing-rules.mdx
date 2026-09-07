@@ -1,0 +1,57 @@
+---
+title: "Routing rules"
+description: "Order inbound rules by priority and verify conditions, schedules and destinations."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Telephony → Contact Center → Routing rules" permission="contact_center.read" addon="Contact center" />
+
+Rules choose an inbound destination. They run from top to bottom by priority: the first match wins. A broad rule can prevent a more specific rule below it from running.
+
+## Configure a rule
+
+1. Open **Routing rules → New rule**.
+2. Choose the trigger and input: phone call, WhatsApp or a call entering a queue.
+3. Configure conditions and a time window where applicable.
+4. Select an available destination.
+5. Review rule order and save.
+6. Test inside and outside configured hours.
+
+## Triggers
+
+| Trigger | Input evaluated |
+|---|---|
+| Phone call | Configured inbound telephone entry |
+| WhatsApp | WhatsApp entry supported by the module rules |
+| Call entering a queue | Entry into a specific queue |
+
+An option does not connect a channel or enable WhatsApp calling by itself. Check the input's requirements before testing.
+
+## Shadowed rules
+
+The app detects rules that may be covered by earlier rules. If a rule does not run, review the conditions and priority of preceding rules.
+
+Place specific rules before a general rule when they should take priority. Use queue fallback to define what happens if the destination does not answer.
+
+## Difference from lead routing
+
+These rules handle contact center entries. Lead routing handles contacts, stages and deadlines. Configuring one does not configure the other.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Do all matching rules run?">
+    No. The first matching rule wins according to priority.
+  </Accordion>
+  <Accordion title="Why does routing change outside business hours?">
+    Review time windows and subsequent or fallback rules. Test both scenarios.
+  </Accordion>
+  <Accordion title="Does selecting WhatsApp connect my number?">
+    No. Channel connection and WhatsApp calling availability are configured separately.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Queues](/en/contact-center/queues-and-skills)
+- [Monitoring](/en/contact-center/live-monitoring)

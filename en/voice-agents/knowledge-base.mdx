@@ -1,0 +1,59 @@
+---
+title: "Knowledge bases"
+description: "Create shared knowledge bases, add files or text, and connect retrieval to a voice agent."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Agents → Voice → Knowledge" permission="agents.read; agents.update to edit" />
+
+Knowledge bases belong to the organization and can be connected to several agents. The **Knowledge** tab shows connected bases, unconnected bases, and use by other agents.
+
+## Create and connect
+
+1. Create a base and give it a descriptive name of up to 120 characters.
+2. Open **Manage sources** and upload documents or write text.
+3. Connect the base to this agent using its switch.
+4. Add the **Knowledge base** tool in **Tools** and explain when to search.
+5. Publish tool changes, then test questions with known answers and questions absent from your sources.
+
+Connecting a base and managing its sources save immediately. Adding or editing the retrieval tool belongs to the agent draft. A connected base without the tool will not make the agent search it.
+
+## Supported sources
+
+| Source | Options |
+|---|---|
+| Documents | PDF, DOCX, XLSX, CSV, or TXT; up to 10 files per upload. Repeat uploads for more files. |
+| Written text | Paste or type content directly. Question-and-answer structure can make facts easier to maintain. |
+
+Text sources support **Edit content** and **Save changes**; read-only users see **View content**. PDFs can be viewed in the app. Uploaded files are updated by removing the old source and uploading its replacement.
+
+Removing a source affects every agent connected to the base. Deleting an entire base also has shared impact; review its connections first.
+
+## Organize information
+
+Keep core behavior, escalation instructions, and short essential facts in the prompt. Use bases for longer catalogs, policies, and manuals. Give documents clear names and remove obsolete or conflicting versions. For spreadsheets, ensure rows remain understandable with their headers.
+
+There is no URL ingestion or website crawler in this screen. Upload a supported export or paste the relevant text. There is no standalone retrieval tester; validate through a test call. The app does not display a per-file size limit, so split large documents if uploads fail.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Do source updates require publishing?">
+    No. Sources and connections save immediately. Retrieval-tool changes require publishing.
+  </Accordion>
+  <Accordion title="Can a base be private to one agent?">
+    Bases belong to the organization. Connect only the agents that should use each base.
+  </Accordion>
+  <Accordion title="Why did the agent not find an answer?">
+    Check the source exists, the base is connected, the retrieval tool is attached and published, and the instructions explain when to search.
+  </Accordion>
+  <Accordion title="Can I add eleven files at once?">
+    Upload at most ten files per batch, then add another batch.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Tools](/en/voice-agents/tools)
+- [Instructions](/en/voice-agents/instructions)
+- [Prompt guide](/en/voice-agents/prompt-guide)

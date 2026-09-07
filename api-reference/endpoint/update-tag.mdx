@@ -34,6 +34,8 @@ Updates the name, color, or label of an existing tag.
 
 ## Response
 
+The response is `{ "statusCode": number, "data": object }`. The fields below describe `data`.
+
 <ResponseField name="id" type="string">
   UUID of the updated tag.
 </ResponseField>
@@ -105,12 +107,15 @@ print(response.json())
 <ResponseExample>
 ```json Example Response
 {
-  "id": "tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "name": "hot-lead",
-  "color": "#FF0000",
-  "label": "Very Hot Lead",
-  "organization_id": "org-f1e2d3c4-b5a6-7890-1234-567890abcdef",
-  "updated_at": "2026-04-06T14:00:00Z"
+  "statusCode": 200,
+  "data": {
+    "id": "tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "hot-lead",
+    "color": "#FF0000",
+    "label": "Very Hot Lead",
+    "organization_id": "org-f1e2d3c4-b5a6-7890-1234-567890abcdef",
+    "updated_at": "2026-04-06T14:00:00Z"
+  }
 }
 ```
 </ResponseExample>

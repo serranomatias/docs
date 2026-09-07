@@ -1,0 +1,50 @@
+---
+title: "Historial de cambios"
+description: "Consultá quién creó, modificó o eliminó registros. Filtrá el historial por período, acción y tipo de registro."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Ajustes → Organización → Miembros del Equipo → Historial" permission="audit.read" addon="Historial de cambios" />
+
+El historial registra cambios en las funciones auditadas de tu organización. Se activa a pedido y necesita el permiso `audit.read`. No recupera cambios anteriores a la activación del módulo.
+
+## Consultar cambios
+
+1. Abrí **Miembros del Equipo** y seleccioná **Historial**.
+2. Elegí los últimos 7, 30 o 90 días. El período inicial es 30 días.
+3. Filtrá por tipo de registro y por acción: creación, modificación o eliminación.
+4. Revisá **Cuándo**, **Quién**, **Qué** y **Cambio**. Usá la paginación para ver más resultados.
+
+El filtro permite consultar miembros, roles, equipos, invitaciones, agentes, números, canales, etiquetas del inbox, respuestas rápidas, agentes de texto y campañas de mensajes. Esto no implica que toda actividad de la plataforma esté registrada.
+
+## Interpretar el resultado
+
+La columna **Cambio** muestra los campos registrados para esa modificación. Una acción puede provenir de una persona, una integración o del sistema; no todo cambio tiene una persona como autora.
+
+Un resultado vacío puede deberse al período, al filtro, a que no hubo cambios o a que ocurrieron antes de activar el módulo. No equivale a una prueba de que nunca se modificó el registro.
+
+## Qué no ofrece esta pantalla
+
+El historial no es una papelera ni un botón para deshacer cambios. Tampoco reemplaza el registro de llamadas, las conversaciones o el historial de ejecuciones de automatizaciones.
+
+Si aparece **No se pudo cargar el historial.**, recargá y conservá la organización, los filtros y el momento del error para soporte.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué no aparece Historial?">
+    La organización debe tener el módulo habilitado y tu rol debe incluir `audit.read`. El acceso a miembros por sí solo no alcanza.
+  </Accordion>
+  <Accordion title="¿Puedo ver cambios de antes de activarlo?">
+    El historial comienza cuando se activa el módulo. No reconstruye automáticamente los cambios anteriores.
+  </Accordion>
+  <Accordion title="¿Puedo restaurar un registro eliminado desde aquí?">
+    Esta pantalla permite consultar cambios; no ofrece restauración. Revisá las opciones de recuperación de la función correspondiente.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Miembros](/es/organizacion/miembros)
+- [Roles y permisos](/es/organizacion/roles-y-permisos)
+- [Soporte](/es/comenzar/soporte)

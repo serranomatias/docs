@@ -1,0 +1,57 @@
+---
+title: "Reglas de enrutamiento"
+description: "Ordená reglas de entrada por prioridad y comprobá horarios y destinos para que cada llamada llegue al lugar correcto."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Ajustes → Telefonía → Contact Center → Reglas de enrutamiento" permission="contact_center.read" addon="Contact center" />
+
+Las reglas deciden el destino de una entrada. Se evalúan por prioridad, de arriba hacia abajo: gana la primera que coincide. Una regla amplia puede impedir que se ejecute otra más específica.
+
+## Configurar una regla
+
+1. Abrí **Reglas de enrutamiento → Nueva regla**.
+2. Elegí el disparador y la entrada: llamada telefónica, WhatsApp o llamada que entra a una cola.
+3. Configurá las condiciones y la ventana horaria que correspondan.
+4. Seleccioná el destino y comprobá que esté disponible.
+5. Revisá el orden de las reglas y guardá.
+6. Probá dentro y fuera del horario configurado.
+
+## Disparadores
+
+| Disparador | Entrada que evalúa |
+|---|---|
+| Llamada | Entrada telefónica configurada |
+| WhatsApp | Entrada de WhatsApp contemplada por las reglas del módulo |
+| Llamada que entra a una cola | Entrada a una cola específica |
+
+La presencia de una opción no conecta un canal ni activa telefonía de WhatsApp por sí sola. Comprobá los requisitos de la entrada antes de probarla.
+
+## Reglas que se tapan entre sí
+
+La app detecta reglas que pueden quedar cubiertas por otras anteriores. Si una regla no se ejecuta, revisá primero el orden y las condiciones de las reglas previas.
+
+Colocá reglas específicas antes de una regla general cuando quieras que tengan prioridad. Usá el respaldo de la cola para definir qué ocurre si el destino no atiende.
+
+## Diferencia con enrutamiento de leads
+
+Estas reglas gestionan entradas del contact center. El enrutamiento de leads trabaja sobre contactos, etapas y plazos. Configurar uno no configura el otro.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Se ejecutan todas las reglas que coinciden?">
+    No. Gana la primera que coincide según el orden de prioridad.
+  </Accordion>
+  <Accordion title="¿Por qué funciona en un horario y en otro no?">
+    Revisá las ventanas horarias y las reglas posteriores o de respaldo. Probá ambos escenarios.
+  </Accordion>
+  <Accordion title="¿Elegir WhatsApp conecta mi número?">
+    No. La conexión del canal y la disponibilidad de llamadas de WhatsApp se configuran por separado.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Colas](/es/contact-center/colas-y-skills)
+- [Monitoreo](/es/contact-center/monitoreo-en-vivo)

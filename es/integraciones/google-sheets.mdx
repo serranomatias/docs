@@ -1,0 +1,47 @@
+---
+title: "Google Sheets"
+description: "Conectá hojas de cálculo y configurá acciones para agregar o actualizar filas con datos de contactos y conversaciones."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Integraciones → Google Sheets" permission="integrations.read; integrations.create" />
+
+Google Sheets se conecta mediante autorización con Google. La conexión permite que las automatizaciones configuradas trabajen con hojas accesibles para esa cuenta.
+
+## Conectar y usar
+
+1. Abrí **Integraciones → Google Sheets** y elegí **Conectar con Google**.
+2. Seleccioná la cuenta que puede acceder al archivo y completá la autorización.
+3. En una automatización del inbox, elegí la acción de agregar o actualizar una fila.
+4. Seleccioná conexión y hoja, y mapeá los datos del evento a las columnas.
+5. Para actualizar, revisá el criterio que identifica la fila existente.
+6. Ejecutá una prueba controlada y comprobá el resultado en la hoja y en la ejecución.
+
+## Agregar frente a actualizar
+
+Agregar crea una nueva fila. Actualizar necesita identificar una existente según la configuración. Usá un identificador estable del contacto o conversación para evitar coincidencias ambiguas.
+
+Conectar la cuenta no exporta automáticamente todos los contactos ni crea un flujo bidireccional. Cada acción depende del evento, condiciones y columnas que configuraste.
+
+## Problemas frecuentes
+
+Si no aparece una hoja, comprobá la cuenta y sus permisos sobre el archivo. Si se duplican filas, revisá si el evento se repite o si usaste agregar donde necesitabas actualizar. Antes de reejecutar una automatización fallida, revisá qué pasos ya se completaron.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Conectar Google Sheets exporta todo el CRM?">
+    No. Configurá las acciones que deben escribir en la hoja y el evento que las dispara.
+  </Accordion>
+  <Accordion title="¿Por qué se agregan filas duplicadas?">
+    Una acción de agregar puede repetirse con cada evento o reintento. Revisá el evento y el criterio de actualización.
+  </Accordion>
+  <Accordion title="¿Mi hoja necesita columnas específicas?">
+    Necesita columnas que coincidan con el mapeo de tu acción. Probá con una fila antes de activar el flujo.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Automatizaciones](/es/mensajes/automatizaciones)
+- [Catálogo](/es/integraciones/vision-general)

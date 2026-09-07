@@ -1,0 +1,56 @@
+---
+title: "Contact tags"
+description: "Create CRM tags and apply them to contacts for filtering and bulk operations. Distinguish contact, inbox and call tags."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Contact Management → Contact Tags" permission="tags.read" />
+
+Contact tags classify CRM records. Use them to filter searches and select groups of contacts. Tags are managed per organization.
+
+## Create and apply
+
+1. Open **Settings → Contact Management → Contact Tags**.
+2. Create a tag with a recognizable name and color.
+3. Return to **Contacts** and apply it through the contact's tag cell.
+4. For multiple contacts, select rows and use the add or remove tag actions.
+
+Creating, editing and deleting require their respective tag permissions. Editing contacts also depends on your CRM access.
+
+## Three tag types
+
+| Type | Classifies | Managed in |
+|---|---|---|
+| Contact | Person or CRM record | Contact Tags |
+| Conversation | One inbox conversation | Settings → Inbox → Tags |
+| Call | Call content or outcome | Voice agent configuration |
+
+Using the same name in two catalogs does not synchronize tags. A text agent's **Tag conversation** tool uses inbox tags.
+
+## Filter and process lists
+
+Filter **Contacts** by tags and check your selection before starting a bulk action. Operations on many contacts can appear as background jobs. Wait for the result before repeating them.
+
+## Remove a tag
+
+Removing a tag from one contact and deleting it from the catalog are different actions. To reclassify one person, remove that contact association. Before deleting a catalog tag, review rules and integrations that use it.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can a tag apply to several contacts?">
+    Yes. It is a reusable classification within the organization. Apply it to the relevant contacts.
+  </Accordion>
+  <Accordion title="Why is it missing from the Tag conversation tool?">
+    That tool uses a separate catalog. Create the tag in **Settings → Inbox → Tags** to use it for conversations.
+  </Accordion>
+  <Accordion title="Does removing a tag delete the contact?">
+    No. Removing an association changes classification. Deleting a contact is a separate action.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Contacts and properties](/en/contacts/contacts-and-properties)
+- [Inbox quick replies and tags](/en/messages/quick-replies-and-tags)
+- [Call tags](/en/voice-agents/call-tags)

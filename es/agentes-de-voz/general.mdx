@@ -1,0 +1,127 @@
+---
+title: 'General: nombre, idiomas y voz'
+description: 'Los campos de la pestaña General de un agente de voz: nombre interno, nombre en llamadas, hasta 5 idiomas o el preajuste multilingüe, zona horaria, selector de voz con vista previa y los seis sonidos de fondo.'
+sidebarTitle: 'General'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read" route="Agentes → Voz → General" />
+
+La pestaña **General** define cómo se identifica el agente y cómo suena. Es la primera pestaña del editor. Salvo el **Nombre del agente**, todo lo que cambiás acá queda en el borrador hasta que publiques.
+
+{/* captura: images/agentes-de-voz/general-es.png | Pestaña General con nombre, nombre en llamadas, idiomas, zona horaria, voz seleccionada y sonido de fondo | app: /agents/voice/[id] */}
+
+## Campos
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Nombre del agente** | Identifica al agente dentro de la app: lista, campañas, reportes. "Solo lo ve tu equipo. Identifica al agente dentro de la app y nunca llega a quien llama." Se guarda al salir del campo o con `Enter`, sin publicar. | Texto. No puede quedar vacío. | New Agent, o el título de la plantilla |
+| **Nombre del agente en llamadas** | "El nombre con el que se presenta el agente." | Texto | vacío, o N/A si creaste desde plantilla |
+| **Idiomas** | "Los idiomas que el agente puede hablar en las llamadas." | 1 idioma en **Selección única**, hasta 5 en **Multiselección**, o el preajuste Multilingual (Spanish + English) | Spanish (Latin America) |
+| **Zona horaria** | "Se usa para resolver las fechas y horas que menciona el agente." | Lista de zonas horarias agrupadas por región, con buscador | sin definir, o la de tu perfil si creaste desde plantilla |
+| **Voz** | "Elige la voz con la que habla el agente." | Catálogo de voces con nombre, género, acento y edad, con vista previa | Una voz predeterminada, o la de la plantilla |
+| **Sonido de fondo** | "Un ambiente que suena por debajo de la llamada." | Ninguno, Cafetería, Sala de congresos, Exterior de verano, Exterior de montaña, Ruido estático, Centro de llamadas | Ninguno |
+
+## Nombre interno y nombre en llamadas
+
+Son dos campos distintos y se guardan distinto.
+
+- **Nombre del agente** es el nombre interno. Aparece en la lista, en las campañas y en los reportes. Nunca llega a quien llama. Se guarda solo, al instante, al salir del campo o presionar `Enter`. Mientras se guarda dice "Guardando…" y después "Guardado". Si lo dejás vacío, la app vuelve al nombre anterior. `Esc` cancela la edición.
+- **Nombre del agente en llamadas** es el nombre con el que el agente se presenta. Forma parte del borrador y se aplica cuando publicás.
+
+<Tip>
+Usá un nombre interno que describa la función, por ejemplo "Recepción clínica · turnos", y un nombre en llamadas corto y fácil de pronunciar, por ejemplo "Ana".
+</Tip>
+
+## Idiomas
+
+{/* captura: images/agentes-de-voz/general-idiomas-es.png | Selector Idioma de habla en Multiselección con dos idiomas elegidos y el contador 2/5 | app: /agents/voice/[id] */}
+
+El selector se abre con el título **Idioma de habla**. Arriba a la derecha alternás entre **Selección única** y **Multiselección**. El buscador es **Buscar idioma...**.
+
+- En **Selección única** elegís un idioma y el selector se cierra.
+- En **Multiselección** marcás hasta 5 idiomas. El contador muestra "n/5". Al llegar a 5, el resto de la lista queda deshabilitado. No podés desmarcar el último idioma.
+- El primer idioma que marcás es el principal. Es el que muestra la lista de agentes y el que usa **Generar con IA**. Si volvés a **Selección única**, se conserva solo el principal.
+- El preajuste **Multilingual (Spanish + English)** es exclusivo: al elegirlo, reemplaza cualquier otra selección y no ocupa lugares del contador.
+- El selector recomienda: "Un solo idioma es más preciso. Elegí uno si sabés cuál habla el contacto." Con 3 o más idiomas avisa: "Más idiomas, más difícil detectar el correcto si el audio es malo."
+
+Los idiomas disponibles, en el orden de la app, son: Multilingual (Spanish + English), Spanish (Latin America), Spanish (Spain), English (US), English (UK), English (Australia), English (New Zealand), English (India), German (Germany), Hindi (India), French (France), French (Canada), Japanese (Japan), Portuguese (Portugal), Portuguese (Brazil), Chinese (Simplified), Russian (Russia), Italian (Italy), Korean (Korea), Dutch (Netherlands), Polish (Poland), Turkish (Turkey), Vietnamese (Vietnam), Romanian (Romania), Catalan (Spain), Danish (Denmark), Finnish (Finland), Greek (Greece), Hungarian (Hungary), Indonesian (Indonesia), Norwegian (Norway), Slovak (Slovakia) y Swedish (Sweden). Los nombres aparecen en inglés también en la app en español.
+
+## Zona horaria
+
+El agente usa esta zona horaria para interpretar y decir fechas y horas: "mañana a las tres", "el próximo lunes". Elegí la zona de las personas con las que habla el agente. Las herramientas de calendario tienen su propia zona horaria, ver [Herramientas](/es/agentes-de-voz/herramientas).
+
+## Voz
+
+{/* captura: images/agentes-de-voz/general-voz-es.png | Diálogo Elegir una voz con el buscador, los filtros de género y acento y el botón de vista previa en cada voz | app: /agents/voice/[id] */}
+
+La tarjeta muestra la voz actual con su nombre y chips de género, acento y edad. **Cambiar voz** abre el diálogo **Elegir una voz**:
+
+- **Buscar voces** filtra por nombre.
+- Dos filtros desplegables, uno por género y otro por acento. **Todas** quita el filtro.
+- El botón de reproducción de cada voz escucha una muestra grabada. Al hacer clic en la fila, la voz queda seleccionada y el diálogo se cierra.
+
+Si todavía no hay voz, la tarjeta dice "Todavía no hay ninguna voz seleccionada." Debajo de la voz hay un enlace **Ajusta el volumen de la voz en Avanzado**, que te lleva al control **Volumen** de **Avanzado → Voz**. Velocidad, expresividad y voces de respaldo también están en [Avanzado](/es/agentes-de-voz/avanzado).
+
+## Sonido de fondo
+
+| Opción (clave) | Qué suena |
+|---|---|
+| **Ninguno** | Sin ambiente |
+| **Cafetería** (coffee-shop) | Murmullo de cafetería |
+| **Sala de congresos** (convention-hall) | Sala grande con gente |
+| **Exterior de verano** (summer-outdoor) | Exterior de día |
+| **Exterior de montaña** (mountain-outdoor) | Exterior abierto |
+| **Ruido estático** (static-noise) | Ruido de línea |
+| **Centro de llamadas** (call-center) | Oficina con otros operadores |
+
+Con un sonido activo aparece el enlace **Ajusta el volumen del fondo en Avanzado**, que lleva a **Volumen del fondo** (de 0 a 2, por defecto 1) en **Avanzado → Voz**.
+
+## Zona de peligro
+
+No está en **General**: es la última sección de **Avanzado** y solo la ven los roles con permiso `agents.delete`. **Eliminar este agente** "Elimina el agente junto con su borrador y todas sus versiones publicadas." El botón **Eliminar agente** abre "¿Eliminar agente de voz?" y pide confirmación con **Eliminar**. El paso a paso está en [Crear un agente de voz](/es/agentes-de-voz/crear).
+
+## Qué no existe todavía
+
+- No hay detección automática de idioma más allá del preajuste **Multilingual (Spanish + English)** y de la Multiselección con hasta 5 idiomas.
+- La vista previa de una voz es una grabación fija. No se puede escuchar la voz leyendo tu propio texto desde el selector. Para eso, hacé una llamada de prueba desde **Probar agente**.
+- Velocidad, expresividad y volumen no están en esta pestaña. Están en **Avanzado → Voz**.
+
+## Problemas frecuentes
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| "No se pudo renombrar el agente" | El guardado del **Nombre del agente** falló. El campo vuelve al valor anterior. | Reintentá. Si persiste, recargá la página. |
+| "No se encontró ningún idioma." | El texto del buscador no coincide con ningún nombre. | Buscá en inglés: "Spanish", "English", "Portuguese". |
+| Los idiomas restantes aparecen deshabilitados | Ya marcaste 5 idiomas en **Multiselección**. | Desmarcá uno antes de agregar otro. |
+| "Todavía no hay ninguna voz seleccionada." | El agente no tiene voz asignada. | Hacé clic en **Cambiar voz** y elegí una. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Qué diferencia hay entre Nombre del agente y Nombre del agente en llamadas?">
+    El primero es interno: lo ve tu equipo en la lista, las campañas y los reportes, y se guarda al instante. El segundo es el nombre con el que el agente se presenta a quien llama, y se aplica cuando publicás el borrador.
+  </Accordion>
+  <Accordion title="¿Cuántos idiomas puede hablar un agente?">
+    Uno en **Selección única** o hasta 5 en **Multiselección**. El preajuste **Multilingual (Spanish + English)** cubre español e inglés sin ocupar lugares. La app recomienda un solo idioma cuando sabés cuál habla el contacto.
+  </Accordion>
+  <Accordion title="¿Qué pasa si elijo varios idiomas?">
+    El agente detecta el idioma en la llamada y responde en ese idioma. Con audio de mala calidad la detección es más difícil, por eso la app avisa a partir de 3 idiomas. El primero que marcaste es el principal y aparece en la lista de agentes.
+  </Accordion>
+  <Accordion title="¿Dónde cambio la velocidad o el volumen de la voz?">
+    En **Avanzado → Voz**: **Velocidad** (0,5 a 2), **Expresividad** (0 a 2), **Volumen** (0 a 2) y **Volumen del fondo** (0 a 2). Desde **General** hay enlaces directos a **Volumen** y **Volumen del fondo**. Ver [Avanzado](/es/agentes-de-voz/avanzado).
+  </Accordion>
+  <Accordion title="¿Los cambios de esta pestaña se aplican de inmediato?">
+    Solo el **Nombre del agente**. Nombre en llamadas, idiomas, zona horaria, voz y sonido de fondo quedan en el borrador hasta que hagas clic en **Publicar**. Ver [Versiones, publicación y pruebas](/es/agentes-de-voz/versiones-y-pruebas).
+  </Accordion>
+  <Accordion title="¿Qué zona horaria conviene poner?">
+    La de las personas con las que habla el agente, porque es la que usa para decir "mañana a las diez". Si el agente agenda con Cal.com o Google Calendar, esas herramientas tienen su propia zona horaria y conviene que coincida con la del calendario.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Crear un agente de voz](/es/agentes-de-voz/crear)
+- [Instrucciones](/es/agentes-de-voz/instrucciones)
+- [Avanzado: voz, manual y contexto](/es/agentes-de-voz/avanzado)
+- [Versiones, publicación y pruebas](/es/agentes-de-voz/versiones-y-pruebas)

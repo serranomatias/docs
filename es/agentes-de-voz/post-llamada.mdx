@@ -1,0 +1,182 @@
+---
+title: 'Post llamada: datos, tablero y webhooks'
+description: 'La sección Post llamada del agente de voz: datos de análisis con los tipos Texto, Opciones, Sí / No y Número, hasta 15 criterios de evaluación, tablero de contactos, etiquetas de llamada y el webhook de salida que se envía cuando termina cada llamada, con qué se guarda al instante y qué requiere publicar.'
+sidebarTitle: 'Post llamada'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read" route="Agentes → Voz → Avanzado → Post llamada" />
+
+**Post llamada** define "qué pasa cuando termina una llamada: qué se extrae, dónde acaba y quién se entera". Está dentro de la pestaña **Avanzado** y tiene cinco subsecciones en este orden: **Datos de análisis**, **Criterios de evaluación**, **Tablero de contactos**, **Etiquetas de llamada** y **Webhooks**. Se usa cuando querés sacar información estructurada de cada conversación, medir calidad, mover contactos o avisar a otro sistema.
+
+No todas se guardan igual:
+
+| Subsección | Cómo se guarda |
+|---|---|
+| **Datos de análisis** | Con el borrador. Se aplica al publicar. |
+| **Criterios de evaluación** | Al instante, sin publicar. |
+| **Tablero de contactos** | Al instante, sin publicar. |
+| **Etiquetas de llamada** | Al instante, sin publicar. |
+| **Webhooks** | Con el borrador. Se aplica al publicar. |
+
+{/* captura: images/agentes-de-voz/post-llamada-datos-de-analisis-es.png | Subsección Datos de análisis con tres campos en la vista previa y el botón Añadir campo | app: /agents/voice/[id]?activeTab=advanced */}
+
+## Datos de análisis
+
+"Campos estructurados que el agente extrae de cada llamada al terminar." Cuando la llamada se analiza, el agente completa cada campo a partir de la transcripción. El resultado aparece en el detalle de la llamada, en **Análisis → Datos extraídos**, y viaja en el webhook de salida.
+
+La subsección muestra hasta 5 campos como vista previa. **Ver todos** o **Ver todos (N más)** abre el panel lateral con la lista completa, donde también podés editar, eliminar y pasar al modo JSON. **Añadir campo** abre el diálogo **Nuevo campo de análisis**.
+
+### Campos del diálogo
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Tipo** | Cómo devuelve el valor el agente. | **Texto** (`string`): "Texto libre, como un nombre completo o un resumen." **Opciones** (`enum`): "Un valor de una lista que tú defines." **Sí / No** (`boolean`): "Verdadero o falso." **Número** (`number`): "Un valor numérico, como una cantidad o una puntuación." | Texto |
+| **Nombre del campo** | "Es la clave que recibes de vuelta." | Minúsculas, números y guiones bajos, empezando por una letra. Único dentro del agente. | vacío |
+| **Qué extraer** | "El agente lee esto para decidir qué extraer. Sé concreto." | Hasta 300 caracteres. | vacío |
+| **Opciones** | Solo con el tipo Opciones. Los valores permitidos. | Al menos 2, distintas entre sí y no vacías. **Añadir opción** agrega filas. | 2 filas vacías |
+| **Obligatorio** | "El agente debe devolver un valor para este campo en todas las llamadas." | Activado o desactivado | desactivado |
+
+Al editar un campo: "Los cambios se aplican a las llamadas analizadas a partir de ahora." Al eliminarlo: "Deja de extraerse en las llamadas nuevas. Los datos ya recogidos se conservan."
+
+### Editar como JSON
+
+En el panel lateral, **Editar como JSON** muestra todos los campos como un array. "Pega o edita todo el array. Los cambios se aplican mientras escribes, en cuanto el JSON es válido." **Formatear** ordena la sangría. **Copiar ejemplo para IA** copia al portapapeles un prompt con el formato exacto y un ejemplo, para pegarlo en tu asistente de IA y pedirle los campos que necesitás; después pegás la respuesta en el editor.
+
+Cada objeto acepta `type`, `name`, `description`, `required` y, solo con `enum`, `choices`.
+
+### Ejemplo: agente de cobranzas
+
+Un agente que llama a deudores necesita saber si hubo compromiso, por cuánto y para cuándo. Tres campos alcanzan:
+
+```json
+[
+  {
+    "type": "boolean",
+    "name": "compromiso_de_pago",
+    "description": "Si el deudor se comprometió a pagar en una fecha concreta. No cuenta 'voy a ver' ni 'lo pienso'.",
+    "required": true
+  },
+  {
+    "type": "number",
+    "name": "monto",
+    "description": "Monto que el deudor dijo que va a pagar, solo el número, sin moneda."
+  },
+  {
+    "type": "string",
+    "name": "fecha_promesa",
+    "description": "Fecha o día en que prometió pagar, tal como lo dijo, por ejemplo 'el viernes 20'."
+  }
+]
+```
+
+Después de una llamada en la que el deudor dice "el viernes 20 les transfiero quince mil", **Datos extraídos** muestra `compromiso_de_pago: true`, `monto: 15000` y `fecha_promesa: "el viernes 20"`. Como `compromiso_de_pago` es obligatorio, en una llamada sin compromiso devuelve `false` en lugar de quedar vacío. Si además querés clasificar por qué no paga, agregá un campo **Opciones** `motivo_no_pago` con valores como `sin_dinero`, `disputa`, `ya_pago`.
+
+<Tip>
+Escribí la descripción como una instrucción para alguien que lee la transcripción sin contexto. "El nombre completo del cliente tal y como lo dio durante la llamada" funciona mejor que "nombre".
+</Tip>
+
+## Criterios de evaluación
+
+"Conectá criterios de éxito de tu organización a este agente. Al terminar cada llamada, un evaluador de IA califica el transcript contra cada criterio conectado. Los cambios acá se aplican de inmediato a las próximas llamadas — no hace falta publicar el agente."
+
+Los criterios se crean y se administran a nivel organización; acá solo se conectan. Cómo definirlos, los tipos Binario y Porcentaje y el reporte están en [Criterios de evaluación](/es/reportes/evaluaciones).
+
+- El botón **Conectados N/15** abre un buscador con los criterios activos de la organización. Marcás y desmarcás con un clic. **Administrar evaluaciones** abre la configuración de la organización en otra pestaña.
+- Un agente admite hasta 15 criterios. Al intentar conectar el número 16: "Un agente puede tener como máximo 15 evaluaciones".
+- Los criterios archivados no aparecen en el buscador.
+- Cada criterio conectado muestra su nombre, su clave y su prompt. La `x` lo desconecta.
+- Conectar y desconectar requiere el permiso `evaluation_criteria.update`, además de `agents.update`.
+
+Cada llamada del agente queda calificada por criterio "como éxito, falla o desconocido, con la evidencia detrás de cada veredicto". El veredicto se ve en el detalle de la llamada y se agrega en el reporte de evaluaciones.
+
+## Tablero de contactos
+
+"Dónde aterrizan los contactos de las llamadas de este agente. Se guarda al instante, sin publicar."
+
+Un selector con **Sin tablero** y los tableros de la organización. Al elegir uno aparece "Asignación de tablero actualizada". Si no hay tableros: "Todavía no hay tableros. Crea primero un tablero de contactos." Un agente tiene como máximo un tablero asignado. Los tableros se crean en [Tableros y etapas](/es/contactos/tableros).
+
+Qué pasa después de la llamada: cuando termina una llamada de este agente con un contacto asociado y el análisis está listo, la plataforma ubica la tarjeta del contacto en el tablero asignado y elige automáticamente la etapa a partir de la transcripción de esa llamada. Las llamadas sin contacto asociado no mueven nada.
+
+## Etiquetas de llamada
+
+"Etiquetas que el agente aplica a las llamadas automáticamente. Se guarda al instante, sin publicar." Cada etiqueta tiene un nombre, una descripción de cuándo aplicarla, un color y un aviso opcional por email. Están documentadas en [Etiquetas de llamada](/es/agentes-de-voz/etiquetas-de-llamada).
+
+## Webhooks
+
+"A dónde se envían los eventos de la llamada terminada."
+
+{/* captura: images/agentes-de-voz/post-llamada-webhooks-es.png | Subsección Webhooks con el campo Webhook de salida completado | app: /agents/voice/[id]?activeTab=advanced */}
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Webhook de salida** | URL de tu sistema que recibe una petición `POST` con los datos de cada llamada terminada de este agente. | URL con `https://` | vacío |
+
+Cómo funciona:
+
+- La plataforma registra tres eventos por llamada: `call_started`, `call_ended` y `call_analyzed`. El webhook del agente se envía con `call_analyzed`, es decir, cuando ya están la transcripción, la grabación, el resumen, el sentimiento y los datos de análisis.
+- El envío pasa por una cola con reintentos automáticos. Cada intento, la respuesta de tu endpoint y los datos crudos se ven en **Llamadas → Webhooks**, desde donde también se puede reenviar. Ver [Webhooks de llamadas](/es/llamadas/webhooks).
+- La lista completa de campos del payload está en la [referencia de webhooks](/api-reference/webhooks).
+- Las llamadas de prueba del panel **Probar agente** también disparan el webhook, así que sirven para verificar el endpoint antes de salir a producción.
+
+El webhook que se llama **al recibir** una llamada, para inyectar variables al prompt, no está acá: es **Webhook propio** dentro de [Contexto de entrada](/es/agentes-de-voz/avanzado#contexto-de-entrada).
+
+<Warning>
+El campo es parte del borrador. Si cambiás la URL y no publicás, las llamadas siguen enviando el webhook a la URL de la versión publicada.
+</Warning>
+
+## Qué no existe todavía
+
+- El editor actual no tiene un botón para probar el webhook con datos de ejemplo. Para probarlo, hacé una llamada desde **Probar agente** y revisá la entrega en **Llamadas → Webhooks**.
+- No se puede elegir qué eventos recibir: el webhook del agente se envía con `call_analyzed`.
+- Los datos de análisis solo admiten los cuatro tipos listados. No hay tipo fecha ni lista de valores múltiples.
+- Un agente no puede tener más de un tablero asignado ni más de 15 criterios de evaluación.
+- No hay condiciones para la etapa del tablero: la etapa se elige automáticamente a partir de la transcripción.
+
+## Problemas frecuentes
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| "Ponle un nombre al campo." | Guardaste un campo de análisis sin nombre. | Completá **Nombre del campo**. |
+| "Usa minúsculas, números y guiones bajos, empezando por una letra." | El nombre tiene mayúsculas, espacios, tildes o empieza con número. | Usá el formato `nombre_cliente`. |
+| "Ya hay otro campo con este nombre." | El agente ya tiene un campo con esa clave. | Cambiá el nombre o editá el campo existente. |
+| "La descripción no puede pasar de 300 caracteres." | **Qué extraer** supera el límite. | Acortá la descripción. |
+| "Añade al menos dos opciones." / "Las opciones deben ser distintas entre sí." / "Las opciones no pueden estar vacías." | Un campo **Opciones** tiene menos de dos valores, valores repetidos o filas vacías. | Corregí la lista de opciones. |
+| "Esto no es JSON válido. Revisa si falta una coma, una comilla o un corchete." | El texto del editor JSON no se puede leer. | Corregí la sintaxis; los cambios se aplican cuando el JSON vuelve a ser válido. |
+| "El nivel superior tiene que ser un array de campos, entre [ ]." | Pegaste un objeto suelto en lugar de una lista. | Envolvé los campos entre corchetes. |
+| "Un agente puede tener como máximo 15 evaluaciones" | Intentaste conectar el criterio 16. | Desconectá uno antes de conectar otro. |
+| "No se pudieron cargar las evaluaciones. Revisá tu conexión e intentá de nuevo." | Falló la carga de criterios. | Presioná **Reintentar**. |
+| "No se pudo actualizar la asignación de tablero" | Falló el guardado del tablero. | Volvé a elegir el tablero; si persiste, contactá a soporte. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Dónde veo los datos de análisis de una llamada?">
+    En **Llamadas**, abrí la llamada y mirá **Análisis → Datos extraídos**. Ahí aparece cada campo con su valor. Los mismos valores llegan en el webhook de salida, con el nombre del campo como clave. Ver [Registro y detalle de llamadas](/es/llamadas/registro).
+  </Accordion>
+  <Accordion title="¿Por qué un campo llega vacío en algunas llamadas?">
+    El agente no encontró en la transcripción algo que coincida con la descripción. Hacé la descripción más concreta, con un ejemplo de lo que buscás, o marcá el campo como **Obligatorio** para que devuelva siempre un valor. En llamadas sin conversación, por ejemplo buzón de voz, no hay nada que extraer.
+  </Accordion>
+  <Accordion title="¿Los cambios en los datos de análisis afectan llamadas anteriores?">
+    No. "Los cambios se aplican a las llamadas analizadas a partir de ahora." Los datos ya recogidos se conservan aunque elimines el campo. Recordá publicar: los datos de análisis forman parte del borrador.
+  </Accordion>
+  <Accordion title="¿Necesito publicar para que un criterio de evaluación o una etiqueta se aplique?">
+    No. Criterios de evaluación, tablero de contactos y etiquetas de llamada se guardan al instante y aplican a las próximas llamadas. Datos de análisis y webhooks sí requieren publicar.
+  </Accordion>
+  <Accordion title="Configuré el webhook y no me llega nada, ¿qué reviso?">
+    Primero, que la versión publicada tenga la URL: si la cambiaste en el borrador, publicá. Después, que el endpoint acepte `POST` y responda rápido; algunos endpoints rechazan el payload porque incluye la transcripción completa. En **Llamadas → Webhooks** vas a ver el estado, la respuesta de tu endpoint y un botón para reintentar. Ver [Webhooks de llamadas](/es/llamadas/webhooks).
+  </Accordion>
+  <Accordion title="¿Qué diferencia hay entre Datos de análisis y Criterios de evaluación?">
+    Los datos de análisis extraen valores de la llamada: un monto, una fecha, una opción. Los criterios de evaluación califican la llamada contra una regla de calidad, con veredicto éxito, falla o desconocido y evidencia. Usá los primeros para alimentar sistemas y reportes; los segundos, para medir si el agente hizo lo que debía.
+  </Accordion>
+  <Accordion title="¿Puedo generar los campos de análisis con IA?">
+    Sí. En el panel de campos, **Editar como JSON → Copiar ejemplo para IA** copia un prompt con el formato exacto. Pegalo en tu asistente, describí los campos que querés y pegá el array que devuelve en el editor. Se valida mientras escribís.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Etiquetas de llamada](/es/agentes-de-voz/etiquetas-de-llamada)
+- [Webhooks de llamadas](/es/llamadas/webhooks)
+- [Criterios de evaluación](/es/reportes/evaluaciones)
+- [Tableros y etapas](/es/contactos/tableros)

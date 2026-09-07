@@ -1,0 +1,56 @@
+---
+title: "Integrations catalog"
+description: "Choose Cal.com, Google Calendar, Google Sheets, Freshdesk or Make. Distinguish connections from configured tools and automations."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Integrations" permission="integrations.read" />
+
+Integrations connect external accounts to your organization. Connecting an account prepares credentials; then you configure the tool or automation that will use them.
+
+| Integration | Connection | ContactShip use |
+|---|---|---|
+| Cal.com | Cal.com API key | Agent scheduling tools |
+| Google Calendar | Connect with Google | Availability and scheduling tools |
+| Google Sheets | Connect with Google | Spreadsheet row actions in automations |
+| Freshdesk | Subdomain and API key | Contacts, tickets and notes through configured actions |
+| Make | Installation link | External scenarios using the API |
+
+## Connect an account
+
+1. Open **Integrations** and select the service.
+2. Review the account and organization to connect.
+3. Complete authentication. Creating a connection requires `integrations.create`.
+4. Check its status and configure the action that will use it.
+5. Test with a controlled record and verify both systems.
+
+An active connection is not a configured synchronization. If an action fails, review both credentials and action parameters.
+
+## Other integration paths
+
+For services outside the catalog, use HTTP tools, the public API, webhooks or n8n. Each path has its own authentication and event settings.
+
+## Not available in the catalog
+
+Calendly, Gmail and Zapier are not currently connectable catalog entries. Connect WhatsApp Business as a channel in inbox settings.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does connecting Google synchronize everything?">
+    No. Choose a tool or automation and its destination data. A connection enables the actions you configure.
+  </Accordion>
+  <Accordion title="Where do I connect WhatsApp?">
+    Use [Connect WhatsApp Business](/en/messages/connect-whatsapp) in inbox channel settings.
+  </Accordion>
+  <Accordion title="Can I connect a custom system?">
+    Yes, through an API or HTTP tool suitable for your flow. First define the data to query or send.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Google Calendar](/en/integrations/google-calendar)
+- [Google Sheets](/en/integrations/google-sheets)
+- [Freshdesk](/en/integrations/freshdesk)
+- [API keys](/en/organization/api-keys)

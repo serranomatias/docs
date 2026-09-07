@@ -1,0 +1,52 @@
+---
+title: "Monitoreo en vivo"
+description: "Supervisá llamadas en espera, sonando y conectadas. Revisá demoras y escuchá llamadas con el softphone."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Monitoreo en vivo" permission="reports.read; contact_center.read" addon="Contact center" />
+
+El monitoreo muestra la operación actual del contact center. Requiere el módulo habilitado y permisos para reportes y contact center.
+
+## Qué revisar
+
+| Indicador | Uso |
+|---|---|
+| En espera | Detectar llamadas que esperan atención |
+| Sonando | Ver intentos de conexión con agentes |
+| Conectadas | Identificar llamadas activas |
+| Espera más larga | Priorizar la demora más alta |
+
+Las alertas visuales de espera usan 30 segundos como aviso y 60 segundos como nivel crítico. No son el tiempo máximo de espera de una cola.
+
+## Escuchar una llamada
+
+1. Identificá la llamada activa en la tabla.
+2. Usá **Escuchar**.
+3. Atendé la conexión de supervisión en tu softphone y comprobá el estado de escucha.
+4. Finalizá la escucha cuando termines.
+
+Si no se conecta, comprobá el softphone y si la llamada sigue activa. Una llamada puede terminar entre seleccionarla y conectarte.
+
+## Qué no existe todavía
+
+**Susurrar** e **Irrumpir** aparecen como **Pronto**. La función disponible es escuchar. Para revisar períodos históricos, usá **Actividad de colas**.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿El aviso de 60 segundos corta la llamada?">
+    No. Es un umbral visual. El tiempo máximo y el respaldo dependen de la cola.
+  </Accordion>
+  <Accordion title="¿Puedo hablarle solo al asesor?">
+    La opción de susurro figura como Pronto. La función actual es escuchar.
+  </Accordion>
+  <Accordion title="¿Por qué desapareció una llamada?">
+    La vista muestra actividad actual. Si terminó, buscala en Actividad de colas o en el registro.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Actividad de colas](/es/contact-center/actividad-de-colas)
+- [Softphone](/es/contact-center/softphone)

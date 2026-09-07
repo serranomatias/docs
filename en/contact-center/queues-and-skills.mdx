@@ -1,0 +1,55 @@
+---
+title: "Queues and skills"
+description: "Define eligible agents, distribution, waiting times and fallback destinations."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Telephony → Contact Center → Queues" permission="contact_center.read" addon="Contact center" />
+
+Queues distribute calls among eligible people. Contact center must be enabled for the organization. Creating or configuring queues requires module creation or editing permissions.
+
+## Create a queue
+
+1. Open **Queues → New queue** and name it.
+2. Choose membership by skills or a fixed agent list.
+3. Select the distribution strategy.
+4. Review maximum wait, ringing timeout and wrap-up time.
+5. Configure fallback when nobody answers and save.
+6. Point a routing rule to the queue and verify a test call.
+
+## Membership and distribution
+
+| Option | Purpose |
+|---|---|
+| By skills | Finds people with required skills |
+| Agent list | Uses explicitly selected people |
+| Ring all | Rings eligible phones simultaneously |
+| Round robin | Offers to one person at a time, rotating |
+| Least recent | Prioritizes whoever has gone longest without answering |
+
+Assign skills in **Agents and skills**. They describe human capabilities, not AI tools. Membership alone is insufficient: the softphone must be online and **Available** to receive queue calls.
+
+## Waiting and fallback
+
+Maximum queue wait and ringing time for each attempt are different. Ringing options are 15, 20, 25, 30, 45 and 60 seconds.
+
+Fallback options are hang up, voicemail or an AI agent. For AI fallback, configure an available destination. Wrap-up provides post-call work time before receiving another call.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why does a member’s phone not ring?">
+    Check skills or list eligibility, softphone connection and Available status. Also verify the call reaches that queue.
+  </Accordion>
+  <Accordion title="Does a support skill activate AI tools?">
+    No. Skills belong to people and determine which queues they can handle.
+  </Accordion>
+  <Accordion title="Why does a call reach voicemail?">
+    Check fallback, waiting time and whether eligible people were available.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Softphone](/en/contact-center/softphone)
+- [Routing](/en/contact-center/routing-rules)

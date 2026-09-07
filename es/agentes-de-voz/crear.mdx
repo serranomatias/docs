@@ -1,0 +1,148 @@
+---
+title: 'Crear un agente de voz'
+description: 'Cómo crear un agente de voz desde cero o desde una plantilla, qué trae por defecto, las cinco pestañas del editor, la diferencia entre borrador y versión publicada, el límite de agentes por plan y cómo eliminar un agente.'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read" route="Agentes → Voz" />
+
+Un agente de voz atiende y hace llamadas telefónicas y web con la voz, el idioma y las instrucciones que le configurás. Esta página cubre la lista de agentes, el diálogo **Crea un nuevo agente**, lo que trae un agente recién creado y cómo se elimina. Cada pestaña del editor tiene su propia página.
+
+{/* captura: images/agentes-de-voz/lista-es.png | Lista de agentes en vista Tarjetas con la pestaña Voz activa y el botón Nuevo agente | app: /agents */}
+
+## La lista de agentes
+
+La lista está en **Agentes**. La pantalla dice: "En esta página puedes ver y gestionar todos los agentes, así como monitorear su rendimiento." Necesitás el permiso `agents.read` para verla y `agents.create` para ver el botón **Nuevo agente**.
+
+| Control | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| Pestañas **Voz** / **Texto** | Separan los agentes de voz de los de texto. Cada pestaña muestra cuántos hay. Solo aparecen si tu organización tiene agentes de texto habilitados. | Voz, Texto | Voz |
+| **Buscar agentes de voz** | Filtra por **Nombre del agente**. La tecla `/` lleva el cursor al buscador. | Texto | vacío |
+| **Ordenar** | Elige el campo y el sentido del orden. | **Ordenar por**: Fecha de creación, Fecha de actualización. **Orden**: Más recientes primero, Más antiguos primero | Fecha de actualización, Más recientes primero |
+| **Vista** | Cambia entre tarjetas y tabla. La tecla `V` alterna. La app recuerda tu elección. | Tarjetas, Tabla | Tarjetas |
+| Paginación | Muestra hasta 50 agentes por página. | — | 50 |
+
+Cada tarjeta muestra el nombre, el **Nombre del agente en llamadas** (o "—" si está vacío), el idioma principal, la velocidad y el volumen cuando no son 1, la cantidad de tools y cuándo se creó o actualizó. Tiene dos botones: **Probar** y **Editar**. **Editar** solo aparece con el permiso `agents.update`.
+
+La tabla tiene las columnas **Nombre**, **Propósito de conversación**, **Idioma**, **Detalles** y **Creado**. Si el agente habla varios idiomas, la columna **Idioma** muestra el principal y "+N".
+
+Sin agentes, la lista dice "Sin agentes de voz" y "Crea tu primer agente de voz para comenzar."
+
+## Crear un agente
+
+{/* captura: images/agentes-de-voz/crear-dialogo-es.png | Diálogo Crea un nuevo agente en el paso Inicio rápido, con Empezar desde cero y la galería de plantillas | app: /agents?new-agent=true */}
+
+<Steps>
+  <Step title="Abrí el diálogo">
+    Hacé clic en **Nuevo agente**, presioná `Shift + N` o abrí `/agents?new-agent=true`. El diálogo se titula **Crea un nuevo agente** y dice "Empieza desde una plantilla o desde cero". Arriba a la derecha indica **Paso 1 de 3**. Si tu organización no tiene agentes de texto, son dos pasos y el diálogo empieza directo en **Inicio rápido**.
+  </Step>
+  <Step title="Elegí el tipo">
+    En **Tipo de agente**, elegí **Agente de voz** ("Habla con tus clientes en llamadas telefónicas y web."). La otra tarjeta es **Agente de texto**, que se documenta en [Crear un agente de texto](/es/agentes-de-texto/crear).
+  </Step>
+  <Step title="Elegí cómo empezar">
+    En **Inicio rápido**, **Empezar desde cero** crea el agente al instante y abre el editor. Debajo está **Plantillas · N**, con el buscador **Buscar plantillas...** y filtros por categoría (**Todas · N** más una por categoría). Cada plantilla muestra título, descripción, idioma, categoría y hasta dos etiquetas.
+  </Step>
+  <Step title="Revisá la plantilla y creá">
+    Al elegir una plantilla ves su **Configuración** (Idioma y Categoría), el **Propósito** y el **Prompt** completo. Si la voz de la plantilla tiene vista previa, aparece un botón de reproducción. Hacé clic en **Crear agente**. La app muestra "Agente de voz creado correctamente" y abre el editor.
+  </Step>
+</Steps>
+
+## Qué trae un agente nuevo
+
+| Ajuste | Desde cero | Desde plantilla |
+|---|---|---|
+| **Nombre del agente** | New Agent | El título de la plantilla |
+| **Nombre del agente en llamadas** | vacío | N/A |
+| **Idiomas** | Spanish (Latin America) | El idioma de la plantilla |
+| **Zona horaria** | sin definir | La de tu perfil, si la tenés configurada |
+| **Voz** | Una voz predeterminada | La voz de la plantilla, con su velocidad, expresividad y volumen |
+| **Objetivo de la conversación** y **Prompt** | vacíos | Los de la plantilla |
+| **Cómo empieza la llamada** | El agente saluda con sus palabras | El agente saluda con sus palabras |
+| **Duración máxima de la llamada** | 30 min, o el tope de tu plan si es menor | 30 min, o el tope de tu plan si es menor |
+| Herramientas | ninguna | ninguna |
+| Versión | v1 publicada automáticamente | v1 publicada automáticamente |
+
+El tope de duración por plan es 3 min en free, 7 min en starter, 30 min en pro y 60 min en growth y enterprise. Lo ajustás en **Avanzado → Conversación**, ver [Avanzado](/es/agentes-de-voz/avanzado).
+
+<Note>
+Un agente desde cero nace con la versión 1 publicada y sin prompt. Escribí las instrucciones y publicá antes de asignarle un número o una campaña. Si creaste desde una plantilla, revisá **Nombre del agente en llamadas**: queda en "N/A".
+</Note>
+
+## El editor: cinco pestañas
+
+{/* captura: images/agentes-de-voz/editor-pestanas-es.png | Cabecera del editor con el nombre, el badge de versión, Versiones, las cinco pestañas, Probar agente y Publicar | app: /agents/voice/[id] */}
+
+| Pestaña | Qué configura | Página |
+|---|---|---|
+| **General** | Nombre, nombre en llamadas, idiomas, zona horaria, voz y sonido de fondo | [General](/es/agentes-de-voz/general) |
+| **Instrucciones** | Objetivo, prompt y cómo empieza la llamada | [Instrucciones](/es/agentes-de-voz/instrucciones) |
+| **Herramientas** | Transferencias, traspaso a otro agente, endpoints HTTP, base de conocimiento y calendarios | [Herramientas](/es/agentes-de-voz/herramientas) |
+| **Avanzado** | Voz, conversación, post llamada, contexto de entrada, voces de respaldo, manual del agente y zona de peligro | [Avanzado](/es/agentes-de-voz/avanzado) y [Post llamada](/es/agentes-de-voz/post-llamada) |
+| **Conocimiento** | Bases de conocimiento de la organización conectadas al agente | [Base de conocimiento](/es/agentes-de-voz/base-de-conocimiento) |
+
+La cabecera muestra el nombre del agente y un badge **vN**. Al pasar el mouse dice "vN · publicada" o "vN · borrador". A la derecha están **Versiones**, **Probar agente** y **Publicar**.
+
+## Borrador y versión publicada
+
+Todo lo que editás en **General**, **Instrucciones**, **Herramientas** y **Avanzado** se guarda solo en un borrador. La barra inferior pasa por "Guardando…", "Borrador guardado" y "Cambios sin publicar", y un banner avisa "Tus cambios aún no están publicados. Las llamadas siguen usando la vN hasta que publiques." Las llamadas usan la última versión publicada hasta que hacés clic en **Publicar**, con una nota opcional. **Descartar borrador** vuelve a la versión publicada. Con `Ctrl + S` (o `Cmd + S`) forzás el guardado del borrador. Algunas cosas se aplican al instante y no pasan por el borrador: el **Nombre del agente**, las bases de conocimiento conectadas, las herramientas de calendario, el tablero, las etiquetas de llamada y los criterios de evaluación. El detalle está en [Versiones, publicación y pruebas](/es/agentes-de-voz/versiones-y-pruebas).
+
+## Probar desde la lista
+
+El botón **Probar** de una tarjeta abre **Probar {name}**: "Llamada web de prueba en tiempo real con tu agente." Elegí el micrófono, hacé clic en **Hablar con {name}** y terminá con **Terminar**. La prueba usa la versión publicada y consume créditos. Dentro del editor, **Probar agente** abre un panel con llamada web o telefónica, transcripción en vivo y grabaciones. Ver [Versiones, publicación y pruebas](/es/agentes-de-voz/versiones-y-pruebas).
+
+## Eliminar un agente
+
+La opción está en **Avanzado → Zona de peligro**, al final de la pestaña, y solo con el permiso `agents.delete`. **Eliminar este agente** dice "Elimina el agente junto con su borrador y todas sus versiones publicadas." El botón **Eliminar agente** abre "¿Eliminar agente de voz?": "Esto eliminará permanentemente el agente de voz {name}. Esta acción no se puede deshacer." Confirmá con **Eliminar**. La app vuelve a la lista y muestra "Agente de voz eliminado correctamente".
+
+<Warning>
+Eliminar un agente borra su borrador y todas sus versiones. No hay papelera ni restauración.
+</Warning>
+
+## Límite de agentes por plan
+
+Cada plan incluye una cantidad máxima de agentes. Al alcanzarla, la creación falla con el mensaje "You have reached the agent limit. Please consider upgrading your plan." Eliminar un agente libera el lugar. Los límites de cada plan están en [Planes y límites](/es/facturacion/planes).
+
+## Qué no existe todavía
+
+- La lista no tiene **Duplicar** para agentes de voz. Solo los agentes de texto tienen esa acción. Para copiar un agente, usá **Copiar prompt** en **Instrucciones** y repetí la configuración a mano.
+- La búsqueda solo compara con el **Nombre del agente**. No busca por nombre en llamadas ni por propósito.
+- No hay carpetas, etiquetas ni filtros en la lista: solo búsqueda por nombre y orden por fecha.
+
+## Problemas frecuentes
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| "You have reached the agent limit. Please consider upgrading your plan." | Tu organización llegó al máximo de agentes del plan. | Eliminá un agente que no uses o cambiá de plan en [Planes y límites](/es/facturacion/planes). |
+| "Error al crear el agente de voz" | La creación falló por un error de red o del servidor. | Reintentá. Si persiste, contactá a soporte. |
+| "Agente no encontrado. Puede que se haya eliminado o que pertenezca a otra organización." | El enlace apunta a un agente borrado o de otra organización. | Cambiá de organización desde el menú superior o volvé a la lista. |
+| "Tienes acceso de solo lectura" | Tu rol no tiene el permiso `agents.update`. | Pedile a un administrador el permiso en [Roles y permisos](/es/organizacion/roles-y-permisos). |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Puedo duplicar un agente de voz?">
+    No. La acción **Duplicar** existe solo para agentes de texto. Creá un agente nuevo, pegá el prompt con **Copiar prompt** desde el original y repetí voz, idiomas y herramientas. Ver [Instrucciones](/es/agentes-de-voz/instrucciones).
+  </Accordion>
+  <Accordion title="¿Cuántos agentes puedo crear?">
+    Depende del plan. Cuando llegás al máximo, la app muestra "You have reached the agent limit. Please consider upgrading your plan." Eliminar un agente libera un lugar. Los límites están en [Planes y límites](/es/facturacion/planes).
+  </Accordion>
+  <Accordion title="¿Por qué no veo la pestaña Texto?">
+    Las pestañas **Voz** y **Texto** aparecen solo cuando tu organización tiene agentes de texto habilitados. Si no las ves, la lista muestra únicamente agentes de voz y el diálogo de creación empieza en **Inicio rápido**.
+  </Accordion>
+  <Accordion title="¿El agente nuevo ya atiende llamadas?">
+    Técnicamente sí: nace con la versión 1 publicada. Pero un agente desde cero no tiene prompt, así que primero escribí las instrucciones, publicá y después asignale un número en [Mis números](/es/llamadas/mis-numeros) o usalo en una campaña.
+  </Accordion>
+  <Accordion title="¿Qué diferencia hay entre Empezar desde cero y una plantilla?">
+    Desde cero obtenés un agente mínimo: sin prompt, con la voz y el idioma predeterminados. Una plantilla trae objetivo, prompt, voz, idioma y ajustes de voz ya definidos. En los dos casos podés cambiar todo después.
+  </Accordion>
+  <Accordion title="¿Puedo cambiar el idioma o la voz después de crearlo?">
+    Sí. Los dos están en la pestaña **General** y se pueden cambiar en cualquier momento. El cambio queda en el borrador hasta que publiques. Ver [General](/es/agentes-de-voz/general).
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [General: nombre, idiomas y voz](/es/agentes-de-voz/general)
+- [Instrucciones](/es/agentes-de-voz/instrucciones)
+- [Versiones, publicación y pruebas](/es/agentes-de-voz/versiones-y-pruebas)
+- [Tu primera llamada con IA](/es/comenzar/primera-llamada)

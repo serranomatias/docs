@@ -1,0 +1,62 @@
+---
+title: "Roles y permisos"
+description: "Entendé acciones y alcances, configurá roles personalizados y resolvé diferencias de acceso entre personas y equipos."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Ajustes → Organización → Roles y Permisos" permission="roles.read" />
+
+Los roles definen qué acciones puede realizar una persona y sobre qué registros. La disponibilidad del módulo, el permiso y el alcance son controles distintos: tener permiso no activa un add-on.
+
+## Acciones y alcances
+
+Una clave como `contacts.read` permite leer contactos. Su alcance determina cuáles puede consultar esa persona. Permisos de lectura no habilitan automáticamente creación, edición o eliminación.
+
+| Alcance | Qué permite ver según la entidad |
+|---|---|
+| Todos (`all`) | Registros de la organización |
+| Propios (`own`) | Registros propios o asignados según las reglas de esa entidad |
+| Sin asignar (`unassigned`) | Registros sin responsable |
+| Asignados a otros (`other_assigned`) | Registros asignados a otras personas |
+| Mis equipos (`my_team`) | Registros propios y de los miembros de sus equipos |
+| Mis equipos y subequipos (`my_team_tree`) | Incluye también equipos descendientes |
+| Agente IA (`ai_agent`) | Registros de agentes de IA en las funciones que admiten este alcance |
+
+Las opciones cambian por función. No todos los alcances se ofrecen para todos los permisos. El significado de «propio» también depende de la entidad.
+
+## Revisar un rol
+
+1. Abrí **Roles y Permisos** y elegí un rol.
+2. Revisá los módulos habilitados y sus acciones.
+3. Comprobá los alcances y las dependencias que muestra el editor.
+4. Para cambiar un rol personalizado necesitás `roles.update`. Guardá y revisá un caso concreto con una persona afectada.
+
+Los roles de sistema se distinguen de los personalizados. La edición de un rol afecta a sus usuarios; cambiar el rol de una sola persona se hace desde **Miembros del Equipo**.
+
+## Acceso a conversaciones
+
+Ver una conversación, tomar una conversación sin asignar y tomarla de la IA son acciones diferentes. La protección de asignación también puede limitar quién cambia el responsable.
+
+## Diagnosticar un acceso faltante
+
+Revisá en este orden: organización activa, módulo habilitado, rol asignado, acción permitida y alcance. Si el alcance usa equipos, comprobá la pertenencia actual a esos equipos.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué dos personas con el mismo rol ven cosas distintas?">
+    Los alcances de equipo se resuelven para cada persona. Dos usuarios con el mismo rol pueden pertenecer a equipos diferentes y ver registros distintos.
+  </Accordion>
+  <Accordion title="¿Ser líder de un equipo me convierte en administrador?">
+    No. La pertenencia o el liderazgo de un equipo no reemplaza el rol individual. Revisá [Equipos](/es/organizacion/equipos).
+  </Accordion>
+  <Accordion title="¿Dar permiso a un add-on lo habilita?">
+    No. La organización también necesita tener el módulo activado. Consultá a [soporte](/es/comenzar/soporte) si falta esa disponibilidad.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Miembros](/es/organizacion/miembros)
+- [Equipos](/es/organizacion/equipos)
+- [Historial de cambios](/es/organizacion/historial-de-cambios)

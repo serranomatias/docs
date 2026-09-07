@@ -1,0 +1,62 @@
+---
+title: "Roles and permissions"
+description: "Understand actions and scopes, configure custom roles and diagnose access differences between people and teams."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Organization → Roles and Permissions" permission="roles.read" />
+
+Roles define which actions a person can perform and which records they can access. Module availability, permission and scope are separate controls: permission does not activate an add-on.
+
+## Actions and scopes
+
+A key such as `contacts.read` allows reading contacts. Its scope determines which contacts the person can access. Read permissions do not automatically allow creation, editing or deletion.
+
+| Scope | Records covered, depending on the entity |
+|---|---|
+| All (`all`) | Organization records |
+| Own (`own`) | Owned or assigned records according to entity rules |
+| Unassigned (`unassigned`) | Records without an assignee |
+| Others assigned (`other_assigned`) | Records assigned to other people |
+| My teams (`my_team`) | The person's records and their team members' records |
+| My teams and sub-teams (`my_team_tree`) | Also includes descendant teams |
+| AI agent (`ai_agent`) | AI-agent records in features that support this scope |
+
+Options vary by feature. Every permission does not offer every scope. The meaning of “own” also depends on the entity.
+
+## Review a role
+
+1. Open **Roles and Permissions** and select a role.
+2. Review enabled modules and actions.
+3. Check scopes and dependencies shown by the editor.
+4. Editing a custom role requires `roles.update`. Save and check a specific case with an affected person.
+
+System roles are distinguished from custom roles. Editing a role affects its users; change one person's assigned role in **Team Members**.
+
+## Conversation access
+
+Viewing a conversation, claiming an unassigned conversation and taking one from AI are different actions. Assignment protection can also restrict who changes the assignee.
+
+## Diagnose missing access
+
+Check, in order: active organization, enabled module, assigned role, permitted action and scope. If the scope uses teams, check current team membership.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why do two people with the same role see different records?">
+    Team scopes are resolved per person. Users with the same role can belong to different teams and see different records.
+  </Accordion>
+  <Accordion title="Does being a team leader make me an administrator?">
+    No. Team membership or leadership does not replace the individual role. See [Teams](/en/organization/teams).
+  </Accordion>
+  <Accordion title="Does granting add-on permissions enable the add-on?">
+    No. The organization must also have that module enabled. Contact [support](/en/get-started/support) if it is unavailable.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Members](/en/organization/members)
+- [Teams](/en/organization/teams)
+- [Change history](/en/organization/change-history)

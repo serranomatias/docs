@@ -1,0 +1,47 @@
+---
+title: "Google Sheets"
+description: "Connect spreadsheets and configure actions to add or update rows with contact and conversation data."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Integrations → Google Sheets" permission="integrations.read; integrations.create" />
+
+Google Sheets connects through Google authorization. Configured automations can work with spreadsheets accessible to that account.
+
+## Connect and use
+
+1. Open **Integrations → Google Sheets** and choose **Connect with Google**.
+2. Select an account with access to the file and complete authorization.
+3. In an inbox automation, choose the add-row or update-row action.
+4. Select the connection and sheet, and map event data to columns.
+5. For updates, review how the existing row is identified.
+6. Run a controlled test and inspect both the sheet and execution result.
+
+## Add versus update
+
+Adding creates a row. Updating must identify an existing row according to configuration. Use a stable contact or conversation identifier to avoid ambiguous matches.
+
+Connecting an account does not automatically export every contact or create bidirectional synchronization. Each action depends on its configured event, conditions and columns.
+
+## Common problems
+
+If a sheet is missing, check the account and file permissions. For duplicate rows, check repeated events or whether you chose add instead of update. Before replaying a failed automation, review steps that already completed.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does connecting export the entire CRM?">
+    No. Configure the actions that write rows and the events that trigger them.
+  </Accordion>
+  <Accordion title="Why are duplicate rows created?">
+    An add action can repeat on each event or retry. Review the trigger and update-matching criteria.
+  </Accordion>
+  <Accordion title="Does my sheet need specific columns?">
+    Columns must match your action mapping. Test one row before enabling the flow.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Automations](/en/messages/automations)
+- [Catalog](/en/integrations/overview)

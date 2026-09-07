@@ -1,0 +1,47 @@
+---
+title: "Cal.com"
+description: "Conectá Cal.com con su clave API y asigná la integración a una herramienta de agenda del agente de voz."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Integraciones → Cal.com" permission="integrations.read; integrations.create" />
+
+La integración de Cal.com permite usar su agenda desde las herramientas del agente. Necesitás una cuenta con los tipos de evento y disponibilidad que querés ofrecer.
+
+## Configurar
+
+1. Abrí **Integraciones → Cal.com**.
+2. Ingresá la clave API de Cal.com. El formulario espera una clave con prefijo `cal_`.
+3. Guardá la conexión y comprobá su estado.
+4. En el agente de voz, agregá la herramienta de Cal.com y seleccioná la conexión y la configuración de evento.
+5. Indicá en las instrucciones cuándo consultar disponibilidad y cuándo reservar.
+6. Probá con datos controlados y verificá el evento resultante.
+
+La clave de Cal.com y la de ContactShip son credenciales distintas. No las intercambies ni las incluyas en el prompt.
+
+## Si no aparecen horarios
+
+Revisá el tipo de evento, su disponibilidad y la zona horaria. Comprobá que la conexión corresponda a la cuenta esperada. Una conexión válida no garantiza que haya un horario compatible con la solicitud.
+
+## Alcance
+
+Conectar Cal.com no configura Google Calendar ni el módulo Agenda de ContactShip. Elegí la herramienta correspondiente al sistema donde querés crear las reservas.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Qué clave va en esta integración?">
+    La clave API de Cal.com, con el formato que indica el formulario. La clave API de ContactShip no sirve para autenticar esa cuenta.
+  </Accordion>
+  <Accordion title="¿Conectar la cuenta crea la herramienta del agente?">
+    No. Agregá y configurá la herramienta en el agente que va a reservar.
+  </Accordion>
+  <Accordion title="¿Qué reviso si el agente no agenda?">
+    Comprobá la conexión, el evento, la disponibilidad y las instrucciones. Revisá el resultado de la herramienta antes de repetir la reserva.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Herramientas de voz](/es/agentes-de-voz/herramientas)
+- [Google Calendar](/es/integraciones/google-calendar)

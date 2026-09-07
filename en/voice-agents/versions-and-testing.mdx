@@ -1,0 +1,65 @@
+---
+title: "Versions, publishing, and tests"
+description: "Understand drafts, immediate settings, publishing, rollback, and web or phone tests."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Agents → Voice → Versions / Test agent" permission="agents.read; agents.update to edit" />
+
+Voice agents have at most one draft and one published version, plus archived previously published versions. Calls use the published configuration. Editing and publishing require `agents.update`.
+
+## What publication controls
+
+| Draft: publish to apply | Saves immediately |
+|---|---|
+| In-call name, languages, time zone, voice, background | Internal agent name |
+| Objective, prompt, opening behavior | Knowledge-base connections and sources |
+| Transfers, handoffs, custom tools, retrieval tool | Google Calendar and Cal.com tools |
+| Voice and conversation controls, input context, guidelines | Evaluation assignments and board assignment |
+| Analysis extraction fields and outgoing webhook | Call tags |
+
+Immediate settings are outside the draft lifecycle. Restoring a voice version should not be treated as restoring every organization resource.
+
+## Save and publish
+
+Edits autosave after you stop typing. `Cmd+S` or `Ctrl+S` forces a draft save. Watch the bottom status bar: saved draft, unpublished changes, saving, save failed, or an invalid numeric value.
+
+Select **Publish**, optionally add a change note, and wait for confirmation. The new configuration becomes published and the previous one is archived. If publication fails, inspect the error and resolve it before assuming calls use the change.
+
+**Discard draft** returns the editable configuration to the published version. In **Versions**, **Restore this version** on an archived version publishes a new version with that configuration and archives the current one. It overwrites the open draft, so preserve any changes you still need first.
+
+The history shows version number, status, note, and date. There is no side-by-side diff, scheduled publication, percentage rollout, or editing of past publication notes.
+
+## Test the published agent
+
+Tests use the published version and consume credits. Publish before testing a prompt change.
+
+- **Web:** optionally enter contact name, email, and dynamic variables; select a microphone and start talking. The panel shows live transcript, mute, elapsed time, and an end-call action. Microphone selection applies to the next call.
+- **Phone:** choose a verified **Call from** number, enter **Call to** with country code, and optionally provide contact name and variables. This places a real call.
+
+Dynamic-variable keys use lowercase names and underscores, such as `order_number`. Use representative missing and populated values.
+
+Both test types follow plan duration caps: Free 3, Starter 7, Pro 30, Growth and Enterprise 60 minutes. Recent tests provide recordings and transcripts; calls also appear in the main log. The agent-list test action offers web tests, while phone tests are in the editor.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can I test an unpublished draft?">
+    No. Publish it first; the test panel runs the published agent.
+  </Accordion>
+  <Accordion title="Does restoring delete the current version?">
+    It archives the current version and publishes a new one using the selected configuration. The open draft is overwritten.
+  </Accordion>
+  <Accordion title="Why did a test stop at three minutes?">
+    Free has a three-minute cap. Also inspect the call’s disconnection reason.
+  </Accordion>
+  <Accordion title="Where can I review a tool invocation?">
+    Open a recent test or its call-log record and inspect the transcript’s tool arguments and result.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Advanced](/en/voice-agents/advanced)
+- [Instructions](/en/voice-agents/instructions)
+- [Tools](/en/voice-agents/tools)

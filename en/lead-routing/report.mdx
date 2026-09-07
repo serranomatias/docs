@@ -1,0 +1,48 @@
+---
+title: "Lead-routing report"
+description: "Interpret compliance, conversion, expiry, and the critical queue."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Reports → Lead routing" permission="reports.read" addon="Lead routing" />
+
+The report shows what happened to routed contacts: who received them, how long handling took, and their outcomes. Choose the range and team before comparing results.
+
+| Metric | Interpretation |
+|---|---|
+| First contact | Median first-contact time; details include mean and p90. |
+| SLA compliance | Fulfilled assignments divided by resolved assignments. |
+| Escalated | Leads that required another level or owner. |
+| Expired | Expired assignments and their proportion of resolved assignments. |
+| Unmanaged | Contacts whose chain ended without handling. |
+| Conversion | Won contacts divided by the report’s indicated total. |
+
+One contact can have several assignments. Do not compare assignment counts with contact counts as if they were the same unit.
+
+## Use the detail views
+
+- The **Critical queue** shows contacts that exhausted their chain and currently have no owner. Review them to decide the next handling action.
+- **Teams** and **Advisors** compare volume, compliance, expiry, first message, and tagging. Advisor rates receive color indicators from five assignments onward; small samples produce unstable percentages.
+- **Outcomes** splits results by advisor, team, channel, escalation, or column.
+- **Hourly load** shows active contacts and entries by time slot to help size shifts.
+
+Use **Download CSV** and retain the selected range and team. For large changes, also inspect configuration changes: a different deadline or requirement can change compliance even when team speed has not changed.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Is the critical queue historical?">
+    It describes currently unowned contacts with exhausted chains; distinguish that state from period totals.
+  </Accordion>
+  <Accordion title="Does fulfilled mean won?">
+    No. Fulfilled means assignment requirements were met; won is a journey outcome.
+  </Accordion>
+  <Accordion title="Why is the report empty?">
+    Check the add-on, permissions, configured board, and a date range containing routed contacts.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [How it works](/en/lead-routing/how-it-works)
+- [Teams](/en/organization/teams)

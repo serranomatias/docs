@@ -1,0 +1,73 @@
+---
+title: "Importar contactos"
+description: "Cargá contactos desde CSV o XLSX con la plantilla del asistente. Corregí encabezados, campos inválidos y duplicados antes de importar."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Contactos → Importar" permission="contacts.create" />
+
+La importación usa una plantilla generada por la app. El asistente permite seleccionar columnas, descargar el archivo, cargarlo y revisar las filas antes de incorporarlas.
+
+## Preparar e importar
+
+<Steps>
+  <Step title="Configurá las columnas">
+    Abrí la importación desde **Contactos** y elegí las columnas de la plantilla. Incluí los datos que vas a completar.
+  </Step>
+  <Step title="Descargá la plantilla">
+    Descargá el archivo del segundo paso y completalo. Conservá los nombres y el orden de los encabezados.
+  </Step>
+  <Step title="Cargá el archivo">
+    Usá CSV o XLSX. La app compara sus encabezados con la plantilla configurada.
+  </Step>
+  <Step title="Revisá y confirmá">
+    Revisá la vista previa y las filas señaladas con errores. Corregí el archivo o quitá filas antes de confirmar. Esperá el resultado de la carga.
+  </Step>
+</Steps>
+
+## Datos y formato
+
+| Dato | Revisión |
+|---|---|
+| Encabezados | Mismos nombres, cantidad y orden que la plantilla |
+| Correo | Dirección válida; el asistente actual la usa en la validación de filas |
+| Teléfono y país | Datos coherentes para que la app formatee el número |
+| Columnas seleccionadas | Completá las celdas requeridas por la plantilla |
+| Filas vacías | Se omiten |
+
+Conservá teléfonos como texto en tu archivo para evitar notación científica o pérdida de dígitos. No inventes correos para superar una validación: consultá otra vía de carga si tu lista no los tiene.
+
+## Duplicados
+
+La revisión inicial detecta filas repetidas por la combinación de nombre, correo y teléfono. Las marca como duplicadas antes de importar.
+
+Esto no garantiza que se fusionen registros que ya existen en la organización. Revisá el resultado de una lista pequeña antes de volver a cargar toda la base.
+
+## Problemas frecuentes
+
+| Mensaje o síntoma | Causa y solución |
+|---|---|
+| Error: The format of the file does not match the expected format. | Los encabezados no coinciden. Volvé a descargar la plantilla configurada. |
+| Fila duplicada | Corregí las repeticiones de nombre, correo y teléfono dentro del archivo. |
+| Filas excluidas de la vista previa | Revisá correo, celdas vacías y los errores que muestra el asistente. |
+| Menos contactos cargados que filas del archivo | Compará filas válidas, vacías, duplicadas y rechazadas antes de repetir. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Puedo usar mi CSV sin modificarlo?">
+    Solo si sus columnas coinciden con la plantilla seleccionada. La coincidencia incluye nombres y orden, no únicamente que tenga datos de contacto.
+  </Accordion>
+  <Accordion title="¿Importar reemplaza mis contactos anteriores?">
+    No asumas una sustitución o fusión automática. Comprobá una muestra y el resultado de la carga antes de repetir la base completa.
+  </Accordion>
+  <Accordion title="¿Por qué se rechaza una lista sin correos?">
+    La validación del asistente actual comprueba el correo de las filas. No completes correos ficticios: consultá a [soporte](/es/comenzar/soporte) la vía adecuada para tu lista.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Contactos y propiedades](/es/contactos/contactos-y-propiedades)
+- [Tableros y etapas](/es/contactos/tableros)
+- [Campañas de llamadas](/es/llamadas/campanas)

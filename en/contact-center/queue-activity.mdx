@@ -1,0 +1,53 @@
+---
+title: "Queue activity"
+description: "Analyze calls and agent states by period, interpret handling times and export results."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Queue activity" permission="reports.read; contact_center.read" addon="Contact center" />
+
+**Queue activity** reviews operations over a period. It requires Contact center enabled plus reports and contact center permissions.
+
+## Review a period
+
+Choose dates and filters before comparing metrics. **Calls** and **Agents** tabs answer different questions: what happened to calls and how people spent their time.
+
+| Data | What to review |
+|---|---|
+| Queue time | Wait associated with entry |
+| Response / ASA | Average response time according to the view |
+| Talk | Speaking time |
+| Hold | Hold time during the interaction |
+| ACW / Wrap-up | Post-call work |
+| Time by state | Distribution of availability and other agent states |
+
+Read each metric's label and help. The call card labeled **AHT (talk avg.)** uses average conversation time; agent AHT alerts include talk, hold and post-call work. Do not compare these as identical measures.
+
+## Export
+
+Tabs offer XLSX exports when data exists. Apply filters and check the period before downloading. For an empty-data message, review the range and selection.
+
+## AHT alert
+
+Contact center settings offer an agent AHT threshold in seconds. Empty or zero disables the alert. Configuration requires `organization.update`.
+
+An alert highlights a value for review; it does not explain its cause. Compare call types and component times.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Is this the same as Live monitoring?">
+    No. Monitoring shows current state; Queue activity reviews a period.
+  </Accordion>
+  <Accordion title="Why is the export empty?">
+    Check the selected tab’s dates and filters. The app does not export when it finds no records.
+  </Accordion>
+  <Accordion title="Does setting the alert to zero block calls?">
+    No. Zero disables the AHT alert. It does not change routing or call duration.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Monitoring](/en/contact-center/live-monitoring)
+- [Queues](/en/contact-center/queues-and-skills)

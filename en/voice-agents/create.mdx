@@ -1,0 +1,61 @@
+---
+title: "Create a voice agent"
+description: "Create an agent from scratch or a template, configure it, and prepare it for calls."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Agents → Voice → Create" permission="agents.read; agents.update to edit" />
+
+A voice agent handles phone and browser calls using its configured voice, languages, instructions, and tools. Creating requires `agents.create`; viewing requires `agents.read`.
+
+## Create your agent
+
+1. Open **Agents** and choose **New agent**, or press `Shift+N`.
+2. Select **Voice agent** when the type picker appears. Organizations without text agents skip this step.
+3. Choose **Start from scratch** or search templates by name and category.
+4. For a template, review its purpose, prompt, language, category, and voice preview before selecting **Create agent**.
+
+An agent created from scratch starts with the internal name **New Agent**, Spanish (Latin America), a default voice, and empty instructions. Templates supply instructions and voice settings; review the in-call name, which may be `N/A`. Both flows automatically publish version 1. Configure and publish usable instructions before assigning real traffic.
+
+Initial maximum duration is 30 minutes, reduced to your plan’s cap where necessary: Free 3, Starter 7, Pro 30, Growth 60, Enterprise 60 minutes.
+
+## Use the editor
+
+| Tab | Configuration |
+|---|---|
+| General | Internal and in-call names, languages, time zone, voice, background sound. |
+| Instructions | Objective, prompt, and opening behavior. |
+| Tools | Transfers, agent handoffs, HTTP requests, knowledge retrieval, calendars. |
+| Advanced | Voice controls, conversation timing, analysis, context, and agent guidelines. |
+| Knowledge | Organization knowledge bases connected to the agent. |
+
+Most changes autosave to a draft. Calls keep using the published version until you select **Publish**. Some settings apply immediately, including the internal name, knowledge connections, calendars, board, tags, and evaluation assignments. Review the version guide before changing an active agent.
+
+## Manage the list
+
+Search matches the internal name. Sort by creation or update date and choose cards or table view. The list shows up to 50 agents per page. Cards provide **Test** and, with edit permission, **Edit**. Voice agents do not have a duplicate action; create another agent and copy the prompt and settings you need.
+
+Delete an agent from **Advanced → Danger zone** with `agents.delete`. Confirmation permanently removes its draft and versions. Agent counts are limited by your plan; deleting an unused agent releases a slot.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why is the Text tab missing?">
+    The organization may not have text agents enabled. The list then shows voice agents only.
+  </Accordion>
+  <Accordion title="Is a new agent ready for customers?">
+    It has a published version, but a blank agent has no instructions. Configure, publish, and test before assigning traffic.
+  </Accordion>
+  <Accordion title="Can I rename it later?">
+    Yes. The internal name saves immediately. The in-call name belongs to the draft.
+  </Accordion>
+  <Accordion title="Why can’t I edit?">
+    Check the active organization and the agents.update permission.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [General](/en/voice-agents/general)
+- [Instructions](/en/voice-agents/instructions)
+- [Versions and tests](/en/voice-agents/versions-and-testing)

@@ -1,0 +1,57 @@
+---
+title: "Boards and stages"
+description: "Organize contacts into stages, move cards and distinguish pipeline progress from assignment, SLAs and tasks."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Contacts → Board" permission="contact_board.read" />
+
+A board organizes contacts into process stages. Each card represents a contact within that board. Stages might be New, Contacted and Qualified; adapt them to your operation.
+
+## Work with a board
+
+1. Open **Contacts**, choose board view and select the board.
+2. Review stages and the contacts in each.
+3. Open a card to inspect the contact record.
+4. Move the card to the appropriate stage to update progress. You need permission to modify the board.
+
+From table view, select contacts for a bulk move to a stage. Check the background job before repeating it.
+
+## Automate moves
+
+Agents can move contacts when the corresponding tool is configured. In a text agent, choose the board, enable stages and describe when to use each.
+
+Voice agents have post-call board configuration. Inbox automations can also add, move or remove contacts from stages.
+
+Avoid conflicting rules that move the same contact on the same event.
+
+## Stage, assignee and deadline
+
+| Concept | Meaning |
+|---|---|
+| Stage | Contact progress through a process |
+| Assignee | Person responsible for a record or conversation |
+| SLA | Response deadline when enabled |
+| Task | Work pending in the process |
+
+Moving a card does not by itself assign a person, schedule a call or create a task. If you use routing or SLAs, check the rules for that stage.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Is a contact board the same as a task board?">
+    No. They organize different entities. See [Tasks](/en/contacts/tasks) for pending work.
+  </Accordion>
+  <Accordion title="Why is the AI not moving the contact?">
+    Check the board and enabled stages in its tool. Save changes and test the criterion that should trigger the move.
+  </Accordion>
+  <Accordion title="Does moving a card automatically start a deadline?">
+    Only when the feature is available to your organization and rules are configured. See [Lead routing](/en/lead-routing/how-it-works).
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Contacts and properties](/en/contacts/contacts-and-properties)
+- [Text agent tools](/en/text-agents/tools)
+- [Lead routing](/en/lead-routing/how-it-works)

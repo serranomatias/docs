@@ -1,0 +1,91 @@
+---
+title: 'Test in the sandbox'
+description: 'Test conversations without sending WhatsApp messages to customers. Inspect replies, triggered rules and simulated tools before assigning an agent to a channel.'
+tag: 'New'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" permission="agents.read" route="Agents → Text → Test agent" status="nuevo" />
+
+The sandbox lets you write as a customer and inspect the agent's reply. Tools appear as simulations with their arguments. It tests conversational behavior; it does not verify WhatsApp delivery or live connections to your systems.
+
+## Start a test
+
+<Steps>
+  <Step title="Save your configuration">
+    Save every tab you changed. Tests use the saved agent; they do not send unsaved editor content.
+  </Step>
+  <Step title="Open Test agent">
+    Use the header button. The panel identifies the environment as **Sandbox**.
+  </Step>
+  <Step title="Write as a customer">
+    Send a specific message, wait for the reply and continue. Also test incomplete information and requests for human support.
+  </Step>
+  <Step title="Inspect tools">
+    Expand the simulated tool indicator to see names and arguments. The blocked-effect badge means the real action was blocked during the test.
+  </Step>
+  <Step title="Reset for another scenario">
+    Use **Reset** to start without the previous conversation's context. Save agent changes before testing again.
+  </Step>
+</Steps>
+
+## Read the panel
+
+| Element | Meaning |
+|---|---|
+| Agent reply | Text generated for this scenario |
+| Triggered rule | A rule produced the response; its name appears when applicable |
+| Simulated tools | Actions the agent would have attempted, including arguments |
+| Real effect blocked | The test blocked an action with real effects |
+| Tokens | Usage returned with the response when available; not an invoice |
+| Thinking… | The request is in progress; the panel shows elapsed time |
+
+## Test scenarios
+
+| Test message | Expected result according to your configuration |
+|---|---|
+| A question covered by documents | An answer supported by available information |
+| An order request without its reference | Asking for the missing information before querying |
+| A catalog request | The configured image or PDF tool |
+| “I want to speak to a person” | Delegation to the intended destination |
+| A question outside the business's scope | Acknowledging the limitation without inventing an answer |
+| A correction to contact information | Correct arguments for enabled fields |
+
+Record the message, expected result and observed result. Repeat these scenarios after changing instructions, model or tools.
+
+## Test scope
+
+The sandbox does not send customer messages through WhatsApp. A simulated tool does not confirm a CRM update, a real conversation transfer or an API response.
+
+The HTTP tool's test request is different: it contacts the endpoint. Read [Tools](/en/text-agents/tools) before using it.
+
+## Common problems
+
+| Message or symptom | What to do |
+|---|---|
+| Sandbox could not start | Check that the agent exists in the current organization. Reset and keep error details for support. |
+| Message could not be sent | Check the connection and error details before repeating the test. |
+| An expected tool is missing | Save **Tools** and review the description and instructions that should activate it. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does this test contact a customer?">
+    It does not send WhatsApp messages to customers. The panel uses a sandbox chat and displays simulated tools.
+  </Accordion>
+  <Accordion title="Can I test unsaved changes?">
+    Save the tabs you changed first. The test uses the agent identifier and does not send the editor draft.
+  </Accordion>
+  <Accordion title="Does a successful test mean WhatsApp is ready?">
+    You still need a connected channel and a rule assigning conversations to the agent. See [Channel settings](/en/messages/channel-settings).
+  </Accordion>
+  <Accordion title="How do I avoid carrying over previous replies?">
+    Use **Reset** before the next scenario. This prevents previous conversation context from affecting the new test.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Instructions](/en/text-agents/instructions)
+- [Tools](/en/text-agents/tools)
+- [Your first WhatsApp agent](/en/get-started/first-whatsapp)

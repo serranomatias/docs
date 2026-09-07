@@ -46,12 +46,14 @@ This endpoint allows you to retrieve all contacts from your organization's datab
 </ParamField>
 
 <Note>
-  To export your whole contact base, iterate with `limit=1000` and increase `offset` until you have fetched `pagination.total_rows` contacts. This endpoint allows 20 requests per minute per organization — see [Rate Limits](/api-reference/rate-limits).
+  To export your whole contact base, iterate with `limit=1000` and increase `offset` until you have fetched `pagination.total_rows` contacts. For request throttling, see [Rate Limits](/api-reference/rate-limits).
 </Note>
 
 ## Response
 
-<ResponseField name="status code" type="number">
+The response contains `statusCode`, a `data` array, and `pagination` with `page`, `total_rows`, and `total_pages`.
+
+<ResponseField name="statusCode" type="number">
   200 on success
 </ResponseField>
 
@@ -107,7 +109,7 @@ This endpoint allows you to retrieve all contacts from your organization's datab
 
 - `400 Bad Request` - Invalid request parameters (for example `limit` above 1000, or `limit` without `offset`)
 - `401 Unauthorized` - Invalid or missing API key
-- `429 Too Many Requests` - Rate limit exceeded (this endpoint allows 20 requests per minute per organization); wait for `Retry-After` seconds. See [Rate Limits](/api-reference/rate-limits)
+- `429 Too Many Requests` - Rate limit exceeded; honor `Retry-After` when present and use bounded backoff. See [Rate Limits](/api-reference/rate-limits)
 - `500 Internal Server Error` - Server-side error
 
 ## Code Examples
@@ -146,7 +148,7 @@ const fetchContacts = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     
-    const contacts = await response.json();
+    const { data: contacts } = await response.json();
     console.log('Contacts retrieved:', contacts);
     return contacts;
   } catch (error) {
@@ -184,7 +186,7 @@ response = requests.get(f"{base_url}/v1/contacts", headers=headers, params=param
 
 # Check if the request was successful
 if response.status_code == 200:
-    contacts = response.json()
+    contacts = response.json()["data"]
     print(f"Found {len(contacts)} contacts")
     for contact in contacts:
         print(f"Name: {contact['full_name']}, Phone: {contact['phone_number']}")
@@ -196,41 +198,49 @@ else:
 
 <ResponseExample>
 ```json Example Response
-[
-  {
-    "id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
-    "created_at": "2023-01-01T12:00:00Z",
-    "phone_number": "+12124567890",
-    "full_name": "Juan Pérez",
-    "country": "México",
-    "email": "juan@ejemplo.com",
-    "description": "Lead from LinkedIn campaign",
-    "additional_data": [
-      {
-        "type": "location",
-        "field": "dirección",
-        "value": "Av. Insurgentes 123"
-      },
-      {
-        "type": "text",
-        "field": "notas",
-        "value": "Cliente potencial para servicio premium"
-      }
-    ],
-    "organization_id": "org123456"
-  },
-  {
-    "id": "d5e6f7g8-h9i0-j1k2-l3m4-n5o6p7q8r9s0",
-    "created_at": "2023-01-05T09:30:00Z",
-    "phone_number": "+12125678901",
-    "full_name": "Juan Martínez",
-    "country": "Colombia",
-    "email": "juan.martinez@ejemplo.com",
-    "description": "Cliente potencial",
-    "additional_data": [],
-    "organization_id": "org123456"
+{
+  "statusCode": 200,
+  "data": [
+    {
+      "id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
+      "created_at": "2023-01-01T12:00:00Z",
+      "phone_number": "+12124567890",
+      "full_name": "Juan Pérez",
+      "country": "México",
+      "email": "juan@ejemplo.com",
+      "description": "Lead from LinkedIn campaign",
+      "additional_data": [
+        {
+          "type": "location",
+          "field": "dirección",
+          "value": "Av. Insurgentes 123"
+        },
+        {
+          "type": "text",
+          "field": "notas",
+          "value": "Cliente potencial para servicio premium"
+        }
+      ],
+      "organization_id": "org123456"
+    },
+    {
+      "id": "d5e6f7g8-h9i0-j1k2-l3m4-n5o6p7q8r9s0",
+      "created_at": "2023-01-05T09:30:00Z",
+      "phone_number": "+12125678901",
+      "full_name": "Juan Martínez",
+      "country": "Colombia",
+      "email": "juan.martinez@ejemplo.com",
+      "description": "Cliente potencial",
+      "additional_data": [],
+      "organization_id": "org123456"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "total_rows": 2,
+    "total_pages": 1
   }
-]
+}
 ```
 </ResponseExample>
 

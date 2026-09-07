@@ -1,0 +1,107 @@
+---
+title: 'Follow-ups, hours and closing'
+description: 'Configure experimental follow-ups, cumulative delays, operating hours, cancellation, closing and webhooks. Adjust contact context and message buffering.'
+tag: 'Experimental'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" permission="agents.read; agents.update to edit" route="Agents → Text → Advanced" status="Experimental" />
+
+**Follow-up messages** sends reminders when a contact stops replying. The app marks this feature as **Experimental**. Review timing, time zone and rules before enabling it.
+
+## Configure a sequence
+
+<Steps>
+  <Step title="Enable follow-up messages">
+    Open the agent, go to **Advanced** and enable **Follow-up messages**.
+  </Step>
+  <Step title="Choose a starting point">
+    Select **Gentle**, **Balanced** or **Persistent**. Change the intervals or add more stages.
+  </Step>
+  <Step title="Review hours and exceptions">
+    Open **Advanced options**. Configure operating hours, outside-hours behavior and conditions that should stop follow-ups.
+  </Step>
+  <Step title="Choose closing behavior and save">
+    Decide whether to close the conversation when the sequence ends and whether to send a webhook. Save **Advanced**.
+  </Step>
+</Steps>
+
+## Delays are cumulative
+
+Each stage adds a delay after the previous stage. The app shows cumulative time since the last AI reply.
+
+| Preset | Intervals | Cumulative totals |
+|---|---|---|
+| Gentle | 4 hours | 4 hours |
+| Balanced | 2 hours, then 12 hours | 2 and 14 hours |
+| Persistent | 30 minutes, then 2 hours, then 8 hours | 30 minutes, 2 h 30 min and 10 h 30 min |
+
+Each interval accepts a positive integer in minutes or hours. A sequence needs at least one stage.
+
+<Warning>
+The app states that WhatsApp follow-ups must be sent within 24 hours of the user's last message. Time counted from the AI reply does not restart that window. A stage can fall outside it even when its cumulative delay is under 24 hours.
+</Warning>
+
+## Advanced options
+
+| Field | Purpose | Values or requirements |
+|---|---|---|
+| Follow-up operating hours | Defines when reminders can be sent | Time zone, days, start and end times |
+| Cancel follow-up | Skips a reminder outside operating hours | One of two outside-hours options |
+| Postpone to the next business period | Reschedules to the next operating period | The new time remains subject to the WhatsApp window |
+| Custom follow-up instructions | Defines when not to follow up | For example, an order was confirmed or the customer requested no reminders |
+| Auto-close conversation | Closes when the process finishes | On or off |
+| On-close webhook | Notifies on an AI decision or completion of all stages | URL and POST or PUT method |
+
+Specific follow-up hours override channel or agent operating rules only for follow-ups. When disabled, those existing rules apply.
+
+Each schedule needs at least one day and a start time before its end time. An enabled webhook requires a valid URL.
+
+## Closing and webhooks
+
+With **Auto-close conversation** off, the conversation stays open and an internal note is added when the process finishes. With it on, the conversation closes automatically.
+
+The **On-close webhook** belongs to the follow-up process. It is separate from call webhooks and channel change webhooks. Do not assume every manual inbox closure triggers it.
+
+## Other Advanced options
+
+| Option | Effect |
+|---|---|
+| Auto-tag conversation | Analyzes and tags with AI; review the additional cost shown before enabling it |
+| Global contact context | Adds cross-channel history and contact lifecycle state |
+| Message buffer | Waits between 1 and 10 seconds to group messages before replying |
+
+## Common problems
+
+| Message or symptom | Cause and solution |
+|---|---|
+| Stage exceeds 24 hours | Reduce cumulative delay and check when the user last wrote. |
+| Invalid schedule | Complete days and times; the start must be earlier than the end. |
+| Invalid webhook URL | Complete and correct the URL if the webhook is enabled. |
+| No follow-up outside operating hours | Check cancellation or postponement settings and the time zone. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does Balanced send its second reminder after 12 hours?">
+    It schedules it after 14 cumulative hours: a 2-hour wait followed by another 12 hours. Each stage shows that running total.
+  </Accordion>
+  <Accordion title="Does postponing extend the WhatsApp window?">
+    No. It changes the attempt time, but does not extend the window. See [WhatsApp templates](/en/messages/templates) for starting a conversation outside it.
+  </Accordion>
+  <Accordion title="Can the conversation stay open after the last follow-up?">
+    Yes. Disable **Auto-close conversation** and save **Advanced**. An internal note is added when the process finishes.
+  </Accordion>
+  <Accordion title="Do follow-up hours change the channel’s business hours?">
+    No. They override hours only for follow-ups. Configure business hours in the [channel settings](/en/messages/channel-settings).
+  </Accordion>
+  <Accordion title="Why does the agent wait a few seconds before replying?">
+    Check **Message buffer**. Its 1–10 second range groups consecutive messages before generating a reply.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Instructions](/en/text-agents/instructions)
+- [Channel settings](/en/messages/channel-settings)
+- [WhatsApp templates](/en/messages/templates)

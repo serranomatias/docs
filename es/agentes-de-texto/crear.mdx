@@ -1,0 +1,162 @@
+---
+title: 'Crear un agente de texto'
+description: 'Cómo crear un agente de texto para WhatsApp Business: el diálogo Nuevo agente (Shift+N), plantillas o desde cero, la pestaña General (nombre, descripción, seis modelos, temperatura 0 a 2, zona horaria), el guardado por pestaña y cómo asignarlo a un canal.'
+tag: 'Nuevo'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read" route="Agentes → Texto" status="nuevo" />
+
+Un agente de texto responde conversaciones escritas en los canales del inbox. Hoy el único canal que se puede conectar es WhatsApp Business. El agente se configura en **Agentes → Texto** y atiende las conversaciones que un canal le asigna. La disponibilidad de los agentes de texto depende de la configuración de tu organización. Si no aparece la opción, consultá a soporte.
+
+{/* captura: images/agentes-de-texto/lista-es.png | Lista de agentes con la pestaña Texto activa y la vista de tarjetas | app: /agents */}
+
+## Dónde actúa
+
+- Canales: WhatsApp Business. Instagram y Facebook Messenger figuran como **Próximamente** en el diálogo **Nuevo canal**.
+- Permisos: `agents.read` para ver la lista y la configuración, `agents.update` para editar y `agents.delete` para eliminar.
+- Un agente de texto no hace ni recibe llamadas. Para eso existen los agentes de voz.
+
+## Crear el agente
+
+<Steps>
+  <Step title="Abrí el diálogo de creación">
+    En **Agentes**, hacé clic en **Nuevo agente** o presioná Shift+N. El diálogo se llama **Crea un nuevo agente**.
+  </Step>
+  <Step title="Elegí el tipo">
+    En **Tipo de agente**, elegí **Agente de texto**. Si tu organización tiene los agentes de texto desactivados, este paso no aparece y solo se crean agentes de voz.
+  </Step>
+  <Step title="Elegí cómo empezar">
+    En **Inicio rápido** tenés dos caminos: **Empezar desde cero** o una plantilla de la sección **Plantillas**. Las plantillas se buscan por nombre o descripción con **Buscar plantillas...**.
+  </Step>
+  <Step title="Completá los datos">
+    Desde cero: ingresá **Nombre** y **Descripción**; los dos son obligatorios. La sección **Configuración predeterminada** muestra Modelo GPT-4o mini, Temperatura 0.7 y Seguimiento No. Desde una plantilla: revisá la **Configuración** y el **Prompt** que trae. En los dos casos, hacé clic en **Crear agente**.
+  </Step>
+  <Step title="Configurá el agente">
+    La app abre la pantalla del agente en la pestaña **General**. Desde ahí seguís con las instrucciones, las tools y el resto de la configuración.
+  </Step>
+</Steps>
+
+{/* captura: images/agentes-de-texto/nuevo-agente-es.png | Diálogo Crea un nuevo agente en el paso Inicio rápido con la galería de plantillas | app: /agents?new-agent=true */}
+
+| Origen | Qué trae | Cuándo conviene |
+|---|---|---|
+| **Empezar desde cero** | Nombre y descripción. Sin instrucciones ni tools. Modelo GPT-4o mini, temperatura 0.7, seguimiento desactivado. | Ya tenés el prompt escrito o querés control total. |
+| **Plantilla** | Nombre, descripción, prompt, modelo, temperatura, funciones y zona horaria de la plantilla. | Querés un punto de partida probado y editarlo después. |
+
+<Note>
+Las plantillas las publica ContactShip. La app no tiene una opción para crear plantillas propias. Un agente creado desde una plantilla se edita igual que cualquier otro.
+</Note>
+
+## La pantalla del agente
+
+- El encabezado muestra el nombre. Hacé clic sobre él para renombrarlo; el cambio se guarda al instante con el aviso **Nombre del agente actualizado**.
+- El botón **Probar agente** abre el sandbox. Ver [Probar en el sandbox](/es/agentes-de-texto/sandbox).
+- Las pestañas son **General**, **Instrucciones**, **Tools** (con el contador de tools), **Avanzado** y **Conocimiento**.
+
+### Cómo se guarda
+
+Cada pestaña tiene su propio botón **Guardar**, también disponible con Ctrl + Enter. Al guardar una pestaña se envían solo los campos de esa pestaña. La barra inferior muestra el estado: **Todos los cambios guardados**, **Cambios sin guardar**, **Guardando…**, **Cambios guardados** o **No se pudo guardar**. La pestaña **Conocimiento** no tiene botón: cada cambio se guarda al instante.
+
+No hay borradores ni publicación. Lo que guardás es lo que usa el agente en las conversaciones.
+
+## Pestaña General
+
+{/* captura: images/agentes-de-texto/general-es.png | Pestaña General con el selector de modelo abierto | app: /agents/text/[id]?activeTab=general */}
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Nombre del agente** | Identifica al agente en toda la app. Solo lo ve tu equipo. | Texto, obligatorio | El nombre que ingresaste al crearlo |
+| **Descripción** | Una nota corta sobre qué hace el agente. | Texto libre | La descripción que ingresaste al crearlo |
+| **Modelo** | El modelo de lenguaje que maneja la conversación. | Uno de los seis modelos de la tabla siguiente | GPT-4o mini desde cero; el de la plantilla si usaste una |
+| **Temperatura** | Valores bajos dan respuestas más predecibles; valores altos, más creativas. | 0 a 2, en pasos de 0.1 | 0.7 |
+| **Zona horaria** | Se usa para resolver fechas y horas que el agente menciona. | Una zona horaria, con buscador | Vacía desde cero; la de la plantilla si usaste una |
+
+### Modelos disponibles
+
+El selector agrupa los modelos por proveedor. Estos son los seis, en el orden en que aparecen:
+
+| Modelo | Identificador |
+|---|---|
+| GPT-4.1 Mini | `gpt-4.1-mini` |
+| GPT-4o mini | `gpt-4o-mini` |
+| GPT-4o | `gpt-4o` |
+| Gemini 3 Flash Preview | `gemini-3-flash-preview` |
+| Gemini 3 Pro | `gemini-3-pro-latest` |
+| Claude 4.5 Haiku | `claude-4.5-haiku` |
+
+La lista refleja el selector de ContactShip; no es un catálogo completo de modelos de cada proveedor.
+
+<Tip>
+Cambiá el modelo y probalo en el sandbox antes de dejarlo en producción. La misma instrucción puede dar resultados distintos según el modelo.
+</Tip>
+
+## Asignar el agente a un canal
+
+El agente no responde hasta que un canal se lo asigna. La asignación se configura en el canal, no en el agente:
+
+1. Abrí **Mensajes**, elegí el canal y entrá en **Configuración del canal**.
+2. En la pestaña **Asignación**, la sección **Asignación automática** evalúa reglas en orden. Gana la primera que coincide.
+3. En cada regla, elegí **Cuándo** (**Siempre** o **En un horario**) y **A quién**: **IA**, **Una persona** o **Un equipo**. Con **IA**, elegí el agente de texto.
+
+{/* captura: images/agentes-de-texto/asignacion-canal-es.png | Pestaña Asignación del canal con una regla que apunta a un agente de texto | app: /inbox */}
+
+Varios canales pueden apuntar al mismo agente. Para pasar una conversación de un agente de IA a otro durante el chat, usá la tool **Transfer to AI Agent**. Ver [Configurar un canal](/es/mensajes/configurar-canal) y [Herramientas](/es/agentes-de-texto/herramientas).
+
+## Acceso de solo lectura
+
+Sin el permiso `agents.update`, la pantalla muestra el aviso **Tienes acceso de solo lectura**: podés revisar la configuración pero no modificarla. Los campos aparecen deshabilitados y no hay botón **Guardar**. Pedí acceso de edición a un administrador. Ver [Roles y permisos](/es/organizacion/roles-y-permisos).
+
+## Duplicar y eliminar
+
+- **Duplicar**, desde la lista de agentes, crea una copia llamada `Nombre (Copy)` con la misma configuración y las mismas tools. Si alguna tool no se pudo copiar, el aviso lo indica.
+- **Eliminar**, desde la lista o desde **Avanzado → Zona de peligro → Eliminar agente**, borra el agente con todas sus tools y su configuración. Requiere `agents.delete` y no se puede deshacer.
+
+## Qué no existe todavía
+
+- Instagram y Facebook Messenger figuran como **Próximamente** en el diálogo **Nuevo canal**.
+- Los agentes de texto no tienen versiones, borradores ni publicación. Eso existe solo en agentes de voz.
+- No se pueden crear plantillas propias. La galería muestra solo las plantillas de ContactShip.
+- El agente no se asigna a un canal desde su propia pantalla. Se hace en **Configuración del canal → Asignación**.
+- Un agente de texto no atiende llamadas ni grupos de WhatsApp.
+
+## Problemas frecuentes
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| **El nombre es obligatorio** / **La descripción es obligatoria** | El formulario desde cero exige los dos campos. | Completá los dos y volvé a hacer clic en **Crear agente**. |
+| **Error al cargar plantillas** | La galería no pudo cargarse. | Hacé clic en **Reintentar**. Si persiste, creá el agente desde cero. |
+| **Los agentes de texto no están habilitados para tu organización.** | Soporte desactivó los agentes de texto para tu organización. | Contactá a soporte. |
+| **Agente no encontrado** | El agente fue eliminado o pertenece a otra organización. | Volvé a la lista de agentes y verificá la organización activa. |
+| **Revisa los campos marcados antes de guardar** | Un campo obligatorio está vacío o un valor es inválido. | Corregí el campo marcado en rojo y guardá de nuevo. |
+| **No se pudo guardar** | El servidor rechazó el guardado. | Leé el detalle debajo del estado y reintentá. Si persiste, contactá a soporte. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Puedo usar el mismo agente en varios canales?">
+    Sí. Cada canal tiene sus propias reglas de asignación y cualquier regla puede apuntar a cualquier agente de texto de la organización. Si necesitás comportamientos distintos por canal, creá un agente por canal. Ver [Configurar un canal](/es/mensajes/configurar-canal).
+  </Accordion>
+  <Accordion title="¿Qué diferencia hay entre un agente de texto y uno de voz?">
+    El de texto responde mensajes escritos en el inbox y se guarda pestaña por pestaña, sin publicar. El de voz atiende llamadas, tiene voz, idiomas y versiones publicadas. Los dos comparten la base de conocimiento de la organización.
+  </Accordion>
+  <Accordion title="¿Escribo las instrucciones en español o en inglés?">
+    Podés usar cualquiera de los dos. Indicá el idioma de respuesta y verificá el comportamiento con pruebas. Ver [Instrucciones](/es/agentes-de-texto/instrucciones).
+  </Accordion>
+  <Accordion title="¿Los cambios se aplican sin publicar?">
+    Sí. Al hacer clic en **Guardar** en una pestaña, esa configuración pasa a ser la que usa el agente. Si querés revisar antes, probá en el sandbox con la configuración guardada.
+  </Accordion>
+  <Accordion title="¿Qué modelo conviene para empezar?">
+    GPT-4o mini es el valor por defecto al crear desde cero. Compará respuestas y herramientas en el sandbox con tus propios escenarios antes de elegir otro modelo.
+  </Accordion>
+  <Accordion title="¿El agente puede atender grupos o comunidades de WhatsApp?">
+    El inbox de ContactShip documentado aquí atiende conversaciones individuales. No ofrece configuración de agentes para grupos o comunidades.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Instrucciones](/es/agentes-de-texto/instrucciones)
+- [Herramientas](/es/agentes-de-texto/herramientas)
+- [Configurar un canal](/es/mensajes/configurar-canal)
+- [Tu primer agente de WhatsApp](/es/comenzar/primer-whatsapp)

@@ -1,0 +1,91 @@
+---
+title: 'Probar en el sandbox'
+description: 'Probá conversaciones sin enviar WhatsApp a clientes. Revisá respuestas, reglas activadas y herramientas simuladas antes de asignar el agente a un canal.'
+tag: 'Nuevo'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read" route="Agentes → Texto → Probar agente" status="nuevo" />
+
+El sandbox permite escribir como si fueras un cliente y revisar la respuesta del agente. Las herramientas aparecen simuladas, con sus argumentos. Es una prueba del comportamiento conversacional; no demuestra la entrega de mensajes por WhatsApp ni la conexión real con tus sistemas.
+
+## Iniciar una prueba
+
+<Steps>
+  <Step title="Guardá la configuración">
+    Guardá cada pestaña que modificaste. La prueba inicia con el agente guardado; no envía el contenido sin guardar del editor.
+  </Step>
+  <Step title="Abrí Probar agente">
+    Usá el botón del encabezado. El panel identifica el entorno como **Sandbox**.
+  </Step>
+  <Step title="Escribí como un cliente">
+    Enviá un mensaje concreto, esperá la respuesta y continuá la conversación. Probá también datos incompletos y solicitudes de atención humana.
+  </Step>
+  <Step title="Revisá las herramientas">
+    Expandí el indicador de tools simuladas para ver nombres y argumentos. Si aparece **efecto real bloqueado**, la acción real fue bloqueada en la prueba.
+  </Step>
+  <Step title="Reiniciá para otro escenario">
+    Usá **Reiniciar** para empezar sin el contexto de la conversación anterior. Si cambiaste el agente, guardá antes de probar otra vez.
+  </Step>
+</Steps>
+
+## Qué muestra el panel
+
+| Elemento | Cómo interpretarlo |
+|---|---|
+| Respuesta del agente | Texto que generó en este escenario |
+| Regla activada | La respuesta provino de una regla; el panel muestra su nombre cuando corresponde |
+| Tools simuladas | Acciones que habría intentado, con sus argumentos |
+| Efecto real bloqueado | La prueba bloqueó una acción con efectos reales |
+| Tokens | Uso informado por la respuesta cuando está disponible; no es una factura |
+| Pensando… | La solicitud sigue en curso; el panel muestra el tiempo transcurrido |
+
+## Escenarios para revisar
+
+| Mensaje de prueba | Resultado esperado según tu configuración |
+|---|---|
+| Una pregunta cubierta por los documentos | Respuesta apoyada en información disponible |
+| Un pedido sin número de referencia | Solicitud del dato faltante antes de consultar |
+| Una solicitud de catálogo | Herramienta de imagen o PDF con el archivo configurado |
+| «Quiero hablar con una persona» | Delegación al destino previsto |
+| Información que el negocio no ofrece | Reconocer el límite, sin inventar una respuesta |
+| Corrección de un dato del contacto | Argumentos correctos para los campos habilitados |
+
+Anotá el mensaje, el resultado esperado y lo que observaste. Repetí estos escenarios después de cambiar instrucciones, modelo o herramientas.
+
+## Alcance de la prueba
+
+El sandbox no envía mensajes al cliente por WhatsApp. Una herramienta simulada tampoco confirma que se actualizó el CRM, se transfirió una conversación real o respondió tu API.
+
+La prueba **Enviar request de prueba** dentro de una herramienta HTTP es distinta: sí solicita el endpoint. Revisá [Herramientas](/es/agentes-de-texto/herramientas) antes de usarla.
+
+## Problemas frecuentes
+
+| Mensaje | Qué hacer |
+|---|---|
+| No se pudo iniciar el sandbox: … | Comprobá que el agente exista en la organización actual. Reiniciá y conservá el detalle si necesitás soporte. |
+| No se pudo enviar el mensaje: … | Revisá la conexión y el detalle del error antes de repetir la prueba. |
+| No se ve una herramienta esperada | Guardá **Tools** y revisá su descripción y las instrucciones que deberían activarla. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Esta prueba le escribe a un cliente?">
+    No envía mensajes por WhatsApp a clientes. El panel usa un chat sandbox y muestra herramientas simuladas.
+  </Accordion>
+  <Accordion title="¿Puedo probar cambios sin guardarlos?">
+    Guardá primero las pestañas que cambiaste. La prueba usa el identificador del agente y no envía el borrador del editor.
+  </Accordion>
+  <Accordion title="¿Que funcione aquí significa que ya funciona en WhatsApp?">
+    Todavía necesitás un canal conectado y una regla que asigne conversaciones al agente. Ver [Configurar un canal](/es/mensajes/configurar-canal).
+  </Accordion>
+  <Accordion title="¿Cómo pruebo sin arrastrar respuestas anteriores?">
+    Usá **Reiniciar** antes del siguiente escenario. Así evitás que la conversación previa condicione la nueva prueba.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Instrucciones](/es/agentes-de-texto/instrucciones)
+- [Herramientas](/es/agentes-de-texto/herramientas)
+- [Tu primer agente de WhatsApp](/es/comenzar/primer-whatsapp)

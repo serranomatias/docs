@@ -1,0 +1,48 @@
+---
+title: "Conditions, alerts, and webhooks"
+description: "Configure verifiable requirements and lead-routing alert recipients."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Organization → Lead routing → Stage" permission="lead_routing_config.update" addon="Lead routing" />
+
+## Build conditions
+
+In the stage’s requirements, choose **all** to require every condition or **any** to accept one. Groups can be nested: for example, `(sent a message or logged a call) and has a tag`.
+
+The catalog includes outbound and inbound messages, logged calls, talk seconds, call outcomes, tags, completed tag categories, contact fields, channel, line, notes, and minutes in the column. Choose an operator appropriate to the field.
+
+Where supported, define whose actions count: the assignee, any person, AI, or anyone. Also choose the time window: since entering the stage or the contact’s entire history. An old call can satisfy a historical condition without satisfying a new handling requirement.
+
+Read the generated explanation before saving. Name groups in language advisors will recognize in their alerts. Internal notes, outgoing messages, and customer messages are different facts.
+
+Entry conditions are evaluated when the card is created, before an extended conversation exists. Use channel, line, or contact data there. Pool conditions determine which team can receive the card.
+
+## Alerts
+
+Alert thresholds use consumed deadline percentages. Alerts display pending requirements. Configure who should be notified when something goes wrong and, when needed, a pool supervisor. Without explicit recipients, team leaders or their hierarchy are used; verify that leaders exist to receive those alerts.
+
+No-advisor and exhausted-chain alerts need recipients even when a card has no owner.
+
+## Webhooks and email
+
+The current journey screen does not expose webhook or email-alert configuration for engine events. Coordinate configuration and the event contract with support if your organization needs them. Call and channel webhooks are not substitutes; they describe different events.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does an AI message count?">
+    Only when AI or anyone is an accepted author for that condition.
+  </Accordion>
+  <Accordion title="Why was a condition met without new actions?">
+    Check for empty groups or a condition counting the contact’s full history.
+  </Accordion>
+  <Accordion title="Who is alerted when there is no owner?">
+    Configured supervisors or the relevant team leaders. Check that configuration.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [How it works](/en/lead-routing/how-it-works)
+- [Teams](/en/organization/teams)

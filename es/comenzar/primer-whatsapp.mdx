@@ -1,0 +1,117 @@
+---
+title: 'Tu primer agente de WhatsApp'
+description: 'Conectar WhatsApp Business con Conectar con Facebook, crear un agente de texto desde una plantilla, asignarlo en Configuración del canal → Asignación, probarlo con el QR, seguir la conversación en Mensajes y tomarla con Take Over.'
+sidebarTitle: 'Primer agente de WhatsApp'
+tag: 'Nuevo'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="conversation.read" route="Mensajes · Ajustes → Inbox → Canales" status="nuevo" />
+
+Esta guía conecta un número de WhatsApp Business, lo deja atendido por un agente de texto y muestra cómo tu equipo sigue la conversación desde **Mensajes** y la toma cuando hace falta. Necesitás una cuenta de Meta Business con un número habilitado para la API de WhatsApp Business.
+
+<Steps>
+  <Step title="Conectá WhatsApp Business">
+    Andá a **Ajustes → Inbox → Canales** y hacé clic en **Nuevo canal**. El diálogo muestra tres canales: **WhatsApp Business** con la marca **Socio verificado de Meta**, e **Instagram** y **Facebook Messenger** con la marca **Próximamente**. Elegí WhatsApp Business.
+
+    {/* captura: images/comenzar/nuevo-canal-es.png | Diálogo Nuevo canal con WhatsApp Business (Socio verificado de Meta), Instagram y Messenger marcados como Próximamente | app: /settings/inbox/channels */}
+
+    Hay dos caminos:
+
+    | Opción | Cuándo usarla | Qué pasa |
+    |---|---|---|
+    | **Usar esta cuenta** | Ya tenés una cuenta en **Cuentas de Facebook Business conectadas**. | Pasás directo a elegir el número. |
+    | **Conectar con Facebook** (Recomendado) | Primera conexión o un Business Portfolio nuevo. | Se abre la ventana de Facebook; completás el proceso ahí y la app espera la respuesta. |
+
+    Después, en **Seleccionar número de teléfono**, elegí el número y hacé clic en **Conectar**. Cuando ves **Canal conectado**, el número ya recibe mensajes en la bandeja. La opción **Configuración manual** (Phone Number ID, Access Token y Business Account ID) figura como próximamente. Ver [Conectar WhatsApp Business](/es/mensajes/conectar-whatsapp).
+  </Step>
+  <Step title="Creá un agente de texto desde una plantilla">
+    En **Agentes**, hacé clic en **Nuevo agente** (Shift+N), elegí **Agente de texto** y después una plantilla o **Empezar desde cero**. El editor de texto tiene instrucciones en markdown, herramientas (mover contactos en el tablero, etiquetar, enviar imagen o PDF, transferir a otro agente, consultar una API) y la sección **Avanzado** con seguimientos y horario. Los cambios se guardan con **Guardar**.
+
+    Antes de conectarlo a un canal, probalo con **Probar agente**: es un sandbox donde las herramientas corren simuladas, sin efectos reales. Ver [Crear un agente de texto](/es/agentes-de-texto/crear) y [Probar en el sandbox](/es/agentes-de-texto/sandbox).
+  </Step>
+  <Step title="Asignalo al canal">
+    Volvé a **Ajustes → Inbox → Canales**, abrí el canal y entrá a la pestaña **Asignación**. La sección **Asignación automática** decide quién atiende cada conversación nueva con reglas que se evalúan en orden.
+
+    | Campo | Qué hace | Valores |
+    |---|---|---|
+    | **Cuándo** | Cuándo aplica la regla. | **Siempre**, **En un horario** (días, horas y zona horaria) |
+    | **A quién** | Quién recibe la conversación. | **IA**, **Una persona**, **Un equipo** |
+    | Estrategia (solo equipo) | Cómo se reparte dentro del equipo. | **Por turnos**, **Menos ocupado**, **Por peso** |
+    | **Respaldo** | A quién va la conversación si ninguna regla coincide. | Una persona o un agente de IA |
+
+    Para esta guía, agregá una regla con **Cuándo: Siempre** y **A quién: IA**, y elegí tu agente en **Elegí un agente de IA**. Guardá. Ver [Configurar un canal](/es/mensajes/configurar-canal).
+
+    {/* captura: images/comenzar/canal-asignacion-ia-es.png | Pestaña Asignación con una regla Siempre → IA y el agente de texto seleccionado | app: /settings/inbox/channels */}
+  </Step>
+  <Step title="Probá con el QR">
+    En la misma pantalla, pestaña **Avanzado**, la sección **Enviar mensaje de prueba** muestra un código QR. Escanealo desde tu teléfono o hacé clic en **Abrir WhatsApp**; también podés **Copiar enlace**. Mandá un mensaje al número: el agente responde en segundos.
+
+    {/* captura: images/comenzar/canal-enviar-mensaje-prueba-es.png | Sección Enviar mensaje de prueba con el QR y los botones Abrir WhatsApp y Copiar enlace | app: /settings/inbox/channels */}
+  </Step>
+  <Step title="Seguí la conversación en Mensajes">
+    Abrí **Mensajes** en la barra lateral. La conversación aparece en la lista con el canal, el asignado (tu agente de IA) y un contador con el tiempo que queda de la ventana de 24 horas de WhatsApp. Al abrirla ves cada mensaje del cliente y cada respuesta del agente, y a la derecha el panel del contacto con su actividad, información e historial de llamadas. Ver [Trabajar en la bandeja](/es/mensajes/bandeja).
+  </Step>
+  <Step title="Tomá la conversación cuando haga falta">
+    Mientras la conversación está asignada a un agente de IA, el área de respuesta muestra el aviso "This conversation is assigned to an agent" y el botón **Take Over**. Al hacer clic, la conversación pasa a vos, el agente deja de responder y podés escribir desde el compositor, con respuestas rápidas, plantillas, notas internas y adjuntos. Tomar una conversación de la IA requiere el permiso `conversation.take_from_ai` del rol; sin él aparece "No tenés permiso para tomar esta conversación".
+
+    {/* captura: images/comenzar/bandeja-take-over-es.png | Conversación asignada al agente de IA con el aviso y el botón Take Over visibles | app: /inbox */}
+  </Step>
+</Steps>
+
+<Note>
+WhatsApp solo permite responder libremente durante 24 horas desde el último mensaje del cliente. Pasado ese plazo, solo se pueden enviar [plantillas aprobadas](/es/mensajes/plantillas). Los [seguimientos](/es/agentes-de-texto/seguimientos) del agente respetan esa ventana.
+</Note>
+
+## Qué no existe todavía
+
+- Instagram y Facebook Messenger figuran como **Próximamente** en **Nuevo canal**.
+- La **Configuración manual** de WhatsApp figura como próximamente. Hoy se conecta con **Conectar con Facebook** o reutilizando una cuenta ya conectada.
+- Grupos y comunidades de WhatsApp: la API oficial de Meta no los permite.
+- La bandeja no traduce mensajes, no sugiere respuestas con IA ni tiene menciones a compañeros.
+- No hay canales de SMS ni de correo electrónico.
+
+## Problemas frecuentes
+
+| Mensaje en pantalla | Causa | Solución |
+|---|---|---|
+| El SDK de Facebook no está listo | El navegador bloqueó la ventana de Facebook o la página no terminó de cargar. | Permití ventanas emergentes para app.contactship.ai y recargá. |
+| Esperando respuesta de Facebook... | El proceso sigue abierto en la ventana de Facebook. | Completalo ahí; si la cerraste, hacé clic en **Cancelar** y empezá de nuevo. |
+| No hay números disponibles. | El Business Portfolio que conectaste no tiene números habilitados para la API. | Agregá el número en Meta Business y volvé a **Conectar con Facebook**. |
+| Ya conectado | Ese número ya es un canal de la organización. | Abrí el canal existente en **Canales**. |
+| Error al conectar | Falló la creación del canal. | Reintentá. Si persiste, escribí a soporte con la hora y el número. |
+| Los agentes de texto no están habilitados para tu organización. | La organización tiene los agentes de texto desactivados por excepción. | Escribí a soporte. |
+| No tenés permiso para tomar esta conversación | Tu rol no tiene `conversation.take_from_ai` o la protección de asignación está activa. | Pedile a un administrador el permiso en **Roles y Permisos**. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué solo tengo 24 horas para responder?">
+    Es una regla de Meta: la ventana de conversación dura 24 horas desde el último mensaje del cliente. Después solo podés enviar plantillas aprobadas, que se crean en **Ajustes → Inbox → Plantillas**. La lista de conversaciones muestra el tiempo restante. Ver [Plantillas de WhatsApp](/es/mensajes/plantillas).
+  </Accordion>
+  <Accordion title="¿Qué pasa si el cliente deja de responder?">
+    El agente de texto tiene **Seguimientos** en **Avanzado**, con los presets **Suave**, **Balanceado** y **Persistente**, horario propio y cierre automático de la conversación. Los mensajes de seguimiento se generan con el contexto de la conversación y se envían dentro de la ventana de 24 horas. Ver [Seguimientos, horarios y cierre](/es/agentes-de-texto/seguimientos).
+  </Accordion>
+  <Accordion title="¿Puedo asignar agentes de IA distintos por canal?">
+    Sí. Cada canal tiene su propia pestaña **Asignación**, así que un número puede atenderlo un agente de ventas y otro un agente de soporte. Dentro de una conversación, la herramienta **Transferir a agente** deriva a otro agente según la intención. Ver [Herramientas](/es/agentes-de-texto/herramientas).
+  </Accordion>
+  <Accordion title="¿El agente puede enviar fotos y documentos?">
+    Sí. Las herramientas **Enviar imagen** (JPG o PNG, máximo 5 MB) y **Enviar PDF** (máximo 10 MB) se configuran en el agente con el archivo que va a mandar. El agente también lee imágenes, documentos y audios que envía el cliente. Ver [Herramientas](/es/agentes-de-texto/herramientas).
+  </Accordion>
+  <Accordion title="¿Puedo atender grupos o comunidades de WhatsApp?">
+    No. La API oficial de WhatsApp Business no permite grupos ni comunidades; solo conversaciones uno a uno con el número conectado.
+  </Accordion>
+  <Accordion title="¿Cómo mando mensajes masivos por WhatsApp?">
+    Con una **Campaña de mensajes** en **Campañas**: elegís el canal, una plantilla aprobada y los contactos, y programás el envío. La campaña muestra enviados, entregados, leídos, respondidos y fallidos. Ver [Campañas de mensajes](/es/mensajes/campanas).
+  </Accordion>
+  <Accordion title="¿La IA puede hacer o recibir llamadas por WhatsApp?">
+    De forma limitada. Cada canal tiene la pestaña **Llamadas** con el interruptor de llamadas de WhatsApp, que depende de la elegibilidad del número según Meta. Meta exige que la persona acepte una invitación antes de recibir llamadas. Ver [Configurar un canal](/es/mensajes/configurar-canal).
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Conectar WhatsApp Business](/es/mensajes/conectar-whatsapp)
+- [Configurar un canal](/es/mensajes/configurar-canal)
+- [Crear un agente de texto](/es/agentes-de-texto/crear)
+- [Trabajar en la bandeja](/es/mensajes/bandeja)

@@ -44,10 +44,6 @@ This endpoint allows you to update the information of an existing contact in you
   The updated email address of the contact
 </ParamField>
 
-<ParamField body="description" type="string">
-  Updated description or notes about the contact
-</ParamField>
-
 <ParamField body="additional_data" type="array">
   Updated array of additional data fields for the contact. Note that this will replace the entire additional_data array, not merge with existing values.
   <Expandable title="additional_data object">
@@ -65,9 +61,7 @@ This endpoint allows you to update the information of an existing contact in you
 
 ## Response
 
-<ResponseField name="status code" type="number">
-  200 on successful update
-</ResponseField>
+The response is `{ "statusCode": number, "data": object }`. The fields below describe `data`.
 
 <ResponseField name="id" type="string">
   The unique identifier of the updated contact (UUID format)
@@ -123,7 +117,6 @@ curl -X PATCH "https://api.contactship.ai/v1/contacts/c1a2b3c4-d5e6-f7g8-h9i0-j1
   -H "Content-Type: application/json" \
   -d '{
     "full_name": "Juan Carlos Pérez",
-    "description": "Lead converted to customer"
   }'
 ```
 
@@ -177,7 +170,7 @@ const updateContact = async (contactId, updateData) => {
       throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorData.message || 'Unknown error'}`);
     }
     
-    const updatedContact = await response.json();
+    const { data: updatedContact } = await response.json();
     console.log('Contact updated:', updatedContact);
     return updatedContact;
   } catch (error) {
@@ -190,7 +183,6 @@ const contactId = 'c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6';
 const updateData = {
   full_name: 'Juan Carlos Pérez',
   email: 'juan.perez@ejemplo.com',
-  description: 'Lead converted to customer'
 };
 
 updateContact(contactId, updateData);
@@ -218,7 +210,6 @@ headers = {
 # Update data - only include fields you want to change
 update_data = {
     "email": "juan.perez@ejemplo.com",
-    "description": "Lead converted to customer",
     "additional_data": [
         {
             "type": "location",
@@ -242,7 +233,7 @@ response = requests.patch(
 
 # Check if the request was successful
 if response.status_code == 200:
-    updated_contact = response.json()
+    updated_contact = response.json()["data"]
     print(f"Contact updated successfully: {updated_contact['full_name']}")
     
     # Print updated field information
@@ -265,31 +256,34 @@ else:
 <ResponseExample>
 ```json Example Response
 {
-  "id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
-  "created_at": "2023-01-01T12:00:00Z",
-  "phone_number": "+12125678901",
-  "full_name": "Juan Carlos Pérez",
-  "country": "México",
-  "email": "juan.perez@ejemplo.com",
-  "description": "Lead converted to customer",
-  "additional_data": [
-    {
-      "type": "location",
-      "field": "dirección",
-      "value": "Av. Reforma 456"
-    },
-    {
-      "type": "text",
-      "field": "notas",
-      "value": "Cliente activo con suscripción premium"
-    },
-    {
-      "type": "date",
-      "field": "fecha_conversión",
-      "value": "2023-03-15"
-    }
-  ],
-  "organization_id": "org123456"
+  "statusCode": 200,
+  "data": {
+    "id": "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6",
+    "created_at": "2023-01-01T12:00:00Z",
+    "phone_number": "+12125678901",
+    "full_name": "Juan Carlos Pérez",
+    "country": "México",
+    "email": "juan.perez@ejemplo.com",
+    "description": "Lead converted to customer",
+    "additional_data": [
+      {
+        "type": "location",
+        "field": "dirección",
+        "value": "Av. Reforma 456"
+      },
+      {
+        "type": "text",
+        "field": "notas",
+        "value": "Cliente activo con suscripción premium"
+      },
+      {
+        "type": "date",
+        "field": "fecha_conversión",
+        "value": "2023-03-15"
+      }
+    ],
+    "organization_id": "org123456"
+  }
 }
 ```
 </ResponseExample>

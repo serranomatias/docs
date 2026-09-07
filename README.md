@@ -1,33 +1,54 @@
-# Mintlify Starter Kit
+# ContactShip Docs
 
-Click on `Use this template` to copy the Mintlify starter kit. The starter kit contains examples including
+Documentación pública de ContactShip: [docs.contactship.ai](https://docs.contactship.ai). Construida con [Mintlify](https://mintlify.com); se publica sola al hacer push a `main`.
 
-- Guide pages
-- Navigation
-- Customizations
-- API Reference pages
-- Use of popular components
+Esta etapa cubre **solo texto**: 203 páginas de navegación completas, con guías en español e inglés y referencia API compartida. Capturas, videos y GIFs quedan para una etapa posterior.
 
-### Development
+## Estructura
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the documentation changes locally. To install, use the following command
+| Carpeta | Qué contiene |
+|---|---|
+| `es/` | Documentación en español (idioma por defecto). Un directorio por grupo del menú: `comenzar`, `agentes-de-voz`, `agentes-de-texto`, `mensajes`, `llamadas`, `contactos`, `contact-center`, `enrutamiento`, `reportes`, `organizacion`, `facturacion`, `integraciones`, `mcp`, `casos-de-uso`. |
+| `en/` | Espejo en inglés con la misma estructura (`get-started`, `voice-agents`, `text-agents`, `messages`, `calls`, `contacts`, `contact-center`, `lead-routing`, `reports`, `organization`, `billing`, `integrations`, `mcp`, `use-cases`). |
+| `api-reference/` | Referencia de la API pública (solo en inglés, compartida por los dos idiomas). Una página por endpoint en `endpoint/`, más `introduction`, `rate-limits` y `webhooks`. |
+| `snippets/` | Componentes reutilizables. `availability.mdx` exporta el bloque de disponibilidad (plan, add-on, permiso, dónde) que va al inicio de cada página de producto. |
+| `images/` | Capturas y clips. Nombres `images/<grupo>/<pantalla>-es.png` y `-en.png`. |
+| `docs.json` | Navegación, idiomas, redirecciones de URLs viejas y configuración del sitio. |
+| `.internal/` | Herramientas de QA y registro de rutas retiradas. Las notas de fuentes, inventarios y material sensible se conservan localmente, excluidos de Git; `.mintignore` excluye toda la carpeta del sitio. |
 
+## Antes de escribir
+
+Mantené el tono y la estructura de las páginas actuales: pasos concretos, disponibilidad, preguntas frecuentes y enlaces a contenido relacionado. Conservá la paridad español/inglés. Contrastá comportamientos con la app y su backend antes de afirmarlos. Si tenés las notas internas locales, consultá también `.internal/STYLE-GUIDE.md`.
+
+## Vista previa local
+
+```bash
+npx mint@latest dev
 ```
-npm i -g mintlify
+
+Abre http://localhost:3000. Para revisar enlaces rotos:
+
+```bash
+npx mint@latest broken-links
 ```
 
-Run the following command at the root of your documentation (where mint.json is)
+## Control de calidad
 
+```bash
+python3 .internal/qa/check-pages.py --strict
+python3 -m unittest discover -s .internal/qa -p 'test_*.py'
+npx mint@latest validate --disable-openapi
+npx mint@latest broken-links --check-anchors --check-snippets --check-redirects
 ```
-mintlify dev
-```
 
-### Publishing Changes
+El validador local comprueba archivos, navegación, enlaces internos, redirecciones, disponibilidad, preguntas frecuentes y cantidad de páginas ES/EN. Mintlify verifica compilación MDX y anclas. `.mintignore` excluye `.internal/` y este README de la compilación pública.
 
-Install our Github App to auto propagate changes from your repo to your deployment. Changes will be deployed to production automatically after pushing to the default branch. Find the link to install on your dashboard. 
+La revisión combina compilación, validación de enlaces y contraste con el código; no equivale a pruebas autenticadas en producción. Las notas de recuperación y fuentes se conservan localmente y no forman parte de este repositorio público.
 
-#### Troubleshooting
+## Capturas de pantalla (postergadas)
 
-- Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
-- Page loads as a 404 - Make sure you are running in a folder with `mint.json`
+Algunas páginas conservan marcadores `{/* captura: images/<grupo>/<nombre>-es.png | qué mostrar | app: <ruta> */}` donde va cada imagen. El pipeline de capturas se conserva en las notas internas locales para una etapa posterior.
 
+## Contacto
+
+Soporte: support@contactship.ai

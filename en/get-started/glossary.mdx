@@ -1,0 +1,59 @@
+---
+title: "Glossary"
+description: "Definitions of inbox, channel, prompt, tool, webhook, SLA, softphone and other ContactShip terms."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Documentation" />
+
+Use this glossary when a screen or integration uses an unfamiliar term. Start with [Concepts](/en/get-started/concepts) to understand relationships between records.
+
+| Term | Meaning |
+|---|---|
+| Add-on | Module requiring additional organization enablement |
+| Scope | Records to which a permission applies |
+| API | Interface for querying or modifying data from another system |
+| Knowledge base | Business information an agent can search |
+| Message buffer | Waiting period to group messages before replying |
+| Channel | Connection through which messages arrive and leave |
+| Caller ID | Number presented to a call recipient |
+| Queue | Distribution of calls to eligible human agents |
+| Context | Information available to AI during a conversation |
+| Follow-up | Subsequent contact after an interaction |
+| Inbox | Conversation workspace in Messages |
+| MCP | Protocol connecting a compatible assistant to ContactShip tools |
+| Prompt | Written instructions for AI |
+| Round robin | Taking turns among eligible destinations |
+| Sandbox | Conversation test environment with simulated tools |
+| Skill | Human agent capability used to determine queue eligibility |
+| SLA | Response or handling deadline defined by configured rules |
+| Softphone | Software telephone used in a browser |
+| Template | In WhatsApp, a structured message subject to approval |
+| Thread | Conversation identifier used by APIs and integrations |
+| Tool | Capability that performs an action or query |
+| Webhook | Request sent from one system to another to announce an event |
+| Wrap-up | Post-call work time |
+
+## Terms that are not interchangeable
+
+Contact, conversation and call tags belong to different catalogs. A board stage is not a call status. An organization API key is not an individual member's permission.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Are Inbox and Messages the same section?">
+    Inbox refers to the conversation workspace in **Messages**. Its settings include channels, templates and tags.
+  </Accordion>
+  <Accordion title="Are tools the same as agent capabilities?">
+    Tools are the configured actions and queries an agent can execute. The text editor groups them in **Tools**.
+  </Accordion>
+  <Accordion title="What is the difference between an API and a webhook?">
+    With the API, your system initiates a request. With a webhook, ContactShip notifies a configured URL when an event occurs.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Concepts](/en/get-started/concepts)
+- [Text agent tools](/en/text-agents/tools)
+- [API Reference](/api-reference/introduction)

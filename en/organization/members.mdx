@@ -1,0 +1,63 @@
+---
+title: "Members and invitations"
+description: "Invite people, review pending invitations and change organization roles. Resolve expired links, email mismatches and plan limits."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Organization → Team Members" permission="team_member.read" />
+
+Each member signs in with their own account and has an organization role. Invite people through **Team Members**; adding a CRM contact does not grant app access.
+
+## Invite a person
+
+1. Check the active organization and open **Team Members**.
+2. Start an invitation, enter the email and choose the intended role.
+3. Review pending invitations. The recipient must open the link using the account with the invited email.
+4. After acceptance, check that the person appears among active members with the correct role.
+
+Inviting requires `team_member.create`. Member limits depend on the plan; check **Plans** if the app blocks new invitations.
+
+## Manage access
+
+| Action | Permission |
+|---|---|
+| View members and pending invitations | `team_member.read` |
+| Invite | `team_member.create` |
+| Change roles | `team_member.update` |
+| Remove a member | `team_member.delete` |
+
+Change roles from the list, including several selected members. Review the affected people before confirming: roles change what they can see and do.
+
+An invitation can be pending, accepted, revoked or expired. Resending an invitation does not mean it has been accepted.
+
+## Acceptance problems
+
+| Situation | What to do |
+|---|---|
+| Expired or canceled invitation | Ask an administrator for a current invitation. |
+| Email mismatch | Sign in with the email that received the invitation. |
+| Already a member | Select the organization in your account. |
+| Member limit reached | An administrator must review the plan allowance. |
+| Invite button missing | Check permission to create members. |
+
+History appears when **Change history** is enabled for the organization and your role includes `audit.read`.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can I belong to several organizations?">
+    Yes. Access is managed per organization. Check the active organization before inviting people or changing roles.
+  </Accordion>
+  <Accordion title="Why can’t I accept with another email?">
+    The invitation is tied to its recipient email. Use that account or request a new invitation addressed to the correct email.
+  </Accordion>
+  <Accordion title="Does an invitation grant access to everything?">
+    Access depends on the role and its scopes. Review [Roles and permissions](/en/organization/roles-and-permissions).
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Roles and permissions](/en/organization/roles-and-permissions)
+- [Teams](/en/organization/teams)
+- [Plans and limits](/en/billing/plans)

@@ -1,0 +1,248 @@
+---
+title: 'Herramientas'
+description: 'Las seis herramientas de un agente de voz: transferencia de llamada inmediata o con aviso a un número, una SIP URI o un destino que decide el agente, traspaso a otro agente, herramienta HTTP personalizada con parámetros JSON y panel de prueba, base de conocimiento, Cal.com y Google Calendar.'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read" route="Agentes → Voz → Herramientas" />
+
+La pestaña **Herramientas** define "lo que el agente puede hacer durante la llamada, además de hablar": pasar la llamada a una persona, consultar tus sistemas, buscar en una base de conocimiento o agendar. El agente decide cuándo usar cada herramienta según la **Descripción** que escribís y lo que dice el prompt.
+
+{/* captura: images/agentes-de-voz/herramientas-catalogo-es.png | Diálogo Añadir herramienta con los tres grupos Durante la llamada, Datos y sistemas y Calendario | app: /agents/voice/[id]?activeTab=tools */}
+
+## El catálogo
+
+| Grupo | Herramienta | Qué hace, según la app | Por agente |
+|---|---|---|---|
+| **Durante la llamada** | **Transferencia de llamada** | "Pasa la llamada a un número o deja que el agente decida a dónde enrutarla." | Varias |
+| **Durante la llamada** | **Traspaso de agente** | "Traspasa la conversación a otro agente de voz." | Varias |
+| **Datos y sistemas** | **Personalizada** | "Llama a tu propio endpoint HTTP y usa la respuesta en la conversación." | Varias |
+| **Datos y sistemas** | **Base de conocimiento** | "Deja que el agente consulte tus bases de conocimiento antes de responder." | Una |
+| **Calendario** | **Cal.com** | "Agenda citas sobre un tipo de evento de Cal.com." | Una. Requiere la integración Cal.com activa. |
+| **Calendario** | **Google Calendar** | "Consulta disponibilidad y crea eventos en Google Calendar." | Una. Requiere la integración Google Calendar activa. |
+
+- **Añadir** abre **Añadir herramienta**. Las herramientas que solo admiten una instancia muestran **Ya añadida**. Las de calendario sin integración muestran **Conéctala en Integraciones**, ver [Catálogo de integraciones](/es/integraciones/vision-general).
+- Cada fila de la lista tiene un menú con **Editar** y **Quitar**. **Quitar** pregunta "El agente dejará de poder usar {name}. Puedes volver a añadirla más adelante."
+- Sin herramientas, la pestaña ofrece accesos directos a **Transferencia de llamada**, **Personalizada** y **Google Calendar**.
+
+<Note>
+Transferencia, traspaso, personalizada y base de conocimiento forman parte del borrador: se aplican cuando publicás. Las de calendario no: "Las herramientas de calendario se aplican al instante. No forman parte del borrador ni esperan a la publicación."
+</Note>
+
+Tres campos se repiten en varias herramientas:
+
+- **Nombre**: "Letras, números, guiones y guiones bajos. Sin espacios." Hasta 64 caracteres y único dentro del agente. Es el nombre con el que la IA conoce la herramienta y el que insertás con `@` en el prompt.
+- **Descripción**: hasta 2.000 caracteres. "Indica al agente cuándo debe recurrir a esta herramienta." Es el criterio principal con el que el agente decide usarla.
+- **Hablar mientras se ejecuta** con **Qué decir** ("El agente lo parafrasea, no lo lee literalmente."), y **Hablar al terminar** ("El agente comenta el resultado cuando la herramienta responde.").
+
+## Transferencia de llamada
+
+{/* captura: images/agentes-de-voz/herramientas-transferencia-es.png | Formulario Transferencia de llamada con destino Un número de teléfono, Transferencia con aviso y las opciones de aviso desplegadas | app: /agents/voice/[id]?activeTab=tools */}
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Nombre** | Nombre de la herramienta. La app lo convierte a minúsculas con guiones bajos mientras escribís. | Hasta 64 caracteres | vacío |
+| **A dónde va la llamada** | Destino fijo o elegido por el agente. | **Un número de teléfono** ("Siempre transfiere al mismo número."), **Lo decide el agente** ("El agente elige el número según tus instrucciones.") | Un número de teléfono |
+| **Formato del destino** | Solo con destino fijo. | **Número de teléfono**, **SIP URI** | Número de teléfono |
+| **Número de teléfono** | El destino fijo. "Incluye el prefijo del país." | Formato internacional, por ejemplo +34 600 000 000 | vacío |
+| **SIP URI** | El destino fijo en SIP. "Formato sip:usuario@dominio. Se envía tal cual al trunk SIP." | `sip:usuario@dominio` | vacío |
+| **Instrucciones de enrutado** | Solo con **Lo decide el agente**. "Enumera los destinos y cuándo usar cada uno." | Texto, hasta 500 caracteres | vacío |
+| **Los destinos son SIP URIs** | Solo con **Lo decide el agente**. "Actívalo si las instrucciones de enrutado contienen direcciones sip: en lugar de números." | Activado, desactivado | desactivado |
+| **Cómo se entrega la llamada** | Fría o con aviso. | **Transferencia inmediata** (cold_transfer): "La llamada pasa directa al destino." **Transferencia con aviso** (warm_transfer): "El agente avisa al destino antes de conectar la llamada." | Transferencia inmediata |
+| **Descripción** | "Indica al agente cuándo debe transferir." Obligatoria. | Hasta 2.000 caracteres | vacío |
+
+Con **Transferencia con aviso** aparecen estas opciones:
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Esperar a que atienda una persona real** | "Retiene el aviso hasta que atienda una persona, ignorando buzones e IVR." | Activado, desactivado | activado |
+| **Tiempo de detección** | "Cuánto esperar a que atienda una persona antes de dar la transferencia por fallida." Solo con la opción anterior activada. | De 10 a 300 s | Sin valor propio: el control descansa en 30 s y no guarda nada hasta que lo movés |
+| **Dar contexto a quien recibe** | "Lo que escucha el destino antes de conectar a quien llama." | Activado, desactivado | desactivado |
+| **Tipo de aviso** | Cómo se arma el aviso. | **Generado con instrucciones** (prompt), **Mensaje exacto** (static_message) | Generado con instrucciones |
+| **Instrucciones del aviso** o **Mensaje del aviso** | El texto que guía o que lee el agente al destino. | Hasta 500 caracteres | vacío |
+| **Aviso privado (whisper)** | "Solo lo escucha quien recibe. Desactívalo para que también lo escuche quien llama." | Activado, desactivado | activado |
+| **Música de espera** | Lo que oye quien llama mientras se conecta al destino. | **Silencio** (none), **Tono de llamada** (ringtone), **Relajante** (relaxing_sound), **Animada** (uplifting_beats) | Tono de llamada |
+
+**Opciones avanzadas**, plegadas al final del formulario:
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Tiempo de timbrado** | "Cuánto timbra el destino antes de abandonar la transferencia." | De 5 a 90 s | Sin valor propio: el control descansa en 30 s |
+| **Número que ve el destino** | Qué identificador de llamada recibe el destino. | **Número del agente Contactship**, **Número del contacto** ("El destino ve el número original de quien llama en lugar del número del agente.") | Número del agente Contactship |
+| **Cabeceras SIP personalizadas** | Solo con destino SIP. "Se envían con el INVITE SIP. Las claves deben empezar con X- o ser User-to-User." | Pares clave y valor, sin claves repetidas | ninguna |
+
+## Traspaso de agente
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Agente destino** | "El agente que se hace cargo de la llamada." | Cualquier otro agente de voz de la organización | vacío |
+| **Nombre** | Nombre de la herramienta, en minúsculas con guiones bajos. | Hasta 64 caracteres | vacío |
+| **Descripción** | "Indica al agente cuándo debe traspasar la llamada." Obligatoria. | Hasta 2.000 caracteres | vacío |
+| **Análisis posterior** | "Sobre qué agente se analiza la llamada." | **Ambos agentes** (both_agents), **Solo el agente destino** (only_destination_agent) | Ambos agentes |
+| **Hablar mientras se ejecuta** y **Qué decir** | Qué dice el agente mientras traspasa. | Activado, desactivado; texto | desactivado |
+
+El traspaso mantiene la misma llamada y cambia el agente que la conduce. Es la base del patrón "agente de triage más agentes especializados": un agente detecta la intención y traspasa a ventas, soporte o cobranzas.
+
+## Personalizada
+
+{/* captura: images/agentes-de-voz/herramientas-personalizada-es.png | Formulario de herramienta Personalizada con parámetros en vista Visual y el panel Probar el endpoint con una respuesta 200 | app: /agents/voice/[id]?activeTab=tools */}
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Nombre** | Nombre de la herramienta. | Hasta 64 letras, números, guiones o guiones bajos. Único. No se admiten nombres reservados (ver Problemas frecuentes). | vacío |
+| **URL del endpoint** | "El agente envía aquí una petición POST mientras dura la llamada." | URL completa, por ejemplo `https://api.tuempresa.com/pedidos` | vacío |
+| **Descripción** | "Indica al agente cuándo debe recurrir a esta herramienta." | Hasta 2.000 caracteres | vacío |
+| **Parámetros** | "Datos que el agente extrae de la conversación y envía con la petición." | Constructor visual o esquema JSON en **Raw** | sin parámetros |
+| **Hablar mientras se ejecuta** y **Qué decir** | Rellena el silencio mientras el endpoint responde. | Activado, desactivado; texto | desactivado |
+| **Hablar al terminar** | El agente comenta el resultado. | Activado, desactivado | activado |
+| **Sonido de escritura** | "Reproduce un sonido de escritura mientras corre la herramienta personalizada." | Activado, desactivado | desactivado |
+| **Headers** | "Se envían en cada petición. Sirven para autenticación o enrutamiento." | Pares clave y valor. Claves con letras, números o `- _ .`, sin espacios ni repetidas. | ninguno |
+
+### Parámetros
+
+Cada parámetro tiene un nombre en minúsculas, números y guiones bajos, un **Tipo**, una descripción y el interruptor **Obligatorio**, activado por defecto en los parámetros nuevos.
+
+| Tipo | Clave JSON | Detalle |
+|---|---|---|
+| **Texto** | string | Texto libre |
+| **Número** | number | Valor numérico |
+| **Sí / no** | boolean | Verdadero o falso |
+| **Lista** | array | Elegís **Tipo de los ítems**: Texto, Número, Sí / no u Objeto |
+| **Objeto** | object | Agregás **Campos** anidados de tipo Texto, Número, Sí / no o Lista |
+
+El constructor visual admite un nivel de anidamiento. Un esquema más profundo se muestra como "Tiene demasiados niveles para editarlo acá. Cambiá a raw para modificarlo." El botón **Raw** muestra el esquema JSON completo: "Usa un objeto con type, properties y required opcional." Al volver a **Visual**, la app valida el JSON. Sin parámetros, "La petición se enviará con el cuerpo vacío."
+
+Los **Headers** también tienen vista **Raw**: "Pegá un objeto JSON o un header por línea, como Nombre: valor."
+
+### Probar el endpoint
+
+El panel **Probar el endpoint** "Envía una petición real con los headers y parámetros de arriba." Muestra la **URL de la petición** y un **Cuerpo de la petición** de ejemplo, generado a partir de los parámetros, que podés editar. **Enviar petición** hace un POST desde los servidores de ContactShip con `Content-Type: application/json` si no definiste otro, y muestra el código de estado en verde si es menor que 400 o en rojo si no, la duración en ms, los **Headers de la respuesta** y el **Cuerpo de la respuesta** formateado. Si el cuerpo supera los 10 KB, avisa "La respuesta se cortó en 10 KB." La petición no sigue redirecciones.
+
+Comportamientos que hay que conocer:
+
+- Si el endpoint no responde en 10 segundos, la prueba falla con "El endpoint no respondió en 10 segundos."
+- Las direcciones locales o privadas (localhost, redes internas, dominios .local o .internal) no se pueden probar: "Esa dirección no es alcanzable desde el servidor." Usá una URL pública.
+- La prueba no es una llamada: no consume créditos y no pasa por el agente.
+
+### Ejemplo: consultar el estado de un pedido
+
+Una herramienta para una tienda que quiere que el agente informe el estado de un pedido.
+
+| Campo | Valor |
+|---|---|
+| **Nombre** | `consultar_estado_pedido` |
+| **URL del endpoint** | `https://api.mitienda.com/voz/pedidos/estado` |
+| **Descripción** | Usala cuando la persona pregunte por el estado, la demora o la entrega de un pedido. Pedile el número de pedido antes de llamarla. |
+| **Headers** | `Authorization: Bearer TU_TOKEN` |
+| **Hablar mientras se ejecuta** | Activado. **Qué decir**: "Dame un segundo que lo busco." |
+| **Hablar al terminar** | Activado |
+
+Parámetros en vista **Raw**:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "numero_pedido": {
+      "type": "string",
+      "description": "Número de pedido tal como lo dictó la persona, sin espacios ni guiones"
+    },
+    "email": {
+      "type": "string",
+      "description": "Correo con el que se hizo la compra, solo si la persona lo menciona"
+    }
+  },
+  "required": ["numero_pedido"]
+}
+```
+
+Tu endpoint recibe un POST con JSON y responde con JSON. Respondé corto y en texto legible, por ejemplo `{"estado": "En camino", "entrega_estimada": "jueves 12 de septiembre"}`: el agente usa ese texto para contestar. Después, mencioná la herramienta en el prompt con `@` y describí cuándo usarla, ver [Instrucciones](/es/agentes-de-voz/instrucciones).
+
+## Base de conocimiento
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Descripción** | "Indica al agente cuándo debe buscar información." Ejemplo de la app: "Consulta la base de conocimiento cuando pregunten por productos o políticas..." | Hasta 2.000 caracteres | vacío |
+| **Hablar mientras se ejecuta** y **Qué decir** | Qué dice el agente mientras busca. | Activado, desactivado; texto | desactivado |
+| **Hablar al terminar** | El agente responde con lo que encontró. | Activado, desactivado | activado |
+
+La herramienta busca en las bases conectadas al agente en la pestaña **Conocimiento**. Si no hay ninguna conectada, el formulario queda deshabilitado y avisa "Sin base de conocimiento conectada. Esta herramienta no devolverá nada hasta que conectes una." con el botón **Conectar base**. Si la organización no tiene bases, ofrece **Ir a Recursos**. En el prompt aparece como `knowledge-base`. Cómo crear y cargar bases está en [Base de conocimiento](/es/agentes-de-voz/base-de-conocimiento).
+
+## Cal.com
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Tipo de evento** | "El evento de Cal.com sobre el que agenda el agente." | Los tipos de evento de la cuenta conectada | vacío |
+| **Zona horaria** | "La disponibilidad y las reservas se resuelven en esta zona horaria." | Lista de zonas horarias | La zona horaria de tu navegador |
+
+Requiere la integración Cal.com en estado activo, ver [Cal.com](/es/integraciones/cal-com). Antes de abrir el formulario, la app valida la integración; si falla, muestra "Hay que volver a conectar la integración." Los cambios se aplican al instante, sin publicar.
+
+## Google Calendar
+
+{/* captura: images/agentes-de-voz/herramientas-google-calendar-es.png | Formulario Google Calendar con la cuenta conectada, zona horaria, duración, eventos simultáneos y horario laboral | app: /agents/voice/[id]?activeTab=tools */}
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| **Cuenta conectada** | El correo de la cuenta de Google vinculada. Solo lectura. | — | — |
+| **Zona horaria** | "La disponibilidad y las reservas se resuelven en esta zona horaria." | Lista de zonas horarias | La zona horaria de tu navegador |
+| **Duración por defecto (minutos)** | "Duración de los eventos que crea el agente." | Mínimo 5, en pasos de 5 | 30 |
+| **Eventos simultáneos máximos** | "Cuántos eventos pueden solaparse en la misma franja." | Mínimo 1 | 1 |
+| **Horario laboral** | **Desde** y **Hasta**. La hora de fin debe ser posterior a la de inicio. | Horas del día | 09:00 a 18:00 |
+
+Requiere la integración Google Calendar activa, ver [Google Calendar](/es/integraciones/google-calendar). La herramienta consulta la disponibilidad de los próximos 7 días y crea el evento cuando la persona confirma. Se aplica al instante, sin publicar.
+
+## Qué no existe todavía
+
+- El formulario de la herramienta personalizada no tiene campos para query params ni para el tiempo de espera. Si la herramienta ya los tenía, se conservan.
+- No hay herramientas nativas para enviar SMS, WhatsApp o correo durante la llamada. Se resuelve con una herramienta personalizada que llame a tu sistema.
+- La transferencia va a un número o a una SIP URI. No transfiere a un usuario ni a una cola del contact center.
+- Calendly no está disponible como herramienta de calendario.
+
+## Problemas frecuentes
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| "Ese nombre está reservado. Elige otro." | El nombre coincide con uno interno: create-booking, create_booking, check-availability, check_availability, transfer-call, transfer_call, knowledge-base, knowledge_base, end-call, end_call, gc-create-booking, gc-check-availability, attempt-booking. | Usá otro nombre. |
+| "Ya hay otra herramienta con ese nombre." | Dos herramientas del agente no pueden compartir nombre. | Cambiá el nombre. |
+| "Usa hasta 64 letras, números, guiones o guiones bajos." | El nombre tiene espacios o caracteres no permitidos. | Escribí el nombre sin espacios, por ejemplo `consultar_pedido`. |
+| "Escribe una URL válida, incluyendo https://." | La URL del endpoint no es una URL completa. | Incluí el protocolo y el dominio. |
+| "Esa dirección no es alcanzable desde el servidor." | La prueba apunta a localhost o a una red privada. | Publicá el endpoint en una URL pública. |
+| "El endpoint no respondió en 10 segundos." | El servidor tardó más de 10 segundos. | Revisá el rendimiento del endpoint. Una herramienta lenta también alarga el silencio en la llamada. |
+| "Escribe un número válido en formato internacional." | El número de destino no tiene prefijo de país. | Escribilo como +54 11 5555 5555. |
+| "Debe empezar con X- o ser User-to-User." | Una cabecera SIP tiene una clave no permitida. | Renombrá la clave con el prefijo `X-`. |
+| **Conéctala en Integraciones** | La herramienta de calendario necesita una integración activa. | Conectá Cal.com o Google Calendar en [Integraciones](/es/integraciones/vision-general). |
+| "Hay que volver a conectar la integración." | La integración existe pero ya no es válida. | Volvé a conectarla en Integraciones y reintentá. |
+| "Sin base de conocimiento conectada" | El agente no tiene bases conectadas. | Conectá una desde el aviso o en la pestaña **Conocimiento**. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Cuándo transfiere el agente a una persona?">
+    Cuando el prompt y la **Descripción** de la herramienta se lo indican: pedido explícito del cliente, un tema fuera de su alcance, un horario. Fuera de horario podés quitar la transferencia o pedirle que ofrezca una devolución de llamada. Con **Transferencia con aviso**, además puede explicarle el caso a quien recibe.
+  </Accordion>
+  <Accordion title="¿El agente puede cobrar dentro de la llamada?">
+    No toma datos de tarjeta. Lo habitual es una herramienta personalizada que genere un link de pago y lo envíe por WhatsApp, SMS o correo desde tu sistema; la confirmación llega por el webhook de tu proveedor de pagos.
+  </Accordion>
+  <Accordion title="¿Cómo registro los datos de la llamada en mi CRM o ERP?">
+    En tiempo real, con una herramienta personalizada que envíe los datos durante la llamada. Al terminar, con el webhook de post llamada, que incluye transcripción, resumen y datos extraídos. Ver [Post llamada](/es/agentes-de-voz/post-llamada).
+  </Accordion>
+  <Accordion title="¿Por qué falla el agendamiento con Cal.com?">
+    Las causas más comunes: la zona horaria de la herramienta no coincide con la de Cal.com, el tipo de evento no tiene disponibilidad definida, o el agente no confirmó el correo del cliente antes de reservar. Pedile en el prompt que repita el correo antes de agendar.
+  </Accordion>
+  <Accordion title="¿Por qué el agente cortó diciendo que se agotaron las interacciones?">
+    Si el agente ejecuta la misma herramienta sin éxito más de 15 veces, la llamada se corta. Casi siempre es un endpoint que devuelve error o una descripción ambigua. Probá la herramienta con **Probar el endpoint** y ajustá la descripción.
+  </Accordion>
+  <Accordion title="¿El agente puede colgar solo?">
+    Sí. Todo agente de voz puede terminar la llamada cuando las dos partes se despiden. No es una herramienta del catálogo y no se configura.
+  </Accordion>
+  <Accordion title="¿Conviene un agente único o varios?">
+    Varios agentes especializados con un agente de triage que derive con **Traspaso de agente**. Un "mega agente" con muchas tareas se equivoca más. Para el análisis de esas llamadas, elegí en **Análisis posterior** si se evalúan ambos agentes o solo el destino.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Instrucciones](/es/agentes-de-voz/instrucciones)
+- [Base de conocimiento](/es/agentes-de-voz/base-de-conocimiento)
+- [Cal.com](/es/integraciones/cal-com)
+- [Google Calendar](/es/integraciones/google-calendar)

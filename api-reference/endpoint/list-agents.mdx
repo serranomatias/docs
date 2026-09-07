@@ -1,33 +1,20 @@
 ---
-title: 'List Agents'
-openapi: 'GET /v1/agents'
+title: "List Agents"
+api: "GET /v1/agents"
+description: "List voice agents for the organization associated with the API key."
 ---
 
-<Endpoint
-  method="GET"
-  path="/v1/agents"
-  description="Returns all agents from the system that the user has access to"
->
-  <RequestHeaders>
-    <RequestHeader
-      name="x-api-key"
-      description="API key for authentication"
-      required
-      example="YOUR_API_KEY"
-    />
-  </RequestHeaders>
-  <ResponseFields>
-    <ResponseField
-      status="200"
-      description="Agents retrieved successfully"
-      contentType="application/json"
-      schemaRef="#/components/schemas/AgentsResponse"
-    />
-    <ResponseField
-      status="400"
-      description="Unexpected error"
-      contentType="application/json"
-      schemaRef="#/components/schemas/Error"
-    />
-  </ResponseFields>
-</Endpoint>
+List voice agents for the organization associated with the API key.
+
+## Authentication
+
+<ParamField header="x-api-key" type="string" required>Organization API key. Keep it on your server or in a credential store.</ParamField>
+
+```bash
+curl 'https://api.contactship.ai/v1/agents' -H 'x-api-key: YOUR_API_KEY'
+```
+
+<ResponseField name="statusCode" type="number">200 on success.</ResponseField>
+<ResponseField name="data" type="object[]">Published voice-agent records. Each entry uses the fields in [Get agent](/api-reference/endpoint/get-agent).</ResponseField>
+
+Use each record’s `id` for subsequent requests. This endpoint has no documented pagination parameters. Voice IDs come from [List voices](/api-reference/endpoint/list-voices), not from this list’s agent IDs.

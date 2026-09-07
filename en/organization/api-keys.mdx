@@ -1,0 +1,70 @@
+---
+title: "API keys"
+description: "Generate and manage your organization key. Check plan access, permissions and integration setup."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="API keys" permission="organization.create to generate" plan="Plan with API access" />
+
+The API key identifies your organization to ContactShip's public API. The app supports one key per organization. Your plan must include API access; administrative permissions do not replace that requirement.
+
+## Generate and use
+
+1. Select the organization your integration will work with.
+2. Open **API keys** and generate a key.
+3. Copy it into the private configuration of your server or automation tool.
+4. Send it in the `x-api-key` request header.
+
+```bash
+curl 'https://api.contactship.ai/v1/credits'   -H 'x-api-key: YOUR_API_KEY'
+```
+
+Replace `YOUR_API_KEY` in your private environment. Do not place keys in public webpages, URLs, screenshots or support tickets.
+
+## Permissions and availability
+
+| Requirement | Application |
+|---|---|
+| Plan with API access | Required to generate a key |
+| `organization.create` | Generate |
+| `organization.delete` | Delete from the key menu |
+| Active organization | Determines the organization that owns the key |
+
+The screen does not offer individual keys with custom permissions or scopes. Do not assume a key has the same restricted scope as a human member.
+
+## Delete or replace
+
+<Warning>
+Deleting a key interrupts integrations that use it. Identify dependent systems before replacing it and update their credentials.
+</Warning>
+
+Coordinate deletion, generation and dependent system updates. A coexistence period for old and new keys is not documented.
+
+## Common problems
+
+| Situation | What to check |
+|---|---|
+| A key already exists | Review the existing card; the app does not generate a second simultaneous key. |
+| A plan restriction appears | Check API access under **Plans**. |
+| Generate button is missing | Check `organization.create`. |
+| Integration authentication fails | Check the header, current key and organization. Do not share the secret with support. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can one key access several organizations?">
+    Each key belongs to one organization. Configure separate credentials for different organizations.
+  </Accordion>
+  <Accordion title="Are read-only keys available?">
+    The current configurator does not provide per-key scopes. Do not treat a key as a read-only credential.
+  </Accordion>
+  <Accordion title="What should I send support for a failed request?">
+    Send the method, path, time and response status. Redact the key and other secrets.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [API Reference](/api-reference/introduction)
+- [Roles and permissions](/en/organization/roles-and-permissions)
+- [Plans and limits](/en/billing/plans)

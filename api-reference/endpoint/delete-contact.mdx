@@ -4,13 +4,12 @@ api: 'DELETE /v1/contacts/{contactId}'
 description: 'Delete a contact from the organization'
 ---
 
-This endpoint allows you to permanently delete a contact from your organization's database. This action cannot be undone, so use it with caution.
+This endpoint allows you to delete a contact from your organization. Review the contact ID before making the request.
 
 ## Use Cases
 
 - Remove obsolete or duplicate contact records
 - Comply with data retention policies
-- Honor user requests to delete their personal information
 - Clean up your contact database
 
 ## Path Parameters
@@ -27,13 +26,8 @@ This endpoint allows you to permanently delete a contact from your organization'
 
 ## Response
 
-<ResponseField name="status code" type="number">
-  204 on success (No Content)
-</ResponseField>
-
-<Info>
-  This endpoint returns a 204 No Content response on successful deletion, with no response body.
-</Info>
+<ResponseField name="statusCode" type="number">200 on success.</ResponseField>
+<ResponseField name="data" type="boolean">`true` when deletion is accepted.</ResponseField>
 
 ## Error Codes
 
@@ -62,7 +56,7 @@ const deleteContact = async (contactId) => {
       }
     });
     
-    if (response.status === 204) {
+    if (response.status === 200) {
       console.log('Contact deleted successfully');
       return true;
     } else if (response.status === 404) {
@@ -114,7 +108,7 @@ def delete_contact(contact_id):
     )
     
     # Check if the request was successful
-    if response.status_code == 204:
+    if response.status_code == 200:
         print(f"Contact {contact_id} deleted successfully")
         return True
     elif response.status_code == 404:
@@ -140,13 +134,13 @@ if delete_successful:
 
 <ResponseExample>
 ```json Example Response
-// 204 No Content - No response body
+{ "statusCode": 200, "data": true }
 ```
 </ResponseExample>
 
 ## Notes and Best Practices
 
-- Always confirm with the user before permanently deleting a contact
+- Confirm the contact ID before deleting a contact
 - Consider implementing a "soft delete" in your application by flagging contacts as inactive instead of permanently deleting them
 - Keep audit logs of deleted contacts for compliance purposes
 - Ensure you have proper error handling for failed deletion attempts

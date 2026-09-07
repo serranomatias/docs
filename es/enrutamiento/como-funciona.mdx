@@ -1,0 +1,153 @@
+---
+title: 'Cómo funciona el enrutamiento'
+description: 'Qué resuelve el enrutamiento de leads: un tablero, etapas con plazo, grupos de asesores, estrategias de reparto, cadena de escalamiento, desenlaces, quién ve el reloj y qué permisos hacen falta.'
+sidebarTitle: 'Cómo funciona'
+tag: 'Add-on'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" addon="Enrutamiento de leads" permission="lead_routing.read" route="Ajustes → Organización → Enrutamiento de contactos" />
+
+El enrutamiento de leads es un add-on. Se activa por organización a pedido, escribiendo a soporte. Resuelve un problema concreto: cada contacto que llega a una columna del tablero tiene que ser atendido por la persona correcta dentro de un plazo. Si esa persona no lo gestiona a tiempo, el contacto pasa a otra, y si nadie lo atiende, alguien se entera.
+
+{/* captura: images/enrutamiento/recorrido-es.png | Ajustes → Organización → Enrutamiento de contactos con la barra "El motor trabaja sobre" y la lista Recorrido con una línea de resumen por etapa | app: /settings/organization/lead-routing */}
+
+## El modelo en seis piezas
+
+| Pieza | Qué es | Dónde se configura |
+|---|---|---|
+| Tablero | El único tablero de contactos sobre el que trabaja el motor. Sus etapas son los estados por los que pasa un lead. | Barra **El motor trabaja sobre** en **Ajustes → Organización → Enrutamiento de contactos** |
+| Etapa (columna) | Cada columna del tablero puede medir tiempo, ser la puerta de entrada de los leads nuevos, o ser un desenlace. | Pestaña **Recorrido**, un diálogo por etapa |
+| Tarjeta con reloj | Cuando una tarjeta entra a una columna que mide, se le asigna una persona y arranca un plazo en minutos. | **¿Cuánto tiempo puede quedarse acá?** dentro de la etapa |
+| Grupo (filial) | Un equipo de la organización que atiende la columna. Una columna puede tener varios grupos, en orden. En el reporte se llaman filiales. | **¿Quién lo atiende?** dentro de la etapa |
+| Estrategia | Cómo se elige a la persona dentro del grupo: **Al que menos tenga**, **Por turno** o **Por porcentaje**. | **A quién le toca** dentro del grupo |
+| Cadena y desenlace | Qué pasa al vencer el plazo: reintentos dentro del grupo, salto al grupo siguiente, y qué hacer cuando no queda ninguno. Las columnas marcadas como ganada o perdida cierran el recorrido. | **¿Y si no lo hace?** y **Esta columna es un desenlace** |
+
+Cada pieza se detalla en [Configurar etapas y grupos](/es/enrutamiento/etapas-y-grupos).
+
+## El recorrido de un lead, con un ejemplo
+
+Supongamos un tablero con las etapas **Nuevo**, **Contactado**, **Ganado** y **Perdido**.
+
+<Steps>
+  <Step title="Entra">
+    **Nuevo** tiene activado **¿Los leads nuevos entran acá?**. Cada conversación nueva de la organización crea su tarjeta en esa columna. Se puede limitar a ciertos canales y a una condición sobre el canal, la línea o los datos del contacto.
+  </Step>
+  <Step title="La IA lo entrega">
+    El agente de texto califica al contacto. Cuando usa la herramienta **Entregar el lead a un asesor**, la tarjeta pasa a la columna elegida en **Cuando la IA lo entrega, mover a**. En el ejemplo, a **Contactado**.
+  </Step>
+  <Step title="Se asigna">
+    **Contactado** tiene activado **Plazo y reasignación automática**. El motor toma el primer grupo, elige una persona según la estrategia y respeta su tope de tarjetas activas. El reloj arranca con el plazo de la columna, por ejemplo 180 minutos.
+  </Step>
+  <Step title="Se gestiona">
+    El asesor ve el reloj en la solapa **Gestión** de la conversación, junto con lo que le falta. La columna exige condiciones, por ejemplo un mensaje enviado, una llamada registrada y una etiqueta. Al 50 % y al 80 % del tiempo consumido recibe un aviso con lo que todavía falta.
+  </Step>
+  <Step title="Cumple o vence">
+    Si cumple todo, el reloj se detiene y la tarjeta se queda o se mueve a la columna elegida en **Cuando cumpla todo, mover a**. Si vence, la tarjeta se reasigna dentro del grupo tantas veces como diga **Intentos acá**, después pasa al grupo siguiente, y cuando no queda ninguno se hace lo que diga **Cuando se agotan todos los grupos, mover a**.
+  </Step>
+  <Step title="Desenlace">
+    **Ganado** está marcado como **Sí — ganada** y **Perdido** como **Sí — perdida**. Mover la tarjeta a una de esas columnas cierra el recorrido y alimenta la conversión del reporte.
+  </Step>
+</Steps>
+
+## Quién ve qué
+
+### El asesor, en la conversación
+
+En el panel del contacto de una conversación aparece la solapa **Gestión**, junto a Actividad, Información e Historial de llamadas. En **Información** hay una fila **Tiempo para gestionarlo** con el reloj y la cantidad de pendientes. Un clic lleva a **Gestión**, donde el asesor ve:
+
+- El reloj con el tiempo restante y el porcentaje que queda.
+- La etapa actual. Si el lead es suyo, puede moverlo con **Mover a otra etapa**.
+- El enlace **Ver en el tablero**.
+- La lista **Todavía te falta**, con cada condición pendiente escrita en una oración.
+- El bloque **Tipificación**, con las etiquetas de contacto de la organización.
+- El botón **Registrar una llamada**, con el resultado **Contestó**, **No contesta**, **Buzón**, **Ocupado** o **Número errado**.
+
+Cuando cumple todo, el bloque muestra **Gestión completa** y **El lead quedó en** seguido de la etapa.
+
+{/* captura: images/enrutamiento/conversacion-gestion-es.png | Solapa Gestión de una conversación con el reloj, la lista Todavía te falta, Tipificación y el botón Registrar una llamada | app: /inbox */}
+
+### El supervisor, en el tablero
+
+En **Contactos → Tablero**, cada tarjeta con plazo muestra el reloj y un ícono para abrir la conversación. Un clic en el reloj abre el diálogo **Lead en gestión**, con el reloj, la tipificación y el enlace **Abrir la conversación**. El menú de la columna tiene la opción **Configurar el enrutamiento**, que lleva a Ajustes.
+
+### La dirección, en el reporte
+
+**Reportes → Enrutamiento** muestra cumplimiento, primer contacto, escalados, vencidas, sin gestión y conversión, con la cola crítica y el detalle por filial y por asesor. Está descrito en [Reporte de enrutamiento](/es/enrutamiento/reporte).
+
+## Cómo se lee el reloj
+
+| Estado | Qué muestra | Cuándo |
+|---|---|---|
+| Corriendo | `h:mm:ss` o `m:ss` y una barra con el porcentaje restante | Hay plazo y el reloj corre |
+| Ámbar | El mismo contador en ámbar | Queda el 30 % del plazo o menos |
+| Rojo | El mismo contador en rojo | Queda el 15 % del plazo o menos |
+| Vencido | **Vencido hace 2h 10m** | El plazo pasó y la tarjeta todavía no rotó |
+| Pausado por horario | **Pausado · lun 09:00** en el tablero. **En pausa fuera del horario del equipo. Se reanuda el lunes a las 09:00** en la conversación | La columna mide en horario laboral y el equipo está fuera de su jornada |
+| En pausa | **En pausa** | El motor pausó el reloj, por ejemplo por la opción **Dejarla con su asesor hasta que el cliente responda** |
+
+En horario laboral el tiempo restante es tiempo hábil, no tiempo de pared. Un plazo de 3 horas que arranca un viernes a las 18:00 se ve con 3 horas el lunes a las 9:00.
+
+## Activación y permisos
+
+| Qué | Quién lo da | Qué habilita |
+|---|---|---|
+| Add-on **Enrutamiento de leads** | Soporte, por organización | Sin él no aparecen la pantalla de ajustes, los relojes, la solapa **Gestión** ni el reporte |
+| `lead_routing.read` | **Ajustes → Organización → Roles y Permisos** | Ver los relojes en el tablero y en la conversación. Su alcance decide de quién: **Toda la organización**, **Mis equipos y los que dependen de ellos**, **Mis equipos** o **Sólo los suyos** |
+| `lead_routing_config.update` | Roles y Permisos | Editar la configuración. Sin él la pantalla se ve en modo lectura y no hay botón **Guardar configuración** |
+| `contact_board.read` y `contact_board.update` | Roles y Permisos | Abrir la pantalla de ajustes y ver la entrada **Enrutamiento de contactos** en el menú de Ajustes |
+| `contacts.read` | Roles y Permisos | Ver la solapa **Gestión** en la conversación |
+| `reports.read` | Roles y Permisos | Ver **Reportes → Enrutamiento** |
+
+<Note>
+El propietario de la organización configura siempre. Los roles personalizados no traen `lead_routing.read` ni `lead_routing_config.update` de fábrica: hay que agregarlos.
+</Note>
+
+## La pantalla de ajustes
+
+**Ajustes → Organización → Enrutamiento de contactos** tiene dos partes.
+
+1. **El motor trabaja sobre**: el tablero elegido. La primera vez la pantalla muestra solo **1 · El motor trabaja sobre este tablero** con el selector **Elegí un tablero**. Solo se listan tableros de contactos. Al elegir uno aparece **Listo, el motor quedó atado a ese tablero.**
+2. Pestaña **Recorrido**: las etapas del tablero en orden, con una línea de resumen por etapa. Por ejemplo, **Puerta de entrada**, **180 min · Ventas · 3 requisitos · horario laboral** o **Sin reglas: los contactos se quedan acá hasta que alguien los mueva**. Un clic abre el diálogo de la etapa.
+
+Dos avisos aparecen cuando falta algo esencial: **Ninguna etapa es todavía la puerta de entrada: los contactos nuevos no van a entrar solos al recorrido.** y **Ninguna etapa mide tiempo todavía: elegí una y definí su plazo.**
+
+La jornada laboral y los feriados no se cargan en esta pantalla. Viven en cada equipo, en **Ajustes → Organización → Equipos**, pestañas **Jornada laboral** y **Feriados**. El huso horario del equipo se elige en su diálogo **Editar**.
+
+## Qué no existe todavía
+
+- Un solo tablero por organización. El motor no toca ningún otro tablero.
+- Las estrategias **Por turno, con pesos** y **Por orden de prioridad** no están en el selector. Solo hay tres estrategias.
+- El asesor puede mover el lead de etapa desde **Gestión**, pero no reasignarlo a otra persona desde ahí.
+- La pantalla de ajustes no tiene configuración de webhooks ni de avisos por correo para los eventos del enrutamiento. Consultá a soporte si necesitás recibir esos eventos en otro sistema.
+- No hay una vista de cola crítica en el tablero. Solo aparece en el reporte.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué no veo relojes en el tablero?">
+    Hay tres causas. La organización no tiene el add-on activo. Tu rol no tiene `lead_routing.read`. O la columna no tiene activado **Plazo y reasignación automática**. Revisá primero **Ajustes → Organización → Enrutamiento de contactos**: si muestra el aviso de add-on no habilitado, escribí a soporte.
+  </Accordion>
+  <Accordion title="¿Por qué el reloj de un lead está en pausa de noche?">
+    La columna mide **Sólo en horario laboral** y el equipo está fuera de su jornada. El reloj muestra **Pausado** y la hora a la que vuelve a correr. Si querés que corra siempre, cambiá la columna a **El reloj corre siempre (24/7)**.
+  </Accordion>
+  <Accordion title="¿Qué pasa si nadie puede tomar el lead?">
+    El motor reintenta cada 5 minutos y pasa al grupo siguiente a los 30 minutos, con los valores por defecto de **Si no hay nadie disponible**. Avisa a los supervisores de la columna. Cuando no quedan grupos, hace lo que diga **Cuando se agotan todos los grupos, mover a**. Si eligió **Dejarla acá, sin dueño**, el lead aparece en la **Cola crítica** del reporte.
+  </Accordion>
+  <Accordion title="¿Puedo usar el enrutamiento en dos tableros?">
+    No. La barra **El motor trabaja sobre** admite un único tablero de contactos por organización. Cambiar de tablero cambia el recorrido completo.
+  </Accordion>
+  <Accordion title="¿Un mensaje del cliente cuenta como gestión?">
+    Depende de las condiciones de la columna. La condición por defecto cuenta **Mensajes enviados al contacto** por **quien tiene la tarjeta**. Un mensaje recibido del cliente es otro hecho, **Mensajes recibidos del contacto**, y las notas internas son un tercero. Ver [Condiciones, avisos y webhooks](/es/enrutamiento/condiciones-y-avisos).
+  </Accordion>
+  <Accordion title="¿Se configura desde el menú de la columna del tablero?">
+    No. El menú de la columna tiene **Configurar el enrutamiento**, que abre la pantalla de Ajustes con el recorrido completo. La configuración se hace siempre viendo todas las etapas.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Configurar etapas y grupos](/es/enrutamiento/etapas-y-grupos)
+- [Condiciones, avisos y webhooks](/es/enrutamiento/condiciones-y-avisos)
+- [Reporte de enrutamiento](/es/enrutamiento/reporte)
+- [Tableros y etapas](/es/contactos/tableros)

@@ -1,0 +1,10 @@
+.DS_Store
+node_modules/
+.mintlify/
+__pycache__/
+*.pyc
+
+# Keep internal source notes local; publish only documentation QA and redirects audit.
+.internal/*
+!.internal/qa/
+!.internal/retired-pages.md

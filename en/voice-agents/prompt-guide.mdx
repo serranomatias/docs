@@ -1,0 +1,107 @@
+---
+title: "Voice prompt guide"
+description: "Structure spoken instructions, define tool behavior, handle missing data, and test representative calls."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Agents → Voice" permission="agents.read; agents.update to edit" />
+
+Write instructions around a clear business outcome. The platform also supplies agent identity, enabled context, language configuration, and agent guidelines, so keep those settings consistent with your prompt. Prior calls are available only when their context is configured.
+
+## A useful structure
+
+| Section | Include |
+|---|---|
+| Role | Who the agent represents and its job. |
+| Context | Incoming or outgoing call, available variables, missing-value behavior. |
+| Objective | What counts as successful completion. |
+| Conversation flow | One question at a time and when to wait. |
+| Tools | Exact name, prerequisites, invocation timing, success and failure behavior. |
+| Spoken formats | Examples for numbers, dates, currencies, email addresses, and abbreviations. |
+| Boundaries | Unsupported requests, unavailable facts, and escalation. |
+| Closing | Confirm the result once and end naturally. |
+
+Keep frequently changing facts in `[[Section name]]` blocks. Type `@` to insert an attached tool’s exact name. Keep long reference documents in a knowledge base and state when to search it. Instructions support up to 28,000 characters.
+
+## Example: showroom appointments
+
+The following fictional example assumes you have created the two named tools. Replace the business facts and insert your actual tool names.
+
+```markdown
+# Role
+You are Ana, the appointment assistant for North Showroom.
+Use short, natural sentences and ask one question at a time.
+
+# Context
+If {{contact_name}} is empty, greet without a name.
+Ask for missing details when needed. Never read variable or tool names aloud.
+
+# Objective
+Confirm an appointment backed by a successful booking result,
+or explain the next available step when booking is not possible.
+
+# Flow
+1. Ask which service the customer needs and wait.
+2. Ask for the preferred day and wait.
+3. Use check_availability with the service and day.
+4. Offer at most two returned times in one spoken sentence.
+5. Confirm service, date, time, and required contact details.
+6. After confirmation, use create_booking once.
+7. Confirm only the outcome returned by the tool.
+
+# Tools
+- check_availability: never offer a time not returned by this tool.
+- create_booking: if it succeeds, do not repeat it when the customer
+  repeats their confirmation. If it fails, do not claim a booking exists.
+
+[[Business information]]
+We offer product demonstrations by appointment.
+[[/Business information]]
+
+# Spoken formats
+Read 15:30 as "three thirty in the afternoon".
+Read phone digits with pauses. Say the currency with every price.
+
+# Boundaries
+Do not invent availability, prices, or completed bookings.
+If information is unavailable, explain that and offer a follow-up.
+
+# Closing
+Repeat the confirmed appointment once, ask whether anything else is needed,
+and end with a short farewell.
+```
+
+A prompt instruction alone is not a duplicate-prevention mechanism for your endpoint. Important external operations should also handle repeated requests correctly.
+
+## Test in stages
+
+1. Publish and run web tests with populated and missing variables. Inspect tool arguments and results in the transcript.
+2. Call your own phone to check recognition, pauses, interruptions, dates, and numbers under realistic audio conditions.
+3. Start with a small set of real calls, review analysis and tags, and expand after the outcomes are acceptable.
+
+Include wrong numbers, refusals, unavailable appointments, tool failures, silence, and requests outside scope. Change one source of confusion at a time. Version notes make it easier to identify which change affected behavior.
+
+For substantially different jobs, consider a short triage agent that hands off to specialists. Test that design against your scenarios rather than assuming more agents always improve results.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Should I write in English or Spanish?">
+    Either can be used. Configure spoken languages in General and test the instructions in the intended language.
+  </Accordion>
+  <Accordion title="Can a prompt guarantee no invented answers?">
+    No. Give explicit sources and fallback behavior, inspect tool outcomes, and evaluate representative calls.
+  </Accordion>
+  <Accordion title="Why is the old flow still running?">
+    Tests use the published version. Save and publish the new prompt.
+  </Accordion>
+  <Accordion title="Can sections be shared across agents?">
+    Editable sections belong to each prompt; there is no shared section library in the editor.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Instructions](/en/voice-agents/instructions)
+- [Tools](/en/voice-agents/tools)
+- [Versions and testing](/en/voice-agents/versions-and-testing)

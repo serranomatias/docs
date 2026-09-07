@@ -1,0 +1,203 @@
+---
+title: 'Configurar un canal'
+description: 'Las seis pestañas de un canal de WhatsApp: reglas de asignación automática (IA, persona o equipo por horario), horario de atención y saludo automático, alertas de inactividad, datos de conexión, llamadas de WhatsApp y webhook.'
+sidebarTitle: 'Configurar un canal'
+tag: 'Nuevo'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="channels.update" route="Ajustes → Inbox → Canales → Configuración del canal" status="nuevo" />
+
+La configuración de un canal define quién atiende cada conversación nueva, en qué horario responde la IA, cuándo avisar por inactividad y a qué sistema notificar. Se abre desde **Ajustes → Inbox → Canales → Configuración del canal**. Ver la pantalla requiere `channels.read`; guardar cambios requiere `channels.update`.
+
+El encabezado muestra el nombre del canal (editable con un clic), el tipo, el estado **Active** o **Inactive** y el número. Las pestañas van en este orden: **Asignación**, **Respuestas**, **Alertas**, **Conexión**, **Llamadas** (solo canales de WhatsApp Business API) y **Avanzado**. Un punto en la pestaña indica que esa función está encendida. El botón **Guardar cambios** guarda todas las pestañas a la vez, salvo **Conexión** (solo lectura) y **Llamadas** (se aplica al instante).
+
+{/* captura: images/mensajes/canal-asignacion-es.png | Pestaña Asignación con una regla en horario hacia IA, una regla de equipo y el respaldo Por defecto | app: /settings/inbox/channels/[id] */}
+
+## Asignación
+
+El bloque **Asignación automática** ("Decidí quién atiende cada conversación nueva. Las reglas se evalúan en orden.") tiene un interruptor general y una lista de reglas numeradas. La regla de la lista dice "Gana la primera regla que coincide. La última es el respaldo cuando ninguna aplica."
+
+### Cómo se evalúan las reglas
+
+1. Llega una conversación nueva al canal.
+2. Las reglas se leen de arriba hacia abajo. La primera cuyo horario coincide con la hora actual, en su zona horaria, gana.
+3. Si ninguna coincide, se aplica la última regla, marcada **Por defecto**. Esa regla es siempre **Siempre** y no se puede borrar ni mover.
+
+Cada regla se lee como una oración: "Cuando sea **L–V · 09:00–18:00 · Buenos Aires** asignar a **IA · Agente Ventas**". El botón **Agregar regla** inserta una regla antes del respaldo con horario lunes a viernes de 09:00 a 18:00 en la zona horaria de tu navegador. Las flechas reordenan y el tachito elimina.
+
+### Campos de una regla
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| Cuándo | Define cuándo aplica la regla. | **Siempre** · **En un horario** (días de la semana, hora desde y hasta, **Zona horaria**). Si la hora "hasta" es menor que la "desde", la app marca **Cruza medianoche**. | **En un horario**, L–V 09:00–18:00 |
+| A quién | Quién recibe la conversación. | **IA** (un agente de texto) · **Una persona** · **Un equipo** | **IA** si la organización tiene agentes de texto; si no, **Una persona** |
+| Estrategia (solo **Un equipo**) | Cómo se reparte entre las personas. | **Por turnos** (`round_robin`): "Cada conversación va a la siguiente persona de la lista, en orden." · **Menos ocupado** (`least_load`): "Va a quien tenga menos conversaciones asignadas en la ventana elegida." · **Por peso** (`weighted`): "Reparte proporcionalmente según el peso de cada persona." | **Por turnos** |
+| días de ventana (solo **Menos ocupado**) | Cuántos días hacia atrás se cuentan las conversaciones asignadas. | 1 a 30 | 7 |
+| Personas | Quiénes entran en el reparto. | **Todo el equipo** (con **Excluir de la rotación** para sacar a alguien) · **Elegir personas** (lista con buscador) | **Todo el equipo** |
+| Peso (solo **Por peso** con **Elegir personas**) | Proporción de conversaciones que recibe cada persona. | 1 a 100 por persona | 1 |
+| Solo asignar a gente conectada | Ignora a quienes no tienen la app abierta. | Encendido · Apagado | Apagado |
+| Respaldo (obligatorio con **Un equipo**) | "Si el equipo queda vacío (todos excluidos o desconectados), la conversación va acá." | **IA** · **Una persona** | Sin valor; hay que elegirlo |
+
+<Note>**Un equipo** en una regla es una lista de personas de la organización. No está vinculado a los equipos de **Ajustes → Organización → Equipos**.</Note>
+
+### Ejemplo: horario con IA, fin de semana con equipo
+
+Un canal de ventas quiere que la IA atienda en horario laboral, que un grupo de vendedores se turne el fin de semana y que todo lo demás caiga en una supervisora.
+
+| Orden | Cuándo | A quién |
+|---|---|---|
+| 1 | **En un horario** · L–V · 09:00–18:00 · America/Argentina/Buenos_Aires | **IA** · Agente Ventas |
+| 2 | **En un horario** · S D · 10:00–14:00 · America/Argentina/Buenos_Aires | **Un equipo** · **Por turnos** · **Elegir personas** (Ana, Bruno, Carla) · **Solo asignar a gente conectada** · **Respaldo**: **Una persona** · Marta |
+| 3 (**Por defecto**) | **Siempre** | **Una persona** · Marta |
+
+Resultado:
+
+- Martes 10:30: coincide la regla 1. Responde el agente de texto.
+- Sábado 11:00: coincide la regla 2. La conversación va a Ana; la siguiente a Bruno; la siguiente a Carla. Si ninguno tiene la app abierta, va a Marta por el respaldo.
+- Martes 22:00: no coincide ninguna regla con horario. Se aplica la regla 3 y la conversación queda con Marta.
+
+Si además activás **Horario de atención** en **Respuestas** con el mismo horario, el martes a las 22:00 el contacto recibe el mensaje fuera de horario y la IA no responde. La conversación queda asignada a Marta para la mañana siguiente.
+
+### Errores al guardar
+
+Si una regla está incompleta, la app no guarda y vuelve a la pestaña **Asignación** con el mensaje "No se guardó: revisá la regla de asignación — {motivo}". Los motivos son: "elegí al menos una persona", "falta el respaldo", "completá el respaldo", "elegí un agente de IA", "elegí una persona", "completá el horario" y "elegí la zona horaria".
+
+## Respuestas
+
+La pestaña tiene dos bloques con interruptor propio: **Horario de atención** y **Saludo automático**.
+
+### Horario de atención
+
+"Definí cuándo este canal responde y qué pasa fuera de horario". Fuera del horario, la IA no responde. Las personas pueden seguir escribiendo desde la bandeja.
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| Este canal atiende en | Zona horaria del horario. | Cualquier zona horaria | America/Mexico_City |
+| Franjas | Días y horas en que el canal atiende. Se muestran en una tira semanal. | Días de la semana más hora desde y hasta. **Agregar franja** suma una franja de sábado 10:00–14:00. Si "hasta" es menor que "desde", la app marca **cruza medianoche**. | Una franja: L–V 09:00–18:00 |
+| Presets | Atajos que reemplazan las franjas. | **Oficina · L–V 9–18** · **Todos los días · 9–21** | — |
+| Cuando escriben fuera de horario | Mensaje que recibe el contacto. "Se envía este mensaje y la IA no responde hasta el próximo horario de atención." | Texto libre | Vacío |
+| Feriados y excepciones (en **Avanzado**) | "Fechas en las que el canal responde como fuera de horario aunque sea día laboral." | Fechas completas, con **Agregar fecha** y **Quitar** | Ninguna |
+| Webhook fuera de horario (en **Avanzado**) | "Notificá a un sistema externo cada vez que llega un mensaje fuera de horario." | Interruptor y URL. Se llama con método POST y un cuerpo con `thread_id`, `from`, `message` y `timestamp`. | Apagado |
+
+Si dejás el mensaje vacío, la app avisa: "Sin mensaje fuera de horario. Fuera del horario la IA no responderá, pero tampoco se enviará ningún mensaje automático al contacto."
+
+{/* captura: images/mensajes/canal-respuestas-es.png | Horario de atención con la tira semanal, dos franjas y el mensaje fuera de horario | app: /settings/inbox/channels/[id] */}
+
+### Saludo automático
+
+"Saludá automáticamente en los momentos correctos". El saludo se agrega a la respuesta de la IA o la reemplaza.
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| Cuándo se activa | Momento en que se envía el saludo. | **Primera respuesta** (`first_agent_response`): "La primera vez que el canal le responde a este contacto" · **Primera del día** (`daily_first`): "La primera respuesta de cada día para cada conversación" · **Tras inactividad** (`after_inactivity`): "Cuando la conversación estuvo quieta más de las horas elegidas" | **Primera respuesta** |
+| Horas de inactividad (solo **Tras inactividad**) | Horas sin mensajes que disparan el saludo. | 1 o más | 24 |
+| Cómo saluda | Qué pasa con la respuesta de la IA. | **Antes de la respuesta de la IA** (`prepend`): "El saludo se agrega al inicio de lo que responde la IA" · **Mensaje fijo (sin IA)** (`fixed`): "Se envía solo este mensaje y la IA no responde" | **Antes de la respuesta de la IA** |
+| Mensaje de saludo | El texto. Se ve en **Vista previa**. | Texto libre | Vacío |
+
+## Alertas
+
+El bloque **Alertas de inactividad** ("Avisá cuando una conversación queda sin respuesta de un agente") permite cargar varios umbrales. Cada alerta se compone de un número y una unidad (**Minutos**, **Horas**, **Días**) y se agrega con el botón de más o con Enter. Las alertas se ordenan de menor a mayor y se quitan con la cruz.
+
+| Campo | Qué hace | Valores | Por defecto |
+|---|---|---|---|
+| Tiempo | Cuánto puede quedar sin respuesta una conversación antes del aviso. | Número mayor a 0 | 30 |
+| Unidad | Unidad del tiempo. | **Minutos** · **Horas** · **Días** | **Minutos** |
+
+Errores posibles: "El tiempo tiene que ser mayor a 0" y "Esa alerta ya existe". Por qué medio llega el aviso no se configura en esta pantalla; consultá a soporte.
+
+## Conexión
+
+Tarjeta de solo lectura **Identidad del canal**, con el estado **Activo** o **Inactivo** y estas filas: **Número**, **ID del proveedor**, **Phone Number ID**, **WABA ID** e **ID del canal**. Al pasar el mouse aparece **Copiar**. Las filas sin valor se ocultan. El **ID del canal** es el que usás en la API pública y en las campañas de mensajes.
+
+## Llamadas
+
+Solo aparece en canales de WhatsApp Business API. La tarjeta **Llamadas de WhatsApp** ("Permití que tus clientes te llamen por WhatsApp a este número") consulta el estado del número en Meta y muestra:
+
+| Campo | Qué hace | Valores |
+|---|---|---|
+| Interruptor | Activa o desactiva las llamadas entrantes por WhatsApp. Se aplica al instante, sin **Guardar cambios**. | **Llamadas activadas** · **Llamadas desactivadas** |
+| Número elegible | Si Meta permite llamadas en este número. Si es **No**, el interruptor queda deshabilitado. | **Sí** · **No** |
+| Límite de mensajería | Nivel de mensajería del número según Meta. | 250, 1 K, 10 K, 100 K o ∞ |
+| SIP | Host SIP configurado, cuando existe. | Texto |
+
+Mensajes de la tarjeta: "Consultando estado…", "No se pudo consultar el estado de llamadas" con **Reintentar**, "Llamadas activadas", "Llamadas desactivadas" y "No se pudo cambiar el estado de llamadas". Con el add-on **Contact center**, las llamadas entrantes por WhatsApp se enrutan con reglas de tipo `whatsapp_inbound`. Guía: [Reglas de enrutamiento](/es/contact-center/reglas-de-enrutamiento).
+
+## Avanzado
+
+### Webhook
+
+El bloque **Webhook** ("Notificá a un sistema externo sobre eventos de las conversaciones") tiene un interruptor, el campo **URL del webhook** ("El webhook se llama cuando ocurren los eventos seleccionados") y la lista **Eventos**.
+
+| Evento | Cuándo se dispara | Por defecto |
+|---|---|---|
+| `INSERT` | "Se dispara cuando se crea una conversación nueva" | Marcado |
+| `UPDATE` | "Se dispara cuando se actualiza una conversación" | Marcado |
+| `DELETE` | "Se dispara cuando se elimina una conversación" | Marcado |
+
+Los eventos son de conversación, no de mensaje. Para reaccionar a cada mensaje nuevo, usá las [automatizaciones del inbox](/es/mensajes/automatizaciones).
+
+### Enviar mensaje de prueba
+
+Tarjeta con un código QR, el número, **Abrir WhatsApp** y **Copy Link**. Escaneá el QR o abrí el enlace, mandá un mensaje y verificá que aparece en **Mensajes**. Solo existe para canales de WhatsApp con número.
+
+{/* captura: images/mensajes/canal-avanzado-es.png | Pestaña Avanzado con el webhook y los tres eventos marcados, y la tarjeta Enviar mensaje de prueba | app: /settings/inbox/channels/[id] */}
+
+## Guardar
+
+**Guardar cambios** confirma con "Configuración del canal actualizada". Si falla, muestra "No se pudo guardar la configuración". Sin `channels.update`, la pantalla se ve pero todos los controles están deshabilitados y el botón no aparece.
+
+## Qué no existe todavía
+
+- El destino **Un equipo** no usa los equipos de **Ajustes → Organización → Equipos**. Se eligen personas una por una.
+- El webhook fuera de horario solo se envía con método POST.
+- Los feriados son días completos; no hay franjas de excepción por horas.
+- No hay prioridad por canal en la interfaz. El dato `priority_level` existe con valor `medium`, pero no se edita.
+- El método de respuesta **Manual** / **Automático** de la tarjeta del canal no se edita acá.
+- El horario de atención no bloquea el compositor de las personas; solo frena a la IA.
+- El cuerpo del webhook de conversaciones no se documenta en esta pantalla.
+
+## Problemas frecuentes
+
+| Mensaje en pantalla | Causa | Qué hacer |
+|---|---|---|
+| "No se guardó: revisá la regla de asignación — elegí un agente de IA" | Una regla apunta a **IA** sin agente seleccionado. | Abrí la regla y elegí un agente de texto, o cambiá el destino. |
+| "No se guardó: revisá la regla de asignación — falta el respaldo" | Una regla de **Un equipo** no tiene **Respaldo**. | Elegí **IA** o **Una persona** como respaldo. |
+| "No se guardó: revisá la regla de asignación — completá el horario" | Falta la hora desde o hasta. | Completá las dos horas o cambiá a **Siempre**. |
+| "El tiempo tiene que ser mayor a 0" | La alerta tiene tiempo cero. | Escribí un número mayor a 0. |
+| "Esa alerta ya existe" | Ya hay una alerta con el mismo tiempo. | Cambiá el valor o la unidad. |
+| "No se pudo consultar el estado de llamadas" | Meta no respondió o el canal no es de WhatsApp Business API. | Hacé clic en **Reintentar**. Si persiste, contactá a soporte. |
+| "Failed to update channel name" | No se pudo guardar el nuevo nombre. | Verificá que tenés `channels.update` y reintentá. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Qué pasa cuando un contacto escribe fuera del horario de atención?">
+    Con **Horario de atención** activo, el contacto recibe el mensaje de **Cuando escriben fuera de horario** y la IA no responde hasta la próxima franja. Si configuraste **Webhook fuera de horario**, tu sistema recibe un POST con el mensaje. La conversación igual se asigna según las reglas de **Asignación**, así que una persona puede responder desde la bandeja.
+  </Accordion>
+  <Accordion title="¿Puedo asignar a un equipo de Ajustes → Equipos?">
+    No. El destino **Un equipo** de una regla es una lista de personas que elegís en el momento, con **Todo el equipo** o **Elegir personas**. Los equipos de la organización se usan para los permisos de lectura (**My teams**) y no para el reparto automático.
+  </Accordion>
+  <Accordion title="¿Qué significa Solo asignar a gente conectada?">
+    Con esa opción, el reparto ignora a las personas que no tienen la app abierta en ese momento. En el selector de asignados de la bandeja, un punto verde marca a quienes están conectados. Si nadie del grupo está conectado, la conversación va al **Respaldo**.
+  </Accordion>
+  <Accordion title="¿Cómo sé qué regla se aplicó a una conversación?">
+    Abrí la conversación y mirá la pestaña **Activity** del panel de contacto. La asignación automática aparece como "System assigned this conversation to …". Una asignación manual muestra el nombre de quien la hizo.
+  </Accordion>
+  <Accordion title="¿La IA responde aunque la conversación esté asignada a una persona?">
+    No. Solo responde cuando la conversación está asignada a un agente de texto. Si una regla asigna a **Una persona** o **Un equipo**, la IA no interviene. Para volver a la IA, reasigná la conversación al agente desde el encabezado.
+  </Accordion>
+  <Accordion title="¿Puedo cambiar el nombre del canal?">
+    Sí. Hacé clic sobre el nombre en el encabezado de la configuración, escribí el nuevo y confirmá. La app responde "Channel name updated successfully". Requiere `channels.update`.
+  </Accordion>
+  <Accordion title="¿El webhook de la pestaña Avanzado me avisa cada mensaje?">
+    No. Sus eventos son de conversación: `INSERT` cuando se crea, `UPDATE` cuando cambia y `DELETE` cuando se elimina. Para actuar por cada mensaje, usá el disparador de mensaje nuevo de las [automatizaciones del inbox](/es/mensajes/automatizaciones).
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Conectar WhatsApp Business](/es/mensajes/conectar-whatsapp)
+- [Trabajar en la bandeja](/es/mensajes/bandeja)
+- [Automatizaciones del inbox](/es/mensajes/automatizaciones)
+- [Crear un agente de texto](/es/agentes-de-texto/crear)

@@ -1,0 +1,48 @@
+---
+title: "Reporte de enrutamiento"
+description: "Interpretá cumplimiento, conversión, vencimientos y la cola crítica."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Reportes → Enrutamiento" permission="reports.read" addon="Enrutamiento de leads" />
+
+El reporte muestra qué ocurrió con los contactos del recorrido: quién los recibió, cuánto tardó y cómo terminaron. Elegí el rango y la filial antes de comparar resultados.
+
+| Indicador | Lectura |
+|---|---|
+| Primer contacto | Mediana del tiempo de primer contacto; el detalle incluye promedio y p90. |
+| Cumplimiento de SLA | Asignaciones cumplidas sobre asignaciones resueltas. |
+| Escalados | Leads que requirieron pasar a otro nivel o responsable. |
+| Vencidas | Asignaciones que vencieron, con su proporción sobre resueltas. |
+| Sin gestión | Contactos cuya cadena terminó sin gestión. |
+| Conversión | Ganados sobre el total indicado por el reporte. |
+
+Un contacto puede pasar por varias asignaciones. No compares una cantidad de asignaciones con una cantidad de contactos como si fueran la misma unidad.
+
+## Usar el detalle
+
+- **Cola crítica** muestra contactos que agotaron la cadena y actualmente no tienen dueño. Revisalos para decidir la siguiente gestión.
+- **Filiales** y **Asesores** permiten comparar volumen, cumplimiento, vencimiento, primer mensaje y etiquetado. Las tasas por asesor se colorean a partir de cinco asignaciones; pocas observaciones producen porcentajes poco representativos.
+- **En qué terminaron** separa desenlaces por asesor, filial, canal, escalamiento o columna.
+- **Carga horaria** ayuda a revisar contactos activos y entradas por franja para dimensionar turnos.
+
+Usá **Descargar CSV** y conservá rango y filial seleccionados. Ante un cambio grande, revisá también cambios de configuración: otro plazo o requisito puede alterar cumplimiento sin que haya cambiado la velocidad del equipo.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿La cola crítica es histórica?">
+    Describe contactos sin dueño ahora que agotaron la cadena; distinguí esa situación de los totales del período.
+  </Accordion>
+  <Accordion title="¿Cumplido significa ganado?">
+    No. Cumplido satisface requisitos de la asignación; ganado es un desenlace del recorrido.
+  </Accordion>
+  <Accordion title="¿Por qué no veo datos?">
+    Revisá add-on, permisos, tablero configurado y rango con contactos enrutados.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Cómo funciona](/es/enrutamiento/como-funciona)
+- [Equipos](/es/organizacion/equipos)

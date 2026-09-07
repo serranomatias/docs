@@ -38,6 +38,8 @@ Returns the full details of a single call. The transcript (`chat_history`) is **
 
 ## Response
 
+The response is `{ "statusCode": number, "data": object }`. The fields below describe `data`.
+
 <ResponseField name="id" type="string">
   Unique identifier of the call (UUID).
 </ResponseField>
@@ -178,7 +180,7 @@ response = requests.get(
 )
 
 if response.status_code == 200:
-    call = response.json()
+    call = response.json()["data"]
     print(f"Duration: {call['duration']}s, Result: {call['call_result']}")
     if call.get("chat_history"):
         print(f"Transcript entries: {len(call['chat_history'])}")
@@ -192,45 +194,48 @@ else:
 <ResponseExample>
 ```json Example Response
 {
-  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "direction": "outbound",
-  "from": "+12025551234",
-  "call_record": "https://api.contactship.ai/recordings/a1b2c3d4.mp3",
-  "call_status": "completed",
-  "call_result": "answered",
-  "disconnection_reason": "agent_hangup",
-  "finished_at": "2026-03-15T14:35:22Z",
-  "start_at": "2026-03-15T14:30:05Z",
-  "duration": 317,
-  "call_analysis": {
-    "summary": "Customer expressed interest in the premium plan and requested a demo.",
-    "sentiment": "positive"
-  },
-  "type": "ai_call",
-  "created_at": "2026-03-15T14:30:00Z",
-  "agent_id": "f1e2d3c4-b5a6-7890-1234-567890abcdef",
-  "contact": {
-    "id": "c1d2e3f4-a5b6-7890-cdef-123456789012",
-    "full_name": "Jane Smith",
-    "phone_number": "+14155552678",
-    "email": "jane.smith@example.com",
-    "country": "US"
-  },
-  "chat_history": [
-    {
-      "role": "agent",
-      "content": "Hello, this is an AI assistant calling from ContactShip. Am I speaking with Jane?"
+  "statusCode": 200,
+  "data": {
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "direction": "outbound",
+    "from": "+12025551234",
+    "call_record": "https://api.contactship.ai/recordings/a1b2c3d4.mp3",
+    "call_status": "completed",
+    "call_result": "answered",
+    "disconnection_reason": "agent_hangup",
+    "finished_at": "2026-03-15T14:35:22Z",
+    "start_at": "2026-03-15T14:30:05Z",
+    "duration": 317,
+    "call_analysis": {
+      "summary": "Customer expressed interest in the premium plan and requested a demo.",
+      "sentiment": "positive"
     },
-    {
-      "role": "user",
-      "content": "Yes, this is Jane."
+    "type": "ai_call",
+    "created_at": "2026-03-15T14:30:00Z",
+    "agent_id": "f1e2d3c4-b5a6-7890-1234-567890abcdef",
+    "contact": {
+      "id": "c1d2e3f4-a5b6-7890-cdef-123456789012",
+      "full_name": "Jane Smith",
+      "phone_number": "+14155552678",
+      "email": "jane.smith@example.com",
+      "country": "US"
     },
-    {
-      "role": "agent",
-      "content": "Great! I'm reaching out about our premium plan. Do you have a moment to chat?"
-    }
-  ],
-  "transcript_format": "json"
+    "chat_history": [
+      {
+        "role": "agent",
+        "content": "Hello, this is an AI assistant calling from ContactShip. Am I speaking with Jane?"
+      },
+      {
+        "role": "user",
+        "content": "Yes, this is Jane."
+      },
+      {
+        "role": "agent",
+        "content": "Great! I'm reaching out about our premium plan. Do you have a moment to chat?"
+      }
+    ],
+    "transcript_format": "json"
+  }
 }
 ```
 </ResponseExample>

@@ -1,0 +1,83 @@
+---
+title: "Softphone and agent status"
+description: "Make and receive browser calls, transfer to teammates or queues, and record outcomes."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Softphone icon at the bottom of the sidebar" addon="Softphone" />
+
+The softphone is your team’s browser telephone. It is enabled per organization through the **Softphone** add-on. Queue distribution, skills, and routing rules also require the Contact center add-on.
+
+## Connect and choose your state
+
+Open the headset icon, select **Go Online**, and allow microphone access and call notifications. The app assigns an extension. Closing or minimizing the floating window does not disconnect you; use the power/disconnect action. Closing the browser tab disconnects it.
+
+| Agent state | Queue availability |
+|---|---|
+| Available | Receives queue offers when eligible. |
+| In call | System-controlled while a call is active. |
+| Wrap-up | Post-call work configured by the queue; no new offers. |
+| Away | Manual pause; no offers. |
+| Offline | Disconnected. |
+| Custom state | No queue offers. |
+
+The app can restore Away or a custom state after reconnecting. If you place a call while away, you return to that state afterward. During a call, the status selector is locked. During wrap-up, you can choose a state or finish early with **I’m available**.
+
+## Place and answer calls
+
+Check the **Call from** number, enter an international destination, and select **Call**. Recent calls prefill the dialer; the Team tab supports internal calls to available teammates. The contact panel’s **Call** button opens and prepares the softphone but does not dial until you confirm.
+
+Incoming calls show contact or number, channel, queue, and available context. Choose **Answer**. **Decline** requires `softphone.decline`. A declined or unanswered offer returns to queue handling according to its cooldown and ringing settings. Only one active call is supported.
+
+During a call, use **Mute**, **Hold**, **DTMF keypad**, **Transfer call**, or **Hang up**. Contact and notes buttons open side panels.
+
+## Transfer
+
+Choose an available teammate or queue.
+
+- **Direct transfer** hands off immediately and releases you. It supports people and queues.
+- **Consult first** holds the original caller while you speak privately to a teammate. Confirm after they answer, or return with **Back to call**. The consultation cancels if unanswered for 30 seconds. Queues do not support this mode.
+
+External-number transfer is not offered by this softphone. Voice-agent transfer tools are configured separately.
+
+## Contact context, notes, and outcome
+
+Known contacts show name, phone, email, assignee, latest call, tags, and populated properties. Editing name/email requires `contacts.update`. **Quick comment** saves to the contact record. Unknown numbers can be added as contacts; without a name, the number becomes the name.
+
+With Freshdesk connected, the summary shows up to two open/pending tickets and the Tickets tab shows the last three days of tickets with links to Freshdesk.
+
+Call notes remain editable during wrap-up and are submitted with the call when the interaction finishes. The result panel offers **Resolved**, **Still open**, or **Call back** plus optional context, saved as a contact comment. Skipping or allowing its 45-second timeout does not save an outcome. This panel is separate from the queue’s wrap-up timer.
+
+## Tabs and audio
+
+One tab per browser controls the softphone. **Use in this tab** transfers control only when the other tab is not ringing or in a call. Across browsers or computers, the newest registration receives calls.
+
+Choose Microphone and Speaker in audio settings. **Test my audio** calls an echo line while you are online and idle. If queue calls do not ring, check connection, Available status, queue eligibility, and which tab owns the softphone.
+
+Supervisors can listen through live monitoring. Whisper and barge-in are marked coming soon.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does closing the window disconnect me?">
+    No. Use the disconnect action or close the browser tab.
+  </Accordion>
+  <Accordion title="Why don’t queue calls ring?">
+    Check online state, Available status, queue membership/skills, and the active softphone tab.
+  </Accordion>
+  <Accordion title="Are wrap-up status and the outcome panel the same?">
+    No. Queue wrap-up controls new-call availability; the outcome panel records a contact comment.
+  </Accordion>
+  <Accordion title="Can I consult before transferring to a queue?">
+    No. Consult first supports people; queues use direct transfer.
+  </Accordion>
+  <Accordion title="How do I check my microphone?">
+    Use the audio settings and the echo test while online and idle.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Queues and skills](/en/contact-center/queues-and-skills)
+- [Live monitoring](/en/contact-center/live-monitoring)
+- [My numbers](/en/calls/my-numbers)

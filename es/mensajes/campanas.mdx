@@ -1,0 +1,48 @@
+---
+title: "Campañas de mensajes"
+description: "Prepará una campaña de WhatsApp con plantilla, destinatarios y seguimiento."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Campañas → Mensajes" permission="campaigns.read / campaigns.create" />
+
+Las campañas de mensajes envían una plantilla desde un canal de WhatsApp. Necesitás un canal conectado, una plantilla aprobada y destinatarios adecuados para el envío.
+
+## Preparar y publicar
+
+1. Creá una campaña de mensajes y completá nombre, descripción y canal.
+2. Elegí una fecha o la opción de inicio inmediato que presenta el formulario. Publicar inicia la preparación: no supongas que todos los envíos salen en ese instante.
+3. Agregá contactos desde un CSV o desde la selección de contactos. Revisá el mapeo de columnas y los teléfonos.
+4. Elegí la plantilla del canal y completá sus variables. Usá la previsualización para comprobar que ningún destinatario quede con datos vacíos o desordenados.
+5. Revisá la cantidad de destinatarios y publicá. Esa acción habilita envíos reales.
+
+## Estados y resultados
+
+La campaña pasa por estados como `DRAFT`, `UPLOADING_CONTACTS`, `PUBLISHED`, `ACTIVE`, `PAUSED` y `COMPLETED`. Esperá a que termine la carga de contactos antes de interpretar el total.
+
+En el detalle se muestran **enviados**, **entregados**, **leídos**, **respondieron** y **fallidos**. Cada etapa mide algo distinto: enviado no prueba entrega, y entrega no prueba lectura ni respuesta. Revisá el estado y el error de cada destinatario cuando investigues fallos.
+
+El análisis de respuestas ayuda a revisar resultados y preparar una campaña de seguimiento cuando la opción esté disponible. Revisá siempre sus destinatarios y plantilla antes de publicarla; no debe tratarse como una continuación automática sin control.
+
+## Si hay fallos
+
+Consultá el código y el mensaje devuelto por WhatsApp en el detalle. Comprobá el estado actual de la plantilla, el canal, los datos del destinatario y las variables. Evitá republicar toda la campaña para corregir un solo destinatario: podrías repetir envíos que ya se entregaron.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Puedo enviar texto libre como campaña?">
+    Este flujo usa plantillas del canal. Prepará y aprobá la plantilla antes de publicar.
+  </Accordion>
+  <Accordion title="¿Pausar borra lo enviado?">
+    No. Revisá los resultados ya registrados y el estado antes de reanudar.
+  </Accordion>
+  <Accordion title="¿Completada significa que todos leyeron?">
+    No. Revisá las métricas de entrega, lectura y respuesta por separado.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Plantillas](/es/mensajes/plantillas)
+- [Bandeja](/es/mensajes/bandeja)

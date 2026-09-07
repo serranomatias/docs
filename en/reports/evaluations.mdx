@@ -1,0 +1,46 @@
+---
+title: "Evaluation criteria"
+description: "Define call criteria and understand pass rates, coverage, and unknown results."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Organization → Evaluations; Reports" permission="reports.read" />
+
+Criteria evaluate specific aspects of a conversation, such as whether the agent confirmed the reason for an inquiry. Define an observable rule and connect it to the relevant agents.
+
+## Create and attach
+
+1. Open **Manage evaluations** from the report or organization evaluation settings.
+2. Create a criterion with a name, key, and evaluation prompt. Its key cannot be changed after creation.
+3. Choose **Binary** or **Percentage** and explain the rubric: acceptable evidence, passing behavior, and how to handle insufficient information. Add agent context when needed.
+4. Save and select the criterion in the voice agent’s **Advanced → Post-call** settings. An agent supports up to 15 criteria.
+5. Criterion assignments save immediately, without publishing. Test calls that should pass and fail. Connecting criteria requires `evaluation_criteria.update` and `agents.update`.
+
+## Read the report
+
+The report includes a criterion ranking, verdict timeline, and individual results. Open a criterion to filter success, failure, or unknown results; open the associated call to inspect evidence.
+
+Criterion **pass rate** = successes ÷ (successes + failures). Unknowns are excluded from the denominator. **Coverage** indicates how much material has definitive verdicts. A high pass rate with low coverage therefore does not describe every call.
+
+The global metric counts calls whose verdicts were all successful. Percentage criteria also show a distribution and average score. Human ratings and automatic verdicts are separate records.
+
+Archive criteria that should no longer be used, retaining the context needed to interpret historical results.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does unknown count as failure?">
+    It is excluded from the pass-rate denominator. Review coverage and the call.
+  </Accordion>
+  <Accordion title="Is creating a criterion enough?">
+    No. Attach it to the agent; that connection applies immediately to subsequent calls.
+  </Accordion>
+  <Accordion title="Does an evaluation prove an external operation happened?">
+    Check the verdict against the tool result and destination system.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Post-call](/en/voice-agents/post-call)
+- [Dashboard](/en/reports/dashboard)

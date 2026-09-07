@@ -1,0 +1,64 @@
+---
+title: "Soporte"
+description: "Contactá a soporte con los datos necesarios para resolver un problema de acceso, una llamada, un mensaje o una integración."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Soporte" />
+
+Escribí a [support@contactship.ai](mailto:support@contactship.ai) para pedir ayuda o consultar la activación de un módulo. Describí el resultado esperado y lo que ocurrió.
+
+## Qué incluir
+
+| Problema | Datos útiles |
+|---|---|
+| Acceso o permisos | Organización, sección afectada y acción que no podés realizar |
+| Llamada | ID de llamada, fecha, hora, zona horaria y estado |
+| Mensaje o campaña | Canal, conversación o campaña afectada y error visible |
+| Integración o API | Método, ruta, código de respuesta y momento del intento |
+| Facturación | Organización y referencia del pago o factura afectada |
+
+No envíes contraseñas, claves API, tokens ni datos completos de tarjetas. Usá identificadores y reemplazá los secretos por valores ocultos.
+
+## Antes de escribir
+
+1. Confirmá la organización activa.
+2. Revisá si tu rol permite la acción y si el módulo está habilitado.
+3. Anotá el error exacto y los pasos que lo reproducen.
+4. En envíos, llamadas o pagos, comprobá el estado antes de repetir: un error de pantalla no garantiza que la operación no se haya procesado.
+
+## Pedir acceso a un módulo
+
+Indicá qué necesitás resolver y la organización donde lo vas a usar. Contact center, enrutamiento, agenda, tareas e historial pueden requerir activación específica. Consultar su disponibilidad no los activa automáticamente.
+
+## Plantilla de consulta
+
+```text
+Organización:
+Sección o identificador afectado:
+Fecha, hora y zona horaria:
+Qué intenté hacer:
+Qué esperaba:
+Qué ocurrió y mensaje exacto:
+Pasos para reproducir:
+```
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Dónde reporto un error de la app?">
+    Escribí al correo de soporte con la organización y los pasos para reproducirlo. Si afecta una llamada o conversación, agregá su identificador.
+  </Accordion>
+  <Accordion title="¿Tengo que enviar mi clave API para que revisen una integración?">
+    No. Compartí método, ruta, hora y respuesta sin secretos. Los identificadores ayudan a localizar la solicitud.
+  </Accordion>
+  <Accordion title="¿Por qué mi organización no tiene una sección que aparece en las docs?">
+    Puede depender de activación, plan o permisos. Revisá [Roles y permisos](/es/organizacion/roles-y-permisos) y consultá la disponibilidad del módulo.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Roles y permisos](/es/organizacion/roles-y-permisos)
+- [Claves API](/es/organizacion/claves-api)
+- [Planes y límites](/es/facturacion/planes)

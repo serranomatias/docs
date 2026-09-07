@@ -20,7 +20,7 @@ Permanently deletes a tag. This also removes the tag from all contacts it was as
 
 ## Response
 
-Returns `true` on successful deletion.
+Returns `{ "statusCode": 200, "data": true }` on successful deletion.
 
 ## Error Codes
 
@@ -32,33 +32,36 @@ Returns `true` on successful deletion.
 
 <RequestExample>
 ```bash cURL
-curl -X DELETE "https://api.contactship.ai/v1/tags/tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890" \
+curl -X DELETE "https://api.contactship.ai/v1/tags/c1b2c3d4-e5f6-4890-abcd-ef1234567890" \
   -H "x-api-key: your-api-key"
 ```
 
 ```javascript JavaScript
-const tagId = 'tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+const tagId = 'c1b2c3d4-e5f6-4890-abcd-ef1234567890';
 const response = await fetch(`https://api.contactship.ai/v1/tags/${tagId}`, {
   method: 'DELETE',
   headers: { 'x-api-key': 'your-api-key' },
 });
-const success = await response.json(); // true
+const { data: success } = await response.json(); // true
 ```
 
 ```python Python
 import requests
 
-tag_id = 'tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+tag_id = 'c1b2c3d4-e5f6-4890-abcd-ef1234567890'
 response = requests.delete(
     f'https://api.contactship.ai/v1/tags/{tag_id}',
     headers={'x-api-key': 'your-api-key'},
 )
-print(response.json())  # True
+print(response.json()["data"])  # True
 ```
 </RequestExample>
 
 <ResponseExample>
 ```json Example Response
-true
+{
+  "statusCode": 200,
+  "data": true
+}
 ```
 </ResponseExample>

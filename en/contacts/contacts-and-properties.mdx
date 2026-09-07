@@ -1,0 +1,66 @@
+---
+title: "Contacts and properties"
+description: "Search, filter and edit contacts. Organize custom properties and review calls, conversations, notes and tasks from the contact record."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Contacts" permission="contacts.read" />
+
+A contact record brings together a person's information and activity with your organization. The table supports searching, filtering and editing without opening each record. Access depends on your role and scope.
+
+## Find a contact
+
+Use search and combine country, tag, stage, assignee and property filters. If a contact is missing, clear filters and check the active organization before creating another record.
+
+| Information | Purpose |
+|---|---|
+| Name, email and phone | Identify and contact the person |
+| Country and source | Understand the record's context |
+| Tags | Classify for searches and bulk actions |
+| Assignee | Identify the responsible person |
+| Custom properties | Store business-specific information |
+
+## Edit and extend a record
+
+With editing permission, modify cells in the table. Open the contact to review details and add properties. Choose a property type that matches the information to store.
+
+Available types include text, calendar, date, time zone, number, location, URL, currency, company, user, phone, email, boolean, select and multiselect.
+
+For example, use a number for budget and a selection for product interest. Filter operators depend on type: text contains, numeric comparisons, true/false or membership in a list.
+
+## Associated activity
+
+The record includes calls, conversations, comments, notes and available tasks. Calls have their own transcript and analysis detail.
+
+Agents can use properties as context or update them through configured tools. Creating a property does not instruct the AI to populate it.
+
+## Bulk actions
+
+Select contacts to add or remove tags, move to a stage or create a campaign. Operations can run as background jobs. Check the result before repeating an operation on the same list.
+
+## Not yet available
+
+The contact table does not offer CSV export. Call-log export is separate and does not export the CRM.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why do I see fewer contacts than someone else?">
+    Your role may restrict access to your own or team records. Check [Roles and permissions](/en/organization/roles-and-permissions) before assuming data is missing.
+  </Accordion>
+  <Accordion title="Does creating a property make the AI populate it?">
+    No. Configure the update tool and explain what to extract. See [Text agent tools](/en/text-agents/tools).
+  </Accordion>
+  <Accordion title="Can I import an existing list?">
+    Yes. Use the [Import contacts](/en/contacts/import) wizard and its template.
+  </Accordion>
+  <Accordion title="Does a conversation tag also classify the contact?">
+    They are separate tags. Use [Contact tags](/en/contacts/tags) to classify CRM records.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Import](/en/contacts/import)
+- [Boards and stages](/en/contacts/boards)
+- [Tags](/en/contacts/tags)

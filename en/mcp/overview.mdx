@@ -11,7 +11,7 @@ Instead of logging into the platform, finding the agent, editing the prompt, con
 
 > "Create a collections agent for Mexico that sounds professional. Extract whether the customer committed to pay and the amount."
 
-Done. 30 seconds.
+Review the proposed change and the tool result to confirm it was applied.
 
 That's **ContactShip MCP**: a bridge that connects your ContactShip account with AI assistants like Claude, Cursor, or Claude Code. You talk in plain language, and the AI handles all the technical stuff.
 
@@ -24,7 +24,7 @@ That's **ContactShip MCP**: a bridge that connects your ContactShip account with
     View, create, and edit your voice agents. Change prompts, voice, language, speed — all from the chat.
   </Card>
   <Card title="Launch calls" icon="phone">
-    Start an AI phone call instantly, or schedule one for later.
+    Request an AI phone call, or schedule one for later.
   </Card>
   <Card title="Search contacts" icon="address-book">
     Find contacts by name, email, or phone. View complete call history.
@@ -46,7 +46,7 @@ That's **ContactShip MCP**: a bridge that connects your ContactShip account with
     Works with Claude (web, desktop, and Code), Cursor, and any MCP-compatible app.
   </Step>
   <Step title="Connect your account">
-    Paste your ContactShip API key and you're done. Takes less than 2 minutes.
+    Paste your ContactShip API key and you're done. Follow the client’s connection steps.
   </Step>
   <Step title="Talk to your AI">
     Ask for what you need in plain language. The AI understands the context and takes action for you.
@@ -89,14 +89,22 @@ Ask your AI to:
 - **Get full call details** — transcript, extracted variables, duration, recording
 - **Find patterns** — which calls succeeded, which had objections, what customers said most
 
-Call transcripts use **TOON format** (Turn-Oriented Optimized Notation), a compact representation designed for efficient AI processing. This means your AI can read and reason over large numbers of call transcripts quickly and accurately.
+The assistant processes the results returned by its tools. Check filters and data coverage before treating a summary as complete.
 
 ---
 
+## Tools and publishing
+
+Use `summarize_calls` for aggregate results and `search_calls` to find mentions. `list_calls` returns compact rows; `get_call` reads one call in detail.
+
+Voice agents support staging with `update_agent_draft` and explicit publication with `publish_agent`. `update_agent` publishes directly and may reject the request when a draft is open. Say whether you want a draft for review or a change applied to new calls.
+
+The server also includes contact, board, task, and WhatsApp tools. Text-agent, conversation, and analytics tools depend on enabled services. Check the tools shown by your connected client to confirm availability.
+
 ## Requirements
 
-<Check>A ContactShip account with a Starter subscription ($30 USD/month) or above</Check>
-<Check>Your API key — generate it from [Settings > API Keys](https://app.contactship.ai/es/organization/api-keys)</Check>
+<Check>A ContactShip account with a plan that includes API access</Check>
+<Check>Your API key — generate it from [Settings > API Keys](https://app.contactship.ai/en/organization/api-keys)</Check>
 <Check>A compatible AI assistant (Claude, Cursor, or any MCP-enabled client)</Check>
 
 <Note>
@@ -123,5 +131,5 @@ Each API key belongs to a single organization. If you manage several, see [Multi
 </CardGroup>
 
 <Tip>
-Don't have your API key? Generate it at [app.contactship.ai/es/organization/api-keys](https://app.contactship.ai/es/organization/api-keys). Requires a Starter subscription or above.
+Don't have your API key? Generate it at [app.contactship.ai/en/organization/api-keys](https://app.contactship.ai/en/organization/api-keys). Requires a plan with API access.
 </Tip>

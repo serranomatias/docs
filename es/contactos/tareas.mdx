@@ -1,0 +1,60 @@
+---
+title: "Tareas"
+description: "Distinguí tareas generales y de IA, revisá estados y organizá pendientes en lista o tablero."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Tareas" addon="Tareas" />
+
+El módulo **Tareas** se habilita por organización. Reúne tareas generales y tareas de IA, con vistas de lista y tablero. Si no aparece en el menú, consultá su disponibilidad con soporte.
+
+## Elegir la vista
+
+| Vista | Uso |
+|---|---|
+| General | Configurar tareas generales por tipo |
+| Lista de IA | Consultar y actualizar tareas de IA |
+| Tablero | Organizar tareas por etapas de un tablero |
+
+En la vista general, la creación solicita nombre, descripción y tipo. La descripción necesita al menos cuatro caracteres. Los tipos del formulario son enviar WhatsApp, programar llamada, enviar correo y seguimiento.
+
+El nombre del tipo describe el trabajo. No implica que crear una tarea haya enviado un mensaje, realizado una llamada o configurado una integración de correo.
+
+## Estados de tareas de IA
+
+| Estado | Interpretación |
+|---|---|
+| `backlog` | Pendiente de priorizar |
+| `todo` | Por hacer |
+| `in_progress` | En curso |
+| `done` | Completada |
+| `blocked` | Bloqueada |
+| `canceled` | Cancelada |
+
+Usá el selector de estado en la lista para actualizar el seguimiento. La prioridad permite distinguir baja, media y alta cuando está disponible en la tarea.
+
+## Trabajar con tableros
+
+Elegí la vista **Tablero** y seleccioná un tablero de tareas. Creá etapas para organizar el trabajo. Estos tableros son distintos de los tableros de contactos.
+
+Al consultar una tarea, revisá su contexto y el contacto asociado antes de actuar. Cambiar un estado registra el avance; verificá por separado el resultado de la llamada o mensaje correspondiente.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué no veo Tareas?">
+    Es una función habilitada por organización. Consultá a [soporte](/es/comenzar/soporte) y revisá tu acceso antes de buscarla en otro menú.
+  </Accordion>
+  <Accordion title="¿Crear una tarea de WhatsApp envía el mensaje?">
+    No tomes la creación como confirmación de entrega. Revisá la conversación y el resultado del envío en [Mensajes](/es/mensajes/bandeja).
+  </Accordion>
+  <Accordion title="¿Completar una tarea cambia la etapa del contacto?">
+    Son registros distintos. El movimiento del contacto depende de la acción o automatización que hayas configurado.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Contactos y propiedades](/es/contactos/contactos-y-propiedades)
+- [Tableros de contactos](/es/contactos/tableros)
+- [Agenda](/es/contactos/agenda)

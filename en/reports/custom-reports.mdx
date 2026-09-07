@@ -1,0 +1,49 @@
+---
+title: "Custom reports"
+description: "Choose measures, call filters, and grouping for a custom report."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Reports → Customize → Add widget → Custom report" permission="reports.read" />
+
+The builder answers questions about **calls** and saves the result as a personal widget. It follows the dashboard date range.
+
+## Build a question
+
+1. Open **Customize → Add widget → Custom report** and enter a descriptive name.
+2. Under **Show**, choose a count, conditional percentage, distinct contacts, duration, cost, or numeric analysis field. You can add multiple measures.
+3. Under **Only calls that**, define the dataset using agent, campaign, outcome, direction, analysis fields, and other filters. Operators depend on field type.
+4. Under **Split by**, select up to two groups, such as agent and period. Without grouping, you get a total.
+5. Enable comparison to use the preceding period of equal length. Choose a compatible visualization or keep **Auto**.
+6. Review the preview and **How it is calculated**, then add the widget to your dashboard.
+
+## Example: percentage of transferred calls
+
+Choose **Percentage of calls that…** and add the transfer condition you want to assess inside that measure. Split by agent. If you also filter the entire report to one campaign, the denominator consists of that campaign’s calls, not all organization calls.
+
+Mean, median, and p90 answer different questions. Median splits durations into two halves; p90 is the value below which 90% of calls fall.
+
+## Inspect and export
+
+Use **View calls** or a cell’s action to inspect the records behind a result. You can export calls from that list. Comparison uses an equally long period immediately before the selected range; it differs from the dashboard KPI comparison between range halves.
+
+If a field is no longer available, open **Configure** and replace it. Empty results may reflect the date range or overly restrictive filters.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can I query contacts without calls?">
+    The builder’s source is calls. Distinct contacts counts contacts associated with those calls.
+  </Accordion>
+  <Accordion title="Which time zone does it use?">
+    The report time zone; inspect the range shown in the preview.
+  </Accordion>
+  <Accordion title="Will changes affect coworkers?">
+    It belongs to your personal dashboard for that organization.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Dashboard](/en/reports/dashboard)
+- [Call log](/en/calls/call-log)

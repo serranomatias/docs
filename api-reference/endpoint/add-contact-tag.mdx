@@ -24,7 +24,7 @@ Assigns an existing tag to a contact. Use [List Tags](/api-reference/endpoint/li
 
 ## Response
 
-Returns the created contact-tag association object.
+Returns `{ "statusCode": 201, "data": contact }`. The contact includes its updated `tags` array.
 
 ## Error Codes
 
@@ -51,7 +51,7 @@ const response = await fetch(
     headers: { 'x-api-key': 'your-api-key' },
   }
 );
-const result = await response.json();
+const { data: result } = await response.json();
 ```
 
 ```python Python
@@ -67,14 +67,3 @@ response = requests.post(
 print(response.json())
 ```
 </RequestExample>
-
-<ResponseExample>
-```json Example Response
-{
-  "id": "ct-x1y2z3a4-b5c6-7890-defg-hi1234567890",
-  "contact_id": "c1d2e3f4-a5b6-7890-cdef-123456789012",
-  "tag_id": "tag-a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "created_at": "2026-04-06T14:30:00Z"
-}
-```
-</ResponseExample>

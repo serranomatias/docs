@@ -1,0 +1,47 @@
+---
+title: "Freshdesk"
+description: "Connect Freshdesk using a subdomain and API key. Configure inbox automations for tickets, contacts and notes."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Integrations → Freshdesk" permission="integrations.read; integrations.create" />
+
+Freshdesk connects ticket management to ContactShip. Its actions synchronize contacts, create tickets and add notes with conversation context.
+
+## Connect
+
+1. Open **Integrations → Freshdesk**.
+2. Enter only the subdomain: for `yourcompany.freshdesk.com`, use `yourcompany`.
+3. Enter the Freshdesk API key and confirm the connection.
+4. If credentials are rejected, correct both the key and domain before continuing.
+
+## Configure the workflow
+
+In inbox automations, choose the event and conditions. Available actions include syncing a contact, creating a ticket and adding a conversation note.
+
+Connecting Freshdesk does not create a ticket for every conversation. Define when tickets are needed, which information to send and how to avoid duplicates when replaying rules.
+
+## View tickets in the softphone
+
+With the integration connected, a known contact's panel can show tickets when it has an email or phone. The summary shows up to two open or pending tickets; the **Tickets** tab checks the last three days and links to Freshdesk.
+
+If tickets are missing, check contact identity, filters and connection before creating another.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Should I enter the full Freshdesk URL?">
+    No. Enter the subdomain without `.freshdesk.com`.
+  </Accordion>
+  <Accordion title="Why is no ticket created when a conversation closes?">
+    Check the automation trigger, conditions and create-ticket action. Connecting the account does not configure them.
+  </Accordion>
+  <Accordion title="Can replaying an automation duplicate a ticket?">
+    It can repeat actions that already succeeded. Review the earlier execution before retrying.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Automations](/en/messages/automations)
+- [Softphone](/en/contact-center/softphone)

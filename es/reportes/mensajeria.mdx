@@ -1,0 +1,50 @@
+---
+title: "Reportes de mensajería"
+description: "Revisá volumen, respuesta humana, tiempos, etiquetas e intenciones."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Reportes → Mensajería → Ver detalle" permission="reports.read" />
+
+Los widgets de mensajería aparecen cuando la organización tiene el inbox habilitado. Agregalos desde **Personalizar → Agregar widget** y usá **Ver detalle** para abrir tablas y exportar a **XLSX**.
+
+| Widget | Qué revisar |
+|---|---|
+| Resumen de mensajería | Conversaciones, mensajes, atención IA/humana y distribución por canal. |
+| Rendimiento de agentes humanos | Atendidas, asignadas, cerradas, escaladas y sin responder. |
+| Tiempos de respuesta | Promedio, mediana, p90 y extremos de respuesta. |
+| Etiquetas de conversación | Clasificación por etiquetas del inbox y aplicaciones en el rango. |
+| Intenciones de conversación | Categorías fijas según el primer mensaje sustantivo. |
+
+## Interpretar correctamente
+
+- **Atendida** significa que el agente envió al menos un mensaje. Puede haber atendido conversaciones que no le asignaron.
+- **Tasa de respuesta** divide atendidas por asignadas y puede superar el 100 %. No es un porcentaje de clientes que respondieron una campaña.
+- **Sin respuesta** identifica conversaciones asignadas cuyo último mensaje es del cliente.
+- **Tiempo de respuesta** mide el intervalo del mensaje del cliente a la respuesta del agente. Excluye saltos de más de 24 horas. Los promedios se ponderan por cantidad de respuestas.
+- **Esperando respuesta ahora** es una cifra en vivo; no cambia con el rango histórico. El detalle de pendientes respeta el alcance de tu rol.
+
+Usá la misma zona horaria y rango al comparar reportes. La distribución horaria de mensajería usa la zona del reporte. En etiquetas, distinguí las etiquetas de conversaciones activas en el rango de las aplicaciones de etiquetas ocurridas dentro de ese rango.
+
+## Investigar un cambio
+
+Revisá primero canal y fechas, luego el detalle por agente. Si sube la espera, inspeccioná las conversaciones pendientes antes de atribuirlo a volumen o desempeño. Guardá los filtros junto con el archivo exportado.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Por qué la tasa supera el 100 %?">
+    El agente respondió conversaciones que no estaban asignadas a él; atendidas puede superar asignadas.
+  </Accordion>
+  <Accordion title="¿Por qué los pendientes no cambian con la fecha?">
+    Esperando respuesta ahora describe la situación actual.
+  </Accordion>
+  <Accordion title="¿Las intenciones son mis etiquetas?">
+    No. Son categorías fijas de clasificación; las etiquetas del inbox se gestionan aparte.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Bandeja](/es/mensajes/bandeja)
+- [Dashboard](/es/reportes/dashboard)
