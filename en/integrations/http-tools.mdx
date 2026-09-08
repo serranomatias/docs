@@ -1,0 +1,102 @@
+---
+title: "Connect an HTTP tool"
+sidebarTitle: "HTTP tools"
+description: "Connect an agent to your API: parameters, automatic context, request, response, and differences between tests and live execution."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Agents → Voice or Text → Tools" permission="agents.read; agents.update to edit" />
+
+An HTTP tool queries or updates your system **during the conversation**. The agent decides when to invoke it from its description and instructions. Your endpoint returns information the agent uses to continue.
+
+## Choose the agent type
+
+<Tabs>
+  <Tab title="Voice">
+    Add a **Custom** tool. Save and publish the agent. Your endpoint receives a POST with `call`, `tool_name`, and `args`.
+
+    [Configure voice tools](/en/voice-agents/tools) · [Inspect voice fields](/api-reference/tool-execution#voice-request)
+  </Tab>
+  <Tab title="Text">
+    Add **External API** and save the **Tools** tab. Your endpoint receives a POST with `thread`, `tool_name`, and `args`.
+
+    [Configure text tools](/en/text-agents/tools) · [Inspect text fields](/api-reference/tool-execution#text-request)
+  </Tab>
+</Tabs>
+
+## Walkthrough: look up an order
+
+<Steps>
+  <Step title="Define what your API needs">Create `lookup_order` with a required `order_number` parameter. Describe when to use it and how to request missing information.</Step>
+  <Step title="Separate parameters from context">The order number arrives in `args.order_number`. ContactShip adds `call` or `thread` separately. Customers do not need to provide internal IDs.</Step>
+  <Step title="Query your system">Your receiver reads arguments, validates input, and finds the order. Correlate diagnostic records using `call.call_id` or `thread.id`.</Step>
+  <Step title="Return a useful result">Respond with valid JSON and concrete data. If the order does not exist, return that outcome. Avoid empty responses that leave the agent guessing.</Step>
+  <Step title="Test the complete conversation">Check connectivity in the configurator. Then run a controlled conversation and inspect the actual request and response.</Step>
+</Steps>
+
+<CodeGroup>
+```json Extracted arguments
+{
+  "order_number": "ORD-1042"
+}
+```
+```json Your endpoint response
+{
+  "found": true,
+  "order_number": "ORD-1042",
+  "status": "in_transit",
+  "estimated_delivery": "2026-10-15"
+}
+```
+```json Order not found
+{
+  "found": false,
+  "order_number": "ORD-1042",
+  "reason": "No order matches this number"
+}
+```
+</CodeGroup>
+
+Response fields illustrate your own contract; they are not required ContactShip fields. Configure instructions to interpret both outcomes.
+
+## Where each value comes from
+
+| Value | Source | Request field |
+|---|---|---|
+| Tool name | Tool configuration | `tool_name` |
+| Order, date, or other requested input | Agent, using configured parameters | `args` |
+| Call ID, type, and state | ContactShip context | `call.call_id`, `call.call_type`, `call.call_status` |
+| Variables available during the call | Voice context | `call.contactship_llm_dynamic_variables` |
+| Conversation, contact, and channel | Text context | `thread.id`, `thread.contact_id`, `thread.channel_id` |
+| Your system's result | Your endpoint | HTTP response body |
+
+<Note>Context depends on the case. Web voice calls can have empty phone numbers. Text channel information can be missing. Inspect the [complete fields and examples](/api-reference/tool-execution).</Note>
+
+## What each test demonstrates
+
+| Test | What it sends | What it checks |
+|---|---|---|
+| Voice → Test endpoint | Editable body; initially sample parameters only | Endpoint connectivity and response |
+| Text → External API → Test | Fictional `thread`, `tool_name`, and sample `args` | Browser connectivity and response |
+| Text-agent chat sandbox | Simulated tool execution | Agent decision and proposed arguments |
+| Controlled conversation | Actual context and execution arguments | Complete workflow |
+
+<Warning>HTTP test buttons send real requests. Voice tests use configured headers, but live execution currently does not forward them to your endpoint. If your integration requires header authentication, coordinate with support and verify a real call.</Warning>
+
+## Tool, webhook, or automation
+
+<CardGroup cols={2}>
+  <Card title="I need data during the conversation" icon="wrench" href="/api-reference/tool-execution">Use a tool and return its result in the HTTP response.</Card>
+  <Card title="I need to act after completion" icon="bell" href="/en/integrations/webhooks">Choose the webhook matching the event and its contract.</Card>
+  <Card title="I need an inbox rule" icon="bolt" href="/en/messages/automations">Configure a trigger, conditions, and actions.</Card>
+  <Card title="I need a follow-up" icon="arrows-rotate" href="/en/integrations/automate-follow-ups">Choose an event and map the data that determines the action.</Card>
+</CardGroup>
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Should I define call or thread as parameters?">No. Configure only the arguments your tool needs to extract. ContactShip adds the corresponding context.</Accordion>
+  <Accordion title="Can I return the result later through another webhook?">The tool expects a response during this execution. For long jobs, return a truthful pending state and your own reference. Design delivery of the final result separately.</Accordion>
+  <Accordion title="Where can I inspect what my system received?">Use endpoint logs or workflow execution history. For text, also compare the configurator payload. Post-call webhook history represents a separate event.</Accordion>
+  <Accordion title="Can I deduplicate using only call_id or thread.id?">A conversation can legitimately invoke the same tool multiple times. For operations that create records or charge customers, use a business operation identifier and store its result.</Accordion>
+</AccordionGroup>

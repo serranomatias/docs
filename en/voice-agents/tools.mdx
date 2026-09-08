@@ -19,6 +19,12 @@ Tools let the agent act during a conversation. Add them in **Tools**, then descr
 
 Transfers, handoffs, custom tools, and retrieval belong to the draft. Calendar tools apply immediately and require an active integration.
 
+<CardGroup cols={2}>
+  <Card title="Connect your API" href="/en/integrations/http-tools">Parameters, responses, and testing step by step.</Card>
+  <Card title="What your endpoint receives" href="/api-reference/tool-execution">Automatic fields and voice and text JSON bodies.</Card>
+</CardGroup>
+
+
 ## Call transfer
 
 Choose a fixed international phone number or SIP URI, or let the agent choose a destination from routing instructions of up to 500 characters. For inferred SIP destinations, enable the SIP option.
@@ -48,6 +54,8 @@ The visual parameter builder supports string, number, boolean, array, and object
 ```
 
 **Test endpoint** sends a real POST using the configured headers and editable example body. It displays status, duration, response headers, and body. Tests time out after 10 seconds, truncate bodies at 10 KB, do not follow redirects, and cannot target local/private addresses. They are not agent calls and do not consume call credits, but the endpoint can perform real actions.
+
+Live execution posts `call`, `tool_name`, and `args` to your endpoint. Configured headers are used by the endpoint test but are not currently forwarded during live execution. Coordinate header-based authentication with support and verify a controlled call.
 
 The custom-tool form has no query-parameter or execution-timeout control; existing values are preserved. Return concise, useful data and describe how the agent should handle errors instead of claiming success.
 

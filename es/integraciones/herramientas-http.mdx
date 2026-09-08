@@ -1,0 +1,112 @@
+---
+title: "Conectar una herramienta HTTP"
+sidebarTitle: "Herramientas HTTP"
+description: "Conectá un agente con tu API: parámetros, contexto automático, petición, respuesta y diferencias entre pruebas y ejecución real."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Agentes → Voz o Texto → Herramientas" permission="agents.read; agents.update para editar" />
+
+Una herramienta HTTP permite consultar o modificar tu sistema **durante la conversación**. El agente decide cuándo ejecutarla según su descripción y las instrucciones. Tu endpoint devuelve información que el agente usa para continuar.
+
+## Elegí el tipo de agente
+
+<Tabs>
+  <Tab title="Voz">
+    Agregá una herramienta **Personalizada**. Guardá y publicá el agente. Tu endpoint recibe un POST con `call`, `tool_name` y `args`.
+
+    [Configurar herramientas de voz](/es/agentes-de-voz/herramientas) · [Ver campos de voz](/api-reference/tool-execution#voice-request)
+  </Tab>
+  <Tab title="Texto">
+    Agregá **API externa** y guardá la pestaña **Herramientas**. Tu endpoint recibe un POST con `thread`, `tool_name` y `args`.
+
+    [Configurar herramientas de texto](/es/agentes-de-texto/herramientas) · [Ver campos de texto](/api-reference/tool-execution#text-request)
+  </Tab>
+</Tabs>
+
+## Recorrido: consultar un pedido
+
+<Steps>
+  <Step title="Definí qué necesita tu API">
+    Creá `consultar_pedido` con el parámetro obligatorio `numero_pedido`. Describí cuándo usarla y cómo pedir el dato faltante.
+  </Step>
+  <Step title="Separá parámetros y contexto">
+    El número del pedido llega en `args.numero_pedido`. ContactShip agrega por separado el contexto `call` o `thread`. No hace falta pedirle al cliente IDs internos.
+  </Step>
+  <Step title="Consultá tu sistema">
+    Tu receptor lee los argumentos, valida los datos y busca el pedido. Usá `call.call_id` o `thread.id` para relacionar registros de diagnóstico.
+  </Step>
+  <Step title="Devolvé el resultado útil">
+    Respondé con JSON válido y datos concretos. Si no encontraste el pedido, indicá ese resultado. Evitá respuestas vacías que obliguen al agente a adivinar.
+  </Step>
+  <Step title="Probá la conversación completa">
+    Verificá la conexión desde el configurador. Después, ejecutá un caso controlado con el agente y compará la petición real y su respuesta.
+  </Step>
+</Steps>
+
+<CodeGroup>
+```json Argumentos extraídos
+{
+  "numero_pedido": "PED-1042"
+}
+```
+```json Respuesta de tu endpoint
+{
+  "encontrado": true,
+  "numero_pedido": "PED-1042",
+  "estado": "en_camino",
+  "entrega_estimada": "2026-10-15"
+}
+```
+```json Pedido no encontrado
+{
+  "encontrado": false,
+  "numero_pedido": "PED-1042",
+  "motivo": "No existe un pedido con ese número"
+}
+```
+</CodeGroup>
+
+Los campos de respuesta son un ejemplo de tu contrato, no campos obligatorios de ContactShip. Configurá las instrucciones para interpretar ambos resultados.
+
+## Qué dato sale de dónde
+
+| Dato | Quién lo aporta | Dónde llega |
+|---|---|---|
+| Nombre de la herramienta | Configuración de la herramienta | `tool_name` |
+| Pedido, fecha u otro dato solicitado | El agente, según los parámetros configurados | `args` |
+| ID, tipo y estado de llamada | Contexto de ContactShip | `call.call_id`, `call.call_type`, `call.call_status` |
+| Variables disponibles durante la llamada | Contexto de voz | `call.contactship_llm_dynamic_variables` |
+| Conversación, contacto y canal | Contexto de texto | `thread.id`, `thread.contact_id`, `thread.channel_id` |
+| Resultado de tu sistema | Tu endpoint | Cuerpo de la respuesta HTTP |
+
+<Note>El contexto depende del caso. En voz web los teléfonos pueden estar vacíos. En texto algunos datos del canal pueden faltar. Consultá los [campos y ejemplos completos](/api-reference/tool-execution).</Note>
+
+## Qué demuestra cada prueba
+
+| Prueba | Qué envía | Qué comprueba |
+|---|---|---|
+| Voz → Probar el endpoint | Cuerpo editable; inicialmente solo parámetros de ejemplo | Conectividad y respuesta del endpoint |
+| Texto → API externa → Test | `thread` ficticio, `tool_name` y valores de prueba en `args` | Conectividad desde el navegador y respuesta |
+| Chat sandbox del agente de texto | Simulación de la herramienta | Decisión del agente y argumentos propuestos |
+| Conversación controlada | Contexto y argumentos de la ejecución real | El flujo completo |
+
+<Warning>Los botones de prueba HTTP envían peticiones reales. En voz, los headers configurados se usan en la prueba, pero la ejecución actual no los reenvía al endpoint. Si necesitás autenticación por header, coordiná la integración con soporte y verificá una llamada real.</Warning>
+
+## Herramienta, webhook o automatización
+
+<CardGroup cols={2}>
+  <Card title="Necesito un dato durante la conversación" icon="wrench" href="/api-reference/tool-execution">Usá una herramienta y devolvé el resultado en la respuesta HTTP.</Card>
+  <Card title="Necesito actuar cuando termina" icon="bell" href="/es/integraciones/webhooks">Elegí el webhook correspondiente al evento y su contrato.</Card>
+  <Card title="Necesito reaccionar a una regla del inbox" icon="bolt" href="/es/mensajes/automatizaciones">Configurá disparador, condiciones y acciones.</Card>
+  <Card title="Necesito crear un seguimiento" icon="arrows-rotate" href="/es/integraciones/automatizar-seguimientos">Elegí el evento y mapeá los datos que deciden la acción.</Card>
+</CardGroup>
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Tengo que definir call o thread como parámetros?">No. Configurá solo los argumentos que tu herramienta necesita extraer. ContactShip agrega el contexto correspondiente.</Accordion>
+  <Accordion title="¿Puedo responder después con otro webhook?">La herramienta espera una respuesta en esa ejecución. Para trabajos largos, devolvé un estado real como pendiente y una referencia propia. Diseñá por separado cómo informar el resultado final.</Accordion>
+  <Accordion title="¿Dónde veo lo que recibió mi sistema?">En los logs del endpoint o el historial del workflow. En texto, compará también el payload del configurador. El registro de webhooks posteriores a llamadas corresponde a otro evento.</Accordion>
+  <Accordion title="¿Puedo evitar duplicados solo con call_id o thread.id?">Una conversación puede ejecutar la misma herramienta varias veces legítimamente. Para operaciones que crean o cobran, usá un identificador de operación de tu negocio y conservá su resultado.</Accordion>
+</AccordionGroup>

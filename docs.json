@@ -176,6 +176,7 @@
                 "pages": [
                   "es/integraciones/integrar-tu-sistema",
                   "es/integraciones/webhooks",
+                  "es/integraciones/herramientas-http",
                   "es/integraciones/automatizar-seguimientos",
                   "es/integraciones/vision-general",
                   "es/integraciones/google-calendar",
@@ -224,7 +225,8 @@
                   "api-reference/rate-limits",
                   "api-reference/webhooks",
                   "api-reference/inbound-webhook",
-                  "api-reference/follow-up-webhook"
+                  "api-reference/follow-up-webhook",
+                  "api-reference/tool-execution"
                 ]
               },
               {
@@ -463,6 +465,7 @@
                 "pages": [
                   "en/integrations/connect-your-system",
                   "en/integrations/webhooks",
+                  "en/integrations/http-tools",
                   "en/integrations/automate-follow-ups",
                   "en/integrations/overview",
                   "en/integrations/google-calendar",
@@ -511,7 +514,8 @@
                   "api-reference/rate-limits",
                   "api-reference/webhooks",
                   "api-reference/inbound-webhook",
-                  "api-reference/follow-up-webhook"
+                  "api-reference/follow-up-webhook",
+                  "api-reference/tool-execution"
                 ]
               },
               {

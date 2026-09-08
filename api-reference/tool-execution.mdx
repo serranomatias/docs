@@ -1,0 +1,195 @@
+---
+title: "HTTP tool execution"
+description: "Inspect the voice and text tool request bodies, automatic context, arguments, responses, and test payloads."
+---
+
+A custom HTTP tool calls **your endpoint during a conversation**. These requests have no top-level `data` envelope. Voice uses `call`; text uses `thread`. Both include `tool_name` and `args`.
+
+<CardGroup cols={2}>
+  <Card title="Set up an HTTP tool" href="/en/integrations/http-tools">Configure parameters, connect your system, and verify execution.</Card>
+  <Card title="Post-call webhook" href="/api-reference/webhooks">Use this separate contract for analysis after a call.</Card>
+</CardGroup>
+
+## Voice request
+
+Your endpoint receives a JSON **POST**. Example values below are fictional; optional values can be empty or absent.
+
+<CodeGroup>
+```json Phone call
+{
+  "call": {
+    "call_id": "22222222-2222-4222-8222-222222222222",
+    "agent_id": "11111111-1111-4111-8111-111111111111",
+    "contactship_llm_dynamic_variables": {
+      "customer_tier": "standard"
+    },
+    "call_status": "in_progress",
+    "call_type": "api_call",
+    "from_number": "+15555550101",
+    "to_number": "+15555550102"
+  },
+  "tool_name": "lookup_order",
+  "args": {
+    "order_number": "ORD-1042"
+  }
+}
+```
+```json Browser test call
+{
+  "call": {
+    "call_id": "22222222-2222-4222-8222-222222222222",
+    "agent_id": "11111111-1111-4111-8111-111111111111",
+    "contactship_llm_dynamic_variables": {},
+    "call_status": "in_progress",
+    "call_type": "test_web_call",
+    "from_number": "",
+    "to_number": ""
+  },
+  "tool_name": "lookup_order",
+  "args": {
+    "order_number": "ORD-1042"
+  }
+}
+```
+</CodeGroup>
+
+<ResponseField name="call" type="object">
+  Context available during the call. This is not the analyzed post-call record.
+  <Expandable title="call">
+    <ResponseField name="call_id" type="string">ContactShip call ID. Can be empty if the call record cannot be resolved.</ResponseField>
+    <ResponseField name="agent_id" type="string">ContactShip ID of the resolved active voice agent. After a handoff, it can identify the destination agent.</ResponseField>
+    <ResponseField name="contactship_llm_dynamic_variables" type="object">Variables available in this execution. Keys depend on call setup and context; there is no universal list of customer fields. Defaults to an empty object when unavailable.</ResponseField>
+    <ResponseField name="call_status" type="string">State stored for the call when the tool executes. It can be empty. Do not treat it as the final outcome.</ResponseField>
+    <ResponseField name="call_type" type="string">Stored call origin, such as `api_call`, `inbound_call`, or `test_web_call`. See [call types](/en/calls/call-types). Can be empty if no record is resolved.</ResponseField>
+    <ResponseField name="from_number" type="string | null">Source phone number. A web call can have an empty value.</ResponseField>
+    <ResponseField name="to_number" type="string | null">Destination phone number. A web call can have an empty value.</ResponseField>
+  </Expandable>
+</ResponseField>
+<ResponseField name="tool_name" type="string">Name of the invoked tool, as configured on the agent.</ResponseField>
+<ResponseField name="args" type="object">Arguments supplied for this invocation. Read configured inputs here, such as `args.order_number`. With no arguments, this can be `{}`.</ResponseField>
+
+Voice execution does not add a dedicated contact object, `contact_id`, transcript, recording, or final analysis. Dynamic variables may provide additional context, but do not assume those fields exist there.
+
+<Note>The current voice execution path posts the body to the configured URL without forwarding configured tool headers or separate query parameters. **Test endpoint** can send them. A successful authenticated test therefore does not prove that a live call can authenticate. Coordinate header-based integration requirements with support.</Note>
+
+## Text request
+
+The **External API** tool configured in the editor sends a JSON **POST**.
+
+```json Text conversation
+{
+  "thread": {
+    "id": "55555555-5555-4555-8555-555555555555",
+    "contact_id": "33333333-3333-4333-8333-333333333333",
+    "channel_type": "WABA",
+    "channel_id": "66666666-6666-4666-8666-666666666666",
+    "from_number": "+15555550102",
+    "wa_id": "15555550102"
+  },
+  "tool_name": "lookup_order",
+  "args": {
+    "order_number": "ORD-1042"
+  }
+}
+```
+
+<ResponseField name="thread" type="object">
+  Conversation context. If context construction fails, the sender can fall back to a body containing only `tool_name` and `args`.
+  <Expandable title="thread">
+    <ResponseField name="id" type="string">Conversation ID. The fallback value is `unknown_thread` when unavailable.</ResponseField>
+    <ResponseField name="contact_id" type="string | null">Associated contact ID when resolved. Fallback context can contain `unknown_contact`; do not use it as a real contact ID.</ResponseField>
+    <ResponseField name="channel_type" type="string | null">Channel type stored on the conversation. Can be `null` when context is unavailable.</ResponseField>
+    <ResponseField name="channel_id" type="string | null">Associated channel ID. Can be `null`.</ResponseField>
+    <ResponseField name="from_number" type="string">Contact phone number, not the business channel's number. Omitted when unavailable.</ResponseField>
+    <ResponseField name="wa_id" type="string">Contact WhatsApp identifier when available. Omitted for null or unavailable values.</ResponseField>
+  </Expandable>
+</ResponseField>
+
+`tool_name` is the configured tool name. `args` contains configured arguments; undeclared keys are not automatically forwarded. Missing optional arguments may be omitted. The current visual text editor configures parameters as strings.
+
+The standard body does not include a dedicated `agent_id`, organization ID, transcript, or conversation summary. Fetch other records through your integration when needed.
+
+## Your endpoint response
+
+Return **valid JSON** containing the result the agent needs. These example fields belong to your contract, not a required ContactShip response schema.
+
+<CodeGroup>
+```json Found
+{
+  "found": true,
+  "order_number": "ORD-1042",
+  "status": "in_transit",
+  "estimated_delivery": "2026-10-15"
+}
+```
+```json Not found
+{
+  "found": false,
+  "order_number": "ORD-1042",
+  "reason": "No order matches this number"
+}
+```
+</CodeGroup>
+
+ContactShip makes the returned result available to the agent. You do not need to wrap it in `call`, `thread`, or `args`. Use instructions that distinguish a missing record, an operation still pending, and a completed action.
+
+For text tools, successful responses normally become a tool result containing the HTTP `status` and response `data`. A plain non-JSON string can remain opaque text. Return JSON with the correct content type, especially from workflow response nodes.
+
+Text requests default to a 15-second timeout unless configuration changes it. Selected transient network failures and HTTP 429, 503, or 504 can trigger up to two additional HTTP attempts. This is not a guarantee about the total number of agent invocations.
+
+For operations with side effects, use your own business operation key and stored result. A call or conversation can legitimately invoke a tool multiple times; its ID alone is not an operation ID. The standard body supplies no dedicated unique tool-invocation ID.
+
+## Test requests versus live execution
+
+<Tabs>
+  <Tab title="Voice endpoint test">
+    **Test endpoint** sends exactly the editable sample body. Initially it is built from parameter examples, without the live `call`, `tool_name`, or `args` wrapper. Edit it to resemble a full request when testing your parser.
+
+```json Initial parameter sample
+{
+  "order_number": ""
+}
+```
+
+    The test sends configured headers, times out after 10 seconds, and does not follow redirects. It does not invoke the agent. Confirm the actual body and authentication through a controlled call.
+  </Tab>
+  <Tab title="Text endpoint test">
+    **External API → Test** sends a fictional conversation and your entered argument values directly from the browser. The request can require CORS support.
+
+```json Configurator test
+{
+  "thread": {
+    "id": "test-thread-id",
+    "contact_id": "test-contact-id",
+    "channel_type": "TEST",
+    "channel_id": "test-channel-id",
+    "from_number": "+0000000000",
+    "wa_id": "0000000000"
+  },
+  "tool_name": "lookup_order",
+  "args": {
+    "order_number": "ORD-1042"
+  }
+}
+```
+
+    These identifiers are placeholders. Do not look them up as real ContactShip records. The text-agent chat sandbox instead simulates tool execution.
+  </Tab>
+</Tabs>
+
+## Find the data and diagnose failures
+
+| Need | Where to look |
+|---|---|
+| Set the endpoint and parameters | [Voice tools](/en/voice-agents/tools) or [text tools](/en/text-agents/tools) |
+| Inspect the actual received body and headers | Endpoint logs or workflow execution history |
+| Find the contact from a text request | `thread.contact_id`, then [get contact](/api-reference/endpoint/get-contact-by-identifier) |
+| Find the voice call record | `call.call_id`, then [get call](/api-reference/endpoint/get-call) |
+| Obtain final voice analysis | [Post-call webhook](/api-reference/webhooks), after the call |
+
+<AccordionGroup>
+  <Accordion title="The test works, but the real call returns 401">Compare received headers. The voice configurator test and live execution handle configured headers differently. Check authentication with support.</Accordion>
+  <Accordion title="My endpoint cannot find order_number">Read `args.order_number` during live execution. A voice configurator sample initially places parameters at the root.</Accordion>
+  <Accordion title="The text test cannot connect">Check the endpoint URL and browser CORS response. The test runs from the browser; real text execution runs on the server.</Accordion>
+  <Accordion title="I need the final transcript inside a tool">A tool runs during the conversation. Receive the completed transcript and analysis through the post-call webhook instead.</Accordion>
+</AccordionGroup>

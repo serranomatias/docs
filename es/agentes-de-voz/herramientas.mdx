@@ -10,6 +10,12 @@ La pestaña **Herramientas** define "lo que el agente puede hacer durante la lla
 
 {/* captura: images/agentes-de-voz/herramientas-catalogo-es.png | Diálogo Añadir herramienta con los tres grupos Durante la llamada, Datos y sistemas y Calendario | app: /agents/voice/[id]?activeTab=tools */}
 
+<CardGroup cols={2}>
+  <Card title="Conectar tu API" href="/es/integraciones/herramientas-http">Parámetros, respuesta y pruebas paso a paso.</Card>
+  <Card title="Qué recibe tu endpoint" href="/api-reference/tool-execution">Campos automáticos y JSON de voz y texto.</Card>
+</CardGroup>
+
+
 ## El catálogo
 
 | Grupo | Herramienta | Qué hace, según la app | Por agente |
@@ -96,7 +102,7 @@ El traspaso mantiene la misma llamada y cambia el agente que la conduce. Es la b
 | **Hablar mientras se ejecuta** y **Qué decir** | Rellena el silencio mientras el endpoint responde. | Activado, desactivado; texto | desactivado |
 | **Hablar al terminar** | El agente comenta el resultado. | Activado, desactivado | activado |
 | **Sonido de escritura** | "Reproduce un sonido de escritura mientras corre la herramienta personalizada." | Activado, desactivado | desactivado |
-| **Headers** | "Se envían en cada petición. Sirven para autenticación o enrutamiento." | Pares clave y valor. Claves con letras, números o `- _ .`, sin espacios ni repetidas. | ninguno |
+| **Headers** | Se guardan en la herramienta y se envían en **Probar el endpoint**. La ejecución actual no los reenvía a tu URL. | Pares clave y valor. Claves con letras, números o `- _ .`, sin espacios ni repetidas. | ninguno |
 
 ### Parámetros
 
@@ -110,7 +116,7 @@ Cada parámetro tiene un nombre en minúsculas, números y guiones bajos, un **T
 | **Lista** | array | Elegís **Tipo de los ítems**: Texto, Número, Sí / no u Objeto |
 | **Objeto** | object | Agregás **Campos** anidados de tipo Texto, Número, Sí / no o Lista |
 
-El constructor visual admite un nivel de anidamiento. Un esquema más profundo se muestra como "Tiene demasiados niveles para editarlo acá. Cambiá a raw para modificarlo." El botón **Raw** muestra el esquema JSON completo: "Usa un objeto con type, properties y required opcional." Al volver a **Visual**, la app valida el JSON. Sin parámetros, "La petición se enviará con el cuerpo vacío."
+El constructor visual admite un nivel de anidamiento. Un esquema más profundo se muestra como "Tiene demasiados niveles para editarlo acá. Cambiá a raw para modificarlo." El botón **Raw** muestra el esquema JSON completo: "Usa un objeto con type, properties y required opcional." Al volver a **Visual**, la app valida el JSON. Sin parámetros, la ejecución real conserva `call` y `tool_name`, con `args: {}`. El cuerpo inicial de **Probar el endpoint** es `{}`.
 
 Los **Headers** también tienen vista **Raw**: "Pegá un objeto JSON o un header por línea, como Nombre: valor."
 
@@ -133,7 +139,7 @@ Una herramienta para una tienda que quiere que el agente informe el estado de un
 | **Nombre** | `consultar_estado_pedido` |
 | **URL del endpoint** | `https://api.mitienda.com/voz/pedidos/estado` |
 | **Descripción** | Usala cuando la persona pregunte por el estado, la demora o la entrega de un pedido. Pedile el número de pedido antes de llamarla. |
-| **Headers** | `Authorization: Bearer TU_TOKEN` |
+| **Autenticación** | Si tu endpoint requiere headers, coordiná con soporte y verificá una llamada real. |
 | **Hablar mientras se ejecuta** | Activado. **Qué decir**: "Dame un segundo que lo busco." |
 | **Hablar al terminar** | Activado |
 
@@ -156,7 +162,7 @@ Parámetros en vista **Raw**:
 }
 ```
 
-Tu endpoint recibe un POST con JSON y responde con JSON. Respondé corto y en texto legible, por ejemplo `{"estado": "En camino", "entrega_estimada": "jueves 12 de septiembre"}`: el agente usa ese texto para contestar. Después, mencioná la herramienta en el prompt con `@` y describí cuándo usarla, ver [Instrucciones](/es/agentes-de-voz/instrucciones).
+Tu endpoint recibe un POST con `call`, `tool_name` y `args`. Leé el pedido desde `args.numero_pedido`. Respondé con JSON. Respondé corto y en texto legible, por ejemplo `{"estado": "En camino", "entrega_estimada": "jueves 12 de septiembre"}`: el agente usa ese texto para contestar. Después, mencioná la herramienta en el prompt con `@` y describí cuándo usarla, ver [Instrucciones](/es/agentes-de-voz/instrucciones).
 
 ## Base de conocimiento
 
