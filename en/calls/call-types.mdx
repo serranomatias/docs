@@ -1,0 +1,72 @@
+---
+title: "Call types"
+description: "Identify browser tests, phone tests, outbound calls, inbound calls, campaigns, and widgets. Distinguish type, status, and result."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Calls → Type filter" />
+
+The type identifies **how the call started**. It does not say whether it was answered, achieved its goal, or delivered a webhook.
+
+## call_type values
+
+| Exact value | Meaning | Associated data |
+|---|---|---|
+| `test_web_call` | Browser test | With email, it can include a contact; otherwise usually not. |
+| `test_phone_call` | Phone test | Includes a contact and source/destination numbers. |
+| `api_call` | Outbound call started through the API | Includes a contact and can carry per-call additional data. |
+| `platform_contact_call` | Outbound call from a contact in the app | Includes a contact; keeps this type even when using the API calling path. |
+| `campaign_call` | Campaign call | Adds campaign and campaign-contact information. |
+| `inbound_call` | Inbound call to an assigned number | Finds or creates the contact from the caller’s number. |
+| `widget_web_call` | Web widget call | With email, it can include a contact. Phone fields can be empty. |
+| `web_call` | Generic web call | Can appear in integrations or existing records. Check for an associated contact. |
+
+
+<Note>Read `data.call.call_type` in the webhook. The call-query API uses `type` on the record. An external provider’s `call_type` is not an equivalent field.</Note>
+
+## Type, status, and result
+
+| Question | Webhook field | Example |
+|---|---|---|
+| Where did it originate? | `data.call.call_type` | `api_call` |
+| What state did it reach? | `data.call.call_status` | `ended` |
+| Was it answered? | `data.call.call_result`, when a contact exists | `answered`, `no_answer`, `voicemail`, `failed` |
+| Did it achieve its goal? | `data.call.call_analysis.call_successful` | `true` or `false` |
+| Why did it disconnect? | `data.call.disconnection_reason` | `user_hangup`, `max_duration_reached` |
+
+An unanswered call can have `call_status: "ended"` and `call_result: "no_answer"`. The [call log](/en/calls/call-log) can also use states such as `completed` or `incomplete`; these are a different field.
+
+## Tests and contact data
+
+<Tabs>
+  <Tab title="Web without contact">Analysis, recording, and transcripts arrive when available. `data.contact`, `call_result`, `from_number`, `to_number`, and `call_additional_data` are omitted.</Tab>
+  <Tab title="Web with contact">Registering the call with email allows a contact to be associated. Contact fields are added, but source and destination can be empty: this is still a browser call.</Tab>
+  <Tab title="Phone">Registered phone calls normally have a contact. Inbound calls that never connect may have no record or final webhook.</Tab>
+</Tabs>
+
+## Use the type in an automation
+
+Choose explicitly which types enter the workflow. For production actions, exclude `test_web_call` and `test_phone_call`. If you also test through a widget, separate those tests by agent or a record in your system.
+
+The [follow-up recipes](/en/integrations/automate-follow-ups) combine type, result, contact, and duplicate handling.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does a web test always have no contact?">
+    No. It can have a contact when registration included email. The payload depends on the call’s actual contact association.
+  </Accordion>
+  <Accordion title="Does ended mean the call was answered?">
+    No. Check `call_result` when present and inspect analysis for the outcome.
+  </Accordion>
+  <Accordion title="Where can I see a complete example?">
+    In the [webhook reference](/api-reference/webhooks), with examples for each case.
+  </Accordion>
+</AccordionGroup>
+
+## Continue with
+
+<CardGroup cols={2}>
+  <Card title="Webhook payload" href="/api-reference/webhooks">Fields and examples.</Card>
+  <Card title="Configure webhooks" href="/en/calls/webhooks">Delivery, testing, and diagnostics.</Card>
+</CardGroup>

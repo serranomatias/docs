@@ -1,0 +1,61 @@
+---
+title: "Inbound context webhook"
+description: "Provide context before an inbound voice call. Inspect the request and the JSON your system should return."
+---
+
+This webhook asks your system for information **before an inbound voice conversation**. Configure **Voice agent → Advanced → Inbound context → Custom webhook**, then publish.
+
+<Steps>
+  <Step title="Receive the lookup">ContactShip posts the incoming phone numbers, agent and organization IDs, and contact context when available.</Step>
+  <Step title="Look up your records">Use the contact ID or phone number to find relevant information in your system. An incoming caller may not yet have a matching contact.</Step>
+  <Step title="Return a JSON object">Return the data the agent needs as named keys. Reference your keys in instructions, for example `{{balance}}`.</Step>
+</Steps>
+
+## Request and response
+
+<CodeGroup>
+```json Request to your system
+{
+  "call": {
+    "direction": "inbound",
+    "from_number": "+15555550102",
+    "to_number": "+15555550101"
+  },
+  "agent_id": "11111111-1111-4111-8111-111111111111",
+  "organization_id": "44444444-4444-4444-8444-444444444444",
+  "contact": {
+    "id": "33333333-3333-4333-8333-333333333333",
+    "full_name": "Demo contact",
+    "email": "person@example.com"
+  }
+}
+```
+```json Response from your system
+{
+  "balance": 125,
+  "order_status": "ready for pickup",
+  "next_appointment": "2026-10-15T10:00:00-06:00"
+}
+```
+</CodeGroup>
+
+The request is not wrapped in `data`. `contact` can be `null`; its properties may also be `null`. There is no guaranteed call ID in this pre-call request. Use the available identifiers to look up context, then correlate the final result using the post-call contract.
+
+## Response requirements
+
+<ResponseField name="Your named keys" type="object">
+  Return a JSON object, not a bare string or array. Its keys become dynamic variables. Return a compact object containing only the information the agent needs. Oversized responses can be ignored; keep serialized JSON within 8,000 characters.
+</ResponseField>
+
+Custom keys can override matching native context variables. Reserved variables `contact_data`, `current_day_time`, and `timezone` are managed by the platform. Do not use them as custom response keys.
+
+The webhook has its own URL and works independently of the native-context switch. Its configured timeout and the overall context budget limit how long the call waits. On a timeout or invalid response, the call can continue without these extra variables. Write instructions that handle missing information.
+
+<Note>This is a request-response lookup. Acknowledge it with the actual context body; returning an empty success response and fetching data later cannot provide context for this lookup.</Note>
+
+## Find the configuration and final result
+
+<CardGroup cols={2}>
+  <Card title="Inbound-context settings" href="/en/voice-agents/advanced">Choose native context, webhook URL, timeout, and instructions.</Card>
+  <Card title="Final call webhook" href="/api-reference/webhooks">Receive transcript and analysis after the call.</Card>
+</CardGroup>

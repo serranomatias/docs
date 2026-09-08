@@ -1,0 +1,96 @@
+---
+title: "Integrar ContactShip con tu sistema"
+sidebarTitle: "Integrar tu sistema"
+description: "Elegí API, webhooks, herramientas HTTP o automatizaciones. Encontrá credenciales, IDs, resultados y un flujo de integración completo."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Organización → Claves API; Agentes; Integraciones" />
+
+Una integración conecta una acción de tu sistema con datos o acciones de ContactShip. Empezá por decidir **quién inicia el proceso** y **cuándo necesitás el resultado**.
+
+## Elegí el punto de entrada
+
+<CardGroup cols={2}>
+  <Card title="Mi sistema inicia la acción" icon="code" href="/api-reference/introduction">
+    Usá la API para crear contactos, iniciar llamadas, enviar mensajes o consultar registros.
+  </Card>
+  <Card title="ContactShip avisa a mi sistema" icon="bell" href="/es/integraciones/webhooks">
+    Usá un webhook para recibir resultados o eventos. Cada tipo tiene su configuración y payload.
+  </Card>
+  <Card title="El agente necesita consultar mi sistema" icon="wrench" href="/es/agentes-de-voz/herramientas">
+    Configurá una herramienta HTTP para consultar o actualizar datos durante una conversación.
+  </Card>
+  <Card title="Quiero automatizar un seguimiento" icon="arrows-rotate" href="/es/integraciones/automatizar-seguimientos">
+    Elegí entre una reacción al resultado de una llamada, una regla del inbox o seguimientos del agente de texto.
+  </Card>
+</CardGroup>
+
+## Recorrido: de tu CRM al resultado de una llamada
+
+<Steps>
+  <Step title="Identificá la organización y los registros">
+    Generá o copiá la [clave API](/es/organizacion/claves-api). Buscá el contacto, agente y número de salida en esa misma organización.
+  </Step>
+  <Step title="Configurá dónde recibir el resultado">
+    En el agente de voz, abrí **Avanzado → Post llamada**, configurá la URL del webhook de salida y publicá. Prepará el receptor antes de iniciar la llamada.
+  </Step>
+  <Step title="Iniciá la llamada y guardá su ID">
+    Usá [Llamar a un contacto](/api-reference/endpoint/make-contact-call) o [Llamar a un número](/api-reference/endpoint/make-ai-phone-call). Guardá `data.call_id` de la respuesta junto al ID de tu CRM. La aceptación de la solicitud todavía no contiene el resultado final.
+  </Step>
+  <Step title="Procesá el análisis y verificá la acción">
+    El webhook llega después del análisis. Relacioná `data.call.call_id` con tu registro, revisá el resultado y actualizá tu sistema. Comprobá entrega en **Llamadas → Webhooks** y ejecución en tu receptor.
+  </Step>
+</Steps>
+
+<Tip>El `call_id` aparece en `data.call_id` al iniciar la llamada y en `data.call.call_id` en el webhook. Guardarlo permite relacionar ambos momentos sin depender del teléfono.</Tip>
+
+## Dónde encontrar cada dato
+
+| Necesitás | Dónde obtenerlo | Para qué sirve |
+|---|---|---|
+| Clave de la organización | [Claves API](/es/organizacion/claves-api) | Encabezado `x-api-key` de la API pública |
+| `agent_id` | [Listar agentes](/api-reference/endpoint/list-agents) | Elegir quién llama |
+| `contact_id` | [Buscar por ID, teléfono o email](/api-reference/endpoint/get-contact-by-identifier) | Relacionar acciones con un contacto |
+| `from_number_id` | [Listar números](/api-reference/endpoint/get-phone-numbers) | Número de salida para llamar a un contacto |
+| `call_id` | Respuesta de creación o [listar llamadas](/api-reference/endpoint/list-calls) | Consultar, correlacionar y evitar acciones duplicadas |
+| Resumen, grabación y datos extraídos | [Webhook de llamada](/api-reference/webhooks) o [consultar llamada](/api-reference/endpoint/get-call) | Usar resultados del análisis |
+| `channel_id` | [Listar canales](/api-reference/endpoint/get-channels) | Seleccionar el canal de WhatsApp |
+| `thread_id` | Registro de conversación o [contexto de una automatización](/es/mensajes/automatizaciones) | Actuar sobre la conversación correcta |
+
+## Elegí dónde ejecutar la integración
+
+<Tabs>
+  <Tab title="Tu backend">
+    Guardá la clave en tu servidor. Usá solicitudes HTTP para llamar a la API y una URL accesible para recibir webhooks. Consultá la [referencia API](/api-reference/introduction) para los campos exactos de cada operación.
+  </Tab>
+  <Tab title="n8n o Make">
+    El receptor de webhook inicia tu workflow o escenario. Una acción HTTP llama a ContactShip cuando necesitás consultar o modificar datos. Elegí [n8n](/es/integraciones/n8n) o [Make](/es/integraciones/make) para configurar la conexión.
+  </Tab>
+  <Tab title="Dentro de ContactShip">
+    Usá [automatizaciones del inbox](/es/mensajes/automatizaciones) para eventos y acciones, o [herramientas del agente](/es/agentes-de-texto/herramientas) para operaciones durante la conversación. El [catálogo](/es/integraciones/vision-general) conecta cuentas de servicios externos.
+  </Tab>
+</Tabs>
+
+<Note>Los webhooks no reenvían automáticamente todos los datos de la API. En particular, el webhook final de llamadas no incluye `metadata`. Conservá en tu sistema la relación entre IDs.</Note>
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿API y webhook son alternativas?">
+    Se complementan. Tu sistema puede iniciar una llamada por API y recibir su análisis por webhook.
+  </Accordion>
+  <Accordion title="¿Qué pasa si pierdo el webhook?">
+    Buscá el evento en **Llamadas → Webhooks** y consultá la llamada por API. Antes de reintentar, comprobá si tu sistema ya realizó la acción.
+  </Accordion>
+  <Accordion title="¿Tengo que programar todo?">
+    Podés usar n8n, Make o automatizaciones del inbox. Aun así, necesitás definir qué evento dispara el flujo, qué datos usa y cómo maneja errores.
+  </Accordion>
+</AccordionGroup>
+
+## Seguí con
+
+<CardGroup cols={2}>
+  <Card title="Tipos de webhooks" href="/es/integraciones/webhooks">Elegí el evento y encontrá su configuración.</Card>
+  <Card title="Automatizar seguimientos" href="/es/integraciones/automatizar-seguimientos">Convertí resultados en acciones concretas.</Card>
+</CardGroup>

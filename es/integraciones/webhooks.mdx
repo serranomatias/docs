@@ -1,0 +1,89 @@
+---
+title: "Tipos de webhooks y dónde configurarlos"
+sidebarTitle: "Tipos de webhooks"
+description: "Compará webhooks de voz, contexto entrante, conversaciones, automatizaciones y seguimientos. Encontrá configuración, payload y diagnóstico."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Agentes; Ajustes → Inbox; Llamadas → Webhooks" />
+
+Un webhook conecta un evento de ContactShip con una URL de tu sistema. **No hay un único webhook para toda la plataforma**: elegí el que corresponda al momento y a los datos que necesitás.
+
+## Elegí el evento
+
+| Necesitás | Usá | Dónde configurarlo |
+|---|---|---|
+| Recibir resultado, análisis y grabación de una llamada | Webhook de salida de voz | Agente de voz → Avanzado → Post llamada |
+| Dar contexto antes de atender una entrante | Webhook propio de entrada | Agente de voz → Avanzado → Contexto de entrada |
+| Reaccionar a creación, cambio o eliminación de una conversación | Webhook del canal | Ajustes → Inbox → Canales → Canal → Avanzado |
+| Reaccionar a un mensaje nuevo o a una condición del inbox | Acción Send Webhook de una automatización | Ajustes → Inbox → Automatizaciones |
+| Saber que terminó una secuencia de seguimiento | Webhook al cierre | Agente de texto → Avanzado → Seguimientos |
+| Avisar a tu sistema fuera del horario del canal | Webhook fuera de horario | Canal → Respuestas → Horario de atención |
+| Integrar asignación, vencimientos o SLA de enrutamiento | Integración de enrutamiento | Configuración coordinada con soporte |
+
+## Qué envía cada uno
+
+<AccordionGroup>
+  <Accordion title="Llamada analizada" defaultOpen>
+    **ContactShip envía:** `{ "data": { "agent": {}, "organization": {}, "call": {}, "campaign": {}, "contact": {} } }`, con bloques condicionales.
+
+    Llega después del análisis; puede esperar evaluaciones. Tu receptor acepta el evento con HTTP 2xx. La configuración y los intentos se revisan en [Webhooks de llamadas](/es/llamadas/webhooks). Consultá los [campos y ejemplos exactos](/api-reference/webhooks).
+  </Accordion>
+  <Accordion title="Contexto antes de una llamada entrante">
+    **ContactShip envía:** `call` con dirección y teléfonos, `agent_id`, `organization_id` y `contact` cuando está disponible.
+
+    **Tu sistema responde:** un objeto JSON con los datos que el agente necesita, por ejemplo saldo o estado de un pedido. La respuesta se usa durante la conversación; no es el resultado final. Ver [contrato de contexto de entrada](/api-reference/inbound-webhook).
+  </Accordion>
+  <Accordion title="Cambios de conversación en un canal">
+    Seleccionás `INSERT`, `UPDATE` o `DELETE`: describen conversaciones, no cada mensaje individual. Configurá URL e interruptor en [Canal → Avanzado](/es/mensajes/configurar-canal).
+
+    Capturá un evento controlado en tu receptor para mapear los campos de ese canal. No apliques el esquema `data.call` a estos eventos. Para controlar explícitamente el cuerpo enviado, usá una automatización con **Body template**.
+  </Accordion>
+  <Accordion title="Acción Send Webhook del inbox">
+    Elegís el disparador y las condiciones de la regla. La acción permite URL, método **POST**, **PUT** o **PATCH**, headers y **Body template**. Con cuerpo vacío, envía el contexto completo del evento.
+
+    Definí un cuerpo propio con las variables que necesitás. En **Run History**, abrí **Trigger Payload** y el **Output** de la acción para comprobar los valores disponibles y el resultado. Ver [automatizaciones del inbox](/es/mensajes/automatizaciones).
+  </Accordion>
+  <Accordion title="Cierre del seguimiento de un agente de texto">
+    Envía `event: "follow_up_closed"`, `threadId`, `agentId`, motivo de cierre, etapas, fecha, contacto y resumen. Es un cuerpo distinto al webhook de voz, sin envoltorio `data`.
+
+    No representa todos los cierres manuales del inbox. Ver [campos y ejemplo de cierre](/api-reference/follow-up-webhook) y [configuración de seguimientos](/es/agentes-de-texto/seguimientos).
+  </Accordion>
+  <Accordion title="Fuera de horario y enrutamiento">
+    El webhook fuera de horario notifica al receptor con un POST cuando se aplica esa regla del canal. Configuralo en [Respuestas](/es/mensajes/configurar-canal) y verificá un mensaje controlado en tu receptor.
+
+    Los avisos de enrutamiento describen asignación y plazos; la pantalla actual no expone un editor público de su webhook. Coordiná el contrato con soporte según [Condiciones, avisos y webhooks](/es/enrutamiento/condiciones-y-avisos). No reutilices una firma ni un parser de otro tipo de webhook.
+  </Accordion>
+</AccordionGroup>
+
+## Cómo probar una integración
+
+<Steps>
+  <Step title="Separá los receptores">Usá rutas o workflows distintos para voz, contexto de entrada y mensajes. Cada uno puede esperar otro cuerpo o respuesta.</Step>
+  <Step title="Provocá un evento controlado">Hacé una prueba del caso real: llamada, mensaje, cierre o cambio de conversación. No uses un JSON de ejemplo como prueba de entrega.</Step>
+  <Step title="Conservá el cuerpo y la respuesta">Revisá los datos en tu receptor. Para voz, compará con **Llamadas → Webhooks**; para reglas del inbox, con **Run History**.</Step>
+  <Step title="Verificá la acción final">Comprobá el ticket, tarea o actualización en tu sistema. Una respuesta HTTP exitosa no demuestra por sí sola que esa acción terminó.</Step>
+</Steps>
+
+<Note>Los reintentos, los headers y las firmas dependen del tipo de webhook. El webhook de llamadas no agrega la firma del enrutamiento, y el cierre de seguimiento no comparte su mecanismo de reintentos.</Note>
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Puedo usar la misma URL para todos?">
+    Solo si tu receptor distingue los contratos. Separar rutas simplifica el mapeo y evita responder al webhook de contexto como si fuera una notificación.
+  </Accordion>
+  <Accordion title="¿Dónde veo el JSON que llegó?">
+    En los logs o historial de tu receptor. Para llamadas, también en **Llamadas → Webhooks**. En automatizaciones, revisá **Trigger Payload** y los pasos de **Run History**.
+  </Accordion>
+  <Accordion title="¿El webhook del canal avisa cada mensaje?">
+    No. Sus eventos son de conversación. Para mensajes nuevos, elegí ese disparador en una automatización.
+  </Accordion>
+</AccordionGroup>
+
+## Seguí con
+
+<CardGroup cols={2}>
+  <Card title="Webhook de llamadas" href="/api-reference/webhooks">Campos y ejemplos completos.</Card>
+  <Card title="Integrar tu sistema" href="/es/integraciones/integrar-tu-sistema">Recorrido desde la API hasta el resultado.</Card>
+</CardGroup>

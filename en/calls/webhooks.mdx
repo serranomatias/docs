@@ -10,13 +10,23 @@ A webhook sends call data to your system through a **POST** request. A call can 
 
 ## Configure and test
 
-1. Open the voice agent and go to **Advanced → Post-call**.
-2. Set the outgoing webhook URL. The inbound webhook supplies agent context and serves a different purpose.
-3. Save and publish the agent configuration.
-4. Make a controlled call through **Test agent** and wait for analysis.
-5. Inspect the received body and HTTP response in your receiver and in **Calls → Webhooks**.
+<Steps>
+  <Step title="Prepare your receiver">Create a reachable URL that accepts POST JSON. If you start calls through the API, store their IDs to correlate them with your system.</Step>
+  <Step title="Publish the agent URL">Open **Voice agent → Advanced → Post-call**, configure the outgoing webhook, and publish. The inbound webhook retrieves context and has a different contract.</Step>
+  <Step title="Make a controlled call">Use **Test agent** and wait for analysis. If evaluation criteria are assigned, delivery can wait for their results.</Step>
+  <Step title="Compare delivery and action">Inspect the body in your receiver and **Calls → Webhooks**. Also confirm that the expected task, ticket, or update completed.</Step>
+</Steps>
 
-The current editor has no sample-payload test button. Test calls can trigger real actions in your receiver.
+The current editor has no sample-payload button. Test calls can execute real actions in your receiver.
+
+## What you receive
+
+The body has a `data` object containing agent, organization, call, and available context. Contact and campaign blocks depend on the record. **A web test can have a contact when it was registered with email.**
+
+<CardGroup cols={2}>
+  <Card title="Payload fields and examples" icon="brackets-curly" href="/api-reference/webhooks">Explore objects and select a JSON example by call type.</Card>
+  <Card title="Call types" icon="phone" href="/en/calls/call-types">Distinguish tests, API calls, campaigns, inbound calls, and widgets.</Card>
+</CardGroup>
 
 ## Investigate delivery
 
@@ -28,7 +38,7 @@ Open an event in **Calls → Webhooks** to inspect its URL, status, attempts, HT
 | Pending | Check again before starting manual recovery. |
 | Failed | Read the response code and message, fix the receiver, and select **Retry** when available. |
 
-Store the event ID alongside the call ID in your logs. Make your receiver tolerate repeated deliveries: a retry must not create duplicate tickets or repeat an operation.
+Store `data.call.call_id` in your receiver. The event ID shown in the app helps diagnostics but is not automatically included in the body. Make your receiver tolerate repeated deliveries: a retry must not create duplicate tickets or repeat an operation.
 
 These deliveries are separate from messaging channel webhooks, inbox automations, and lead-routing events. Each has its own configuration and content.
 
@@ -50,3 +60,6 @@ These deliveries are separate from messaging channel webhooks, inbox automations
 
 - [Call log](/en/calls/call-log)
 - [Post-call](/en/voice-agents/post-call)
+
+- [Webhook types](/en/integrations/webhooks)
+- [Automate follow-ups](/en/integrations/automate-follow-ups)

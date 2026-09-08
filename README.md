@@ -2,7 +2,7 @@
 
 Documentación pública de ContactShip: [docs.contactship.ai](https://docs.contactship.ai). Construida con [Mintlify](https://mintlify.com); se publica sola al hacer push a `main`.
 
-Esta etapa cubre **solo texto**: 203 páginas de navegación completas, con guías en español e inglés y referencia API compartida. Capturas, videos y GIFs quedan para una etapa posterior.
+Esta etapa cubre **solo texto**: 213 páginas de navegación completas, con guías en español e inglés y referencia API compartida. Capturas, videos y GIFs quedan para una etapa posterior.
 
 ## Estructura
 

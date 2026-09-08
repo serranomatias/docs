@@ -1,0 +1,85 @@
+---
+title: "Automate follow-ups"
+description: "Create tasks, update your CRM, or schedule another attempt using call results and inbox events. Map data and avoid duplicates."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Agents; Inbox automations; your system" />
+
+A follow-up can be a task for a person, a CRM update, or another customer interaction. First choose **the event that makes it appropriate**, then configure the action.
+
+## Choose the mechanism
+
+<Tabs>
+  <Tab title="After a call">Receive the [analysis webhook](/en/calls/webhooks). Use the result and extracted data to choose the next step in your backend, n8n, or Make.</Tab>
+  <Tab title="From an inbox event">Use [automations](/en/messages/automations): trigger, conditions, and actions. Add notes, move contacts, create tickets, or send a webhook with a custom body.</Tab>
+  <Tab title="When someone stops replying">Use [text-agent follow-ups](/en/text-agents/follow-ups), marked **Experimental**. Configure stages, hours, and closure. The closure webhook has its [own contract](/api-reference/follow-up-webhook).</Tab>
+</Tabs>
+
+## Recipe: create a task after a call
+
+<Steps>
+  <Step title="Define the follow-up decision field">In [Post-call](/en/voice-agents/post-call), add a boolean analysis field such as `requires_follow_up`. Explain when it should be true. Its value arrives at `data.call.call_analysis.custom_analysis_data.requires_follow_up`.</Step>
+  <Step title="Configure the receiver and mapping">Publish the agent’s outgoing webhook URL. Keep `data.call.call_id` and, when present, `data.contact.contact_id`. Persist the event before acknowledging receipt, then process the task through a queue or recoverable workflow.</Step>
+  <Step title="Check conditions before acting">Allow only the expected call types, exclude tests, and check for a contact. If the analysis field is absent, send the case for review or query the call; do not treat absence as `false`.</Step>
+  <Step title="Create the task once">
+    Use your own unique key such as `call_id + create_follow_up_task`. Store action state and result durably. Do not rely on temporary memory or mark completion before creating the task.
+
+    Create it in your CRM or use [Create task](/api-reference/endpoint/create-task). That endpoint requires `details`, `brief`, `type`, and `created_by`. Include the contact reference in `details`: `contact_id` currently does not create a persisted association through that operation.
+  </Step>
+</Steps>
+
+## Map the data
+
+| Destination in your system | Webhook value | Purpose |
+|---|---|---|
+| Call identifier | `data.call.call_id` | Correlation and duplicate handling |
+| Contact | `data.contact.contact_id` | Find the record; may be absent |
+| Interaction summary | `data.call.call_analysis.call_summary` | Task description or note |
+| Follow-up decision | `data.call.call_analysis.custom_analysis_data.requires_follow_up` | Your configured field, not a standard field |
+| Phone result | `data.call.call_result` | Distinguish answered, unanswered, and voicemail |
+| Recording | `data.call.recording_url` | Optional reference |
+
+## Choose the next step
+
+| Situation | Suggested action | Check |
+|---|---|---|
+| Follow-up required | Create a task or update CRM | Field present, contact available, no duplicate action |
+| No answer | Schedule another attempt under your policy | Calling hours, attempt limit, cancellation if the customer already replied |
+| Payment promise or appointment | Store the extracted date and details | Validate the date and confirm the information before acting |
+| Failed evaluation | Create a human review | `evaluation_results` present; `unknown` means neither pass nor fail |
+
+To call again, use [Call a contact](/api-reference/endpoint/make-contact-call) with `schedule`. Store the relationship between original and new attempts. Do not connect every `no_answer` to an immediate call: that would create an unlimited loop.
+
+## Recipe: send conversation data to your CRM
+
+In an inbox rule, choose a trigger such as **Conversation Closed**, add **AI Conversation Analysis** if you need extraction, then **Send Webhook**. Define a **Body template** using the editor’s available variables. `ai.*` variables only exist after the analysis step.
+
+Inspect **Run History → Trigger Payload** and each step’s **Output**. **Replay** executes actions again; the receiver must also recognize duplicates.
+
+<Warning>A test can start calls, send messages, or create real tasks. Use a controlled contact and verify one complete execution before enabling the workflow for everyone.</Warning>
+
+## If the next step is WhatsApp
+
+The voice webhook does not automatically provide `channel_id` or `thread_id`. Get the channel through [List channels](/api-reference/endpoint/get-channels) and choose the correct conversation. When initiating contact or using a template, see [Send template](/api-reference/endpoint/waba-send-template) and [Templates](/en/messages/templates). A call webhook does not itself open a WhatsApp conversation window.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can I use the result as soon as I start a call?">
+    The creation response identifies the request. Wait for analysis delivery or query the record before making a result-based decision.
+  </Accordion>
+  <Accordion title="Does retrying a webhook make another call?">
+    The retry only delivers data again. Your automation could still make another call if it does not deduplicate actions.
+  </Accordion>
+  <Accordion title="How do I cancel an unnecessary follow-up?">
+    Before executing a pending action, recheck the customer’s response, opportunity state, and attempt limits in your system.
+  </Accordion>
+</AccordionGroup>
+
+## Continue with
+
+<CardGroup cols={2}>
+  <Card title="Call types" href="/en/calls/call-types">Separate tests, campaigns, and production.</Card>
+  <Card title="Webhook types" href="/en/integrations/webhooks">Choose the right trigger.</Card>
+</CardGroup>

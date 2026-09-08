@@ -1,0 +1,89 @@
+---
+title: "Webhook types and where to configure them"
+sidebarTitle: "Webhook types"
+description: "Compare voice, inbound-context, conversation, automation, and follow-up webhooks. Find configuration, payloads, and diagnostics."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Agents; Settings → Inbox; Calls → Webhooks" />
+
+A webhook connects a ContactShip event to a URL in your system. **There is no single platform-wide webhook**: choose the event timing and data you need.
+
+## Choose the event
+
+| You need | Use | Configure it in |
+|---|---|---|
+| Call result, analysis, and recording | Outgoing voice webhook | Voice agent → Advanced → Post-call |
+| Context before answering an inbound call | Custom inbound webhook | Voice agent → Advanced → Inbound context |
+| Conversation creation, updates, or deletion | Channel webhook | Settings → Inbox → Channels → Channel → Advanced |
+| A new message or an inbox condition | Automation Send Webhook action | Settings → Inbox → Automations |
+| Completion of a follow-up sequence | Close webhook | Text agent → Advanced → Follow-ups |
+| Notification outside channel business hours | Out-of-hours webhook | Channel → Responses → Business hours |
+| Routing assignments, expiry, or SLA notifications | Routing integration | Configuration coordinated with support |
+
+## What each webhook sends
+
+<AccordionGroup>
+  <Accordion title="Analyzed call" defaultOpen>
+    **ContactShip sends:** `{ "data": { "agent": {}, "organization": {}, "call": {}, "campaign": {}, "contact": {} } }`, with conditional blocks.
+
+    Delivery follows analysis and may wait for evaluations. Your receiver accepts the event with HTTP 2xx. Configure delivery and inspect attempts in [Call webhooks](/en/calls/webhooks). See the [exact fields and examples](/api-reference/webhooks).
+  </Accordion>
+  <Accordion title="Context before an inbound call">
+    **ContactShip sends:** `call` with direction and phone numbers, `agent_id`, `organization_id`, and `contact` when available.
+
+    **Your system responds:** a JSON object with information the agent needs, such as balance or order status. The response is used during the conversation; it is not the final result. See the [inbound-context contract](/api-reference/inbound-webhook).
+  </Accordion>
+  <Accordion title="Channel conversation changes">
+    Select `INSERT`, `UPDATE`, or `DELETE`: these describe conversations, not every individual message. Configure the URL and switch in [Channel → Advanced](/en/messages/channel-settings).
+
+    Capture a controlled event in your receiver to map that channel’s fields. Do not apply the `data.call` schema. To explicitly control the outgoing body, use an automation with **Body template**.
+  </Accordion>
+  <Accordion title="Inbox Send Webhook action">
+    Choose the rule’s trigger and conditions. The action accepts URL, **POST**, **PUT**, or **PATCH**, headers, and **Body template**. An empty body sends the full event context.
+
+    Define your own body using the variables you need. In **Run History**, inspect **Trigger Payload** and the action’s **Output** to verify available values and the result. See [inbox automations](/en/messages/automations).
+  </Accordion>
+  <Accordion title="Text-agent follow-up closure">
+    Sends `event: "follow_up_closed"`, `threadId`, `agentId`, closure reason, stages, timestamp, contact, and summary. Its body differs from voice webhooks and has no `data` envelope.
+
+    It does not represent every manual inbox closure. See the [closure fields and example](/api-reference/follow-up-webhook) and [follow-up settings](/en/text-agents/follow-ups).
+  </Accordion>
+  <Accordion title="Out-of-hours and routing">
+    The out-of-hours webhook sends a POST when that channel rule applies. Configure it in [Responses](/en/messages/channel-settings) and verify a controlled message in your receiver.
+
+    Routing notifications describe assignments and deadlines. The current screen does not expose a public webhook editor. Coordinate the contract with support using [Conditions, notifications, and webhooks](/en/lead-routing/conditions-and-notifications). Do not reuse another webhook’s parser or signature.
+  </Accordion>
+</AccordionGroup>
+
+## Test an integration
+
+<Steps>
+  <Step title="Separate receivers">Use different routes or workflows for voice, inbound context, and messages. Each can require a different body or response.</Step>
+  <Step title="Trigger a controlled event">Test the actual scenario: call, message, closure, or conversation change. A sample JSON body is not proof of delivery.</Step>
+  <Step title="Keep the body and response">Inspect data in your receiver. For voice, compare with **Calls → Webhooks**; for inbox rules, use **Run History**.</Step>
+  <Step title="Verify the final action">Check the ticket, task, or update in your system. A successful HTTP response alone does not prove that action completed.</Step>
+</Steps>
+
+<Note>Retries, headers, and signatures depend on the webhook type. Call webhooks do not add the routing signature, and follow-up closure does not share their retry mechanism.</Note>
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can I use the same URL for everything?">
+    Only if your receiver distinguishes the contracts. Separate routes simplify mapping and prevent treating a context request as a notification.
+  </Accordion>
+  <Accordion title="Where can I see the received JSON?">
+    In your receiver logs or history. For calls, also use **Calls → Webhooks**. For automations, inspect **Trigger Payload** and **Run History** steps.
+  </Accordion>
+  <Accordion title="Does the channel webhook notify every message?">
+    No. Its events describe conversations. Choose the new-message automation trigger for individual messages.
+  </Accordion>
+</AccordionGroup>
+
+## Continue with
+
+<CardGroup cols={2}>
+  <Card title="Call webhook" href="/api-reference/webhooks">Complete fields and examples.</Card>
+  <Card title="Connect your system" href="/en/integrations/connect-your-system">From an API request to its result.</Card>
+</CardGroup>

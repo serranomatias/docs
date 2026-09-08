@@ -10,13 +10,23 @@ Un webhook envía datos de una llamada a tu sistema mediante una solicitud **POS
 
 ## Configurar y probar
 
-1. Abrí el agente de voz y entrá a **Avanzado → Post llamada**.
-2. Configurá la URL del webhook de salida. El webhook de entrada sirve para aportar contexto al agente y cumple otra función.
-3. Guardá y publicá la configuración del agente.
-4. Hacé una llamada controlada desde **Probar agente** y esperá el análisis.
-5. Revisá el cuerpo recibido y la respuesta HTTP en tu receptor y en **Llamadas → Webhooks**.
+<Steps>
+  <Step title="Prepará tu receptor">Creá una URL accesible que acepte POST JSON. Si vas a iniciar llamadas por API, guardá sus IDs para relacionarlas con tu sistema.</Step>
+  <Step title="Publicá la URL en el agente">Abrí **Agente de voz → Avanzado → Post llamada**, configurá el webhook de salida y publicá. El webhook de entrada obtiene contexto y tiene otro contrato.</Step>
+  <Step title="Hacé una llamada controlada">Usá **Probar agente** y esperá el análisis. Si hay criterios de evaluación, el envío puede esperar sus resultados.</Step>
+  <Step title="Compará la entrega y la acción">Revisá el cuerpo en tu receptor y en **Llamadas → Webhooks**. Confirmá también que la tarea, ticket o actualización esperada se completó.</Step>
+</Steps>
 
-El editor actual no ofrece un botón de prueba con un payload de ejemplo. Las pruebas de llamada pueden disparar acciones reales en tu receptor.
+El editor actual no ofrece un botón de payload de ejemplo. Las llamadas de prueba pueden ejecutar acciones reales en tu receptor.
+
+## Qué vas a recibir
+
+El body tiene un objeto `data` con agente, organización, llamada y contexto disponible. Los bloques de contacto y campaña dependen del registro. **Una prueba web puede tener contacto si se registró con email.**
+
+<CardGroup cols={2}>
+  <Card title="Campos y ejemplos del payload" icon="brackets-curly" href="/api-reference/webhooks">Explorá los objetos y elegí un JSON por tipo de llamada.</Card>
+  <Card title="Tipos de llamada" icon="phone" href="/es/llamadas/tipos-de-llamada">Distinguí pruebas, API, campañas, entrantes y widgets.</Card>
+</CardGroup>
 
 ## Diagnosticar la entrega
 
@@ -28,7 +38,7 @@ En **Llamadas → Webhooks**, abrí un evento para consultar su URL, estado, int
 | Pendiente | Revisá de nuevo antes de disparar una recuperación manual. |
 | Fallido | Leé el código y el mensaje de respuesta, corregí el receptor y usá **Reintentar** cuando esté disponible. |
 
-Guardá el ID de evento junto con el ID de llamada en tus registros. Hacé que tu receptor tolere entregas repetidas: un reintento no debe crear dos tickets ni duplicar una operación.
+Guardá `data.call.call_id` en tu receptor. El ID de evento visible en la app sirve para diagnóstico, pero no viene automáticamente en el body. Hacé que tu receptor tolere entregas repetidas: un reintento no debe crear dos tickets ni duplicar una operación.
 
 No confundas estos envíos con los webhooks de canales de mensajes, las automatizaciones del inbox o los eventos del enrutamiento. Tienen configuración y contenido propios.
 
@@ -50,3 +60,6 @@ No confundas estos envíos con los webhooks de canales de mensajes, las automati
 
 - [Registro de llamadas](/es/llamadas/registro)
 - [Post llamada](/es/agentes-de-voz/post-llamada)
+
+- [Tipos de webhooks](/es/integraciones/webhooks)
+- [Automatizar seguimientos](/es/integraciones/automatizar-seguimientos)

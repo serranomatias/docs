@@ -1,57 +1,1077 @@
 ---
-title: "Call Webhooks"
-description: "Receive analyzed-call data, acknowledge delivery, and handle retries."
+title: "Call webhook payload"
+description: "Inspect the post-call JSON schema, conditional fields, evaluation results, and examples for every call type."
 ---
 
-Configure the voice agent’s outgoing URL in **Advanced → Post-call** and publish it. ContactShip delivers a JSON **POST** after call analysis. This is separate from inbound-context requests, channel conversation events, and lead-routing notifications.
+Receive a JSON **POST** after call analysis. Configure the voice agent’s outgoing URL in **Advanced → Post-call** and publish. This contract covers browser tests, phone calls, campaigns, and widgets.
 
-## Delivery contract
+<CardGroup cols={2}>
+  <Card title="Configure and troubleshoot" icon="gear" href="/en/calls/webhooks">Set the destination, run a test, and inspect delivery attempts.</Card>
+  <Card title="Choose another webhook" icon="arrows-split-up-and-left" href="/en/integrations/webhooks">Inbound context, conversations, and follow-up closure have different contracts.</Card>
+</CardGroup>
 
-The body has a top-level `data` object. It is not an event envelope with a required `event: call_analyzed` property. Internal call lifecycle events do not imply a public subscription to every lifecycle event.
+## When delivery happens
 
-| Path | Content |
-|---|---|
-| `data.agent` | `agent_id`, `name`, `language`, and voice identifier. |
-| `data.organization` | Organization name, email, and country, when available. |
-| `data.call` | Call identifiers, status, transcript, analysis, recording, timing, and type. |
-| `data.contact` | Associated contact details when available. May be omitted. |
-| `data.campaign` | Campaign name, description, schedule, and status for campaign calls; may be empty or absent for other types. |
+<Steps>
+  <Step title="The conversation ends">Ending the call does not immediately provide its analyzed result.</Step>
+  <Step title="Analysis becomes available">ContactShip prepares summary, extracted fields, transcript, and call result. If the agent has evaluations, delivery can wait for their results.</Step>
+  <Step title="Your receiver accepts the event">ContactShip posts the body below. Persist accepted work and return HTTP 2xx within 30 seconds; process longer workflows asynchronously.</Step>
+</Steps>
 
-Call fields include `call_id`, `call_status`, `call_analysis`, `disconnection_reason`, `recording_url`, `start_timestamp`, `end_timestamp`, `transcript`, `transcript_object`, `transcript_with_tool_calls`, `call_type`, and `duration`. Timestamps are Unix milliseconds; duration represents seconds and may be serialized as a string.
+## Payload structure
 
-Calls with an associated contact can also include `call_result`, `from_number`, `to_number`, and `call_additional_data`. Contact fields include `contact_id`, `full_name`, `phone_number`, `email`, `country`, and `additional_data`; campaign-related contact values may be absent.
+The top-level body is `{ "data": { ... } }`. It has no required `event` or webhook event ID. A test call can have an associated contact; the presence of a contact controls the extra fields.
 
-Treat missing context as missing data rather than a delivery failure. An empty recording URL or analysis value does not prove that a usable recording or analysis exists.
+| Situation | `data.contact` | Extra call fields | `data.campaign` |
+|---|---|---|---|
+| Web call without a contact | Omitted | Omitted | `{}` |
+| Web call with an associated contact | Included | Included; phone values may be empty | `{}` |
+| Registered phone call with a contact | Included | Included | `{}` unless a campaign call |
+| Campaign call | Included when available | Included when associated | Campaign details |
 
-## Minimal illustrative body
+Extra call fields are `call_result`, `from_number`, `to_number`, and `call_additional_data`. See [Call types](/en/calls/call-types) for each origin and the distinction between type, state, and result.
 
-This example intentionally omits optional context and transcript details. It shows the nesting to parse, not a complete result from a real call.
+## Field reference
 
-```json
+Expand an object to inspect its fields. Optional context can be omitted; some stored values can be `null` or empty.
+
+<ResponseField name="data.agent" type="object">
+  Agent associated with the call.
+  <Expandable title="data.agent">
+    <ResponseField name="agent_id" type="string">
+      ContactShip agent ID.
+    </ResponseField>
+
+    <ResponseField name="name" type="string">
+      Agent name.
+    </ResponseField>
+
+    <ResponseField name="language" type="string">
+      Agent language.
+    </ResponseField>
+
+    <ResponseField name="voice" type="string">
+      Voice identifier.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="data.organization" type="object">
+  Organization context when available. Contains `name`, `email`, and `country`; no organization ID.
+</ResponseField>
+
+<ResponseField name="data.call" type="object">
+  Call result. Handle a missing block if context could not be retrieved.
+  <Expandable title="data.call">
+    <ResponseField name="call_id" type="string">
+      ContactShip call ID. Match it to `data.call_id` from the call-creation response.
+    </ResponseField>
+
+    <ResponseField name="call_type" type="string">
+      Origin of the call: `test_web_call`, `test_phone_call`, `api_call`, `platform_contact_call`, `campaign_call`, `inbound_call`, `widget_web_call`, or `web_call`.
+    </ResponseField>
+
+    <ResponseField name="call_status" type="string">
+      At this stage normally `ended` or `failed`. An unanswered call can be `ended`; check `call_result` when present.
+    </ResponseField>
+
+    <ResponseField name="duration" type="number | string">
+      Seconds. Normalize with `Number(value)` and validate before calculations.
+    </ResponseField>
+
+    <ResponseField name="start_timestamp" type="number">
+      Unix time in milliseconds; `0` can indicate unavailable data.
+    </ResponseField>
+
+    <ResponseField name="end_timestamp" type="number">
+      Unix time in milliseconds; `0` can indicate unavailable data.
+    </ResponseField>
+
+    <ResponseField name="disconnection_reason" type="string">
+      Why the call disconnected, for example `user_hangup`, `call_transfer`, `max_duration_reached`, `no_answer`, or `failed`.
+    </ResponseField>
+
+    <ResponseField name="recording_url" type="string">
+      Recording URL when available. Empty does not mean a recording exists.
+    </ResponseField>
+
+    <ResponseField name="transcript" type="string">
+      Plain conversation text; may be empty.
+    </ResponseField>
+
+    <ResponseField name="transcript_object" type="object[]">
+      Structured transcript messages, including role, content, and word timing when available.
+    </ResponseField>
+
+    <ResponseField name="transcript_with_tool_calls" type="object[]">
+      Transcript including tool activity when available. Entries can have different shapes.
+    </ResponseField>
+
+    <ResponseField name="call_analysis" type="object">
+      Post-call analysis and optional evaluation results.
+      <Expandable title="call_analysis">
+        <ResponseField name="call_summary" type="string">
+          Conversation summary.
+        </ResponseField>
+
+        <ResponseField name="user_sentiment" type="string">
+          Detected sentiment when available.
+        </ResponseField>
+
+        <ResponseField name="custom_analysis_data" type="object">
+          Your configured extraction fields. Define their keys and types in the voice agent’s post-call settings; a missing key is not a false value.
+        </ResponseField>
+
+        <ResponseField name="call_successful" type="boolean">
+          Whether analysis judged the call’s goal successful. This does not mean every downstream action succeeded.
+        </ResponseField>
+
+        <ResponseField name="in_voicemail" type="boolean">
+          Whether voicemail was detected.
+        </ResponseField>
+
+        <ResponseField name="evaluation_results" type="object[]">
+          Present when configured evaluations produced results. An absent array can mean no criteria or unavailable results. `unknown` means the criterion was evaluated but could not be determined.
+          <Expandable title="evaluation_results">
+            <ResponseField name="key" type="string">
+              Evaluation key.
+            </ResponseField>
+
+            <ResponseField name="name" type="string">
+              Evaluation name.
+            </ResponseField>
+
+            <ResponseField name="result" type="string">
+              `success`, `failure`, or `unknown`.
+            </ResponseField>
+
+            <ResponseField name="rationale" type="string">
+              Explanation of the result.
+            </ResponseField>
+
+            <ResponseField name="quote" type="string">
+              Supporting transcript excerpt; may be empty.
+            </ResponseField>
+
+            <ResponseField name="score" type="number | null">
+              Score when provided; otherwise `null`.
+            </ResponseField>
+
+          </Expandable>
+        </ResponseField>
+
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="call_result" type="string">
+      Only in the contact-associated branch. Examples: `answered`, `no_answer`, `voicemail`, `failed`. Omission is not evidence that the call was answered.
+    </ResponseField>
+
+    <ResponseField name="from_number" type="string | null">
+      Only in the contact-associated branch. Source number from the call record; can be empty for web calls.
+    </ResponseField>
+
+    <ResponseField name="to_number" type="string | null">
+      Only in the contact-associated branch. Destination number from the call record; can be empty for web calls.
+    </ResponseField>
+
+    <ResponseField name="call_additional_data" type="object | null">
+      Only in the contact-associated branch. Additional data saved for this call-contact relationship; usually `{}` when none exists. Not an automatic copy of every prompt variable or metadata value.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="data.contact" type="object">
+  Present when a contact is associated and its context is available.
+  <Expandable title="data.contact">
+    <ResponseField name="contact_id" type="string">
+      ContactShip contact ID.
+    </ResponseField>
+
+    <ResponseField name="full_name" type="string">
+      Contact name.
+    </ResponseField>
+
+    <ResponseField name="phone_number" type="string | null">
+      Contact phone; may be empty for web registrations.
+    </ResponseField>
+
+    <ResponseField name="email" type="string | null">
+      Contact email when available.
+    </ResponseField>
+
+    <ResponseField name="country" type="string | null">
+      Contact country when available.
+    </ResponseField>
+
+    <ResponseField name="additional_data" type="object | array | null">
+      Properties stored on the contact, separate from per-call additional data.
+    </ResponseField>
+
+    <ResponseField name="call_attempts" type="number">
+      Attempts from the campaign-contact relationship; defaults to `0` outside campaigns. Not the contact’s lifetime call count.
+    </ResponseField>
+
+    <ResponseField name="call_status" type="string">
+      Campaign-contact status, when available. Separate from `data.call.call_status`.
+    </ResponseField>
+
+    <ResponseField name="contact_data" type="object | null">
+      Data from the campaign-contact relationship, when available.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="data.campaign" type="object">
+  Campaign context for `campaign_call`. Normally `{}` for other types; can be omitted if unavailable.
+  <Expandable title="data.campaign">
+    <ResponseField name="name" type="string">
+      Campaign name.
+    </ResponseField>
+
+    <ResponseField name="description" type="string">
+      Campaign description.
+    </ResponseField>
+
+    <ResponseField name="start_at" type="string">
+      Campaign start time when available.
+    </ResponseField>
+
+    <ResponseField name="status" type="string">
+      Campaign status.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+## Examples by call type
+
+These are illustrative bodies using fictional data, not captured customer calls. Select the scenario to compare fields. They show one possible result; missing and empty values remain possible.
+
+<Tabs>
+
+  <Tab title="Web tests">
+
+<CodeGroup>
+
+```json Web test · no contact
 {
   "data": {
-    "agent": {"agent_id": "AGENT_ID", "name": "Showroom assistant", "language": "es-419"},
+    "agent": {
+      "agent_id": "11111111-1111-4111-8111-111111111111",
+      "name": "Demo agent",
+      "language": "es-419",
+      "voice": "voice-demo"
+    },
+    "organization": {
+      "country": "Mexico",
+      "email": "equipo@example.com",
+      "name": "Demo organization"
+    },
     "call": {
-      "call_id": "CALL_ID",
+      "call_id": "22222222-2222-4222-8222-222222222222",
+      "call_status": "ended",
+      "call_analysis": {
+        "call_summary": "Conversación de ejemplo.",
+        "user_sentiment": "Neutral",
+        "custom_analysis_data": {
+          "interes": "alto"
+        },
+        "call_successful": true,
+        "in_voicemail": false
+      },
+      "disconnection_reason": "user_hangup",
+      "recording_url": "https://example.com/recording.wav",
+      "start_timestamp": 1788796800000,
+      "end_timestamp": 1788796845000,
+      "transcript": "Agent: Hola.\nUser: Hola.",
+      "transcript_object": [
+        {
+          "role": "agent",
+          "content": "Hola.",
+          "words": []
+        },
+        {
+          "role": "user",
+          "content": "Hola.",
+          "words": []
+        }
+      ],
+      "transcript_with_tool_calls": [],
       "call_type": "test_web_call",
-      "duration": "45",
-      "transcript": "Example conversation text",
-      "call_analysis": {}
+      "duration": 45
+    },
+    "campaign": {}
+  }
+}
+```
+
+```json Web test · with contact
+{
+  "data": {
+    "agent": {
+      "agent_id": "11111111-1111-4111-8111-111111111111",
+      "name": "Demo agent",
+      "language": "es-419",
+      "voice": "voice-demo"
+    },
+    "organization": {
+      "country": "Mexico",
+      "email": "equipo@example.com",
+      "name": "Demo organization"
+    },
+    "call": {
+      "call_id": "22222222-2222-4222-8222-222222222222",
+      "call_status": "ended",
+      "call_analysis": {
+        "call_summary": "Conversación de ejemplo.",
+        "user_sentiment": "Neutral",
+        "custom_analysis_data": {
+          "interes": "alto"
+        },
+        "call_successful": true,
+        "in_voicemail": false
+      },
+      "disconnection_reason": "user_hangup",
+      "call_result": "answered",
+      "recording_url": "https://example.com/recording.wav",
+      "start_timestamp": 1788796800000,
+      "end_timestamp": 1788796845000,
+      "transcript": "Agent: Hola.\nUser: Hola.",
+      "transcript_object": [
+        {
+          "role": "agent",
+          "content": "Hola.",
+          "words": []
+        },
+        {
+          "role": "user",
+          "content": "Hola.",
+          "words": []
+        }
+      ],
+      "transcript_with_tool_calls": [],
+      "duration": 45,
+      "from_number": "",
+      "to_number": "",
+      "call_additional_data": {},
+      "call_type": "test_web_call"
+    },
+    "campaign": {},
+    "contact": {
+      "contact_id": "33333333-3333-4333-8333-333333333333",
+      "country": "Mexico",
+      "email": "persona@example.com",
+      "full_name": "Demo contact",
+      "phone_number": "",
+      "additional_data": {
+        "segmento": "demo"
+      },
+      "call_attempts": 0
     }
   }
 }
 ```
 
-## Acknowledgment and retries
+</CodeGroup>
 
-Return an HTTP **2xx** response after accepting the payload. The delivery client uses a 30-second timeout. Queue retries and manual retries can cause repeated delivery, so persist an application-level processing key such as the call ID before creating an external record. Do not assume a separate webhook event ID is included in the HTTP body.
+  </Tab>
 
-The configured call-webhook sender does not add the lead-routing `x-contactship-signature` header. Do not apply that separate signing contract to these deliveries. If your receiver needs additional verification, agree on a supported mechanism with support before treating a request as authenticated.
+  <Tab title="Phone">
 
-Inspect URL, attempts, response, and raw data in **Calls → Webhooks**. Fix the receiver before retrying, and verify whether an earlier delivery already completed its external effect.
+<CodeGroup>
 
-## Test
+```json Phone test
+{
+  "data": {
+    "agent": {
+      "agent_id": "11111111-1111-4111-8111-111111111111",
+      "name": "Demo agent",
+      "language": "es-419",
+      "voice": "voice-demo"
+    },
+    "organization": {
+      "country": "Mexico",
+      "email": "equipo@example.com",
+      "name": "Demo organization"
+    },
+    "call": {
+      "call_id": "22222222-2222-4222-8222-222222222222",
+      "call_status": "ended",
+      "call_analysis": {
+        "call_summary": "Conversación de ejemplo.",
+        "user_sentiment": "Neutral",
+        "custom_analysis_data": {
+          "interes": "alto"
+        },
+        "call_successful": true,
+        "in_voicemail": false
+      },
+      "disconnection_reason": "user_hangup",
+      "call_result": "answered",
+      "recording_url": "https://example.com/recording.wav",
+      "start_timestamp": 1788796800000,
+      "end_timestamp": 1788796845000,
+      "transcript": "Agent: Hola.\nUser: Hola.",
+      "transcript_object": [
+        {
+          "role": "agent",
+          "content": "Hola.",
+          "words": []
+        },
+        {
+          "role": "user",
+          "content": "Hola.",
+          "words": []
+        }
+      ],
+      "transcript_with_tool_calls": [],
+      "duration": 45,
+      "from_number": "+15555550101",
+      "to_number": "+15555550102",
+      "call_additional_data": {
+        "referencia": "demo"
+      },
+      "call_type": "test_phone_call"
+    },
+    "campaign": {},
+    "contact": {
+      "contact_id": "33333333-3333-4333-8333-333333333333",
+      "country": "Mexico",
+      "email": "persona@example.com",
+      "full_name": "Demo contact",
+      "phone_number": "+15555550102",
+      "additional_data": {
+        "segmento": "demo"
+      },
+      "call_attempts": 0
+    }
+  }
+}
+```
 
-The current voice editor has no sample-payload test button. Publish the URL, make a controlled test call, wait for analysis, and inspect both delivery history and your receiver logs. Tests can produce real webhooks and downstream effects.
+```json Outbound API
+{
+  "data": {
+    "agent": {
+      "agent_id": "11111111-1111-4111-8111-111111111111",
+      "name": "Demo agent",
+      "language": "es-419",
+      "voice": "voice-demo"
+    },
+    "organization": {
+      "country": "Mexico",
+      "email": "equipo@example.com",
+      "name": "Demo organization"
+    },
+    "call": {
+      "call_id": "22222222-2222-4222-8222-222222222222",
+      "call_status": "ended",
+      "call_analysis": {
+        "call_summary": "Conversación de ejemplo.",
+        "user_sentiment": "Neutral",
+        "custom_analysis_data": {
+          "interes": "alto"
+        },
+        "call_successful": true,
+        "in_voicemail": false
+      },
+      "disconnection_reason": "user_hangup",
+      "call_result": "answered",
+      "recording_url": "https://example.com/recording.wav",
+      "start_timestamp": 1788796800000,
+      "end_timestamp": 1788796845000,
+      "transcript": "Agent: Hola.\nUser: Hola.",
+      "transcript_object": [
+        {
+          "role": "agent",
+          "content": "Hola.",
+          "words": []
+        },
+        {
+          "role": "user",
+          "content": "Hola.",
+          "words": []
+        }
+      ],
+      "transcript_with_tool_calls": [],
+      "duration": 45,
+      "from_number": "+15555550101",
+      "to_number": "+15555550102",
+      "call_additional_data": {
+        "referencia": "demo"
+      },
+      "call_type": "api_call"
+    },
+    "campaign": {},
+    "contact": {
+      "contact_id": "33333333-3333-4333-8333-333333333333",
+      "country": "Mexico",
+      "email": "persona@example.com",
+      "full_name": "Demo contact",
+      "phone_number": "+15555550102",
+      "additional_data": {
+        "segmento": "demo"
+      },
+      "call_attempts": 0
+    }
+  }
+}
+```
 
-See [Call webhooks](/en/calls/webhooks), [Post-call settings](/en/voice-agents/post-call), and [Get call](/api-reference/endpoint/get-call).
+```json Outbound from app
+{
+  "data": {
+    "agent": {
+      "agent_id": "11111111-1111-4111-8111-111111111111",
+      "name": "Demo agent",
+      "language": "es-419",
+      "voice": "voice-demo"
+    },
+    "organization": {
+      "country": "Mexico",
+      "email": "equipo@example.com",
+      "name": "Demo organization"
+    },
+    "call": {
+      "call_id": "22222222-2222-4222-8222-222222222222",
+      "call_status": "ended",
+      "call_analysis": {
+        "call_summary": "Conversación de ejemplo.",
+        "user_sentiment": "Neutral",
+        "custom_analysis_data": {
+          "interes": "alto"
+        },
+        "call_successful": true,
+        "in_voicemail": false
+      },
+      "disconnection_reason": "user_hangup",
+      "call_result": "answered",
+      "recording_url": "https://example.com/recording.wav",
+      "start_timestamp": 1788796800000,
+      "end_timestamp": 1788796845000,
+      "transcript": "Agent: Hola.\nUser: Hola.",
+      "transcript_object": [
+        {
+          "role": "agent",
+          "content": "Hola.",
+          "words": []
+        },
+        {
+          "role": "user",
+          "content": "Hola.",
+          "words": []
+        }
+      ],
+      "transcript_with_tool_calls": [],
+      "duration": 45,
+      "from_number": "+15555550101",
+      "to_number": "+15555550102",
+      "call_additional_data": {
+        "referencia": "demo"
+      },
+      "call_type": "platform_contact_call"
+    },
+    "campaign": {},
+    "contact": {
+      "contact_id": "33333333-3333-4333-8333-333333333333",
+      "country": "Mexico",
+      "email": "persona@example.com",
+      "full_name": "Demo contact",
+      "phone_number": "+15555550102",
+      "additional_data": {
+        "segmento": "demo"
+      },
+      "call_attempts": 0
+    }
+  }
+}
+```
+
+```json Inbound
+{
+  "data": {
+    "agent": {
+      "agent_id": "11111111-1111-4111-8111-111111111111",
+      "name": "Demo agent",
+      "language": "es-419",
+      "voice": "voice-demo"
+    },
+    "organization": {
+      "country": "Mexico",
+      "email": "equipo@example.com",
+      "name": "Demo organization"
+    },
+    "call": {
+      "call_id": "22222222-2222-4222-8222-222222222222",
+      "call_status": "ended",
+      "call_analysis": {
+        "call_summary": "Conversación de ejemplo.",
+        "user_sentiment": "Neutral",
+        "custom_analysis_data": {
+          "interes": "alto"
+        },
+        "call_successful": true,
+        "in_voicemail": false
+      },
+      "disconnection_reason": "user_hangup",
+      "call_result": "answered",
+      "recording_url": "https://example.com/recording.wav",
+      "start_timestamp": 1788796800000,
+      "end_timestamp": 1788796845000,
+      "transcript": "Agent: Hola.\nUser: Hola.",
+      "transcript_object": [
+        {
+          "role": "agent",
+          "content": "Hola.",
+          "words": []
+        },
+        {
+          "role": "user",
+          "content": "Hola.",
+          "words": []
+        }
+      ],
+      "transcript_with_tool_calls": [],
+      "duration": 45,
+      "from_number": "+15555550102",
+      "to_number": "+15555550101",
+      "call_additional_data": {},
+      "call_type": "inbound_call"
+    },
+    "campaign": {},
+    "contact": {
+      "contact_id": "33333333-3333-4333-8333-333333333333",
+      "country": "Mexico",
+      "email": "persona@example.com",
+      "full_name": "Demo contact",
+      "phone_number": "+15555550102",
+      "additional_data": {
+        "segmento": "demo"
+      },
+      "call_attempts": 0
+    }
+  }
+}
+```
+
+</CodeGroup>
+
+  </Tab>
+
+  <Tab title="Campaign">
+
+```json Campaign
+{
+  "data": {
+    "agent": {
+      "agent_id": "11111111-1111-4111-8111-111111111111",
+      "name": "Demo agent",
+      "language": "es-419",
+      "voice": "voice-demo"
+    },
+    "organization": {
+      "country": "Mexico",
+      "email": "equipo@example.com",
+      "name": "Demo organization"
+    },
+    "call": {
+      "call_id": "22222222-2222-4222-8222-222222222222",
+      "call_status": "ended",
+      "call_analysis": {
+        "call_summary": "Conversación de ejemplo.",
+        "user_sentiment": "Neutral",
+        "custom_analysis_data": {
+          "interes": "alto"
+        },
+        "call_successful": true,
+        "in_voicemail": false
+      },
+      "disconnection_reason": "user_hangup",
+      "call_result": "answered",
+      "recording_url": "https://example.com/recording.wav",
+      "start_timestamp": 1788796800000,
+      "end_timestamp": 1788796845000,
+      "transcript": "Agent: Hola.\nUser: Hola.",
+      "transcript_object": [
+        {
+          "role": "agent",
+          "content": "Hola.",
+          "words": []
+        },
+        {
+          "role": "user",
+          "content": "Hola.",
+          "words": []
+        }
+      ],
+      "transcript_with_tool_calls": [],
+      "duration": 45,
+      "from_number": "+15555550101",
+      "to_number": "+15555550102",
+      "call_additional_data": {},
+      "call_type": "campaign_call"
+    },
+    "campaign": {
+      "description": "Ejemplo",
+      "name": "Campaña demo",
+      "start_at": "2026-09-07T16:00:00Z",
+      "status": "ACTIVE"
+    },
+    "contact": {
+      "contact_id": "33333333-3333-4333-8333-333333333333",
+      "country": "Mexico",
+      "email": "persona@example.com",
+      "full_name": "Demo contact",
+      "phone_number": "+15555550102",
+      "additional_data": {
+        "segmento": "demo"
+      },
+      "call_attempts": 2,
+      "call_status": "completed",
+      "contact_data": {
+        "referencia": "campaign-demo"
+      }
+    }
+  }
+}
+```
+
+  </Tab>
+
+  <Tab title="Widget and web">
+
+<CodeGroup>
+
+```json Widget · no contact
+{
+  "data": {
+    "agent": {
+      "agent_id": "11111111-1111-4111-8111-111111111111",
+      "name": "Demo agent",
+      "language": "es-419",
+      "voice": "voice-demo"
+    },
+    "organization": {
+      "country": "Mexico",
+      "email": "equipo@example.com",
+      "name": "Demo organization"
+    },
+    "call": {
+      "call_id": "22222222-2222-4222-8222-222222222222",
+      "call_status": "ended",
+      "call_analysis": {
+        "call_summary": "Conversación de ejemplo.",
+        "user_sentiment": "Neutral",
+        "custom_analysis_data": {
+          "interes": "alto"
+        },
+        "call_successful": true,
+        "in_voicemail": false
+      },
+      "disconnection_reason": "user_hangup",
+      "recording_url": "https://example.com/recording.wav",
+      "start_timestamp": 1788796800000,
+      "end_timestamp": 1788796845000,
+      "transcript": "Agent: Hola.\nUser: Hola.",
+      "transcript_object": [
+        {
+          "role": "agent",
+          "content": "Hola.",
+          "words": []
+        },
+        {
+          "role": "user",
+          "content": "Hola.",
+          "words": []
+        }
+      ],
+      "transcript_with_tool_calls": [],
+      "call_type": "widget_web_call",
+      "duration": 45
+    },
+    "campaign": {}
+  }
+}
+```
+
+```json Widget · with contact
+{
+  "data": {
+    "agent": {
+      "agent_id": "11111111-1111-4111-8111-111111111111",
+      "name": "Demo agent",
+      "language": "es-419",
+      "voice": "voice-demo"
+    },
+    "organization": {
+      "country": "Mexico",
+      "email": "equipo@example.com",
+      "name": "Demo organization"
+    },
+    "call": {
+      "call_id": "22222222-2222-4222-8222-222222222222",
+      "call_status": "ended",
+      "call_analysis": {
+        "call_summary": "Conversación de ejemplo.",
+        "user_sentiment": "Neutral",
+        "custom_analysis_data": {
+          "interes": "alto"
+        },
+        "call_successful": true,
+        "in_voicemail": false
+      },
+      "disconnection_reason": "user_hangup",
+      "call_result": "answered",
+      "recording_url": "https://example.com/recording.wav",
+      "start_timestamp": 1788796800000,
+      "end_timestamp": 1788796845000,
+      "transcript": "Agent: Hola.\nUser: Hola.",
+      "transcript_object": [
+        {
+          "role": "agent",
+          "content": "Hola.",
+          "words": []
+        },
+        {
+          "role": "user",
+          "content": "Hola.",
+          "words": []
+        }
+      ],
+      "transcript_with_tool_calls": [],
+      "duration": 45,
+      "from_number": "",
+      "to_number": "",
+      "call_additional_data": {},
+      "call_type": "widget_web_call"
+    },
+    "campaign": {},
+    "contact": {
+      "contact_id": "33333333-3333-4333-8333-333333333333",
+      "country": "Mexico",
+      "email": "persona@example.com",
+      "full_name": "Demo contact",
+      "phone_number": "",
+      "additional_data": {
+        "segmento": "demo"
+      },
+      "call_attempts": 0
+    }
+  }
+}
+```
+
+```json Generic web
+{
+  "data": {
+    "agent": {
+      "agent_id": "11111111-1111-4111-8111-111111111111",
+      "name": "Demo agent",
+      "language": "es-419",
+      "voice": "voice-demo"
+    },
+    "organization": {
+      "country": "Mexico",
+      "email": "equipo@example.com",
+      "name": "Demo organization"
+    },
+    "call": {
+      "call_id": "22222222-2222-4222-8222-222222222222",
+      "call_status": "ended",
+      "call_analysis": {
+        "call_summary": "Conversación de ejemplo.",
+        "user_sentiment": "Neutral",
+        "custom_analysis_data": {
+          "interes": "alto"
+        },
+        "call_successful": true,
+        "in_voicemail": false
+      },
+      "disconnection_reason": "user_hangup",
+      "recording_url": "https://example.com/recording.wav",
+      "start_timestamp": 1788796800000,
+      "end_timestamp": 1788796845000,
+      "transcript": "Agent: Hola.\nUser: Hola.",
+      "transcript_object": [
+        {
+          "role": "agent",
+          "content": "Hola.",
+          "words": []
+        },
+        {
+          "role": "user",
+          "content": "Hola.",
+          "words": []
+        }
+      ],
+      "transcript_with_tool_calls": [],
+      "call_type": "web_call",
+      "duration": 45
+    },
+    "campaign": {}
+  }
+}
+```
+
+</CodeGroup>
+
+  </Tab>
+
+  <Tab title="Results">
+
+<CodeGroup>
+
+```json With evaluations
+{
+  "data": {
+    "agent": {
+      "agent_id": "11111111-1111-4111-8111-111111111111",
+      "name": "Demo agent",
+      "language": "es-419",
+      "voice": "voice-demo"
+    },
+    "organization": {
+      "country": "Mexico",
+      "email": "equipo@example.com",
+      "name": "Demo organization"
+    },
+    "call": {
+      "call_id": "22222222-2222-4222-8222-222222222222",
+      "call_status": "ended",
+      "call_analysis": {
+        "call_summary": "Conversación de ejemplo.",
+        "user_sentiment": "Neutral",
+        "custom_analysis_data": {
+          "interes": "alto"
+        },
+        "call_successful": true,
+        "in_voicemail": false,
+        "evaluation_results": [
+          {
+            "key": "saludo",
+            "name": "Saludo inicial",
+            "result": "success",
+            "rationale": "El agente saluda.",
+            "quote": "Hola.",
+            "score": null
+          }
+        ]
+      },
+      "disconnection_reason": "user_hangup",
+      "recording_url": "https://example.com/recording.wav",
+      "start_timestamp": 1788796800000,
+      "end_timestamp": 1788796845000,
+      "transcript": "Agent: Hola.\nUser: Hola.",
+      "transcript_object": [
+        {
+          "role": "agent",
+          "content": "Hola.",
+          "words": []
+        },
+        {
+          "role": "user",
+          "content": "Hola.",
+          "words": []
+        }
+      ],
+      "transcript_with_tool_calls": [],
+      "call_type": "test_web_call",
+      "duration": 45
+    },
+    "campaign": {}
+  }
+}
+```
+
+```json No answer
+{
+  "data": {
+    "agent": {
+      "agent_id": "11111111-1111-4111-8111-111111111111",
+      "name": "Demo agent",
+      "language": "es-419",
+      "voice": "voice-demo"
+    },
+    "organization": {
+      "country": "Mexico",
+      "email": "equipo@example.com",
+      "name": "Demo organization"
+    },
+    "call": {
+      "call_id": "22222222-2222-4222-8222-222222222222",
+      "call_status": "ended",
+      "call_analysis": {
+        "call_summary": "Sin respuesta.",
+        "user_sentiment": "Neutral",
+        "custom_analysis_data": {},
+        "call_successful": false,
+        "in_voicemail": false
+      },
+      "disconnection_reason": "no_answer",
+      "call_result": "no_answer",
+      "recording_url": "https://example.com/recording.wav",
+      "start_timestamp": 1788796800000,
+      "end_timestamp": 1788796800000,
+      "transcript": "",
+      "transcript_object": [],
+      "transcript_with_tool_calls": [],
+      "duration": 0,
+      "from_number": "+15555550101",
+      "to_number": "+15555550102",
+      "call_additional_data": {
+        "referencia": "demo"
+      },
+      "call_type": "api_call"
+    },
+    "campaign": {},
+    "contact": {
+      "contact_id": "33333333-3333-4333-8333-333333333333",
+      "country": "Mexico",
+      "email": "persona@example.com",
+      "full_name": "Demo contact",
+      "phone_number": "+15555550102",
+      "additional_data": {
+        "segmento": "demo"
+      },
+      "call_attempts": 0
+    }
+  }
+}
+```
+
+</CodeGroup>
+
+  </Tab>
+
+</Tabs>
+
+## Correlation and missing data
+
+- Store the call ID from creation. This webhook does not forward `metadata`, a separate event ID, `direction`, organization ID, campaign ID, call price, or agent version as dedicated fields.
+- Use `data.call.call_analysis.custom_analysis_data` for fields you configure in **Post-call**. Use your own ID mapping to recover CRM context.
+- Missing `evaluation_results` can mean no evaluations were assigned or no results became available. `unknown` is an evaluation result, not a missing evaluation.
+- A call without a recorded call row may have no final webhook. This can affect inbound calls that never connect.
+- For an unanswered call, use `call_result` when present. `call_status: "ended"` alone does not mean someone answered.
+
+## Delivery and retries
+
+The sender uses `Content-Type: application/json`, a 30-second timeout, and accepts HTTP **2xx**. It can follow up to three redirects. Queue retries and manual retries can deliver the same call again.
+
+Use durable processing state keyed by call ID and action. Persist accepted work before acknowledging it, retry failed actions independently, and avoid duplicating completed external operations. A generic HTTP success response does not prove your business action finished.
+
+The sender does not add the lead-routing `x-contactship-signature` header. Do not reuse another webhook’s signing contract. Keep API keys on your server; an API key is not automatically sent to your webhook URL.
+
+## Inspect an actual delivery
+
+Open **Calls → Webhooks** and select the event. Compare destination, attempts, response, and raw data with your receiver. The event ID shown in that screen helps support investigate; it is not automatically present in the HTTP body.
+
+The current voice editor has no sample-payload test button. Publish the URL and make a controlled test call. Receiver workflows can perform real actions during tests.
+
+<CardGroup cols={2}>
+  <Card title="Automate follow-ups" href="/en/integrations/automate-follow-ups">Map analysis into a task, CRM update, or another attempt.</Card>
+  <Card title="Retrieve a call" href="/api-reference/endpoint/get-call">Query a recorded call by its ContactShip ID.</Card>
+</CardGroup>

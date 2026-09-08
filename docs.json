@@ -98,6 +98,7 @@
                 "group": "Llamadas",
                 "icon": "phone-volume",
                 "pages": [
+                  "es/llamadas/tipos-de-llamada",
                   "es/llamadas/mis-numeros",
                   "es/llamadas/registro",
                   "es/llamadas/webhooks",
@@ -173,6 +174,9 @@
                 "group": "Integraciones",
                 "icon": "plug",
                 "pages": [
+                  "es/integraciones/integrar-tu-sistema",
+                  "es/integraciones/webhooks",
+                  "es/integraciones/automatizar-seguimientos",
                   "es/integraciones/vision-general",
                   "es/integraciones/google-calendar",
                   "es/integraciones/google-sheets",
@@ -218,7 +222,9 @@
                 "pages": [
                   "api-reference/introduction",
                   "api-reference/rate-limits",
-                  "api-reference/webhooks"
+                  "api-reference/webhooks",
+                  "api-reference/inbound-webhook",
+                  "api-reference/follow-up-webhook"
                 ]
               },
               {
@@ -379,6 +385,7 @@
                 "group": "Calls",
                 "icon": "phone-volume",
                 "pages": [
+                  "en/calls/call-types",
                   "en/calls/my-numbers",
                   "en/calls/call-log",
                   "en/calls/webhooks",
@@ -454,6 +461,9 @@
                 "group": "Integrations",
                 "icon": "plug",
                 "pages": [
+                  "en/integrations/connect-your-system",
+                  "en/integrations/webhooks",
+                  "en/integrations/automate-follow-ups",
                   "en/integrations/overview",
                   "en/integrations/google-calendar",
                   "en/integrations/google-sheets",
@@ -499,7 +509,9 @@
                 "pages": [
                   "api-reference/introduction",
                   "api-reference/rate-limits",
-                  "api-reference/webhooks"
+                  "api-reference/webhooks",
+                  "api-reference/inbound-webhook",
+                  "api-reference/follow-up-webhook"
                 ]
               },
               {

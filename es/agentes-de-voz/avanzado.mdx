@@ -94,7 +94,7 @@ Está fuera del interruptor **Activar contexto** y funciona aunque el contexto n
 | **Webhook propio** | URL de tu sistema que recibe una petición `POST` cuando entra una llamada. Las claves del JSON que devuelva se convierten en variables del prompt. Si una clave coincide con una variable del contexto nativo, gana la del webhook. | URL, por ejemplo `https://tu-dominio.com/contexto` | vacío |
 | **Tiempo de espera (ms)** | Cuánto espera la plataforma la respuesta antes de seguir sin ella. | 1.000 a 7.000 ms | 3.000 ms |
 
-Para usar una clave puntual, escribí su nombre entre llaves dobles en las instrucciones, por ejemplo `{{saldo}}` si tu endpoint devuelve `"saldo"`. El detalle de lo que recibe y debe devolver el endpoint está en la [referencia de webhooks](/api-reference/webhooks).
+Para usar una clave puntual, escribí su nombre entre llaves dobles en las instrucciones, por ejemplo `{{saldo}}` si tu endpoint devuelve `"saldo"`. El detalle de lo que recibe y debe devolver el endpoint está en la [referencia de webhooks](/api-reference/inbound-webhook).
 
 <Tip>
 Devolvé desde el webhook solo lo que el agente necesita decir o decidir, con claves cortas y en minúsculas. Si el endpoint tarda más que el tiempo de espera, la llamada sigue sin esas variables y el prompt debe contemplar que lleguen vacías.

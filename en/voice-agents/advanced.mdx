@@ -34,7 +34,7 @@ Recorded catalog previews do not demonstrate these settings. Publish and test to
 | Call history | 0–6 calls, default 3; 1–90 days back, default 30; inbound, outbound, or both. |
 | Last transcript | 500–20,000 characters, default 4,000; keeps the end when truncating. |
 
-The optional inbound webhook obtains context through POST. Its returned keys become prompt variables and override matching native context keys. Timeout is 1,000–7,000 ms, default 3,000; the call continues without that response if the timeout is reached. This is separate from outgoing post-call notifications.
+The optional inbound webhook obtains context through POST. Its returned keys become prompt variables and override matching native context keys. Timeout is 1,000–7,000 ms, default 3,000; the call continues without that response if the timeout is reached. This is separate from outgoing post-call notifications. See the [inbound webhook contract](/api-reference/inbound-webhook) for the request body, response format, and reserved variables.
 
 Invalid numeric context values prevent saving and publishing until corrected.
 

@@ -1,0 +1,72 @@
+---
+title: "Tipos de llamada"
+description: "Identificá pruebas web, pruebas telefónicas, salientes, entrantes, campañas y widgets. Distinguí tipo, estado y resultado."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Llamadas → Filtro de tipo" />
+
+El tipo identifica **cómo se originó la llamada**. No indica si fue contestada, si cumplió el objetivo ni si se entregó el webhook.
+
+## Valores de call_type
+
+| Valor exacto | Qué representa | Datos asociados |
+|---|---|---|
+| `test_web_call` | Prueba desde el navegador | Con email, puede incluir contacto; sin él, normalmente no. |
+| `test_phone_call` | Prueba a un teléfono | Tiene contacto y números de origen y destino. |
+| `api_call` | Saliente iniciada por API | Tiene contacto y puede incluir datos adicionales por llamada. |
+| `platform_contact_call` | Saliente desde un contacto del panel | Tiene contacto; conserva este tipo aunque use la misma infraestructura que la API. |
+| `campaign_call` | Llamada de una campaña | Agrega campaña y datos de la relación campaña-contacto. |
+| `inbound_call` | Entrante a un número asignado | Busca o crea el contacto por el teléfono de origen. |
+| `widget_web_call` | Llamada desde el widget web | Con email, puede incluir contacto. Los teléfonos pueden estar vacíos. |
+| `web_call` | Llamada web genérica | Puede aparecer en integraciones o registros existentes. Revisá si tiene contacto. |
+
+
+<Note>En el webhook, leé `data.call.call_type`. En la API de consulta de llamadas, el registro usa `type`. No uses el `call_type` de un proveedor externo como equivalente.</Note>
+
+## Tipo, estado y resultado
+
+| Pregunta | Campo del webhook | Ejemplo |
+|---|---|---|
+| ¿De dónde vino? | `data.call.call_type` | `api_call` |
+| ¿En qué estado quedó? | `data.call.call_status` | `ended` |
+| ¿Contestaron? | `data.call.call_result`, si hay contacto | `answered`, `no_answer`, `voicemail`, `failed` |
+| ¿Cumplió el objetivo? | `data.call.call_analysis.call_successful` | `true` o `false` |
+| ¿Por qué se cortó? | `data.call.disconnection_reason` | `user_hangup`, `max_duration_reached` |
+
+Una llamada sin respuesta puede tener `call_status: "ended"` y `call_result: "no_answer"`. El estado del [registro de llamadas](/es/llamadas/registro) también puede usar valores como `completed` o `incomplete`; no son el mismo campo.
+
+## Pruebas y datos del contacto
+
+<Tabs>
+  <Tab title="Web sin contacto">Recibís análisis, grabación y transcripciones cuando están disponibles. `data.contact`, `call_result`, `from_number`, `to_number` y `call_additional_data` se omiten.</Tab>
+  <Tab title="Web con contacto">Registrar la llamada con email permite asociar un contacto. Se agregan los campos de contacto, pero origen y destino pueden estar vacíos: sigue siendo una llamada de navegador.</Tab>
+  <Tab title="Teléfono">Las llamadas telefónicas registradas normalmente tienen contacto. En entrantes que nunca conectaron puede no existir registro ni webhook final.</Tab>
+</Tabs>
+
+## Usar el tipo en una automatización
+
+Elegí explícitamente qué tipos entran al flujo. Para acciones de producción, excluí `test_web_call` y `test_phone_call`. Si también probás desde un widget, separá esa prueba por agente o registro de tu sistema.
+
+Las [recetas de seguimiento](/es/integraciones/automatizar-seguimientos) combinan tipo, resultado, contacto y control de duplicados.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Una prueba web siempre viene sin contacto?">
+    No. Puede tener contacto si el registro incluyó email. El payload depende de la asociación real de la llamada.
+  </Accordion>
+  <Accordion title="¿ended significa que contestaron?">
+    No. Revisá `call_result` cuando esté presente y el análisis para saber el resultado.
+  </Accordion>
+  <Accordion title="¿Dónde veo un ejemplo completo?">
+    En la [referencia del webhook](/api-reference/webhooks), con ejemplos por caso.
+  </Accordion>
+</AccordionGroup>
+
+## Seguí con
+
+<CardGroup cols={2}>
+  <Card title="Payload del webhook" href="/api-reference/webhooks">Campos y ejemplos.</Card>
+  <Card title="Configurar webhooks" href="/es/llamadas/webhooks">Entrega, pruebas y diagnóstico.</Card>
+</CardGroup>

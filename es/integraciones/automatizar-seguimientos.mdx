@@ -1,0 +1,97 @@
+---
+title: "Automatizar seguimientos"
+description: "Creá tareas, actualizá tu CRM o programá otro intento usando resultados de llamadas y eventos del inbox. Mapeá datos y evitá duplicados."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Agentes; Automatizaciones del inbox; tu sistema" />
+
+Un seguimiento puede ser una tarea para una persona, una actualización del CRM o un nuevo contacto con el cliente. Elegí primero **qué evento lo habilita**; después configurá la acción.
+
+## Elegí el mecanismo
+
+<Tabs>
+  <Tab title="Después de una llamada">
+    Recibí el [webhook de análisis](/es/llamadas/webhooks). Usá resultado y datos extraídos para decidir el siguiente paso en tu backend, n8n o Make.
+  </Tab>
+  <Tab title="Por un evento del inbox">
+    Usá [automatizaciones](/es/mensajes/automatizaciones): disparador, condiciones y acciones. Podés agregar notas, mover contactos, crear tickets o enviar un webhook con cuerpo propio.
+  </Tab>
+  <Tab title="Cuando dejan de responder">
+    Usá [seguimientos del agente de texto](/es/agentes-de-texto/seguimientos), marcados **Experimental**. Configurá etapas, horarios y cierre. Su webhook de cierre tiene un [contrato propio](/api-reference/follow-up-webhook).
+  </Tab>
+</Tabs>
+
+## Receta: crear una tarea después de una llamada
+
+<Steps>
+  <Step title="Definí el dato que decide el seguimiento">
+    En [Post llamada](/es/agentes-de-voz/post-llamada), agregá un dato de análisis como `requiere_seguimiento`, de tipo boolean. Explicá cuándo debe ser verdadero. El valor llegará en `data.call.call_analysis.custom_analysis_data.requiere_seguimiento`.
+  </Step>
+  <Step title="Configurá el receptor y el mapeo">
+    Publicá la URL del webhook de salida del agente. Conservá `data.call.call_id` y, cuando exista, `data.contact.contact_id`. Guardá el evento en almacenamiento persistente antes de confirmar recepción; luego procesá la tarea desde una cola o ejecución recuperable.
+  </Step>
+  <Step title="Aplicá condiciones antes de actuar">
+    Admití solo los tipos de llamada previstos, excluí pruebas y comprobá que existe contacto. Si el dato de análisis falta, mandá el caso a revisión o consultá la llamada: no interpretes ausencia como `false`.
+  </Step>
+  <Step title="Creá la tarea una sola vez">
+    Usá una clave única propia como `call_id + crear_tarea_seguimiento`. Guardá estado y resultado de la acción de manera recuperable. No dependas de memoria temporal ni marques como terminado antes de crear la tarea.
+
+    Podés crearla en tu CRM o con [Create task](/api-reference/endpoint/create-task). Ese endpoint requiere `details`, `brief`, `type` y `created_by`. Incluí la referencia de contacto en `details`: actualmente `contact_id` no crea una asociación persistida en esa operación.
+  </Step>
+</Steps>
+
+## Qué datos mapear
+
+| Destino en tu sistema | Dato del webhook | Uso |
+|---|---|---|
+| Identificador de la llamada | `data.call.call_id` | Correlación y control de duplicados |
+| Contacto | `data.contact.contact_id` | Buscar el registro; puede faltar |
+| Resumen de la gestión | `data.call.call_analysis.call_summary` | Descripción de tarea o nota |
+| Condición de seguimiento | `data.call.call_analysis.custom_analysis_data.requiere_seguimiento` | Campo configurado por vos, no estándar |
+| Resultado telefónico | `data.call.call_result` | Distinguir contestada, sin respuesta y buzón |
+| Grabación | `data.call.recording_url` | Referencia opcional |
+
+## Decidí el siguiente paso
+
+| Situación | Acción sugerida | Qué comprobar |
+|---|---|---|
+| Requiere seguimiento | Crear tarea o actualizar CRM | Campo presente, contacto y acción no duplicada |
+| Sin respuesta | Programar un nuevo intento según tu política | Horario, máximo de intentos y cancelación si el cliente ya respondió |
+| Promesa de pago o cita | Guardar fecha y detalle extraídos | Validar la fecha y confirmar el dato antes de actuar |
+| Evaluación fallida | Crear revisión humana | `evaluation_results` presente; `unknown` no es aprobación ni rechazo |
+
+Para volver a llamar, usá [Call a contact](/api-reference/endpoint/make-contact-call) con `schedule`. Guardá la relación entre intento original y nuevo. No conectes cada `no_answer` a una llamada inmediata: crearía un ciclo sin límite.
+
+## Receta: enviar los datos de una conversación a tu CRM
+
+En una regla del inbox, elegí un disparador como **Conversation Closed**, agregá **AI Conversation Analysis** si necesitás extraer datos, y después **Send Webhook**. Definí un **Body template** con las variables disponibles en el editor. Las variables `ai.*` solo existen después del paso de análisis.
+
+Inspeccioná **Run History → Trigger Payload** y el **Output** de cada paso. **Replay** ejecuta acciones otra vez; el receptor también debe reconocer duplicados.
+
+<Warning>Una prueba puede iniciar llamadas, enviar mensajes o crear tareas reales. Usá un contacto controlado y verificá una ejecución completa antes de activar el flujo para todos.</Warning>
+
+## Si el siguiente paso es WhatsApp
+
+El webhook de voz no aporta automáticamente `channel_id` ni `thread_id`. Obtené el canal con [List channels](/api-reference/endpoint/get-channels) y elegí la conversación correcta. Cuando corresponda iniciar contacto o usar una plantilla, consultá [Send template](/api-reference/endpoint/waba-send-template) y [Plantillas](/es/mensajes/plantillas). El webhook de una llamada no abre por sí mismo una ventana de conversación de WhatsApp.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Puedo usar el resultado apenas inicio la llamada?">
+    La respuesta de creación identifica la solicitud. Esperá el webhook de análisis o consultá el registro antes de decidir por resultado.
+  </Accordion>
+  <Accordion title="¿Un reintento del webhook hace otra llamada?">
+    El reintento solo entrega datos nuevamente. Pero tu automatización sí podría llamar otra vez si no controla acciones duplicadas.
+  </Accordion>
+  <Accordion title="¿Cómo cancelo un seguimiento que ya no hace falta?">
+    Antes de ejecutar una acción pendiente, volvé a comprobar respuesta del cliente, estado de la oportunidad y límites de intentos en tu sistema.
+  </Accordion>
+</AccordionGroup>
+
+## Seguí con
+
+<CardGroup cols={2}>
+  <Card title="Tipos de llamada" href="/es/llamadas/tipos-de-llamada">Separá pruebas, campañas y producción.</Card>
+  <Card title="Tipos de webhooks" href="/es/integraciones/webhooks">Elegí el disparador correcto.</Card>
+</CardGroup>

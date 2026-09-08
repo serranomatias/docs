@@ -1,0 +1,70 @@
+---
+title: "Follow-up closure webhook"
+description: "Receive the text-agent follow-up closure reason, stages, contact, and conversation summary."
+---
+
+Receive a notification when a text agent’s follow-up process finishes its stages or the AI decides further follow-up is unnecessary. Configure **Text agent → Advanced → Follow-ups → Close webhook**. Text-agent follow-ups are **Experimental**.
+
+This webhook does not represent every manual inbox closure. For a rule triggered by conversation closure, use [inbox automations](/en/messages/automations).
+
+## Payload
+
+The body has top-level event fields, with no `data` envelope.
+
+```json Example
+{
+  "event": "follow_up_closed",
+  "threadId": "55555555-5555-4555-8555-555555555555",
+  "agentId": "11111111-1111-4111-8111-111111111111",
+  "closureReason": "all_stages_completed_no_response",
+  "closureReasonDescription": "Todas las etapas de seguimiento fueron completadas sin recibir respuesta del usuario",
+  "totalStages": 3,
+  "currentStage": 3,
+  "closedAt": "2026-10-15T16:00:00.000Z",
+  "contact": {
+    "id": "33333333-3333-4333-8333-333333333333",
+    "phone": "+15555550102",
+    "name": "Demo contact"
+  },
+  "conversationSummary": "The customer has not replied to the follow-up messages."
+}
+```
+
+<ResponseField name="event" type="string">`follow_up_closed`.</ResponseField>
+<ResponseField name="threadId" type="string">Conversation ID. Use it to correlate the follow-up with your conversation record.</ResponseField>
+<ResponseField name="agentId" type="string">Text-agent ID.</ResponseField>
+<ResponseField name="closureReason" type="string">
+  `all_stages_completed_no_response` or `ai_determined_conversation_resolved`. Branch on this stable value, not the description.
+</ResponseField>
+<ResponseField name="closureReasonDescription" type="string">Human-readable reason. The current descriptions are Spanish.</ResponseField>
+<ResponseField name="totalStages" type="number">Configured stage count.</ResponseField>
+<ResponseField name="currentStage" type="number">Current stage, numbered from 1.</ResponseField>
+<ResponseField name="closedAt" type="string">ISO timestamp of the closure notification.</ResponseField>
+<ResponseField name="contact" type="object | null">
+  Contact information when available.
+  <Expandable title="Contact fields">
+    <ResponseField name="id" type="string | null">Contact ID.</ResponseField>
+    <ResponseField name="phone" type="string | null">Contact phone number.</ResponseField>
+    <ResponseField name="name" type="string | null">Contact name.</ResponseField>
+  </Expandable>
+</ResponseField>
+<ResponseField name="conversationSummary" type="string">Summary supplied by the follow-up process.</ResponseField>
+<ResponseField name="aiAnalysisReason" type="string">Additional AI reasoning when provided. Can be omitted.</ResponseField>
+
+## Process the event
+
+<Tabs>
+  <Tab title="No response">Use `all_stages_completed_no_response` to record that the sequence finished without a reply. A human task or CRM update can be appropriate; do not automatically start another unlimited sequence.</Tab>
+  <Tab title="Resolved by AI">Use `ai_determined_conversation_resolved` to record the decision and inspect `conversationSummary` and optional `aiAnalysisReason`. This is the AI’s interpretation, not independent proof that an external business action completed.</Tab>
+</Tabs>
+
+## Delivery behavior
+
+The configured method is **POST** or **PUT**. The sender uses JSON and a 10-second timeout. It does not provide the same automatic retry flow as call webhooks; a delivery failure does not block the conversation’s follow-up process.
+
+Record accepted events and your action results in the receiver. For duplicate handling, correlate by conversation, agent, and closure notification; a conversation can have more than one follow-up cycle. Do not treat the conversation ID alone as a permanent one-time key.
+
+<CardGroup cols={2}>
+  <Card title="Configure text follow-ups" href="/en/text-agents/follow-ups">Stages, cumulative timing, schedules, and closure.</Card>
+  <Card title="Build a follow-up workflow" href="/en/integrations/automate-follow-ups">Choose conditions, map data, and verify the action.</Card>
+</CardGroup>

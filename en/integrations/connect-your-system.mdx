@@ -1,0 +1,74 @@
+---
+title: "Connect ContactShip to your system"
+sidebarTitle: "Connect your system"
+description: "Choose APIs, webhooks, HTTP tools, or automations. Find credentials, IDs, results, and an end-to-end integration flow."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Organization → API Keys; Agents; Integrations" />
+
+An integration connects an action in your system with ContactShip data or actions. Start by deciding **who initiates the process** and **when you need the result**.
+
+## Choose an entry point
+
+<CardGroup cols={2}>
+  <Card title="My system starts the action" icon="code" href="/api-reference/introduction">Use the API to create contacts, start calls, send messages, or query records.</Card>
+  <Card title="ContactShip notifies my system" icon="bell" href="/en/integrations/webhooks">Receive results or events through a webhook. Each type has its own configuration and payload.</Card>
+  <Card title="The agent needs my system" icon="wrench" href="/en/voice-agents/tools">Configure an HTTP tool to read or update data during a conversation.</Card>
+  <Card title="I want to automate follow-ups" icon="arrows-rotate" href="/en/integrations/automate-follow-ups">Choose a call-result workflow, an inbox rule, or text-agent follow-ups.</Card>
+</CardGroup>
+
+## Walkthrough: from your CRM to a call result
+
+<Steps>
+  <Step title="Identify the organization and records">Generate or copy the [API key](/en/organization/api-keys). Find the contact, agent, and outbound number in the same organization.</Step>
+  <Step title="Configure the result destination">Open the voice agent’s **Advanced → Post-call**, configure the outgoing webhook URL, and publish. Prepare your receiver before starting the call.</Step>
+  <Step title="Start the call and store its ID">Use [Call a contact](/api-reference/endpoint/make-contact-call) or [Call a number](/api-reference/endpoint/make-ai-phone-call). Store the response’s `data.call_id` alongside your CRM ID. Request acceptance does not contain the final call result.</Step>
+  <Step title="Process analysis and verify the action">The webhook arrives after analysis. Match `data.call.call_id` to your record, inspect the result, and update your system. Check delivery in **Calls → Webhooks** and execution in your receiver.</Step>
+</Steps>
+
+<Tip>The call ID is at `data.call_id` in the creation response and `data.call.call_id` in the webhook. Store it to correlate both stages without relying on phone numbers.</Tip>
+
+## Where to find each value
+
+| You need | Where to get it | Purpose |
+|---|---|---|
+| Organization key | [API keys](/en/organization/api-keys) | Public API `x-api-key` header |
+| `agent_id` | [List agents](/api-reference/endpoint/list-agents) | Choose the calling agent |
+| `contact_id` | [Find by ID, phone, or email](/api-reference/endpoint/get-contact-by-identifier) | Associate actions with a contact |
+| `from_number_id` | [List numbers](/api-reference/endpoint/get-phone-numbers) | Outbound number when calling a contact |
+| `call_id` | Creation response or [list calls](/api-reference/endpoint/list-calls) | Query, correlate, and avoid duplicate actions |
+| Summary, recording, extracted data | [Call webhook](/api-reference/webhooks) or [get call](/api-reference/endpoint/get-call) | Use analysis results |
+| `channel_id` | [List channels](/api-reference/endpoint/get-channels) | Choose the WhatsApp channel |
+| `thread_id` | Conversation record or [automation context](/en/messages/automations) | Act on the correct conversation |
+
+## Choose where the integration runs
+
+<Tabs>
+  <Tab title="Your backend">Keep the key on your server. Make HTTP requests to the API and expose a reachable URL for webhooks. Use the [API reference](/api-reference/introduction) for each operation’s exact fields.</Tab>
+  <Tab title="n8n or Make">A webhook receiver starts your workflow or scenario. An HTTP action calls ContactShip when you need to query or change data. Follow [n8n](/en/integrations/n8n) or [Make](/en/integrations/make) to configure the connection.</Tab>
+  <Tab title="Inside ContactShip">Use [inbox automations](/en/messages/automations) for events and actions, or [agent tools](/en/text-agents/tools) during a conversation. The [catalog](/en/integrations/overview) connects external service accounts.</Tab>
+</Tabs>
+
+<Note>Webhooks do not automatically forward every API field. The final call webhook does not include `metadata`. Keep the relationship between IDs in your own system.</Note>
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Are APIs and webhooks alternatives?">
+    They work together. Your system can start a call through the API and receive its analysis through a webhook.
+  </Accordion>
+  <Accordion title="What if I miss the webhook?">
+    Find the event in **Calls → Webhooks** and query the call through the API. Before retrying, check whether your system already performed the action.
+  </Accordion>
+  <Accordion title="Do I have to code everything?">
+    You can use n8n, Make, or inbox automations. You still need to define the trigger, data mapping, and error handling.
+  </Accordion>
+</AccordionGroup>
+
+## Continue with
+
+<CardGroup cols={2}>
+  <Card title="Webhook types" href="/en/integrations/webhooks">Choose the event and find its configuration.</Card>
+  <Card title="Automate follow-ups" href="/en/integrations/automate-follow-ups">Turn results into actions.</Card>
+</CardGroup>
