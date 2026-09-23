@@ -175,6 +175,7 @@
                 "icon": "plug",
                 "pages": [
                   "es/integraciones/integrar-tu-sistema",
+                  "es/integraciones/eventos",
                   "es/integraciones/webhooks",
                   "es/integraciones/herramientas-http",
                   "es/integraciones/automatizar-seguimientos",
@@ -287,6 +288,12 @@
                   "api-reference/endpoint/get-contact-tags",
                   "api-reference/endpoint/add-contact-tag",
                   "api-reference/endpoint/remove-contact-tag"
+                ]
+              },
+              {
+                "group": "Eventos",
+                "pages": [
+                  "api-reference/endpoint/send-events"
                 ]
               },
               {
@@ -464,6 +471,7 @@
                 "icon": "plug",
                 "pages": [
                   "en/integrations/connect-your-system",
+                  "en/integrations/events",
                   "en/integrations/webhooks",
                   "en/integrations/http-tools",
                   "en/integrations/automate-follow-ups",
@@ -576,6 +584,12 @@
                   "api-reference/endpoint/get-contact-tags",
                   "api-reference/endpoint/add-contact-tag",
                   "api-reference/endpoint/remove-contact-tag"
+                ]
+              },
+              {
+                "group": "Events",
+                "pages": [
+                  "api-reference/endpoint/send-events"
                 ]
               },
               {

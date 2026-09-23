@@ -1,0 +1,182 @@
+---
+title: 'Send Events'
+api: 'POST /v1/events'
+description: 'Record what your contacts do in your other systems, GA4 style'
+---
+
+Records up to 100 events per request, each tied to a contact. An event is an `event_name` plus free-form `params`, following Google Analytics 4 conventions: a purchase in your e-commerce, an order in your POS, a form, a step in Make or n8n. Events show up in the contact's activity and can be used to segment and report.
+
+<Note>Events are an add-on. If your organization does not have it enabled, this endpoint answers `403`. Ask ContactShip support to turn it on. See the [events guide](/en/integrations/events) for a walkthrough.</Note>
+
+## Use Cases
+
+- Send purchases, carts, sign-ups or any business action from your own systems
+- Load past orders with their original date to segment and report on history
+- Keep contacts in sync: a new customer in your system becomes a contact in ContactShip
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your organization API key. See [API keys](/en/organization/api-keys).
+</ParamField>
+
+## Body Parameters
+
+<ParamField body="events" type="array" required>
+  Between 1 and 100 events. Each one is validated and answered on its own: a malformed event does not reject the others.
+  <Expandable title="event object">
+    <ParamField body="event_name" type="string" required>
+      What happened. Starts with a letter and contains letters, digits or `_`, up to 40 characters. Use GA4 names where they apply (`purchase`, `add_to_cart`, `begin_checkout`, `sign_up`). Names starting with `cs_` are reserved for ContactShip.
+    </ParamField>
+    <ParamField body="event_id" type="string">
+      Your identifier for the event, such as the order number. Sending the same `event_id` again does not duplicate the event: its result is `duplicate`. Recommended, so failed requests can be retried safely.
+    </ParamField>
+    <ParamField body="occurred_at" type="string">
+      When it happened, in ISO 8601. Defaults to the time the request arrives. Dates from year 2000 up to 24 hours in the future are accepted.
+    </ParamField>
+    <ParamField body="contact" type="object" required>
+      Who it happened to. Must include at least one of `contact_id`, `external_id`, `phone` or `email`.
+      <Expandable title="contact object">
+        <ParamField body="contact_id" type="string">
+          The contact's id in ContactShip (UUID).
+        </ParamField>
+        <ParamField body="external_id" type="string">
+          The contact's id in your system. It is linked to the contact the first time an event brings it together with data that finds the contact.
+        </ParamField>
+        <ParamField body="phone" type="string">
+          Phone number, preferably in international format (`+573001234567`). Compared by its last 10 digits.
+        </ParamField>
+        <ParamField body="email" type="string">
+          Email address. Compared case-insensitively.
+        </ParamField>
+        <ParamField body="name" type="string">
+          Name used if the contact has to be created.
+        </ParamField>
+        <ParamField body="country" type="string">
+          Country used if the contact has to be created.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+    <ParamField body="create_contact" type="boolean" default="true">
+      With `false`, the event is only added to contacts that already exist.
+    </ParamField>
+    <ParamField body="params" type="object">
+      Anything you want to keep about the event, in any shape, up to 32,000 characters.
+    </ParamField>
+    <ParamField body="value" type="number">
+      The event's value. Defaults to `params.value`. Numeric strings are accepted.
+    </ParamField>
+    <ParamField body="currency" type="string">
+      ISO 4217 code (`COP`, `USD`, `MXN`). Defaults to `params.currency`.
+    </ParamField>
+    <ParamField body="session_id" type="string">
+      The session the event happened in. Stored only, for now.
+    </ParamField>
+    <ParamField body="group" type="object">
+      The contact's company: `{ "id": "...", "name": "...", "properties": {} }`. Stored only, for now.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## How the contact is found
+
+The contact is looked up in this order, keeping the first match: `contact_id`, then `external_id`, then `phone` (last 10 digits, so `+57 300 123 4567`, `573001234567` and `3001234567` match), then `email`.
+
+- If several contacts share the phone, the event goes to the one with the most recent conversation or call.
+- An email shared by several contacts is not used.
+- If the phone and the email point to different contacts, the phone wins and `conflict` says so.
+- If nothing matches and the event brings a phone or an email, the contact is created (unless `create_contact` is `false`), named after `contact.name`, or else the email or the phone. This uses your plan's contact quota.
+- Contacts are never merged. A contact that is found only gets its phone or email filled in when it was empty.
+
+## Response
+
+The response is `{ "statusCode": 200, "data": object }`, with one result per event in the order they were sent. The fields below describe `data`.
+
+<ResponseField name="summary" type="object">
+  Counts for the request: `received`, `created`, `unresolved`, `duplicate`, `rejected`, `invalid` and `contacts_created`.
+</ResponseField>
+
+<ResponseField name="results" type="array">
+  One result per event.
+  <Expandable title="result object">
+    <ResponseField name="index" type="number">
+      Position of the event in the request.
+    </ResponseField>
+    <ResponseField name="event_id" type="string">
+      The `event_id` you sent, or `null`.
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      - `created`: stored on `contact.id`.
+      - `unresolved`: stored without a contact; see `reason`.
+      - `duplicate`: an event with that `event_id` already exists; not stored again.
+      - `rejected`: not stored; see `reason`.
+      - `invalid`: not stored; see `errors`.
+    </ResponseField>
+    <ResponseField name="reason" type="string">
+      - `contact_limit_reached` (unresolved): your plan allows no more contacts.
+      - `ambiguous_email` (unresolved): the only data was an email shared by several contacts.
+      - `not_found` (unresolved): no contact matched and `create_contact` was `false`.
+      - `no_identity` (rejected): no `contact_id`, `external_id`, `phone` or `email`.
+      - `anonymous_not_supported` (rejected): a `session_id` without contact data. Anonymous events are not accepted yet.
+      - `event_name_limit` (rejected): the organization reached 500 distinct event names.
+    </ResponseField>
+    <ResponseField name="errors" type="string[]">
+      What to fix, for `invalid` events.
+    </ResponseField>
+    <ResponseField name="contact" type="object">
+      For `created` events: `id`, `matched_by` (`contact_id`, `external_id`, `phone`, `email`, or `null` when it was just created) and `created`.
+    </ResponseField>
+    <ResponseField name="conflict" type="object">
+      Present when something was ambiguous: `phone_shared_by`, `email_shared`, `email_points_to` or `contact_id_not_found`.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Errors
+
+| Status | When |
+|---|---|
+| `400` | The body is not `{ "events": [...] }` with 1 to 100 objects. |
+| `401` | The API key is missing or invalid. |
+| `403` | The events add-on is not enabled for the organization. |
+| `429` | The request limit for this endpoint was exceeded. It has its own budget, separate from the rest of the API. See [Rate limits](/api-reference/rate-limits). |
+
+<RequestExample>
+```bash cURL
+curl -X POST https://api.contactship.ai/v1/events \
+  -H "x-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "events": [
+      {
+        "event_name": "purchase",
+        "event_id": "order-10025",
+        "occurred_at": "2026-09-20T15:04:05Z",
+        "contact": { "phone": "+15555550102", "email": "ana@example.com", "name": "Ana Pérez" },
+        "params": {
+          "transaction_id": "10025",
+          "value": 58000,
+          "currency": "COP",
+          "items": [{ "item_id": "PIZZA-L", "item_name": "Large pizza", "quantity": 2 }]
+        }
+      }
+    ]
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "statusCode": 200,
+  "data": {
+    "summary": { "received": 3, "created": 1, "unresolved": 1, "duplicate": 0, "rejected": 0, "invalid": 1, "contacts_created": 1 },
+    "results": [
+      { "index": 0, "event_id": "order-10025", "status": "created", "contact": { "id": "33333333-3333-4333-8333-333333333333", "matched_by": null, "created": true } },
+      { "index": 1, "event_id": "order-10026", "status": "unresolved", "reason": "contact_limit_reached" },
+      { "index": 2, "event_id": null, "status": "invalid", "errors": ["contact.email must be an email"] }
+    ]
+  }
+}
+```
+</ResponseExample>

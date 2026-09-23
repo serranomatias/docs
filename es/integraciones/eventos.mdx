@@ -1,0 +1,106 @@
+---
+title: "Eventos por contacto"
+sidebarTitle: "Eventos"
+description: "Mandá a ContactShip lo que tus clientes hacen en tus otros sistemas —compras, pedidos, formularios— con el formato de Google Analytics."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="API pública → POST /v1/events" addon="Eventos" plan="Plan con acceso a API" status="nuevo" />
+
+Un evento es algo que hizo un contacto fuera de ContactShip: una compra en tu e-commerce, un pedido en tu POS, un formulario, un paso de un flujo en Make o n8n. Lo mandás a la API con un nombre y los datos que quieras, y queda asociado al contacto. Después podés usarlo para segmentar campañas y armar reportes sin integrar cada sistema por separado.
+
+El formato es el de Google Analytics 4: un `event_name` y `params` libres. Si ya mandás eventos a GA4, podés reusar los mismos nombres y parámetros.
+
+## Mandar el primer evento
+
+<Steps>
+  <Step title="Pedí el add-on">
+    Los eventos se activan a pedido. Sin el add-on, la API responde `403`. Escribinos a [soporte](/es/comenzar/soporte).
+  </Step>
+  <Step title="Copiá la clave API">
+    Usá la [clave API](/es/organizacion/claves-api) de la organización en el encabezado `x-api-key`.
+  </Step>
+  <Step title="Mandá el evento">
+    Cada request lleva entre 1 y 100 eventos. Este manda una compra:
+
+    ```bash
+    curl -X POST https://api.contactship.ai/v1/events \
+      -H "x-api-key: $CONTACTSHIP_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "events": [
+          {
+            "event_name": "purchase",
+            "event_id": "order-10025",
+            "contact": { "phone": "+573001234567", "email": "ana@example.com", "name": "Ana Pérez" },
+            "params": { "transaction_id": "10025", "value": 58000, "currency": "COP" }
+          }
+        ]
+      }'
+    ```
+  </Step>
+  <Step title="Revisá el resultado">
+    La respuesta trae un resultado por evento. `created` quiere decir que se guardó en el contacto que figura en `contact.id`. Los campos completos están en [Enviar eventos](/api-reference/endpoint/send-events).
+  </Step>
+</Steps>
+
+## Cómo se encuentra el contacto
+
+Cada evento lleva un objeto `contact` con al menos uno de estos datos. ContactShip los prueba en este orden y se queda con el primero que encuentra:
+
+| Orden | Dato | Cómo se compara |
+|---|---|---|
+| 1 | `contact_id` | El id del contacto en ContactShip. |
+| 2 | `external_id` | El id del contacto en tu sistema. Queda asociado la primera vez que llega junto con otro dato que encuentra al contacto. |
+| 3 | `phone` | Por los últimos 10 dígitos: `+57 300 123 4567`, `573001234567` y `3001234567` son la misma persona. |
+| 4 | `email` | Sin distinguir mayúsculas. |
+
+- Si varios contactos tienen el mismo teléfono, el evento va al que tuvo la conversación o la llamada más reciente.
+- Un email que tienen varios contactos no se usa para buscar.
+- Si el teléfono y el email apuntan a contactos distintos, gana el teléfono y el resultado lo avisa en `conflict`.
+- Si no encuentra a nadie y el evento trae teléfono o email, **crea el contacto**, con el nombre de `contact.name` o, si no viene, el email o el teléfono. Crear contactos consume el cupo de contactos del plan. Con `create_contact: false`, el evento sólo se suma a contactos que ya existen.
+- Los contactos nunca se fusionan: a uno que ya existe sólo se le completan el teléfono o el email si los tenía vacíos.
+
+## Qué significa cada resultado
+
+| `status` | ¿Se guardó? | Qué hacer |
+|---|---|---|
+| `created` | Sí | Nada. `matched_by` dice cómo se encontró el contacto. |
+| `unresolved` | Sí, sin contacto | Revisá `reason`: `contact_limit_reached` (el plan no admite más contactos), `ambiguous_email` (mandá también el teléfono) o `not_found` (no existía y `create_contact` era `false`). |
+| `duplicate` | No | Ya habías mandado ese `event_id`. Es lo esperado al reintentar. |
+| `rejected` | No | Revisá `reason`: `no_identity` (faltan los datos del contacto), `anonymous_not_supported` o `event_name_limit` (la organización llegó a 500 nombres de evento distintos). |
+| `invalid` | No | Corregí lo que dice `errors` y volvé a mandarlo. |
+
+Un evento con problemas no afecta a los demás del mismo request.
+
+## Buenas prácticas
+
+- **Mandá siempre `event_id`**, por ejemplo el número de orden. Así podés reintentar un request que falló sin duplicar eventos.
+- **Cargá la historia con `occurred_at`.** Los eventos viejos cuentan para segmentar y reportar como si hubieran llegado en su momento.
+- **Mandá el teléfono en formato internacional.** Es el dato que mejor identifica al contacto.
+- **Usá los nombres de GA4** (`purchase`, `add_to_cart`, `begin_checkout`, `sign_up`) y, en las compras, `transaction_id`, `value`, `currency` e `items`.
+- **Agrupá** hasta 100 eventos por request. Este endpoint tiene su propio límite de requests, aparte del resto de la API.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿Puedo mandar eventos de visitantes que todavía no se identificaron?">
+    Todavía no. Un evento sin `contact_id`, `external_id`, teléfono ni email se rechaza, aunque traiga `session_id`.
+  </Accordion>
+  <Accordion title="¿Qué nombres no puedo usar?">
+    Los que empiezan con `cs_`: están reservados para lo que ContactShip registra por su cuenta, como llamadas y campañas.
+  </Accordion>
+  <Accordion title="¿Mandar eventos cuesta créditos?">
+    No. Los eventos entran en el plan. Lo que sí consume cupo es crear contactos nuevos.
+  </Accordion>
+  <Accordion title="¿Qué pasa si mando el mismo evento dos veces?">
+    Si trae el mismo `event_id`, la segunda vez el resultado es `duplicate` y no se guarda de nuevo. Sin `event_id` no hay forma de detectarlo.
+  </Accordion>
+</AccordionGroup>
+
+## Seguí con
+
+<CardGroup cols={2}>
+  <Card title="Enviar eventos" href="/api-reference/endpoint/send-events">Todos los campos, resultados y errores.</Card>
+  <Card title="Integrar tu sistema" href="/es/integraciones/integrar-tu-sistema">Otras formas de conectar tu sistema con ContactShip.</Card>
+</CardGroup>

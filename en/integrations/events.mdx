@@ -1,0 +1,106 @@
+---
+title: "Contact events"
+sidebarTitle: "Events"
+description: "Send ContactShip what your customers do in your other systems —purchases, orders, forms— in Google Analytics format."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Public API → POST /v1/events" addon="Events" plan="Plan with API access" status="nuevo" />
+
+An event is something a contact did outside ContactShip: a purchase in your e-commerce, an order in your POS, a form, a step of a Make or n8n flow. You send it to the API with a name and any data you want, and it is tied to the contact. You can then use it to segment campaigns and build reports without integrating each system separately.
+
+The format is Google Analytics 4's: an `event_name` and free-form `params`. If you already send events to GA4, you can reuse the same names and parameters.
+
+## Send your first event
+
+<Steps>
+  <Step title="Request the add-on">
+    Events are enabled on request. Without the add-on, the API answers `403`. Contact [support](/en/get-started/support).
+  </Step>
+  <Step title="Copy the API key">
+    Use the organization's [API key](/en/organization/api-keys) in the `x-api-key` header.
+  </Step>
+  <Step title="Send the event">
+    Each request carries between 1 and 100 events. This one sends a purchase:
+
+    ```bash
+    curl -X POST https://api.contactship.ai/v1/events \
+      -H "x-api-key: $CONTACTSHIP_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "events": [
+          {
+            "event_name": "purchase",
+            "event_id": "order-10025",
+            "contact": { "phone": "+573001234567", "email": "ana@example.com", "name": "Ana Pérez" },
+            "params": { "transaction_id": "10025", "value": 58000, "currency": "COP" }
+          }
+        ]
+      }'
+    ```
+  </Step>
+  <Step title="Check the result">
+    The response has one result per event. `created` means it was stored on the contact in `contact.id`. All fields are in [Send events](/api-reference/endpoint/send-events).
+  </Step>
+</Steps>
+
+## How the contact is found
+
+Each event carries a `contact` object with at least one of these fields. ContactShip tries them in this order and keeps the first match:
+
+| Order | Field | How it is compared |
+|---|---|---|
+| 1 | `contact_id` | The contact's id in ContactShip. |
+| 2 | `external_id` | The contact's id in your system. It gets linked the first time it arrives together with data that finds the contact. |
+| 3 | `phone` | By its last 10 digits: `+57 300 123 4567`, `573001234567` and `3001234567` are the same person. |
+| 4 | `email` | Case-insensitive. |
+
+- If several contacts share the phone, the event goes to the one with the most recent conversation or call.
+- An email shared by several contacts is not used.
+- If the phone and the email point to different contacts, the phone wins and the result says so in `conflict`.
+- If nobody matches and the event brings a phone or an email, **the contact is created**, named after `contact.name` or else the email or the phone. Creating contacts uses the plan's contact quota. With `create_contact: false`, the event is only added to contacts that already exist.
+- Contacts are never merged: an existing one only gets its phone or email filled in when it was empty.
+
+## What each result means
+
+| `status` | Stored? | What to do |
+|---|---|---|
+| `created` | Yes | Nothing. `matched_by` says how the contact was found. |
+| `unresolved` | Yes, without a contact | Check `reason`: `contact_limit_reached` (the plan allows no more contacts), `ambiguous_email` (send the phone too) or `not_found` (it did not exist and `create_contact` was `false`). |
+| `duplicate` | No | You already sent that `event_id`. Expected when retrying. |
+| `rejected` | No | Check `reason`: `no_identity` (contact data is missing), `anonymous_not_supported` or `event_name_limit` (the organization reached 500 distinct event names). |
+| `invalid` | No | Fix what `errors` says and send it again. |
+
+A problem with one event does not affect the others in the same request.
+
+## Good practices
+
+- **Always send `event_id`**, for example the order number, so a failed request can be retried without duplicates.
+- **Load history with `occurred_at`.** Past events count for segmentation and reports as if they had arrived at the time.
+- **Send phones in international format.** It is the field that identifies a contact best.
+- **Use GA4 names** (`purchase`, `add_to_cart`, `begin_checkout`, `sign_up`) and, for purchases, `transaction_id`, `value`, `currency` and `items`.
+- **Batch** up to 100 events per request. This endpoint has its own request limit, separate from the rest of the API.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can I send events for visitors who have not identified themselves yet?">
+    Not yet. An event without `contact_id`, `external_id`, phone or email is rejected, even with a `session_id`.
+  </Accordion>
+  <Accordion title="Which names can I not use?">
+    Names starting with `cs_`: they are reserved for what ContactShip records itself, such as calls and campaigns.
+  </Accordion>
+  <Accordion title="Do events cost credits?">
+    No. Events are included in the plan. Creating new contacts does use the contact quota.
+  </Accordion>
+  <Accordion title="What happens if I send the same event twice?">
+    With the same `event_id`, the second result is `duplicate` and it is not stored again. Without `event_id` there is no way to tell.
+  </Accordion>
+</AccordionGroup>
+
+## Continue with
+
+<CardGroup cols={2}>
+  <Card title="Send events" href="/api-reference/endpoint/send-events">Every field, result and error.</Card>
+  <Card title="Connect your system" href="/en/integrations/connect-your-system">Other ways to connect your system with ContactShip.</Card>
+</CardGroup>
