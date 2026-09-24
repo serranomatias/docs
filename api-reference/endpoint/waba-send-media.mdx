@@ -71,10 +71,12 @@ Sends a media message (image, video, audio, or document) to a contact through a 
 
 ## Error Codes
 
-- `400 Bad Request` — Missing required fields, invalid channel type, or invalid media data
+- `400 Bad Request` — Missing required fields, invalid channel type, or invalid media data, or Meta rejected the request (`message` carries the reason Meta gave, for example an expired channel token or a re-engagement window that closed)
 - `401 Unauthorized` — Invalid or missing API key
 - `404 Not Found` — Contact not found
-- `500 Internal Server Error` — Upload or Meta API failure
+- `429 Too Many Requests` — Meta rate limit; retry after a pause
+- `500 Internal Server Error` — Upload or server-side failure
+- `502 Bad Gateway` — Meta API unavailable; safe to retry
 
 ## Code Examples
 

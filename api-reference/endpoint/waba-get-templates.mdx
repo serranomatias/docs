@@ -68,9 +68,11 @@ Returns the list of approved WhatsApp Business message templates available for a
 
 ## Error Codes
 
-- `400 Bad Request` — Missing `channel_id` or channel is not WABA type
+- `400 Bad Request` — Missing `channel_id` or channel is not WABA type, or Meta rejected the request (`message` carries the reason Meta gave, for example an expired channel token or a re-engagement window that closed)
 - `401 Unauthorized` — Invalid or missing API key
-- `500 Internal Server Error` — Meta API error
+- `429 Too Many Requests` — Meta rate limit; retry after a pause
+- `500 Internal Server Error` — Server-side error
+- `502 Bad Gateway` — Meta API unavailable; safe to retry
 
 ## Code Examples
 
