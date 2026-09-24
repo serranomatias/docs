@@ -63,11 +63,13 @@ Sends a location message (map pin) to a contact through a WABA channel. The cont
 
 ## Error Codes
 
-- `400 Bad Request` — Missing fields, invalid coordinates, or non-WABA channel
+- `400 Bad Request` — Missing fields, invalid coordinates, or non-WABA channel, or Meta rejected the request (`message` carries the reason Meta gave, for example an expired channel token or a re-engagement window that closed)
 - `401 Unauthorized` — Invalid or missing API key
 - `403 Forbidden` — Channel does not belong to your organization
 - `404 Not Found` — Contact not found
-- `500 Internal Server Error` — Meta API error
+- `429 Too Many Requests` — Meta rate limit; retry after a pause
+- `500 Internal Server Error` — Server-side error
+- `502 Bad Gateway` — Meta API unavailable; safe to retry
 
 ## Code Examples
 

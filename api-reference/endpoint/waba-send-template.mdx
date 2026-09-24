@@ -87,10 +87,12 @@ Sends a pre-approved WhatsApp Business message template to a contact. Templates 
 
 ## Error Codes
 
-- `400 Bad Request` — Missing fields, invalid channel, or template not found
+- `400 Bad Request` — Missing fields, invalid channel, or template not found, or Meta rejected the request (`message` carries the reason Meta gave, for example an expired channel token or a re-engagement window that closed)
 - `401 Unauthorized` — Invalid or missing API key
 - `404 Not Found` — Contact not found
-- `500 Internal Server Error` — Meta API error or internal failure
+- `429 Too Many Requests` — Meta rate limit; retry after a pause
+- `500 Internal Server Error` — Internal failure
+- `502 Bad Gateway` — Meta API unavailable; safe to retry
 
 ## Code Examples
 
