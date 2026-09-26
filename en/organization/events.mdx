@@ -1,0 +1,86 @@
+---
+title: "Events catalog"
+sidebarTitle: "Events"
+description: "Review which events reach your organization and choose how each one looks in the contact's activity."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Settings → Organization → Events" addon="Events" permission="events.read · events.update" status="nuevo" />
+
+The catalog is the list of events your systems send through the [events API](/en/integrations/events). It builds itself: each event shows up the first time it arrives, with nothing to create by hand. From here you choose how each one reads in the [contact's activity](/en/contacts/events), and you send a test event to see the result before integrating.
+
+## What the list shows
+
+| Column | What it is |
+|---|---|
+| **Event** | The name you gave it, with the technical name below, such as **Purchase** and `purchase`. |
+| **Last 30 days** | How many times it arrived in the last 30 days. |
+| **Last seen** | When the last one arrived. |
+| **Data it carries** | The data (`params`) those events brought, such as `order_id` or `item_name`. |
+
+Technical names always arrive in lowercase with underscores: if your system sends `Add To Cart` or `addToCart`, it is stored and shown as `add_to_cart`. See [How events are named](/en/integrations/events#how-events-are-named).
+
+The events ContactShip records, such as calls or campaigns received, are not in this list: they always look the same.
+
+## Choose how an event looks
+
+Click an event to open **How it looks**. The preview uses the data of the last one that arrived, so you see the result before saving.
+
+| Option | What for |
+|---|---|
+| **Name** | How it reads in the activity, such as **Purchase** instead of `purchase`. The most common names come translated. |
+| **Icon** and **Color** | To recognize it at a glance. With **Automatic**, the usual ones for that event are used. |
+| **Title** | A sentence with the event's data between braces, such as `Order #{order_id}`. When an event lacks one of them, its name is shown. |
+| **Highlighted data** | Up to 5 fields shown below the title, in the order you choose. |
+| **Amount** | Which field to show as the amount in the activity when the event does not send `value`. It only changes what is shown: filters and [sales reports](/en/reports/sales) add up the `value` the event sent, so it is best to always send it there. |
+| **Hide from the contact's activity** | For events that arrive in bulk and add nothing when read one by one, such as page views. They still count in the list and work in filters and reports. |
+
+Changes apply to the contact's activity, the contact page and the inbox panel.
+
+## Send a test event
+
+Click **Send a test event**. ContactShip records a **Test event** (`test_event`) through the same path the API uses, so you check that everything works without writing code.
+
+- It always goes to the same contact, **Contacto de prueba de eventos** (`eventos.prueba@contactship.ai`). It is created the first time and reused after that, so it never touches a real customer.
+- **Open contact** takes you to its page, where the event shows up in the activity.
+
+## Remove an event from the catalog
+
+From **How it looks**, **Remove from the catalog** deletes that event's settings: name, icon, title and the rest. Recorded events stay in the contacts' activity, and if a new one arrives with that name, it comes back to the list with the default look.
+
+To get the test event back after removing it, send another one with **Send a test event**.
+
+## Who can do what
+
+| Permission | Allows | System roles that have it |
+|---|---|---|
+| `events.read` | Viewing the catalog | Owner, Admin, Moderator and User |
+| `events.create` | Sending the test event | Owner, Admin and Moderator |
+| `events.update` | Changing how an event looks | Owner, Admin and Moderator |
+| `events.delete` | Removing events from the catalog | Owner and Admin |
+
+Without `events.update`, the editor opens read-only. See [Roles and permissions](/en/organization/roles-and-permissions).
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="I do not see Events in Settings">
+    It shows up with the events add-on enabled and the `events.read` permission. The add-on is enabled on request: contact [support](/en/get-started/support).
+  </Accordion>
+  <Accordion title="Can I add an event that has not arrived yet?">
+    No. The catalog lists what actually arrives, so it never shows events your system does not send. To see one before integrating, use the test event.
+  </Accordion>
+  <Accordion title="I sent Add To Cart and it shows add_to_cart">
+    That is expected: names are normalized so the same event is not split into several. The name that is shown is yours to choose in **Name**.
+  </Accordion>
+  <Accordion title="If I hide an event, does it stop counting?">
+    No. It only stops showing in the contact's activity. It still counts in the list, in filters and in reports.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+<CardGroup cols={2}>
+  <Card title="Contact events (API)" href="/en/integrations/events">How to send the events of your systems.</Card>
+  <Card title="Contact events" href="/en/contacts/events">Where they show up and how to filter contacts by what they did.</Card>
+</CardGroup>

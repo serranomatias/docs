@@ -1,0 +1,109 @@
+---
+title: "Sales reports"
+sidebarTitle: "Sales"
+description: "Measure sales, repeat purchases and how much you sold thanks to your campaigns and agents, with the purchase events your system sends."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Reports → Customize → Add widget → Sales" addon="Events" permission="reports.read" status="nuevo" />
+
+With the [purchase events](/en/integrations/events) your store or your system sends, the dashboard answers business questions: how much you sold, who bought again, who stopped and, above all, **how much of it came after a campaign or a call with an AI agent**.
+
+## Before you start
+
+- You need the events add-on and your system sending purchases to the API. The reports look for a `purchase` event or, if there is none, the first one whose name looks like a sale, such as `order_completed` or `compra`.
+- Send the amount in `value` and the currency in `currency`. Amounts in different currencies are never added together.
+
+## Add a sales report
+
+<Steps>
+  <Step title="Open the gallery">
+    In **Reports**, click **Customize → Add widget**.
+  </Step>
+  <Step title="Pick a report in the Sales category">
+    Sales reports open in the builder already set up. You can adjust them before saving, or save them as they are with **Add to dashboard**.
+  </Step>
+</Steps>
+
+| Report | What it answers |
+|---|---|
+| **Sales per day** | Number and amount of purchases per period. It follows the dashboard's grouping: day, week or month. |
+| **Repeat purchases** | Of those who bought in the period, what share had bought before or bought more than once. |
+| **Sales credited to ContactShip** | How much was sold after each campaign or each AI agent, and how much with no earlier touch. See [How a sale is credited](#how-a-sale-is-credited). |
+| **Customers who stopped buying** | How many bought at some point and have not come back in 30, 60, 90 or 180 days. **See who they are** opens that list in **Contacts**. |
+
+If your organization sells in more than one currency, **Sales per day** and **Sales credited** are set up with the currency you used most in the last 90 days, and their description says so. To see another one, edit the report and change the currency condition.
+
+**Customers who stopped buying** is a picture of today: it does not depend on the dashboard's range.
+
+## How a sale is credited
+
+Each purchase is credited to the **last ContactShip touch with that person** in the days before the purchase:
+
+- a **campaign** they received, or
+- a **call with an AI agent**.
+
+If there was none in that time, the purchase is **Not credited**.
+
+- The window is 7 days, and it can be changed to 1, 3, 14 or 30 days in **Options → Attribution window**. The saved report says which window it uses.
+- Each purchase counts once: what is credited plus what is not credited adds up to total sales.
+- Calls handled only by people do not count as a ContactShip touch for attribution.
+- A purchase made before the visitor identified is credited too, with its real date.
+
+Example: Ana receives the "Payment reminder" campaign on Monday and buys on Wednesday. With the 7-day window, that purchase counts for "Payment reminder". Had she bought 10 days later, it would be **Not credited**.
+
+## Build your own report with events
+
+The [custom report](/en/reports/custom-reports) also answers questions about events:
+
+1. In **Customize → Add widget → Custom report**, choose **Events** at the top.
+2. In **Events**, pick the events the report reads, such as `purchase`. This is required.
+3. In **Show**, pick the measures:
+   - **Number of events**, **Distinct contacts** and **Repeat rate**;
+   - **Total amount** and **Average amount**, which is the average ticket when the event is a purchase;
+   - the sum, average or maximum of any numeric field of the event, such as `quantity`.
+4. In **Only the events that** and in **Split by** you can use:
+   - the currency and the contact's country;
+   - whether the contact had done it before, or whether it happened before they identified;
+   - the attribution: campaign or agent, or whether it is credited to ContactShip;
+   - **any data the event carries**, such as the product or the category.
+
+Example questions:
+
+| Question | How to build it |
+|---|---|
+| Which product sells the most? | Event `purchase` · Total amount · Split by `product_name` |
+| How much does each AI agent sell? | Event `purchase` · Total amount · Split by **Credited AI agent** |
+| What share of sales comes from ContactShip? | Event `purchase` · Total amount · Split by **Credited to** |
+| How many days pass between the campaign and the purchase? | Event `purchase` · Average of **Days since the touch** · Only those where **Credited to ContactShip** is yes |
+
+## Not available yet
+
+- Opening the events behind a number of the report, as **View calls** does in calls reports.
+- Grouping sales by the contact's company.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="I do not see the Sales category in the gallery">
+    It shows up with the events add-on enabled. If you see it but the reports are disabled, no purchase event has arrived yet: connect them from your system with the [events API](/en/integrations/events).
+  </Accordion>
+  <Accordion title="Why are most sales Not credited?">
+    Because those purchases had no campaign or AI call within the chosen window. Try a longer window to see how much it changes.
+  </Accordion>
+  <Accordion title="Are pesos and dollars mixed up?">
+    No. Each amount is added up in its own currency. Split or filter by **Currency** if you sell in several.
+  </Accordion>
+  <Accordion title="What does a user with limited access to contacts see?">
+    They only count the events of the contacts they can see, as in the contacts list.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+<CardGroup cols={2}>
+  <Card title="Contact events (API)" href="/en/integrations/events">How to send your system's purchases.</Card>
+  <Card title="Contact events" href="/en/contacts/events">Filter contacts by what they did and send them a campaign.</Card>
+  <Card title="Custom reports" href="/en/reports/custom-reports">The report builder.</Card>
+  <Card title="Dashboard" href="/en/reports/dashboard">Customize the reports dashboard.</Card>
+</CardGroup>

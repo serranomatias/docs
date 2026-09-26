@@ -1,0 +1,116 @@
+---
+title: 'Identify a Session'
+api: 'POST /v1/identify'
+description: 'Join the anonymous events of a visit to the contact who turned out to be behind it'
+---
+
+Links a `session_id` to a contact. The events that were waiting for that session (sent with the `session_id` and no contact data, answered as `pending` by [Send events](/api-reference/endpoint/send-events)) move to the contact within a minute, with their original date, and show up in the contact's activity marked **Before identifying**. Events sent afterwards with only that `session_id` go straight to the contact.
+
+Call it when your site learns who the visitor is and has no event to send at that moment: a login, a sign-up, the end of a checkout. If you do have an event with contact data, such as the purchase, sending it with the same `session_id` identifies the session too, and this call is not needed.
+
+<Note>Part of the events add-on. Without it, this endpoint answers `403`. See the [events guide](/en/integrations/events#visitors-who-have-not-identified-yet).</Note>
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your organization API key. See [API keys](/en/organization/api-keys).
+</ParamField>
+
+## Body Parameters
+
+<ParamField body="session_id" type="string" required>
+  The same `session_id` sent with the anonymous events, up to 200 characters: the Google Analytics client id or an id of your own.
+</ParamField>
+
+<ParamField body="contact" type="object" required>
+  Who the visitor turned out to be, with at least one of `contact_id`, `external_id`, `phone` (7 or more digits) or `email`. The contact is found the same way as in [Send events](/api-reference/endpoint/send-events#how-the-contact-is-found).
+  <Expandable title="contact object">
+    <ParamField body="contact_id" type="string">
+      The contact's id in ContactShip (UUID).
+    </ParamField>
+    <ParamField body="external_id" type="string">
+      The contact's id in your system.
+    </ParamField>
+    <ParamField body="phone" type="string">
+      Phone number, preferably in international format.
+    </ParamField>
+    <ParamField body="email" type="string">
+      Email address.
+    </ParamField>
+    <ParamField body="name" type="string">
+      Name used if the contact has to be created.
+    </ParamField>
+    <ParamField body="country" type="string">
+      Country used if the contact has to be created.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="create_contact" type="boolean" default="true">
+  Create the contact when none matches. With `false`, the session is only linked to a contact that already exists.
+</ParamField>
+
+## Response
+
+The response is `{ "statusCode": 200, "data": object }`. The fields below describe `data`.
+
+<ResponseField name="status" type="string">
+  - `linked`: the session now belongs to `contact.id`; its pending events move to the contact within a minute.
+  - `already_linked`: the session already belonged to another contact, which keeps it. `conflict` says which.
+  - `not_found`: no contact matched and none was created; see `reason`.
+</ResponseField>
+
+<ResponseField name="session_id" type="string">
+  The session, as it was linked.
+</ResponseField>
+
+<ResponseField name="contact" type="object">
+  The contact the session belongs to: `id`, `matched_by` (`contact_id`, `external_id`, `phone`, `email`, or `null` when it was just created) and `created`. `null` when the status is `not_found`.
+</ResponseField>
+
+<ResponseField name="pending_events" type="number">
+  How many events were waiting for the session and are now moving to the contact.
+</ResponseField>
+
+<ResponseField name="reason" type="string">
+  For `not_found`: `not_found` (no contact matched and `create_contact` was `false`), `contact_limit_reached` (your plan allows no more contacts) or `ambiguous_email` (the only data was an email shared by several contacts).
+</ResponseField>
+
+<ResponseField name="conflict" type="object">
+  Present when something was ambiguous, as in Send events.
+</ResponseField>
+
+## Errors
+
+| Status | When |
+|---|---|
+| `400` | `session_id` is missing, or `contact` has none of `contact_id`, `external_id`, `phone` (7 or more digits) or `email`. |
+| `401` | The API key is missing or invalid. |
+| `403` | The events add-on is not enabled for the organization. |
+| `429` | The request limit for events was exceeded. It is the same budget as Send events. See [Rate limits](/api-reference/rate-limits). |
+
+<RequestExample>
+```bash cURL
+curl -X POST https://api.contactship.ai/v1/identify \
+  -H "x-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "session_id": "GA1.1.1234567890.1726000000",
+    "contact": { "email": "ana@example.com", "phone": "+15555550102", "name": "Ana Pérez" }
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "statusCode": 200,
+  "data": {
+    "status": "linked",
+    "session_id": "GA1.1.1234567890.1726000000",
+    "contact": { "id": "33333333-3333-4333-8333-333333333333", "matched_by": "email", "created": false },
+    "pending_events": 3
+  }
+}
+```
+</ResponseExample>

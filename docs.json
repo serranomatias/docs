@@ -111,6 +111,7 @@
                 "icon": "address-book",
                 "pages": [
                   "es/contactos/contactos-y-propiedades",
+                  "es/contactos/eventos",
                   "es/contactos/importar",
                   "es/contactos/tableros",
                   "es/contactos/etiquetas",
@@ -145,6 +146,7 @@
                 "pages": [
                   "es/reportes/dashboard",
                   "es/reportes/a-medida",
+                  "es/reportes/ventas",
                   "es/reportes/mensajeria",
                   "es/reportes/evaluaciones"
                 ]
@@ -158,7 +160,8 @@
                   "es/organizacion/equipos",
                   "es/organizacion/historial-de-cambios",
                   "es/organizacion/configuracion",
-                  "es/organizacion/claves-api"
+                  "es/organizacion/claves-api",
+                  "es/organizacion/eventos"
                 ]
               },
               {
@@ -293,7 +296,8 @@
               {
                 "group": "Eventos",
                 "pages": [
-                  "api-reference/endpoint/send-events"
+                  "api-reference/endpoint/send-events",
+                  "api-reference/endpoint/identify"
                 ]
               },
               {
@@ -407,6 +411,7 @@
                 "icon": "address-book",
                 "pages": [
                   "en/contacts/contacts-and-properties",
+                  "en/contacts/events",
                   "en/contacts/import",
                   "en/contacts/boards",
                   "en/contacts/tags",
@@ -441,6 +446,7 @@
                 "pages": [
                   "en/reports/dashboard",
                   "en/reports/custom-reports",
+                  "en/reports/sales",
                   "en/reports/messaging",
                   "en/reports/evaluations"
                 ]
@@ -454,7 +460,8 @@
                   "en/organization/teams",
                   "en/organization/change-history",
                   "en/organization/settings",
-                  "en/organization/api-keys"
+                  "en/organization/api-keys",
+                  "en/organization/events"
                 ]
               },
               {
@@ -589,7 +596,8 @@
               {
                 "group": "Events",
                 "pages": [
-                  "api-reference/endpoint/send-events"
+                  "api-reference/endpoint/send-events",
+                  "api-reference/endpoint/identify"
                 ]
               },
               {

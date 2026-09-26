@@ -1,0 +1,109 @@
+---
+title: "Reportes de ventas"
+sidebarTitle: "Ventas"
+description: "Medí ventas, recompra y cuánto vendiste gracias a tus campañas y agentes, con los eventos de compra que manda tu sistema."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Reportes → Personalizar → Agregar widget → Ventas" addon="Eventos" permission="reports.read" status="nuevo" />
+
+Con los [eventos de compra](/es/integraciones/eventos) que manda tu tienda o tu sistema, el dashboard responde preguntas de negocio: cuánto vendiste, quién volvió a comprar, quién dejó de hacerlo y, sobre todo, **cuánto de eso vino después de una campaña o de una llamada con un agente de IA**.
+
+## Antes de empezar
+
+- Necesitás el add-on de eventos y que tu sistema mande las compras a la API. Los reportes buscan un evento `purchase` o, si no existe, el primero cuyo nombre parezca una venta, como `order_completed` o `compra`.
+- Mandá el monto en `value` y la moneda en `currency`. Los montos en monedas distintas nunca se suman entre sí.
+
+## Agregar un reporte de ventas
+
+<Steps>
+  <Step title="Abrí la galería">
+    En **Reportes**, tocá **Personalizar → Agregar widget**.
+  </Step>
+  <Step title="Elegí un reporte de la categoría Ventas">
+    Los reportes de ventas se abren en el constructor ya armados. Podés ajustarlos antes de guardar, o guardarlos tal cual con **Agregar al dashboard**.
+  </Step>
+</Steps>
+
+| Reporte | Qué responde |
+|---|---|
+| **Ventas por día** | Cantidad y monto de las compras de cada período. Sigue la agrupación del dashboard: día, semana o mes. |
+| **Recompra** | De los que compraron en el período, qué porcentaje ya había comprado antes o compró más de una vez. |
+| **Ventas atribuidas a ContactShip** | Cuánto se vendió después de cada campaña o de cada agente de IA, y cuánto sin ningún contacto previo. Ver [Cómo se atribuye una venta](#cómo-se-atribuye-una-venta). |
+| **Clientes que dejaron de comprar** | Cuántos compraron alguna vez y no volvieron en 30, 60, 90 o 180 días. Con **Ver quiénes son** abrís esa lista en **Contactos**. |
+
+Si tu organización vende en más de una moneda, **Ventas por día** y **Ventas atribuidas** se arman con la moneda que más usaste en los últimos 90 días y lo dicen en la descripción. Para ver otra, editá el reporte y cambiá la condición de moneda.
+
+**Clientes que dejaron de comprar** es una foto de hoy: no depende del rango del dashboard.
+
+## Cómo se atribuye una venta
+
+Cada compra se le atribuye al **último contacto de ContactShip con esa persona** en los días anteriores a la compra:
+
+- una **campaña** que recibió, o
+- una **llamada con un agente de IA**.
+
+Si en ese tiempo no hubo ninguno, la compra queda como **Sin atribuir**.
+
+- La ventana es de 7 días, y se puede cambiar a 1, 3, 14 o 30 días en **Opciones → Ventana de atribución**. El reporte guardado dice qué ventana usa.
+- Cada compra cuenta una sola vez: la suma de lo atribuido y lo no atribuido es el total de ventas.
+- Las llamadas atendidas sólo por personas no cuentan como contacto de ContactShip para la atribución.
+- Una compra hecha antes de que el visitante se identificara también se atribuye, con su fecha real.
+
+Ejemplo: Ana recibe la campaña "Recordatorio de pago" el lunes y compra el miércoles. Con la ventana de 7 días, esa compra suma en "Recordatorio de pago". Si hubiera comprado 10 días después, quedaría como **Sin atribuir**.
+
+## Armar tu propio reporte con eventos
+
+El [reporte a medida](/es/reportes/a-medida) también responde preguntas sobre eventos:
+
+1. En **Personalizar → Agregar widget → Reporte a medida**, elegí **Eventos** arriba.
+2. En **Eventos**, elegí qué eventos lee el reporte, por ejemplo `purchase`. Es obligatorio.
+3. En **Mostrar**, elegí las medidas:
+   - **Cantidad de eventos**, **Contactos distintos** y **Porcentaje que repite**;
+   - **Monto total** y **Monto promedio**, que es el ticket promedio si el evento es una compra;
+   - la suma, el promedio o el máximo de cualquier dato numérico del evento, como `quantity`.
+4. En **Solo los eventos que** y en **Separado por** podés usar:
+   - la moneda y el país del contacto;
+   - si el contacto ya lo había hecho antes, o si pasó antes de que se identificara;
+   - la atribución: campaña o agente, o si se atribuye a ContactShip;
+   - **cualquier dato que traiga el evento**, como el producto o la categoría.
+
+Ejemplos de preguntas:
+
+| Pregunta | Cómo armarla |
+|---|---|
+| ¿Qué producto se vende más? | Evento `purchase` · Monto total · Separado por `product_name` |
+| ¿Cuánto vende cada agente de IA? | Evento `purchase` · Monto total · Separado por **Agente de IA atribuido** |
+| ¿Qué parte de las ventas viene de ContactShip? | Evento `purchase` · Monto total · Separado por **Atribuido a** |
+| ¿Cuántos días pasan entre la campaña y la compra? | Evento `purchase` · Promedio de **Días desde el contacto** · Solo los que **Atribuido a ContactShip** es sí |
+
+## Qué no existe todavía
+
+- Abrir los eventos que forman un número del reporte, como hace **Ver llamadas** en los reportes de llamadas.
+- Agrupar las ventas por empresa del contacto.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="No veo la categoría Ventas en la galería">
+    Aparece con el add-on de eventos activo. Si la ves pero los reportes figuran deshabilitados, todavía no llegó ningún evento de compra: conectalos desde tu sistema con la [API de eventos](/es/integraciones/eventos).
+  </Accordion>
+  <Accordion title="¿Por qué la mayoría de las ventas sale Sin atribuir?">
+    Porque esas compras no tuvieron una campaña ni una llamada con IA en la ventana elegida. Probá con una ventana más larga para ver cuánto cambia.
+  </Accordion>
+  <Accordion title="¿Se mezclan pesos y dólares?">
+    No. Cada monto se suma en su moneda. Separá o filtrá por **Moneda** si vendés en varias.
+  </Accordion>
+  <Accordion title="Un usuario con acceso limitado a contactos, ¿qué ve?">
+    Sólo cuenta los eventos de los contactos que puede ver, igual que en la lista de contactos.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+<CardGroup cols={2}>
+  <Card title="Eventos por contacto (API)" href="/es/integraciones/eventos">Cómo mandar las compras de tu sistema.</Card>
+  <Card title="Eventos del contacto" href="/es/contactos/eventos">Filtrar contactos por lo que hicieron y mandarles una campaña.</Card>
+  <Card title="Reportes a medida" href="/es/reportes/a-medida">El constructor de reportes.</Card>
+  <Card title="Dashboard" href="/es/reportes/dashboard">Personalizar el dashboard de reportes.</Card>
+</CardGroup>

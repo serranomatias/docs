@@ -1,24 +1,24 @@
 ---
 title: "Contact events"
 sidebarTitle: "Events"
-description: "Send ContactShip what your customers do in your other systems —purchases, orders, forms— in Google Analytics format."
+description: "Send ContactShip what your customers do in your other systems —purchases, orders, forms, visits— in the Google Analytics format."
 ---
 import { Availability } from '/snippets/availability.mdx';
 
-<Availability lang="en" route="Public API → POST /v1/events" addon="Events" plan="Plan with API access" status="nuevo" />
+<Availability lang="en" route="Public API → POST /v1/events · POST /v1/identify" addon="Events" plan="Plan with API access" status="nuevo" />
 
-An event is something a contact did outside ContactShip: a purchase in your e-commerce, an order in your POS, a form, a step of a Make or n8n flow. You send it to the API with a name and any data you want, and it is tied to the contact. You can then use it to segment campaigns and build reports without integrating each system separately.
+An event is something a contact did outside ContactShip: a purchase in your store, an order in your POS, a form, a visit to your website, a step in a Make or n8n flow. You send it to the API with a name and any data you want, and it shows up in the [contact's activity](/en/contacts/events). Then you use it to [segment contacts](/en/contacts/events#filter-contacts-by-what-they-did), send campaigns and build [sales reports](/en/reports/sales), without integrating each system separately.
 
 The format is Google Analytics 4's: an `event_name` and free-form `params`. If you already send events to GA4, you can reuse the same names and parameters.
 
 ## Send your first event
 
 <Steps>
-  <Step title="Request the add-on">
+  <Step title="Ask for the add-on">
     Events are enabled on request. Without the add-on, the API answers `403`. Contact [support](/en/get-started/support).
   </Step>
   <Step title="Copy the API key">
-    Use the organization's [API key](/en/organization/api-keys) in the `x-api-key` header.
+    Use your organization's [API key](/en/organization/api-keys) in the `x-api-key` header.
   </Step>
   <Step title="Send the event">
     Each request carries between 1 and 100 events. This one sends a purchase:
@@ -40,9 +40,30 @@ The format is Google Analytics 4's: an `event_name` and free-form `params`. If y
     ```
   </Step>
   <Step title="Check the result">
-    The response has one result per event. `created` means it was stored on the contact in `contact.id`. All fields are in [Send events](/api-reference/endpoint/send-events).
+    The response has one result per event. `created` means it was stored on the contact in `contact.id`. All the fields are in [Send events](/api-reference/endpoint/send-events).
   </Step>
 </Steps>
+
+<Tip>Want to see how an event looks before writing any code? In **Settings → Organization → Events**, click **Send a test event**. See [Events catalog](/en/organization/events#send-a-test-event).</Tip>
+
+## How events are named
+
+ContactShip stores every name in **lowercase with underscores** (`snake_case`), the style Google Analytics uses: `purchase`, `add_to_cart`, `begin_checkout`. If you send a name written some other way, **it is normalized before it is stored**, so the same event never ends up split into several:
+
+| You send | Stored as |
+|---|---|
+| `add_to_cart` | `add_to_cart` |
+| `Add To Cart` | `add_to_cart` |
+| `add-to-cart` | `add_to_cart` |
+| `addToCart` or `AddToCart` | `add_to_cart` |
+| `Compra Realizada` | `compra_realizada` |
+| `viewHTMLPage` | `view_html_page` |
+
+Normalizing drops accents, splits words on capitals, spaces, hyphens or dots, and lowercases everything. The result must start with a letter and be up to 40 characters long: `1st purchase` is rejected as `invalid` because it starts with a digit.
+
+The response tells you the name each event was stored under in `event_name` and, when it changed, how you sent it in `original_event_name`.
+
+Names starting with `cs_` are reserved for the events ContactShip records itself (see [below](#events-contactship-records)).
 
 ## How the contact is found
 
@@ -51,56 +72,101 @@ Each event carries a `contact` object with at least one of these fields. Contact
 | Order | Field | How it is compared |
 |---|---|---|
 | 1 | `contact_id` | The contact's id in ContactShip. |
-| 2 | `external_id` | The contact's id in your system. It gets linked the first time it arrives together with data that finds the contact. |
+| 2 | `external_id` | The contact's id in your system. It is linked the first time it arrives together with another field that finds the contact. |
 | 3 | `phone` | By its last 10 digits: `+57 300 123 4567`, `573001234567` and `3001234567` are the same person. |
 | 4 | `email` | Case-insensitive. |
 
 - If several contacts share the phone, the event goes to the one with the most recent conversation or call.
-- An email shared by several contacts is not used.
+- An email shared by several contacts is not used for matching.
 - If the phone and the email point to different contacts, the phone wins and the result says so in `conflict`.
-- If nobody matches and the event brings a phone or an email, **the contact is created**, named after `contact.name` or else the email or the phone. Creating contacts uses the plan's contact quota. With `create_contact: false`, the event is only added to contacts that already exist.
-- Contacts are never merged: an existing one only gets its phone or email filled in when it was empty.
+- If nobody matches and the event brings a phone or an email, **the contact is created**, named after `contact.name`, or else the email or the phone. Creating contacts uses your plan's contact quota. With `create_contact: false`, the event is only added to contacts that already exist.
+- Contacts are never merged: an existing contact only gets its phone or email filled in when it was empty.
+
+## Visitors who have not identified yet
+
+"Viewed the catalog" or "added to cart" usually happen before you know who the person is. To keep that journey, send those events **without `contact` and with a `session_id`**: an identifier of the visit, the same in all its events. The Google Analytics client id (the `_ga` cookie) works, or an id of your own stored in a cookie or in your app.
+
+```json
+{ "event_name": "add_to_cart", "session_id": "GA1.1.1234567890.1726000000", "params": { "item_name": "Pro plan" } }
+```
+
+1. **The event waits.** Its result is `pending`. It does not show up on any contact, filter or report yet, and it is kept for up to 30 days.
+2. **The person identifies.** This happens in one of two ways:
+   - another event arrives with the same `session_id` and contact data, such as the purchase, or
+   - you call [`POST /v1/identify`](/api-reference/endpoint/identify) with the `session_id` and the contact, for example when they log in or complete checkout without an event to send.
+3. **The pending events move to the contact** in less than a minute, with their original date. In the activity they are marked **Before identifying**.
+4. **Anything arriving later** with that `session_id` goes straight to the contact, even without contact data.
+
+An organization's anonymous events are capped at 100,000 per day. Past that number they are rejected with `anonymous_daily_limit` until the next day; if you need more, contact us. Requests that carry anonymous events also use a request budget of their own, smaller than the rest of the events ([Rate limits](/api-reference/rate-limits)).
+
+<Warning>Never use something that identifies the person, such as their email or phone, as `session_id`: if you have it, send it in `contact`.</Warning>
 
 ## What each result means
 
 | `status` | Stored? | What to do |
 |---|---|---|
-| `created` | Yes | Nothing. `matched_by` says how the contact was found. |
-| `unresolved` | Yes, without a contact | Check `reason`: `contact_limit_reached` (the plan allows no more contacts), `ambiguous_email` (send the phone too) or `not_found` (it did not exist and `create_contact` was `false`). |
+| `created` | Yes | Nothing. `matched_by` says how the contact was found (`session` when it was by the session). |
+| `pending` | Waiting | Nothing: an anonymous event that moves to the contact when the session is identified. |
+| `unresolved` | Yes, without a contact | Check `reason`: `contact_limit_reached` (your plan allows no more contacts), `ambiguous_email` (send the phone too) or `not_found` (it did not exist and `create_contact` was `false`). |
 | `duplicate` | No | You already sent that `event_id`. Expected when retrying. |
-| `rejected` | No | Check `reason`: `no_identity` (contact data is missing), `anonymous_not_supported` or `event_name_limit` (the organization reached 500 distinct event names). |
+| `rejected` | No | Check `reason`: `no_identity` (no contact data and no `session_id`), `anonymous_daily_limit` (the daily cap of anonymous events was reached) or `event_name_limit` (the organization reached 500 distinct event names). |
 | `invalid` | No | Fix what `errors` says and send it again. |
 
-A problem with one event does not affect the others in the same request.
+An event with problems does not affect the others in the same request.
+
+## Events ContactShip records
+
+Besides the ones you send, ContactShip records what happens inside the platform. They show up in the contact's activity and can be used in filters and reports just like yours:
+
+| Event | Name | When |
+|---|---|---|
+| Call | `cs_call_completed` | A call with the contact ends, with an AI agent or a person. It carries the result, the direction and the duration. |
+| Campaign received | `cs_campaign_sent` | A campaign message is sent to the contact. It carries the campaign name and the channel. |
+| Tag added | `cs_tag_added` | A tag is added to the contact or to one of their conversations. |
+| Details updated | `cs_contact_updated` | The contact's data or properties change. |
+| Conversation started | `cs_conversation_started` | A conversation with the contact starts. |
+| Conversation closed | `cs_conversation_closed` | A conversation is closed. |
+
+That is why you can ask questions that cross both worlds, such as "bought within 7 days of receiving the campaign".
 
 ## Good practices
 
-- **Always send `event_id`**, for example the order number, so a failed request can be retried without duplicates.
-- **Load history with `occurred_at`.** Past events count for segmentation and reports as if they had arrived at the time.
-- **Send phones in international format.** It is the field that identifies a contact best.
-- **Use GA4 names** (`purchase`, `add_to_cart`, `begin_checkout`, `sign_up`) and, for purchases, `transaction_id`, `value`, `currency` and `items`.
-- **Batch** up to 100 events per request. This endpoint has its own request limit, separate from the rest of the API.
+- **Always send `event_id`**, such as the order number. That way you can retry a failed request without duplicating events.
+- **Load history with `occurred_at`.** Past events count for segments and reports as if they had arrived at the time.
+- **Send the phone in international format.** It is the field that best identifies the contact.
+- **Use GA4 names** (`purchase`, `add_to_cart`, `begin_checkout`, `sign_up`) and, for purchases, `transaction_id`, `value`, `currency` and `items`. Sales reports look for `purchase` first.
+- **Send the currency** with every purchase. Amounts in different currencies are never added together.
+- **Use the same `session_id`** in every event of a visit and in the `identify` call.
+- **Batch** up to 100 events per request. This endpoint has its own request budget, separate from the rest of the API.
 
-## Frequently asked questions
+## FAQ
 
 <AccordionGroup>
-  <Accordion title="Can I send events for visitors who have not identified themselves yet?">
-    Not yet. An event without `contact_id`, `external_id`, phone or email is rejected, even with a `session_id`.
+  <Accordion title="Why does my event show up under another name?">
+    Because it was normalized: `addToCart` or `Add To Cart` are stored as `add_to_cart`. Check `original_event_name` in the response to see how it arrived.
+  </Accordion>
+  <Accordion title="Can I send events from visitors who have not identified yet?">
+    Yes, with a `session_id` and no contact data. They wait for up to 30 days and move to the contact when the session is identified. See [Visitors who have not identified yet](#visitors-who-have-not-identified-yet).
   </Accordion>
   <Accordion title="Which names can I not use?">
     Names starting with `cs_`: they are reserved for what ContactShip records itself, such as calls and campaigns.
   </Accordion>
   <Accordion title="Do events cost credits?">
-    No. Events are included in the plan. Creating new contacts does use the contact quota.
+    No. Events are included in the plan. Creating new contacts does use your contact quota.
   </Accordion>
   <Accordion title="What happens if I send the same event twice?">
-    With the same `event_id`, the second result is `duplicate` and it is not stored again. Without `event_id` there is no way to tell.
+    If it carries the same `event_id`, the second result is `duplicate` and it is not stored again. Without `event_id` there is no way to detect it.
+  </Accordion>
+  <Accordion title="Can I create an event in the app, without sending it?">
+    No. Each event shows up in the [catalog](/en/organization/events) the first time it arrives. To see one before integrating, use the test event.
   </Accordion>
 </AccordionGroup>
 
-## Continue with
+## Next
 
 <CardGroup cols={2}>
   <Card title="Send events" href="/api-reference/endpoint/send-events">Every field, result and error.</Card>
-  <Card title="Connect your system" href="/en/integrations/connect-your-system">Other ways to connect your system with ContactShip.</Card>
+  <Card title="Identify a session" href="/api-reference/endpoint/identify">Join the anonymous events of a visit to a contact.</Card>
+  <Card title="Contact events" href="/en/contacts/events">Where they show up and how to filter contacts by what they did.</Card>
+  <Card title="Sales reports" href="/en/reports/sales">Sales, repeat purchases and sales credited to ContactShip.</Card>
 </CardGroup>

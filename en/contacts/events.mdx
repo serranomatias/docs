@@ -1,0 +1,97 @@
+---
+title: "Contact events"
+sidebarTitle: "Events"
+description: "See what each contact did —purchases, carts, calls, campaigns— and find the ones who did, or did not do, something in particular."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Contacts → contact → Activity · Contacts → Events" addon="Events" permission="contacts.read" status="nuevo" />
+
+Events are what a contact did, with a date: a purchase in your store, a cart left halfway, a call with an agent, a campaign they received. They show up in the contact's activity and help you find groups of contacts by what they did, such as "bought at some point and has not come back in 90 days".
+
+## Where they come from
+
+- **From your systems.** Your store, your POS, your CRM or an automation send them through the API: purchases, orders, forms, visits. You set it up once; see [Contact events (API)](/en/integrations/events).
+- **From ContactShip.** Calls, campaigns received, tags added, data changes and conversations are recorded on their own, with nothing to set up.
+
+## Where you see them
+
+On the contact page and in the inbox contact panel, the activity tab lists events along with conversations, calls and changes, newest first.
+
+- **The Events chip** keeps only events. The other chips filter by type of activity, such as conversations or calls.
+- **The summary** at the top counts how many times the contact did each thing and when the last one was.
+- **Each event reads as a sentence**, with its icon and its most important data below, such as the amount or the product. How each one looks is chosen in the [events catalog](/en/organization/events).
+- Events marked as **hidden** in the catalog do not show up in the activity, but they still work in filters and reports.
+
+### What they did before identifying
+
+If your website sends events from anonymous visitors, when the person identifies —for example, by buying or logging in— their earlier events move to their contact. They carry the **Before identifying** mark, and the activity shows where they identified. So you see the whole journey: viewed the catalog, added to cart, wrote on WhatsApp and bought.
+
+## Filter contacts by what they did
+
+<Steps>
+  <Step title="Open the filter">
+    In **Contacts**, click **Events**.
+  </Step>
+  <Step title="Pick the event">
+    Yours are under **From your organization** and the platform's under **From ContactShip**.
+  </Step>
+  <Step title="Set the condition">
+    - **Did it** or **Did not do it**.
+    - **At least** N times. Empty means once.
+    - **In the last** N days. Empty means "ever".
+    - **Total value over**, for events with an amount, such as purchases.
+  </Step>
+  <Step title="Add conditions and apply">
+    You can combine up to 10. All of them must hold.
+  </Step>
+</Steps>
+
+The filter is kept in the page address: you can bookmark or share it and it opens with the same selection. It combines with the list's other filters, such as tags, country or assignee.
+
+### Examples
+
+| I want to find… | Conditions |
+|---|---|
+| Customers who stopped buying | `purchase` **Did it** + `purchase` **Did not do it** in the last 90 days |
+| Frequent customers | `purchase` **Did it** at least 3 times in the last 180 days |
+| Abandoned carts | `add_to_cart` **Did it** in the last 7 days + `purchase` **Did not do it** in the last 7 days |
+| Received the campaign and did not buy | Campaign received **Did it** in the last 7 days + `purchase` **Did not do it** in the last 7 days |
+| Big spenders | `purchase` **Did it** with total value over 1,000,000 |
+
+## Send them a campaign
+
+When you build a [WhatsApp campaign](/en/messages/campaigns), the contacts step has the same **Events** filter. **Select the N that match** adds every contact that meets it at once, up to 10,000 per campaign.
+
+Then, in [Sales reports](/en/reports/sales), you can see how much was sold to the people who received that campaign.
+
+## Not available yet
+
+- Creating an event by hand from the contact page: events arrive through the API or are recorded by ContactShip.
+- Selecting from **Contacts** every contact that meets the filter to tag them at once: today it is done from the campaign.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="I do not see the events tab or filter">
+    Events are an add-on enabled on request. Without it, the activity looks as always. Contact [support](/en/get-started/support).
+  </Accordion>
+  <Accordion title="How long does an event take to show up?">
+    What arrives through the API shows up right away. What an anonymous visitor did shows up in less than a minute after they identify.
+  </Accordion>
+  <Accordion title="Does the total value add up different currencies?">
+    The filter compares the sum of the amounts the event carried. If you sell in several currencies, keep that in mind when choosing the number.
+  </Accordion>
+  <Accordion title="What does a user with limited access to contacts see?">
+    Events follow the same scope as contacts: each person sees the activity of, and filters, only the contacts they can see.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+<CardGroup cols={2}>
+  <Card title="Events catalog" href="/en/organization/events">Name, icon and highlighted data of each event.</Card>
+  <Card title="Sales reports" href="/en/reports/sales">Sales, repeat purchases and sales credited to ContactShip.</Card>
+  <Card title="Contact events (API)" href="/en/integrations/events">How to send the events of your systems.</Card>
+  <Card title="Message campaigns" href="/en/messages/campaigns">Send messages to a group of contacts.</Card>
+</CardGroup>

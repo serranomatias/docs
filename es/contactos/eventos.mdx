@@ -1,0 +1,97 @@
+---
+title: "Eventos del contacto"
+sidebarTitle: "Eventos"
+description: "Mirá lo que hizo cada contacto —compras, carritos, llamadas, campañas— y encontrá a los que hicieron, o no, algo en particular."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Contactos → ficha → Actividad · Contactos → Eventos" addon="Eventos" permission="contacts.read" status="nuevo" />
+
+Los eventos son lo que hizo un contacto, con fecha: una compra en tu tienda, un carrito que dejó a medias, una llamada con un agente, una campaña que recibió. Aparecen en su actividad y te sirven para encontrar grupos de contactos por lo que hicieron, por ejemplo "compró alguna vez y no volvió en 90 días".
+
+## De dónde vienen
+
+- **De tus sistemas.** Tu tienda, tu POS, tu CRM o una automatización los mandan por la API: compras, pedidos, formularios, visitas. Se configura una vez; ver [Eventos por contacto](/es/integraciones/eventos).
+- **De ContactShip.** Llamadas, campañas recibidas, etiquetas agregadas, cambios de datos y conversaciones se registran solos, sin configurar nada.
+
+## Dónde se ven
+
+En la ficha del contacto y en el panel del contacto del inbox, la pestaña de actividad lista los eventos junto con las conversaciones, llamadas y cambios, del más reciente al más viejo.
+
+- **El chip Eventos** deja solo los eventos. Los demás chips filtran por tipo de actividad, como conversaciones o llamadas.
+- **El resumen** de arriba cuenta cuántas veces hizo cada cosa y cuándo fue la última.
+- **Cada evento se lee como una frase**, con su ícono y los datos más importantes debajo, como el monto o el producto. Cómo se ve cada uno se elige en el [catálogo de eventos](/es/organizacion/eventos).
+- Los eventos marcados como **ocultos** en el catálogo no aparecen en la actividad, pero siguen sirviendo para filtrar y en los reportes.
+
+### Lo que hizo antes de identificarse
+
+Si tu sitio manda eventos de visitantes anónimos, cuando la persona se identifica —por ejemplo, al comprar o al iniciar sesión— sus eventos anteriores pasan a su ficha. Llevan la marca **Antes de identificarse**, y la actividad muestra dónde se identificó. Así ves el recorrido completo: vio el catálogo, agregó al carrito, escribió por WhatsApp y compró.
+
+## Filtrar contactos por lo que hicieron
+
+<Steps>
+  <Step title="Abrí el filtro">
+    En **Contactos**, tocá **Eventos**.
+  </Step>
+  <Step title="Elegí el evento">
+    Los tuyos aparecen en **De tu organización** y los de la plataforma en **De ContactShip**.
+  </Step>
+  <Step title="Definí la condición">
+    - **Lo hizo** o **No lo hizo**.
+    - **Al menos** N veces. Vacío es una vez.
+    - **En los últimos** N días. Vacío es "alguna vez".
+    - **Valor total mayor a**, para eventos con monto, como las compras.
+  </Step>
+  <Step title="Sumá condiciones y aplicá">
+    Podés combinar hasta 10. Se tienen que cumplir todas.
+  </Step>
+</Steps>
+
+El filtro queda en la dirección de la página: podés guardarla o compartirla y se abre con el mismo recorte. Se combina con los demás filtros de la lista, como etiquetas, país o asignado.
+
+### Ejemplos
+
+| Quiero encontrar… | Condiciones |
+|---|---|
+| Clientes que dejaron de comprar | `purchase` **Lo hizo** + `purchase` **No lo hizo** en los últimos 90 días |
+| Clientes frecuentes | `purchase` **Lo hizo** al menos 3 veces en los últimos 180 días |
+| Quienes abandonaron el carrito | `add_to_cart` **Lo hizo** en los últimos 7 días + `purchase` **No lo hizo** en los últimos 7 días |
+| Quienes recibieron la campaña y no compraron | Campaña recibida **Lo hizo** en los últimos 7 días + `purchase` **No lo hizo** en los últimos 7 días |
+| Clientes que gastaron mucho | `purchase` **Lo hizo** con valor total mayor a 1.000.000 |
+
+## Mandarles una campaña
+
+Al armar una [campaña de WhatsApp](/es/mensajes/campanas), en el paso de contactos está el mismo filtro de **Eventos**. Con **Seleccionar los N que cumplen** agregás de una vez a todos los contactos que cumplen el filtro, hasta 10.000 por campaña.
+
+Después, en [Reportes de ventas](/es/reportes/ventas), podés ver cuánto se vendió a quienes recibieron esa campaña.
+
+## Qué no existe todavía
+
+- Crear un evento a mano desde la ficha: los eventos llegan por la API o los registra ContactShip.
+- Seleccionar desde **Contactos** todos los que cumplen el filtro para etiquetarlos de una vez: hoy se hace desde la campaña.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="No veo la pestaña ni el filtro de eventos">
+    Los eventos son un add-on que se activa a pedido. Sin él, la actividad se ve como siempre. Escribinos a [soporte](/es/comenzar/soporte).
+  </Accordion>
+  <Accordion title="¿Cuánto tarda en aparecer un evento?">
+    Lo que llega por la API aparece al instante. Lo que hizo un visitante anónimo aparece en menos de un minuto después de que se identifica.
+  </Accordion>
+  <Accordion title="¿El valor total suma monedas distintas?">
+    El filtro compara la suma de los montos que trajo el evento. Si vendés en varias monedas, tenelo en cuenta al elegir el número.
+  </Accordion>
+  <Accordion title="Un usuario con acceso limitado a contactos, ¿qué ve?">
+    Los eventos siguen el mismo alcance que los contactos: cada persona ve la actividad y filtra sólo los contactos que puede ver.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+<CardGroup cols={2}>
+  <Card title="Catálogo de eventos" href="/es/organizacion/eventos">Nombre, ícono y datos destacados de cada evento.</Card>
+  <Card title="Reportes de ventas" href="/es/reportes/ventas">Ventas, recompra y ventas atribuidas a ContactShip.</Card>
+  <Card title="Eventos por contacto (API)" href="/es/integraciones/eventos">Cómo mandar los eventos de tus sistemas.</Card>
+  <Card title="Campañas de mensajes" href="/es/mensajes/campanas">Mandar mensajes a un grupo de contactos.</Card>
+</CardGroup>
