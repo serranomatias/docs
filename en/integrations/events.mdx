@@ -46,6 +46,210 @@ The format is Google Analytics 4's: an `event_name` and free-form `params`. If y
 
 <Tip>Want to see how an event looks before writing any code? In **Settings → Organization → Events**, click **Send a test event**. See [Events catalog](/en/organization/events#send-a-test-event).</Tip>
 
+## Body examples
+
+Each example is the full body of `POST /v1/events`. You can mix events of different kinds in the same array, up to 100 per request.
+
+- **Purchase, cart, checkout and refund** follow GA4's e-commerce format: the amount in `value`, the currency in `currency` and the products in `items`.
+- **Form and sign-up** are the usual ones for a website that captures customers.
+- **Anonymous visit** is a visitor who has not identified yet; see [Visitors who have not identified yet](#visitors-who-have-not-identified-yet).
+- **History** loads past purchases with their real date.
+- **Existing contacts only** adds the event without creating new contacts.
+
+With the names in these examples (`purchase`, `add_to_cart`, `begin_checkout`, `refund`, `generate_lead`, `sign_up`, `page_view`, `view_item`), the contact's activity already shows them with readable names, such as **Purchase** or **Added to cart**, with nothing to set up.
+
+<CodeGroup>
+```json Purchase
+{
+  "events": [
+    {
+      "event_name": "purchase",
+      "event_id": "order-10025",
+      "occurred_at": "2026-09-20T15:04:05-05:00",
+      "contact": {
+        "external_id": "customer-4821",
+        "phone": "+573001234567",
+        "email": "ana@example.com",
+        "name": "Ana Pérez",
+        "country": "CO"
+      },
+      "params": {
+        "transaction_id": "10025",
+        "value": 58000,
+        "currency": "COP",
+        "payment_method": "card",
+        "coupon": "WELCOME10",
+        "items": [
+          { "item_id": "PIZZA-L", "item_name": "Large pizza", "item_category": "Pizzas", "price": 24000, "quantity": 2 },
+          { "item_id": "SODA-15", "item_name": "Soda 1.5 L", "item_category": "Drinks", "price": 10000, "quantity": 1 }
+        ]
+      }
+    }
+  ]
+}
+```
+
+```json Cart
+{
+  "events": [
+    {
+      "event_name": "add_to_cart",
+      "event_id": "cart-8812-1",
+      "contact": { "email": "ana@example.com" },
+      "params": {
+        "value": 24000,
+        "currency": "COP",
+        "items": [
+          { "item_id": "PIZZA-L", "item_name": "Large pizza", "price": 24000, "quantity": 1 }
+        ]
+      }
+    }
+  ]
+}
+```
+
+```json Checkout
+{
+  "events": [
+    {
+      "event_name": "begin_checkout",
+      "event_id": "checkout-8812",
+      "contact": { "phone": "+573001234567" },
+      "params": {
+        "value": 58000,
+        "currency": "COP",
+        "coupon": "WELCOME10",
+        "items": [
+          { "item_id": "PIZZA-L", "item_name": "Large pizza", "price": 24000, "quantity": 2 },
+          { "item_id": "SODA-15", "item_name": "Soda 1.5 L", "price": 10000, "quantity": 1 }
+        ]
+      }
+    }
+  ]
+}
+```
+
+```json Refund
+{
+  "events": [
+    {
+      "event_name": "refund",
+      "event_id": "refund-10025",
+      "contact": { "external_id": "customer-4821" },
+      "params": {
+        "transaction_id": "10025",
+        "value": 24000,
+        "currency": "COP",
+        "reason": "Wrong product"
+      }
+    }
+  ]
+}
+```
+
+```json Form
+{
+  "events": [
+    {
+      "event_name": "generate_lead",
+      "event_id": "lead-55310",
+      "contact": {
+        "phone": "+573001234567",
+        "email": "ana@example.com",
+        "name": "Ana Pérez"
+      },
+      "params": {
+        "form_name": "Business quote",
+        "interest": "Pro plan",
+        "utm_source": "facebook",
+        "utm_campaign": "september"
+      }
+    }
+  ]
+}
+```
+
+```json Sign-up
+{
+  "events": [
+    {
+      "event_name": "sign_up",
+      "event_id": "signup-customer-4821",
+      "contact": {
+        "external_id": "customer-4821",
+        "email": "ana@example.com",
+        "name": "Ana Pérez"
+      },
+      "params": { "method": "google" }
+    }
+  ]
+}
+```
+
+```json Anonymous visit
+{
+  "events": [
+    {
+      "event_name": "page_view",
+      "session_id": "GA1.1.1234567890.1726000000",
+      "params": {
+        "page_location": "https://yourstore.com/pizzas",
+        "page_title": "Pizzas"
+      }
+    },
+    {
+      "event_name": "view_item",
+      "session_id": "GA1.1.1234567890.1726000000",
+      "params": { "item_id": "PIZZA-L", "item_name": "Large pizza", "price": 24000, "currency": "COP" }
+    }
+  ]
+}
+```
+
+```json History
+{
+  "events": [
+    {
+      "event_name": "purchase",
+      "event_id": "order-9001",
+      "occurred_at": "2025-11-03T19:20:00-05:00",
+      "contact": { "phone": "+573001234567", "name": "Ana Pérez" },
+      "params": { "transaction_id": "9001", "value": 42000, "currency": "COP" }
+    },
+    {
+      "event_name": "purchase",
+      "event_id": "order-9377",
+      "occurred_at": "2026-01-15T12:05:00-05:00",
+      "contact": { "phone": "+573001234567", "name": "Ana Pérez" },
+      "params": { "transaction_id": "9377", "value": 61000, "currency": "COP" }
+    }
+  ]
+}
+```
+
+```json Existing contacts only
+{
+  "events": [
+    {
+      "event_name": "purchase",
+      "event_id": "order-10026",
+      "create_contact": false,
+      "contact": { "external_id": "customer-4821" },
+      "value": 35000,
+      "currency": "COP",
+      "params": { "transaction_id": "10026", "store": "Downtown store" }
+    }
+  ]
+}
+```
+</CodeGroup>
+
+- `value` and `currency` can go inside `params`, as in GA4, or at the same level as `event_name`, as in **Existing contacts only**. When both are sent, the outer one wins.
+- `occurred_at` takes any ISO 8601 date with a time zone. Without `occurred_at`, the event takes the time it arrived.
+- Everything you send in `params` is stored as is. The contact's activity shows the most important fields of each event, starting with the ones you choose as highlighted in the [catalog](/en/organization/events).
+- The top-level fields of `params`, such as `store` or `payment_method`, can also be used in [custom reports](/en/reports/sales#build-your-own-report-with-events) to filter and split. What goes inside `items` cannot: to split sales by product or category, also send that field at the top level, such as `"product_name": "Large pizza"`.
+- To see which events restaurants, clinics, lenders or schools send, and how they use them with campaigns, calls and reports, see [Use cases with events](/en/use-cases/events).
+
 ## How events are named
 
 ContactShip stores every name in **lowercase with underscores** (`snake_case`), the style Google Analytics uses: `purchase`, `add_to_cart`, `begin_checkout`. If you send a name written some other way, **it is normalized before it is stored**, so the same event never ends up split into several:
@@ -93,7 +297,14 @@ Each event carries a `contact` object with at least one of these fields. Contact
 1. **The event waits.** Its result is `pending`. It does not show up on any contact, filter or report yet, and it is kept for up to 30 days.
 2. **The person identifies.** This happens in one of two ways:
    - another event arrives with the same `session_id` and contact data, such as the purchase, or
-   - you call [`POST /v1/identify`](/api-reference/endpoint/identify) with the `session_id` and the contact, for example when they log in or complete checkout without an event to send.
+   - you call [`POST /v1/identify`](/api-reference/endpoint/identify) with the `session_id` and the contact, for example when they log in or complete checkout without an event to send:
+
+     ```json
+     {
+       "session_id": "GA1.1.1234567890.1726000000",
+       "contact": { "email": "ana@example.com", "phone": "+573001234567", "name": "Ana Pérez" }
+     }
+     ```
 3. **The pending events move to the contact** in less than a minute, with their original date. In the activity they are marked **Before identifying**.
 4. **Anything arriving later** with that `session_id` goes straight to the contact, even without contact data.
 
@@ -169,4 +380,5 @@ That is why you can ask questions that cross both worlds, such as "bought within
   <Card title="Identify a session" href="/api-reference/endpoint/identify">Join the anonymous events of a visit to a contact.</Card>
   <Card title="Contact events" href="/en/contacts/events">Where they show up and how to filter contacts by what they did.</Card>
   <Card title="Sales reports" href="/en/reports/sales">Sales, repeat purchases and sales credited to ContactShip.</Card>
+  <Card title="Use cases with events" href="/en/use-cases/events">What to send and what to do in restaurants, clinics, collections and more.</Card>
 </CardGroup>

@@ -1,0 +1,473 @@
+---
+title: 'Use cases with events'
+sidebarTitle: 'With events'
+description: 'How to bring what happens in your system —orders, payments, appointments, enrollments— into ContactShip campaigns, AI calls and reports.'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" addon="Events" status="nuevo" />
+
+ContactShip already talks to your customers: it answers WhatsApp, calls leads, confirms appointments and reminds people of payments. What happens next —whether the order was delivered, whether they paid, showed up or enrolled— stays in your system. With [events](/en/integrations/events), that reaches each contact's record. You can use it to choose who to message and to measure what each campaign and each agent brought in.
+
+These cases come from the most common ways ContactShip is used. Each one has the body your system sends to [`POST /v1/events`](/api-reference/endpoint/send-events), the steps in ContactShip and what to measure. The data in the examples is made up.
+
+| If your business… | See |
+|---|---|
+| Takes orders on WhatsApp or by phone | [Restaurants and delivery](#restaurants-and-delivery) |
+| Calls the leads from its ads with AI to sell to them | [Phone sales with AI](#phone-sales-with-ai) |
+| Collects installments or sends due-date reminders | [Collections](#collections) |
+| Books and confirms appointments | [Clinics and medical practices](#clinics-and-medical-practices) |
+| Qualifies prospects and hands them to advisors | [Schools and courses](#schools-and-courses) |
+| Runs a technical help desk | [Technical support](#technical-support) |
+
+<Tip>
+If nobody on your team codes, [n8n](/en/integrations/n8n) or [Make](/en/integrations/make) can send the events with an HTTP step, the same way they launch calls in [Qualify leads automatically](/en/use-cases/lead-qualification).
+</Tip>
+
+## Restaurants and delivery
+
+**Who it is for.** Food chains that take orders with an AI agent on WhatsApp or by phone.
+
+**The problem.** You have thousands of conversations a week, but the order is closed in your POS or your ordering platform. You don't know who stopped ordering, or how much the agent that answers the phone sells.
+
+**What your system sends.** Each order, when it is closed in the POS:
+
+```json
+{
+  "events": [
+    {
+      "event_name": "purchase",
+      "event_id": "order-884213",
+      "occurred_at": "2026-09-26T20:41:00-05:00",
+      "contact": { "phone": "+573001234567", "name": "Laura Gómez" },
+      "params": {
+        "transaction_id": "884213",
+        "value": 63495,
+        "currency": "COP",
+        "store": "Usaquén",
+        "channel": "whatsapp",
+        "order_type": "delivery",
+        "coupon": "COMEBACK15",
+        "discount": 11205,
+        "items": [
+          { "item_id": "HB-DOUBLE", "item_name": "Double cheeseburger", "price": 32900, "quantity": 2 },
+          { "item_id": "FRIES-M", "item_name": "Medium fries", "price": 8900, "quantity": 1 }
+        ]
+      }
+    }
+  ]
+}
+```
+
+**What you do in ContactShip.**
+
+<Steps>
+  <Step title="Win back the ones who stopped ordering">
+    In **Reports → Customize → Add widget**, add **Customers who stopped buying** and choose 60 days to see how many there are. Then build a [WhatsApp campaign](/en/messages/campaigns) with a coupon. In the contacts step, filter by `purchase` **Did it** + `purchase` **Did not do it** in the last 60 days, and click **Select the N that match**.
+  </Step>
+  <Step title="Make the most of big days">
+    Before a match or a long weekend, send a promo to your frequent customers: `purchase` **Did it** at least 3 times in the last 90 days.
+  </Step>
+  <Step title="Measure what came back">
+    Add **Sales credited to ContactShip** twice: with the 7-day window, for campaigns, and with the 1-day window, for the agent that answers the phone. Every order closed after a call with that agent is credited to it.
+  </Step>
+</Steps>
+
+**What you measure.** How much comes back from each campaign and how much the phone agent sells. Since `store`, `channel` and `coupon` are at the top level of `params`, a [custom report](/en/reports/sales#build-your-own-report-with-events) also shows which store and channel people buy through, and how many used the campaign's coupon.
+
+## Phone sales with AI
+
+**Who it is for.** Brands that sell monthly-use products by phone —supplements, cosmetics, pet food— to people who leave their details on an ad, often with cash on delivery.
+
+**The problem.** Your system calls the lead with an AI agent as soon as it arrives, and the agent closes the sale. But a closed sale is not a paid sale: some orders are refused at the door. You don't know which agent brings sales that get delivered, and you don't call in time for the second purchase.
+
+**What your system sends.** The lead, the order and what happens with the delivery:
+
+<CodeGroup>
+```json Lead
+{
+  "events": [
+    {
+      "event_name": "generate_lead",
+      "event_id": "lead-meta-55012",
+      "contact": { "phone": "+525512345678", "name": "Rosa Martínez" },
+      "params": { "product": "Collagen 30-day supply", "source": "facebook", "ad_campaign": "collagen-sep-mx" }
+    }
+  ]
+}
+```
+
+```json Order
+{
+  "events": [
+    {
+      "event_name": "purchase",
+      "event_id": "order-MX-20417",
+      "contact": { "phone": "+525512345678" },
+      "params": {
+        "transaction_id": "MX-20417",
+        "value": 1290,
+        "currency": "MXN",
+        "product": "Collagen 30-day supply",
+        "payment_method": "cash_on_delivery",
+        "items": [{ "item_id": "COL-30", "item_name": "Collagen 30-day supply", "price": 1290, "quantity": 1 }]
+      }
+    }
+  ]
+}
+```
+
+```json Delivered
+{
+  "events": [
+    {
+      "event_name": "order_delivered",
+      "event_id": "delivery-MX-20417",
+      "contact": { "phone": "+525512345678" },
+      "value": 1290,
+      "currency": "MXN",
+      "params": { "transaction_id": "MX-20417", "product": "Collagen 30-day supply", "city": "Guadalajara" }
+    }
+  ]
+}
+```
+
+```json Refused
+{
+  "events": [
+    {
+      "event_name": "order_returned",
+      "event_id": "refusal-MX-20533",
+      "contact": { "phone": "+525587654321" },
+      "value": 1290,
+      "currency": "MXN",
+      "params": { "transaction_id": "MX-20533", "product": "Collagen 30-day supply", "reason": "refused_at_door" }
+    }
+  ]
+}
+```
+</CodeGroup>
+
+**What you do in ContactShip.**
+
+<Steps>
+  <Step title="Keep calling as you do today">
+    Your system launches the call with the [calls API](/api-reference/endpoint/make-ai-phone-call) as soon as the lead arrives. Each call shows in the contact's activity, next to the lead and the order.
+  </Step>
+  <Step title="Measure which agent really sells">
+    Build a [custom report](/en/reports/sales#build-your-own-report-with-events) with the **Events** source: event `order_delivered`, **Total amount**, split by **Credited AI agent**, with a 14-day window. Another one just like it with `order_returned` tells you which agent brings the most refusals.
+  </Step>
+  <Step title="Follow up with the ones who did not buy">
+    Send a [WhatsApp campaign](/en/messages/campaigns) to `generate_lead` **Did it** in the last 3 days + `purchase` **Did not do it** in the last 3 days.
+  </Step>
+  <Step title="Be on time for the repeat purchase">
+    If the product lasts a month, filter by `order_delivered` **Did it** in the last 30 days + `order_delivered` **Did not do it** in the last 20 days + `purchase` **Did not do it** in the last 20 days. They received it between 20 and 30 days ago and have not ordered again. Send them a WhatsApp message and follow the result with **Repeat purchases**.
+  </Step>
+</Steps>
+
+<Note>
+A sale is credited to a call only if it happens after the call ended. If your agent closes the order during the call, measure with the delivery, as in this case.
+</Note>
+
+**What you measure.** Delivered and refused sales by agent and by product, and how much of the repeat purchases come after the reminder.
+
+## Collections
+
+**Who it is for.** Lenders, credit unions, schools and any business that charges in installments.
+
+**The problem.** Your system already launches AI calls based on each installment's status: before it is due, right after it is due and when it is late. The payment comes in through the bank or the payment gateway, and you don't know how much each call collected, or how much would have been paid anyway.
+
+**What your system sends.** When an installment becomes overdue and when a payment comes in:
+
+<CodeGroup>
+```json Installment overdue
+{
+  "events": [
+    {
+      "event_name": "payment_overdue",
+      "event_id": "installment-PR-20931-07-overdue",
+      "contact": { "external_id": "cli-20931", "phone": "+5491123456789", "name": "Jorge Ramírez" },
+      "value": 85400,
+      "currency": "ARS",
+      "params": { "loan_id": "PR-20931", "installment": 7, "due_date": "2026-09-20", "days_overdue": 7 }
+    }
+  ]
+}
+```
+
+```json Payment received
+{
+  "events": [
+    {
+      "event_name": "payment_received",
+      "event_id": "payment-PR-20931-07",
+      "contact": { "external_id": "cli-20931" },
+      "value": 85400,
+      "currency": "ARS",
+      "params": { "loan_id": "PR-20931", "installment": 7, "payment_channel": "bank_transfer" }
+    }
+  ]
+}
+```
+</CodeGroup>
+
+**What you do in ContactShip.**
+
+<Steps>
+  <Step title="Name the events">
+    In **Settings → Organization → Events**, set their **Name** to **Installment overdue** and **Payment received**, and add `loan_id` and `installment` to **Highlighted data**. Your team sees on the contact's record which installment each customer owes and which one they paid.
+  </Step>
+  <Step title="Keep calling as you do today">
+    Your system calls with one agent per stage —coming due, overdue, late— using the [calls API](/api-reference/endpoint/make-ai-phone-call). To build the agent, see [AI-powered collections](/en/use-cases/automated-collections).
+  </Step>
+  <Step title="Measure what each agent collects">
+    Build a [custom report](/en/reports/sales#build-your-own-report-with-events) with the **Events** source: event `payment_received`, **Total amount**, split by **Credited campaign or agent**, with a 7-day window. **Not credited** is what was paid with no AI call or campaign in those 7 days.
+  </Step>
+  <Step title="Remind the ones who still have not paid on WhatsApp">
+    Send a [WhatsApp campaign](/en/messages/campaigns) to `payment_overdue` **Did it** in the last 15 days + `payment_received` **Did not do it** in the last 15 days.
+  </Step>
+</Steps>
+
+**What you measure.** What each agent and each campaign collected, against what came in with no follow-up. If you have one agent per stage, you know which one performs best.
+
+## Clinics and medical practices
+
+**Who it is for.** Clinics, labs and medical centers that serve patients on WhatsApp, Instagram or Messenger and confirm appointments with an AI agent.
+
+**The problem.** Many prospects come in from ads and social media and never book, and some patients miss their appointment and never book again. The appointment lives in your scheduling system.
+
+**What your system sends.** The prospect, the appointment and what happened with it:
+
+<CodeGroup>
+```json Prospect
+{
+  "events": [
+    {
+      "event_name": "generate_lead",
+      "event_id": "form-77120",
+      "contact": { "phone": "+51987654321", "name": "Marta Ruiz" },
+      "params": { "specialty": "Dermatology", "source": "instagram", "form_name": "Free assessment" }
+    }
+  ]
+}
+```
+
+```json Appointment booked
+{
+  "events": [
+    {
+      "event_name": "appointment_booked",
+      "event_id": "appt-551902-booked",
+      "contact": { "phone": "+51987654321" },
+      "params": { "appointment_id": "551902", "specialty": "Dermatology", "site": "Miraflores clinic", "scheduled_for": "2026-10-02T09:30:00-05:00" }
+    }
+  ]
+}
+```
+
+```json No-show
+{
+  "events": [
+    {
+      "event_name": "appointment_no_show",
+      "event_id": "appt-552210-no-show",
+      "contact": { "phone": "+51912345678", "name": "Diego Salas" },
+      "params": { "appointment_id": "552210", "specialty": "Pediatrics", "site": "San Isidro clinic" }
+    }
+  ]
+}
+```
+
+```json Visit attended
+{
+  "events": [
+    {
+      "event_name": "appointment_attended",
+      "event_id": "appt-551902-attended",
+      "contact": { "phone": "+51987654321" },
+      "value": 180,
+      "currency": "PEN",
+      "params": { "appointment_id": "551902", "specialty": "Dermatology", "site": "Miraflores clinic" }
+    }
+  ]
+}
+```
+</CodeGroup>
+
+**What you do in ContactShip.**
+
+<Steps>
+  <Step title="Win back the ones who did not book">
+    Send a [WhatsApp campaign](/en/messages/campaigns) to `generate_lead` **Did it** in the last 7 days + `appointment_booked` **Did not do it** in the last 7 days. Replies land in the inbox, where your AI agent or your team handles them.
+  </Step>
+  <Step title="Rebook no-shows the same day">
+    When your system marks a no-show, have it call the patient with an AI agent using the [calls API](/api-reference/endpoint/make-ai-phone-call). That way it doesn't depend on someone remembering.
+  </Step>
+  <Step title="Measure how many appointments each action brings">
+    Build a [custom report](/en/reports/sales#build-your-own-report-with-events) with the **Events** source: event `appointment_booked`, **Distinct contacts**, split by **Credited campaign or agent**, with a 7-day window. Since `specialty` is at the top level of `params`, you can also split it by specialty.
+  </Step>
+  <Step title="Add up the revenue">
+    With `appointment_attended` and its amount, **Total amount** split by `specialty` tells you how much each specialty bills.
+  </Step>
+</Steps>
+
+<Warning>
+Do not send diagnoses, results or other clinical data in `params`. For these cases, the specialty and the site are enough.
+</Warning>
+
+**What you measure.** Appointments that come from each campaign or call, no-shows that are recovered, and revenue by specialty.
+
+## Schools and courses
+
+**Who it is for.** Language schools, business schools and course platforms that qualify prospects on WhatsApp and hand the best ones to an advisor.
+
+**The problem.** Your AI agent qualifies each prospect and hands them to an advisor, but the enrollment is paid in your school system. You don't know how many prospects end up enrolled, or who to offer the next course to.
+
+**What your system sends.** The prospect, the trial class, the enrollment and the end of the course:
+
+<CodeGroup>
+```json Prospect
+{
+  "events": [
+    {
+      "event_name": "generate_lead",
+      "event_id": "form-30822",
+      "contact": { "phone": "+528112345678", "email": "sofia.lopez@example.com", "name": "Sofía López" },
+      "params": { "course": "English", "level": "Intermediate", "modality": "Online", "source": "google" }
+    }
+  ]
+}
+```
+
+```json Trial class
+{
+  "events": [
+    {
+      "event_name": "trial_class_attended",
+      "event_id": "trial-30822",
+      "contact": { "phone": "+528112345678" },
+      "params": { "course": "English", "level": "Intermediate", "campus": "Monterrey" }
+    }
+  ]
+}
+```
+
+```json Enrollment
+{
+  "events": [
+    {
+      "event_name": "enrollment",
+      "event_id": "enroll-2026-0418",
+      "contact": { "phone": "+528112345678" },
+      "value": 3450,
+      "currency": "MXN",
+      "params": { "course": "English", "level": "Intermediate", "modality": "Online", "cohort": "October 2026" }
+    }
+  ]
+}
+```
+
+```json Course completed
+{
+  "events": [
+    {
+      "event_name": "course_completed",
+      "event_id": "done-2026-0418",
+      "contact": { "phone": "+528112345678" },
+      "params": { "course": "English", "level": "Intermediate", "next_level": "Advanced" }
+    }
+  ]
+}
+```
+</CodeGroup>
+
+**What you do in ContactShip.**
+
+<Steps>
+  <Step title="See each student's journey">
+    On the contact's record you see, in order, the conversation with the agent, the advisor's calls, the trial class and the enrollment.
+  </Step>
+  <Step title="Follow up with the ones who tried and did not enroll">
+    Send a [WhatsApp campaign](/en/messages/campaigns) to `trial_class_attended` **Did it** in the last 14 days + `enrollment` **Did not do it** in the last 14 days.
+  </Step>
+  <Step title="Offer the next course">
+    For `course_completed` **Did it** in the last 30 days + `enrollment` **Did not do it** in the last 30 days, send them a campaign or have your system call them with an AI agent.
+  </Step>
+  <Step title="Measure enrollments">
+    Build a [custom report](/en/reports/sales#build-your-own-report-with-events) with the **Events** source: event `enrollment`, **Distinct contacts** and **Total amount**, split by **Credited campaign or agent**, with a 14-day window.
+  </Step>
+</Steps>
+
+<Note>
+Your advisors' calls do not count for crediting: only campaigns and calls with AI agents count. The ready-made **Sales** reports look for `purchase`; if you want to use them for enrollments, send them with that name.
+</Note>
+
+**What you measure.** How many prospects end up enrolled, how much each campaign bills and how many students move on to the next course.
+
+## Technical support
+
+**Who it is for.** Manufacturers and tech companies with a help desk: an AI agent answers and routes, and your team solves.
+
+**The problem.** When an installer or a customer calls, your team doesn't know which devices they registered, whether they are under warranty or whether they already have an open repair. All of that is in your ERP.
+
+**What your system sends.** The devices each customer registers and their repairs:
+
+<CodeGroup>
+```json Device registered
+{
+  "events": [
+    {
+      "event_name": "product_registered",
+      "event_id": "registration-CAM-D4-0001234",
+      "contact": { "external_id": "inst-4471", "phone": "+13055550123", "email": "juan.perez@example.com", "name": "Juan Pérez" },
+      "params": { "model": "4MP dome camera", "serial": "CAM-D4-0001234", "warranty_until": "2029-09-26", "distributor": "South Distributor" }
+    }
+  ]
+}
+```
+
+```json Repair opened
+{
+  "events": [
+    {
+      "event_name": "rma_opened",
+      "event_id": "rma-US-88213",
+      "contact": { "external_id": "inst-4471" },
+      "params": { "rma_id": "US-88213", "model": "4MP dome camera", "serial": "CAM-D4-0001234", "reason": "no_video" }
+    }
+  ]
+}
+```
+</CodeGroup>
+
+**What you do in ContactShip.**
+
+<Steps>
+  <Step title="Give your team context">
+    In **Settings → Organization → Events**, set their **Name** to **Device registered** and **Repair opened**, and add `model` and `rma_id` to **Highlighted data**. Your team sees it in the inbox contact panel and on the contact's record, without opening another system.
+  </Step>
+  <Step title="Find your best installers">
+    In **Contacts → Events**, filter by `product_registered` **Did it** at least 10 times in the last 90 days. They are the ones who install the most: invite them to a training or to your partner program with a [WhatsApp campaign](/en/messages/campaigns).
+  </Step>
+</Steps>
+
+**What you measure.** Less time looking up data on each call, and which installers are worth looking after.
+
+## Tips for any case
+
+- **Send the phone in international format.** It is what ties the event to the contact's conversations and calls.
+- **Use `event_id`** with the order, installment or appointment number. If you retry, nothing is duplicated.
+- **Put at the top level of `params`** whatever you want to split reports by, such as the store, the product or the specialty. What goes inside `items` cannot be used in reports.
+- **Send the sale when it is closed.** A sale is credited to a call only if it happens after the call ended.
+- **Crediting counts campaigns and calls with AI agents.** Conversations the customer starts and calls handled only by people do not count.
+- **Do not send sensitive data** in `params`: no diagnoses, card numbers or passwords.
+- **Campaigns are built by hand**, for example once a day or once a week. Sending them automatically when an event arrives does not exist yet. To react right away, have your system launch the call through the API.
+
+## See also
+
+<CardGroup cols={2}>
+  <Card title="Contact events (API)" href="/en/integrations/events">How to connect your system, and every format.</Card>
+  <Card title="Contact events" href="/en/contacts/events">Filter contacts by what they did.</Card>
+  <Card title="Sales reports" href="/en/reports/sales">Sales, repeat purchases and crediting.</Card>
+  <Card title="Message campaigns" href="/en/messages/campaigns">Send WhatsApp to a group of contacts.</Card>
+</CardGroup>

@@ -214,7 +214,8 @@
                   "es/casos-de-uso/calificacion-de-leads",
                   "es/casos-de-uso/cobranzas-automatizadas",
                   "es/casos-de-uso/atencion-al-cliente-24-7",
-                  "es/casos-de-uso/campanas-de-ventas"
+                  "es/casos-de-uso/campanas-de-ventas",
+                  "es/casos-de-uso/eventos"
                 ]
               }
             ]
@@ -514,7 +515,8 @@
                   "en/use-cases/lead-qualification",
                   "en/use-cases/automated-collections",
                   "en/use-cases/24-7-customer-support",
-                  "en/use-cases/sales-campaigns"
+                  "en/use-cases/sales-campaigns",
+                  "en/use-cases/events"
                 ]
               }
             ]
