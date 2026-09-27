@@ -189,7 +189,7 @@ A sale is credited to a call only if it happens after the call ended. If your ag
       "contact": { "external_id": "cli-20931", "phone": "+5491123456789", "name": "Jorge Ramírez" },
       "value": 85400,
       "currency": "ARS",
-      "params": { "loan_id": "PR-20931", "installment": 7, "due_date": "2026-09-20", "days_overdue": 7 }
+      "params": { "loan_number": "PR-20931", "installment": 7, "due_date": "2026-09-20", "days_overdue": 7 }
     }
   ]
 }
@@ -204,7 +204,7 @@ A sale is credited to a call only if it happens after the call ended. If your ag
       "contact": { "external_id": "cli-20931" },
       "value": 85400,
       "currency": "ARS",
-      "params": { "loan_id": "PR-20931", "installment": 7, "payment_channel": "bank_transfer" }
+      "params": { "loan_number": "PR-20931", "installment": 7, "payment_channel": "bank_transfer" }
     }
   ]
 }
@@ -215,7 +215,7 @@ A sale is credited to a call only if it happens after the call ended. If your ag
 
 <Steps>
   <Step title="Name the events">
-    In **Settings → Organization → Events**, set their **Name** to **Installment overdue** and **Payment received**, and add `loan_id` and `installment` to **Highlighted data**. Your team sees on the contact's record which installment each customer owes and which one they paid.
+    In **Settings → Organization → Events**, set their **Name** to **Installment overdue** and **Payment received**, and add `loan_number` and `installment` to **Highlighted data**. Your team sees on the contact's record which installment each customer owes and which one they paid.
   </Step>
   <Step title="Keep calling as you do today">
     Your system calls with one agent per stage —coming due, overdue, late— using the [calls API](/api-reference/endpoint/make-ai-phone-call). To build the agent, see [AI-powered collections](/en/use-cases/automated-collections).
@@ -433,7 +433,7 @@ Your advisors' calls do not count for crediting: only campaigns and calls with A
       "event_name": "rma_opened",
       "event_id": "rma-US-88213",
       "contact": { "external_id": "inst-4471" },
-      "params": { "rma_id": "US-88213", "model": "4MP dome camera", "serial": "CAM-D4-0001234", "reason": "no_video" }
+      "params": { "rma_number": "US-88213", "model": "4MP dome camera", "serial": "CAM-D4-0001234", "reason": "no_video" }
     }
   ]
 }
@@ -444,7 +444,7 @@ Your advisors' calls do not count for crediting: only campaigns and calls with A
 
 <Steps>
   <Step title="Give your team context">
-    In **Settings → Organization → Events**, set their **Name** to **Device registered** and **Repair opened**, and add `model` and `rma_id` to **Highlighted data**. Your team sees it in the inbox contact panel and on the contact's record, without opening another system.
+    In **Settings → Organization → Events**, set their **Name** to **Device registered** and **Repair opened**, and add `model` and `rma_number` to **Highlighted data**. Your team sees it in the inbox contact panel and on the contact's record, without opening another system.
   </Step>
   <Step title="Find your best installers">
     In **Contacts → Events**, filter by `product_registered` **Did it** at least 10 times in the last 90 days. They are the ones who install the most: invite them to a training or to your partner program with a [WhatsApp campaign](/en/messages/campaigns).

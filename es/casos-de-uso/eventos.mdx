@@ -189,7 +189,7 @@ Una venta se le atribuye a una llamada solo si ocurre después de que la llamada
       "contact": { "external_id": "cli-20931", "phone": "+5491123456789", "name": "Jorge Ramírez" },
       "value": 85400,
       "currency": "ARS",
-      "params": { "loan_id": "PR-20931", "installment": 7, "due_date": "2026-09-20", "days_overdue": 7 }
+      "params": { "loan_number": "PR-20931", "installment": 7, "due_date": "2026-09-20", "days_overdue": 7 }
     }
   ]
 }
@@ -204,7 +204,7 @@ Una venta se le atribuye a una llamada solo si ocurre después de que la llamada
       "contact": { "external_id": "cli-20931" },
       "value": 85400,
       "currency": "ARS",
-      "params": { "loan_id": "PR-20931", "installment": 7, "payment_channel": "transferencia" }
+      "params": { "loan_number": "PR-20931", "installment": 7, "payment_channel": "transferencia" }
     }
   ]
 }
@@ -215,7 +215,7 @@ Una venta se le atribuye a una llamada solo si ocurre después de que la llamada
 
 <Steps>
   <Step title="Nombrá los eventos">
-    En **Ajustes → Organización → Eventos**, poneles de **Nombre** **Cuota vencida** y **Pago recibido**, y sumá `loan_id` e `installment` a **Datos destacados**. Tu equipo ve en la ficha qué cuota debe cada cliente y cuál pagó.
+    En **Ajustes → Organización → Eventos**, poneles de **Nombre** **Cuota vencida** y **Pago recibido**, y sumá `loan_number` e `installment` a **Datos destacados**. Tu equipo ve en la ficha qué cuota debe cada cliente y cuál pagó.
   </Step>
   <Step title="Seguí llamando como hoy">
     Tu sistema llama con un agente por etapa —por vencer, vencida, con atraso— usando la [API de llamadas](/api-reference/endpoint/make-ai-phone-call). Para armar el agente, mirá [Cobranzas con IA](/es/casos-de-uso/cobranzas-automatizadas).
@@ -433,7 +433,7 @@ Las llamadas de tus asesores no cuentan para la atribución: solo cuentan las ca
       "event_name": "rma_opened",
       "event_id": "rma-US-88213",
       "contact": { "external_id": "inst-4471" },
-      "params": { "rma_id": "US-88213", "model": "Cámara domo 4MP", "serial": "CAM-D4-0001234", "reason": "sin_video" }
+      "params": { "rma_number": "US-88213", "model": "Cámara domo 4MP", "serial": "CAM-D4-0001234", "reason": "sin_video" }
     }
   ]
 }
@@ -444,7 +444,7 @@ Las llamadas de tus asesores no cuentan para la atribución: solo cuentan las ca
 
 <Steps>
   <Step title="Dale contexto a tu equipo">
-    En **Ajustes → Organización → Eventos**, poneles de **Nombre** **Equipo registrado** y **Reparación abierta**, y sumá `model` y `rma_id` a **Datos destacados**. Tu equipo lo ve en el panel del contacto del inbox y en su ficha, sin abrir otro sistema.
+    En **Ajustes → Organización → Eventos**, poneles de **Nombre** **Equipo registrado** y **Reparación abierta**, y sumá `model` y `rma_number` a **Datos destacados**. Tu equipo lo ve en el panel del contacto del inbox y en su ficha, sin abrir otro sistema.
   </Step>
   <Step title="Encontrá a tus mejores instaladores">
     En **Contactos → Eventos**, filtrá por `product_registered` **Lo hizo** al menos 10 veces en los últimos 90 días. Son los que más instalan: invitalos a una capacitación o a tu programa de socios con una [campaña de WhatsApp](/es/mensajes/campanas).
