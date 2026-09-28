@@ -286,6 +286,26 @@ Cada evento lleva un objeto `contact` con al menos uno de estos datos. ContactSh
 - Si no encuentra a nadie y el evento trae teléfono o email, **crea el contacto**, con el nombre de `contact.name` o, si no viene, el email o el teléfono. Crear contactos consume el cupo de contactos del plan. Con `create_contact: false`, el evento sólo se suma a contactos que ya existen.
 - Los contactos nunca se fusionan: a uno que ya existe sólo se le completan el teléfono o el email si los tenía vacíos.
 
+## La empresa del contacto
+
+Si le vendés a empresas, mandá en cada evento la empresa del contacto en `group`. Con eso ContactShip arma las [empresas](/es/contactos/empresas): junta a los contactos de cada una y suma lo que compraron.
+
+```json
+{
+  "event_name": "purchase",
+  "event_id": "orden-9001",
+  "contact": { "phone": "+573001234567", "name": "Ana Pérez" },
+  "group": { "id": "ACME-1", "name": "ACME S.A.", "properties": { "plan": "enterprise", "industria": "retail" } },
+  "params": { "transaction_id": "9001", "value": 1200000, "currency": "COP" }
+}
+```
+
+- `id` es obligatorio: el id de la empresa en tu sistema, hasta 200 caracteres. Con él se reconoce a la empresa en los eventos siguientes.
+- `name` es el nombre que se muestra. Si cambia, la empresa se actualiza.
+- `properties` son datos de la empresa, como el plan o la industria. Cada evento suma o actualiza los que trae y deja los demás. Sirven para filtrar, por ejemplo, a los contactos de empresas con plan `enterprise`.
+- La primera vez que llega un id se crea la empresa y se vincula al contacto. Otro evento con el mismo id no la duplica.
+- Si ya habías armado empresas desde una propiedad de tus contactos y una tiene el mismo nombre, se usa esa.
+
 ## Visitantes que todavía no se identificaron
 
 "Vio el catálogo" o "agregó al carrito" suelen pasar antes de que sepas quién es la persona. Para no perder ese recorrido, mandá esos eventos **sin `contact` y con un `session_id`**: el identificador de la visita, el mismo en todos sus eventos. Sirve el client id de Google Analytics (la cookie `_ga`) o un id propio que guardes en una cookie o en tu app.
@@ -348,6 +368,7 @@ Por eso podés preguntar cosas que cruzan los dos mundos, como "compró en los 7
 - **Usá los nombres de GA4** (`purchase`, `add_to_cart`, `begin_checkout`, `sign_up`) y, en las compras, `transaction_id`, `value`, `currency` e `items`. Los reportes de ventas buscan primero `purchase`.
 - **Mandá la moneda** en cada compra. Los montos en monedas distintas nunca se suman entre sí.
 - **Usá el mismo `session_id`** en todos los eventos de una visita y en el `identify`.
+- **Mandá la empresa en `group`** si le vendés a empresas: sin ella, las compras quedan solo en cada persona.
 - **Agrupá** hasta 100 eventos por request. Este endpoint tiene su propio límite de requests, aparte del resto de la API.
 
 ## Preguntas frecuentes

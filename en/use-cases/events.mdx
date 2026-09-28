@@ -166,7 +166,7 @@ If nobody on your team codes, [n8n](/en/integrations/n8n) or [Make](/en/integrat
 </Steps>
 
 <Note>
-A sale is credited to a call only if it happens after the call ended. If your agent closes the order during the call, measure with the delivery, as in this case.
+A call counts from when it begins: if your agent closes the order while talking, the sale is credited to it all the same. Only calls someone answered count. Measuring with the delivery, as in this case, leaves out the orders that come back.
 </Note>
 
 **What you measure.** Delivered and refused sales by agent and by product, and how much of the repeat purchases come after the reminder.
@@ -458,8 +458,8 @@ Your advisors' calls do not count for crediting: only campaigns and calls with A
 - **Send the phone in international format.** It is what ties the event to the contact's conversations and calls.
 - **Use `event_id`** with the order, installment or appointment number. If you retry, nothing is duplicated.
 - **Put at the top level of `params`** whatever you want to split reports by, such as the store, the product or the specialty. What goes inside `items` cannot be used in reports.
-- **Send the sale when it is closed.** A sale is credited to a call only if it happens after the call ended.
-- **Crediting counts campaigns and calls with AI agents.** Conversations the customer starts and calls handled only by people do not count.
+- **Send the sale with its real time in `occurred_at`.** Crediting compares it with campaigns and calls, and a call counts from when it begins.
+- **Crediting counts campaigns and answered calls with AI agents.** Conversations the customer starts, calls nobody answered and calls handled only by people do not count.
 - **Do not send sensitive data** in `params`: no diagnoses, card numbers or passwords.
 - **Campaigns are built by hand**, for example once a day or once a week. Sending them automatically when an event arrives does not exist yet. To react right away, have your system launch the call through the API.
 

@@ -41,13 +41,14 @@ If your organization sells in more than one currency, **Sales per day** and **Sa
 Each purchase is credited to the **last ContactShip touch with that person** in the days before the purchase:
 
 - a **campaign** they received, or
-- a **call with an AI agent**.
+- a **call with an AI agent** that someone answered.
 
 If there was none in that time, the purchase is **Not credited**.
 
 - The window is 7 days, and it can be changed to 1, 3, 14 or 30 days in **Options → Attribution window**. The saved report says which window it uses.
 - Each purchase counts once: what is credited plus what is not credited adds up to total sales.
-- Calls handled only by people do not count as a ContactShip touch for attribution.
+- A call counts from when it begins: if the purchase is closed while the call is still going, it is credited to that call.
+- Calls nobody answered, that went to voicemail or failed, and calls handled only by people do not count.
 - A purchase made before the visitor identified is credited too, with its real date.
 
 Example: Ana receives the "Payment reminder" campaign on Monday and buys on Wednesday. With the 7-day window, that purchase counts for "Payment reminder". Had she bought 10 days later, it would be **Not credited**.
@@ -63,7 +64,7 @@ The [custom report](/en/reports/custom-reports) also answers questions about eve
    - **Total amount** and **Average amount**, which is the average ticket when the event is a purchase;
    - the sum, average or maximum of any numeric field of the event, such as `quantity`.
 4. In **Only the events that** and in **Split by** you can use:
-   - the currency and the contact's country;
+   - the currency, the contact's country and their [company](/en/contacts/companies);
    - whether the contact had done it before, or whether it happened before they identified;
    - the attribution: campaign or agent, or whether it is credited to ContactShip;
    - **any data the event carries**, such as the product or the category.
@@ -75,12 +76,12 @@ Example questions:
 | Which product sells the most? | Event `purchase` · Total amount · Split by `product_name` |
 | How much does each AI agent sell? | Event `purchase` · Total amount · Split by **Credited AI agent** |
 | What share of sales comes from ContactShip? | Event `purchase` · Total amount · Split by **Credited to** |
+| Which companies buy the most? | Event `purchase` · Total amount · Split by **Company** |
 | How many days pass between the campaign and the purchase? | Event `purchase` · Average of **Days since the touch** · Only those where **Credited to ContactShip** is yes |
 
 ## Not available yet
 
 - Opening the events behind a number of the report, as **View calls** does in calls reports.
-- Grouping sales by the contact's company.
 
 ## FAQ
 

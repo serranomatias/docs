@@ -76,7 +76,7 @@ Events from visitors who have not identified yet can be sent too: with a `sessio
       ISO 4217 code (`COP`, `USD`, `MXN`). Defaults to `params.currency`. Amounts in different currencies are never added together in reports.
     </ParamField>
     <ParamField body="group" type="object">
-      The contact's company: `{ "id": "...", "name": "...", "properties": {} }`. Stored only, for now.
+      The contact's company: `{ "id": "...", "name": "...", "properties": {} }`. `id` is required, up to 200 characters. The first event with an id creates the company and links the contact to it; later ones update its name and add to its `properties`. See [Companies](/en/contacts/companies).
     </ParamField>
   </Expandable>
 </ParamField>

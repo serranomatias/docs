@@ -1,0 +1,94 @@
+---
+title: "Empresas"
+sidebarTitle: "Empresas"
+description: "Agrupá a tus contactos por la empresa en la que trabajan: quiénes son, cuánto compró la empresa y qué hicieron todos."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Contactos → Empresas" addon="Eventos" permission="contacts.read" status="nuevo" />
+
+Si le vendés a empresas, la pregunta no es solo qué hizo Ana, sino qué pasa con ACME: quiénes son sus contactos, cuánto compró la empresa en total y qué hicieron todos. Las empresas juntan a los contactos de una misma empresa y suman su actividad.
+
+## De dónde salen
+
+Hay dos formas, y podés usar las dos a la vez:
+
+- **Desde tus eventos.** Cuando tu sistema manda un evento con `group`, ContactShip crea la empresa la primera vez que llega su id, le actualiza el nombre y los datos las siguientes veces, y vincula al contacto. Ver [La empresa del contacto](/es/integraciones/eventos#la-empresa-del-contacto).
+- **Desde una propiedad de tus contactos.** Si ya guardás la empresa en una propiedad de texto, como "Empresa", ContactShip arma las empresas con lo que ya cargaste. Las variantes de un mismo nombre quedan en una sola: "ACME S.A.", "Acme SA" y "acme" son la misma empresa.
+
+Si llega por eventos una empresa que ya se había armado desde la propiedad con el mismo nombre, se usa esa. Así una empresa nunca queda repetida.
+
+## Armar las empresas desde una propiedad
+
+<Steps>
+  <Step title="Abrí Empresas">
+    En **Contactos**, entrá a la pestaña **Empresas** y tocá **Armar desde una propiedad**.
+  </Step>
+  <Step title="Elegí la propiedad">
+    La lista muestra las propiedades de texto de tus contactos y cuántos de los últimos 5.000 contactos tienen un valor en cada una.
+    - **Recomendada** marca las propiedades de tipo Empresa.
+    - **Solo en los contactos** marca las que tus contactos tienen pero no están creadas como propiedad en Ajustes, por ejemplo porque llegaron por la API o en una importación.
+  </Step>
+  <Step title="Armá las empresas">
+    Tocá **Armar empresas**. Se recorren todos tus contactos de a tandas y ves el avance: contactos revisados, empresas nuevas y contactos vinculados. Tus contactos no cambian.
+  </Step>
+</Steps>
+
+- **Los contactos que llegan después no se vinculan solos.** Volvé a **Armar desde una propiedad** y tocá **Sumar contactos nuevos**: vincula a los contactos nuevos sin repetir las empresas que ya existen.
+- **Una propiedad a la vez.** Para usar otra, primero deshacé la actual.
+- **Deshacer** quita las empresas que salieron de la propiedad y sus vínculos con los contactos. Las que llegaron por eventos se quedan, con sus contactos.
+
+## La ficha de la empresa
+
+En **Contactos → Empresas** están todas, con su origen, el id en tu sistema y cuántos contactos tiene cada una. Buscá por parte del nombre o por el id exacto, y tocá una para abrirla.
+
+- **Compras.** El total de lo que compraron todos sus contactos, separado por moneda, con la cantidad de compras y la última. Cuenta el evento `purchase` o, si no mandás ese, el que se llame como una venta, por ejemplo `order_completed`.
+- **Contactos.** Quiénes son, con su teléfono y su correo. **Principal** marca a los contactos para los que esa es su empresa principal.
+- **Actividad.** Lo que hicieron todos sus contactos, del más reciente al más viejo, con el nombre de quién lo hizo.
+- **Datos de la empresa.** Lo que llegó en `properties` dentro de `group`, como el plan o la industria.
+- **Ver en Contactos** abre **Contactos** filtrado por esa empresa. Desde ahí los podés etiquetar, crearles una campaña o filtrarlos más.
+
+## En Contactos
+
+- **La columna Empresa** muestra la empresa principal de cada contacto, con un enlace a su ficha. Si tiene más, **+N** muestra las demás. La columna aparece cuando algún contacto de la página tiene empresa.
+- **El filtro Empresa** deja a los contactos de las empresas que elijas. También podés filtrar por un dato de la empresa, por ejemplo `plan` = `enterprise`: quedan los contactos de todas las empresas con ese dato, sin distinguir mayúsculas.
+- **La ficha del contacto** muestra su empresa debajo del nombre.
+- El mismo filtro está en el paso de contactos de las [campañas de WhatsApp](/es/mensajes/campanas).
+
+## En los reportes
+
+En el [reporte a medida](/es/reportes/ventas#armar-tu-propio-reporte-con-eventos) con eventos, separá por **Empresa** para ver cuánto compra cada una. Es la empresa que vino en el evento o, si no vino ninguna, la empresa principal del contacto. Lo que no tiene empresa sale como **Sin empresa**.
+
+## Un contacto con varias empresas
+
+Un contacto puede estar en más de una empresa, por ejemplo si trabaja con dos o si se cambió de empresa. Una es la **principal**: la primera a la que se lo vinculó. Es la que muestran la columna y la ficha del contacto; las demás aparecen como **+N** y **y N más**.
+
+## Quién las ve
+
+- Todo esto aparece con el add-on de eventos activo.
+- La pestaña **Empresas** y la ficha de cada empresa las ven los roles que pueden ver **todos** los contactos, porque una empresa muestra todos sus contactos y sus compras. Un rol que ve solo algunos contactos ve la columna y el filtro **Empresa**, pero no la pestaña.
+- Armar y deshacer las empresas pide permiso para editar contactos.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="No veo la pestaña Empresas">
+    Aparece con el add-on de eventos activo y para los roles que pueden ver todos los contactos. Si querés activarlo, escribinos a [soporte](/es/comenzar/soporte).
+  </Accordion>
+  <Accordion title="Mi propiedad no aparece en la lista">
+    Solo sirven las propiedades de texto o de tipo Empresa. Las de número, fecha, sí o no, o lista no sirven para nombrar una empresa.
+  </Accordion>
+  <Accordion title="¿Cómo junta los nombres parecidos?">
+    Ignora mayúsculas, acentos, puntuación y el sufijo legal del final, como S.A., S.A.S., S.A. de C.V., S. de R.L., Ltda., Inc. o LLC. "Distribuidora Pérez Ltda." y "distribuidora perez" quedan juntas. Dos nombres distintos, como "ACME" y "ACME Latam", quedan separados.
+  </Accordion>
+  <Accordion title="¿Armar las empresas cambia mis contactos?">
+    No. El vínculo entre el contacto y la empresa se guarda aparte. Deshacer lo borra y tus contactos quedan como estaban.
+  </Accordion>
+</AccordionGroup>
+
+## Seguí con
+
+<CardGroup cols={2}>
+  <Card title="La empresa en los eventos" href="/es/integraciones/eventos#la-empresa-del-contacto">Cómo mandar `group` desde tu sistema.</Card>
+  <Card title="Eventos del contacto" href="/es/contactos/eventos">Filtrar contactos por lo que hicieron.</Card>
+</CardGroup>

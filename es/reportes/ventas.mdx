@@ -41,13 +41,14 @@ Si tu organización vende en más de una moneda, **Ventas por día** y **Ventas 
 Cada compra se le atribuye al **último contacto de ContactShip con esa persona** en los días anteriores a la compra:
 
 - una **campaña** que recibió, o
-- una **llamada con un agente de IA**.
+- una **llamada con un agente de IA** que alguien atendió.
 
 Si en ese tiempo no hubo ninguno, la compra queda como **Sin atribuir**.
 
 - La ventana es de 7 días, y se puede cambiar a 1, 3, 14 o 30 días en **Opciones → Ventana de atribución**. El reporte guardado dice qué ventana usa.
 - Cada compra cuenta una sola vez: la suma de lo atribuido y lo no atribuido es el total de ventas.
-- Las llamadas atendidas sólo por personas no cuentan como contacto de ContactShip para la atribución.
+- Una llamada cuenta desde que empieza: si la compra se cierra mientras la llamada sigue, se le atribuye a esa llamada.
+- No cuentan las llamadas que nadie atendió, las que fueron al buzón o fallaron, ni las atendidas solo por personas.
 - Una compra hecha antes de que el visitante se identificara también se atribuye, con su fecha real.
 
 Ejemplo: Ana recibe la campaña "Recordatorio de pago" el lunes y compra el miércoles. Con la ventana de 7 días, esa compra suma en "Recordatorio de pago". Si hubiera comprado 10 días después, quedaría como **Sin atribuir**.
@@ -63,7 +64,7 @@ El [reporte a medida](/es/reportes/a-medida) también responde preguntas sobre e
    - **Monto total** y **Monto promedio**, que es el ticket promedio si el evento es una compra;
    - la suma, el promedio o el máximo de cualquier dato numérico del evento, como `quantity`.
 4. En **Solo los eventos que** y en **Separado por** podés usar:
-   - la moneda y el país del contacto;
+   - la moneda, el país del contacto y su [empresa](/es/contactos/empresas);
    - si el contacto ya lo había hecho antes, o si pasó antes de que se identificara;
    - la atribución: campaña o agente, o si se atribuye a ContactShip;
    - **cualquier dato que traiga el evento**, como el producto o la categoría.
@@ -75,12 +76,12 @@ Ejemplos de preguntas:
 | ¿Qué producto se vende más? | Evento `purchase` · Monto total · Separado por `product_name` |
 | ¿Cuánto vende cada agente de IA? | Evento `purchase` · Monto total · Separado por **Agente de IA atribuido** |
 | ¿Qué parte de las ventas viene de ContactShip? | Evento `purchase` · Monto total · Separado por **Atribuido a** |
+| ¿Qué empresas compran más? | Evento `purchase` · Monto total · Separado por **Empresa** |
 | ¿Cuántos días pasan entre la campaña y la compra? | Evento `purchase` · Promedio de **Días desde el contacto** · Solo los que **Atribuido a ContactShip** es sí |
 
 ## Qué no existe todavía
 
 - Abrir los eventos que forman un número del reporte, como hace **Ver llamadas** en los reportes de llamadas.
-- Agrupar las ventas por empresa del contacto.
 
 ## Preguntas frecuentes
 

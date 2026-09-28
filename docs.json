@@ -112,6 +112,7 @@
                 "pages": [
                   "es/contactos/contactos-y-propiedades",
                   "es/contactos/eventos",
+                  "es/contactos/empresas",
                   "es/contactos/importar",
                   "es/contactos/tableros",
                   "es/contactos/etiquetas",
@@ -413,6 +414,7 @@
                 "pages": [
                   "en/contacts/contacts-and-properties",
                   "en/contacts/events",
+                  "en/contacts/companies",
                   "en/contacts/import",
                   "en/contacts/boards",
                   "en/contacts/tags",

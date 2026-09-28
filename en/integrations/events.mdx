@@ -286,6 +286,26 @@ Each event carries a `contact` object with at least one of these fields. Contact
 - If nobody matches and the event brings a phone or an email, **the contact is created**, named after `contact.name`, or else the email or the phone. Creating contacts uses your plan's contact quota. With `create_contact: false`, the event is only added to contacts that already exist.
 - Contacts are never merged: an existing contact only gets its phone or email filled in when it was empty.
 
+## The contact's company
+
+If you sell to companies, send the contact's company in `group` with each event. With it ContactShip builds [companies](/en/contacts/companies): it brings together the contacts of each one and adds up what they bought.
+
+```json
+{
+  "event_name": "purchase",
+  "event_id": "order-9001",
+  "contact": { "phone": "+573001234567", "name": "Ana Pérez" },
+  "group": { "id": "ACME-1", "name": "ACME Inc.", "properties": { "plan": "enterprise", "industry": "retail" } },
+  "params": { "transaction_id": "9001", "value": 1200000, "currency": "COP" }
+}
+```
+
+- `id` is required: the company's id in your system, up to 200 characters. It is how the company is recognized in the next events.
+- `name` is the name shown. If it changes, the company is updated.
+- `properties` are the company's data, such as the plan or the industry. Each event adds or updates the ones it carries and leaves the rest. They let you filter, for example, the contacts of companies on the `enterprise` plan.
+- The first time an id arrives the company is created and linked to the contact. Another event with the same id doesn't duplicate it.
+- If you had already built companies from a contact property and one has the same name, that one is used.
+
 ## Visitors who have not identified yet
 
 "Viewed the catalog" or "added to cart" usually happen before you know who the person is. To keep that journey, send those events **without `contact` and with a `session_id`**: an identifier of the visit, the same in all its events. The Google Analytics client id (the `_ga` cookie) works, or an id of your own stored in a cookie or in your app.
@@ -348,6 +368,7 @@ That is why you can ask questions that cross both worlds, such as "bought within
 - **Use GA4 names** (`purchase`, `add_to_cart`, `begin_checkout`, `sign_up`) and, for purchases, `transaction_id`, `value`, `currency` and `items`. Sales reports look for `purchase` first.
 - **Send the currency** with every purchase. Amounts in different currencies are never added together.
 - **Use the same `session_id`** in every event of a visit and in the `identify` call.
+- **Send the company in `group`** if you sell to companies: without it, purchases stay only on each person.
 - **Batch** up to 100 events per request. This endpoint has its own request budget, separate from the rest of the API.
 
 ## FAQ

@@ -166,7 +166,7 @@ Si no tenés quien programe, [n8n](/es/integraciones/n8n) o [Make](/es/integraci
 </Steps>
 
 <Note>
-Una venta se le atribuye a una llamada solo si ocurre después de que la llamada terminó. Si tu agente cierra el pedido durante la llamada, medí con la entrega, como en este caso.
+Una llamada cuenta desde que empieza: si tu agente cierra el pedido mientras habla, la venta se le atribuye igual. Solo cuentan las llamadas que alguien atendió. Medir con la entrega, como en este caso, deja afuera los pedidos que se devuelven.
 </Note>
 
 **Qué medís.** Ventas entregadas y rechazadas por agente y por producto, y cuánto de la recompra llega después del recordatorio.
@@ -458,8 +458,8 @@ Las llamadas de tus asesores no cuentan para la atribución: solo cuentan las ca
 - **Mandá el teléfono en formato internacional.** Es lo que une el evento con las conversaciones y las llamadas del contacto.
 - **Usá `event_id`** con el número de pedido, de cuota o de turno. Si reintentás, no se duplica nada.
 - **Poné en el primer nivel de `params`** lo que quieras usar para separar reportes, como la sede, el producto o la especialidad. Lo que va dentro de `items` no se puede usar en reportes.
-- **Mandá la venta cuando se cierra.** Una venta se le atribuye a una llamada solo si ocurre después de que la llamada terminó.
-- **La atribución cuenta campañas y llamadas con agentes de IA.** Las conversaciones que empieza el cliente y las llamadas que atienden solo personas no cuentan.
+- **Mandá la venta con su hora real en `occurred_at`.** La atribución la compara con las campañas y las llamadas, y una llamada cuenta desde que empieza.
+- **La atribución cuenta campañas y llamadas atendidas con agentes de IA.** No cuentan las conversaciones que empieza el cliente, las llamadas que nadie atendió ni las que atienden solo personas.
 - **No mandes datos sensibles** en `params`: ni diagnósticos, ni números de tarjeta, ni contraseñas.
 - **Las campañas se arman a mano**, por ejemplo una vez al día o por semana. Mandarlas solas cuando llega un evento todavía no existe. Para reaccionar al instante, que tu sistema lance la llamada por la API.
 
