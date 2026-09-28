@@ -6,7 +6,7 @@ description: 'Join the anonymous events of a visit to the contact who turned out
 
 Links a `session_id` to a contact. The events that were waiting for that session (sent with the `session_id` and no contact data, answered as `pending` by [Send events](/api-reference/endpoint/send-events)) move to the contact within a minute, with their original date, and show up in the contact's activity marked **Before identifying**. Events sent afterwards with only that `session_id` go straight to the contact.
 
-Call it when your site learns who the visitor is and has no event to send at that moment: a login, a sign-up, the end of a checkout. If you do have an event with contact data, such as the purchase, sending it with the same `session_id` identifies the session too, and this call is not needed.
+Call it when your site learns who the visitor is and has no event to send at that moment: a login, a sign-up, the end of a checkout. It does not take `group`: to link the contact to a company, send an event with it. If you do have an event with contact data, such as the purchase, sending it with the same `session_id` identifies the session too, and this call is not needed.
 
 <Note>Part of the events add-on. Without it, this endpoint answers `403`. See the [events guide](/en/integrations/events#visitors-who-have-not-identified-yet).</Note>
 
@@ -19,7 +19,7 @@ Call it when your site learns who the visitor is and has no event to send at tha
 ## Body Parameters
 
 <ParamField body="session_id" type="string" required>
-  The same `session_id` sent with the anonymous events, up to 200 characters: the Google Analytics client id or an id of your own.
+  The same `session_id` sent with the anonymous events: a UUID your site keeps in the browser, or the Google Analytics client id. Up to 200 characters, no spaces.
 </ParamField>
 
 <ParamField body="contact" type="object" required>
@@ -84,7 +84,7 @@ The response is `{ "statusCode": 200, "data": object }`. The fields below descri
 
 | Status | When |
 |---|---|
-| `400` | `session_id` is missing, or `contact` has none of `contact_id`, `external_id`, `phone` (7 or more digits) or `email`. |
+| `400` | `session_id` is missing or has a space inside, or `contact` has none of `contact_id`, `external_id`, `phone` (7 or more digits) or `email`. |
 | `401` | The API key is missing or invalid. |
 | `403` | The events add-on is not enabled for the organization. |
 | `429` | The request limit for events was exceeded. It is the same budget as Send events. See [Rate limits](/api-reference/rate-limits). |

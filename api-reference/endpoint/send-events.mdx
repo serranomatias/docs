@@ -32,7 +32,7 @@ Events from visitors who have not identified yet can be sent too: with a `sessio
       What happened. **It is normalized to lowercase `snake_case` before it is stored**: `Add To Cart`, `add-to-cart`, `addToCart` and `AddToCart` are all stored as `add_to_cart`, and `Compra Realizada` as `compra_realizada`. Accents are dropped and words split on capitals, spaces, hyphens and dots. The normalized name must start with a letter and be up to 40 characters long. Use GA4 names where they apply (`purchase`, `add_to_cart`, `begin_checkout`, `sign_up`). Names starting with `cs_` are reserved for ContactShip.
     </ParamField>
     <ParamField body="event_id" type="string">
-      Your identifier for the event, such as the order number. Sending the same `event_id` again does not duplicate the event: its result is `duplicate`. Recommended, so failed requests can be retried safely.
+      Your identifier for the event, unique across all your events: build it from the event and your record's id, such as `purchase-10025`. Up to 200 characters, no spaces, the same on every retry. Sending the same `event_id` again does not duplicate the event: its result is `duplicate`. Recommended, so failed requests can be retried safely.
     </ParamField>
     <ParamField body="occurred_at" type="string">
       When it happened, in ISO 8601. Defaults to the time the request arrives. Dates from year 2000 up to 24 hours in the future are accepted.
@@ -44,7 +44,7 @@ Events from visitors who have not identified yet can be sent too: with a `sessio
           The contact's id in ContactShip (UUID).
         </ParamField>
         <ParamField body="external_id" type="string">
-          The contact's id in your system. It is linked to the contact the first time an event brings it together with data that finds the contact.
+          The contact's id in your system, up to 200 characters. It is linked to the contact the first time an event brings it together with data that finds the contact.
         </ParamField>
         <ParamField body="phone" type="string">
           Phone number, preferably in international format (`+573001234567`). Compared by its last 10 digits.
@@ -64,7 +64,7 @@ Events from visitors who have not identified yet can be sent too: with a `sessio
       With `false`, the event is only added to contacts that already exist. Anonymous events never create contacts.
     </ParamField>
     <ParamField body="session_id" type="string">
-      The visit the event happened in, the same in all its events: the Google Analytics client id or an id of your own. An event with a `session_id` and no contact data is kept as `pending` for up to 30 days and moves to the contact, with its original date, when the session is identified: by a later event with the same `session_id` and contact data, or by [Identify a session](/api-reference/endpoint/identify). Events sent afterwards with only that `session_id` go straight to the contact. Never use personal data, such as an email, as the session id.
+      The visit the event happened in, the same in all its events: a UUID your site keeps in the browser, or the Google Analytics client id. Up to 200 characters, no spaces. An event with a `session_id` and no contact data is kept as `pending` for up to 30 days and moves to the contact, with its original date, when the session is identified: by a later event with the same `session_id` and contact data, or by [Identify a session](/api-reference/endpoint/identify). Events sent afterwards with only that `session_id` go straight to the contact. Never use personal data, such as an email, as the session id.
     </ParamField>
     <ParamField body="params" type="object">
       Anything you want to keep about the event, in any shape, up to 32,000 characters.
@@ -76,7 +76,7 @@ Events from visitors who have not identified yet can be sent too: with a `sessio
       ISO 4217 code (`COP`, `USD`, `MXN`). Defaults to `params.currency`. Amounts in different currencies are never added together in reports.
     </ParamField>
     <ParamField body="group" type="object">
-      The contact's company: `{ "id": "...", "name": "...", "properties": {} }`. `id` is required, up to 200 characters. The first event with an id creates the company and links the contact to it; later ones update its name and add to its `properties`. See [Companies](/en/contacts/companies).
+      The contact's company: `{ "id": "...", "name": "...", "properties": {} }`. `id` is required: the company's id in your system, not its name, up to 200 characters. The first event with an id creates the company and links the contact to it; later ones update its name and add to its `properties`. See [Companies](/en/contacts/companies).
     </ParamField>
   </Expandable>
 </ParamField>

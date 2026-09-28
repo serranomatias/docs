@@ -269,6 +269,39 @@ The response tells you the name each event was stored under in `event_name` and,
 
 Names starting with `cs_` are reserved for the events ContactShip records itself (see [below](#events-contactship-records)).
 
+## The ids you choose
+
+Besides the contact's data, an event can carry up to four ids that you define. Each one identifies something different:
+
+| Field | What it identifies | What it is for | Example |
+|---|---|---|---|
+| `event_id` | One event | A retry does not store it twice | `purchase-10025` |
+| `session_id` | A visit to your site or app | Bring together what someone did before you know who they are | `7f3c2a9e-1b4d-4c8a-9f21-5d6e8a0b3c47` |
+| `contact.external_id` | A contact, in your system | Find them without a phone or email | `CUS-9001` |
+| `group.id` | A company, in your system | Bring together the contacts of the same company | `TAX-900123456` |
+
+Example: Ana visits your store, looks at two products and buys. Those are three events with the same `session_id`, because they are the same visit, and the purchase also carries its `event_id`, `purchase-10025`.
+
+The rules for all four:
+
+- **1 to 200 characters.**
+- **`event_id` and `session_id` cannot hold spaces.** Spaces at the edges are trimmed; one in the middle makes the event `invalid`, with a message that says what to send. `external_id` and `group.id` accept them, since they come as they are from your systems, but it is best to avoid them.
+- **They are compared exactly:** `CUS-9001` and `cus-9001` are two different ids.
+- **They belong to your organization:** the same id in another organization is never mixed up.
+
+<Warning>Don't use a name as an id. `ACME Warner Bros` as `group.id` works, but the day the name changes or arrives spelled differently you would have two companies. Use the id your system already gives it: the tax id, the customer code, the CRM id.</Warning>
+
+### `event_id`: unique, and the same on every retry
+
+It identifies what happened, in your system. If a request fails and you retry it, the event with the same `event_id` answers `duplicate` and is not stored twice.
+
+- **Build it from the event and the id of what happened:** `purchase-10025`, `refund-10025`, `payment_received-551902-3`. It comes out the same on every retry without storing anything.
+- **It must be unique across all your events**, not just those with the same name: if the purchase and its refund carry just `10025`, the refund comes back `duplicate` and is not stored.
+- If you prefer a UUID, generate it **once** and keep it with the record: a new one on every attempt does not prevent duplicates.
+- It is optional, but without it there is no way to detect a retry.
+
+The `session_id` is explained in [Visitors who have not identified yet](#visitors-who-have-not-identified-yet); `external_id`, in [How the contact is found](#how-the-contact-is-found); and `group.id`, in [The contact's company](#the-contacts-company).
+
 ## How the contact is found
 
 Each event carries a `contact` object with at least one of these fields. ContactShip tries them in this order and keeps the first match:
@@ -286,6 +319,81 @@ Each event carries a `contact` object with at least one of these fields. Contact
 - If nobody matches and the event brings a phone or an email, **the contact is created**, named after `contact.name`, or else the email or the phone. Creating contacts uses your plan's contact quota. With `create_contact: false`, the event is only added to contacts that already exist.
 - Contacts are never merged: an existing contact only gets its phone or email filled in when it was empty.
 
+### Examples by way of identifying
+
+Only the `contact` object changes. The response says how the contact was found in `matched_by`: `contact_id`, `external_id`, `phone`, `email`, `session`, or `null` when it was just created.
+
+<CodeGroup>
+```json Phone
+{
+  "event_name": "purchase",
+  "event_id": "purchase-10025",
+  "contact": { "phone": "+573001234567", "name": "Ana Pérez" },
+  "params": { "transaction_id": "10025", "value": 58000, "currency": "COP" }
+}
+```
+
+```json Email
+{
+  "event_name": "form_submitted",
+  "event_id": "form_submitted-20931",
+  "contact": { "email": "ana@example.com", "name": "Ana Pérez" },
+  "params": { "form_name": "Quote" }
+}
+```
+
+```json ContactShip id
+{
+  "event_name": "payment_received",
+  "event_id": "payment_received-551902-3",
+  "contact": { "contact_id": "33333333-3333-4333-8333-333333333333" },
+  "params": { "value": 250000, "currency": "COP" }
+}
+```
+
+```json Existing contacts only
+{
+  "event_name": "appointment_attended",
+  "event_id": "appointment_attended-88114",
+  "contact": { "phone": "+573001234567" },
+  "create_contact": false
+}
+```
+</CodeGroup>
+
+`contact_id` never creates a contact: if the id does not exist, the other fields are tried, and if there are none, the event is `unresolved`.
+
+**How an `external_id` gets linked.** The first time, send it together with the phone or the email; from then on the id alone is enough:
+
+```bash
+# 1. With the phone: finds (or creates) Ana and links CUS-9001 to her
+curl -X POST https://api.contactship.ai/v1/events \
+  -H "x-api-key: $CONTACTSHIP_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "events": [{
+      "event_name": "sign_up",
+      "event_id": "sign_up-CUS-9001",
+      "contact": { "external_id": "CUS-9001", "phone": "+573001234567", "name": "Ana Pérez" }
+    }]
+  }'
+
+# 2. From then on, the id alone
+curl -X POST https://api.contactship.ai/v1/events \
+  -H "x-api-key: $CONTACTSHIP_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "events": [{
+      "event_name": "purchase",
+      "event_id": "purchase-10026",
+      "contact": { "external_id": "CUS-9001" },
+      "params": { "transaction_id": "10026", "value": 32000, "currency": "COP" }
+    }]
+  }'
+```
+
+An `external_id` that was never linked finds nobody: if it arrives alone, the event is `unresolved`.
+
 ## The contact's company
 
 If you sell to companies, send the contact's company in `group` with each event. With it ContactShip builds [companies](/en/contacts/companies): it brings together the contacts of each one and adds up what they bought.
@@ -300,7 +408,7 @@ If you sell to companies, send the contact's company in `group` with each event.
 }
 ```
 
-- `id` is required: the company's id in your system, up to 200 characters. It is how the company is recognized in the next events.
+- `id` is required: the company's id in your system (the tax id, the customer code or your CRM id), not its name. Up to 200 characters (see [The ids you choose](#the-ids-you-choose)). It is how the company is recognized in the next events.
 - `name` is the name shown. If it changes, the company is updated.
 - `properties` are the company's data, such as the plan or the industry. Each event adds or updates the ones it carries and leaves the rest. They let you filter, for example, the contacts of companies on the `enterprise` plan.
 - The first time an id arrives the company is created and linked to the contact. Another event with the same id doesn't duplicate it.
@@ -308,29 +416,93 @@ If you sell to companies, send the contact's company in `group` with each event.
 
 ## Visitors who have not identified yet
 
-"Viewed the catalog" or "added to cart" usually happen before you know who the person is. To keep that journey, send those events **without `contact` and with a `session_id`**: an identifier of the visit, the same in all its events. The Google Analytics client id (the `_ga` cookie) works, or an id of your own stored in a cookie or in your app.
+"Viewed the catalog" or "added to cart" usually happen before you know who the person is. To keep that journey, send those events **without `contact` and with a `session_id`**: the id of the visit, the same in all its events. Below is [how to generate it](#how-to-generate-the-session_id).
 
-```json
-{ "event_name": "add_to_cart", "session_id": "GA1.1.1234567890.1726000000", "params": { "item_name": "Pro plan" } }
-```
+<Steps>
+  <Step title="Send the anonymous events">
+    ```bash
+    curl -X POST https://api.contactship.ai/v1/events \
+      -H "x-api-key: $CONTACTSHIP_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "events": [
+          { "event_name": "view_item", "session_id": "7f3c2a9e-1b4d-4c8a-9f21-5d6e8a0b3c47",
+            "params": { "item_id": "SKU-123", "item_name": "Pro plan" } },
+          { "event_name": "add_to_cart", "session_id": "7f3c2a9e-1b4d-4c8a-9f21-5d6e8a0b3c47",
+            "params": { "item_id": "SKU-123", "value": 58000, "currency": "COP" } }
+        ]
+      }'
+    ```
+    Each result is `pending`: they do not show up on any contact, filter or report yet, and they are kept for up to 30 days.
+  </Step>
+  <Step title="Identify the session when you learn who it is">
+    If at that moment you send an event with the contact's data, such as the purchase, add the same `session_id` to it. That identifies the session:
 
-1. **The event waits.** Its result is `pending`. It does not show up on any contact, filter or report yet, and it is kept for up to 30 days.
-2. **The person identifies.** This happens in one of two ways:
-   - another event arrives with the same `session_id` and contact data, such as the purchase, or
-   - you call [`POST /v1/identify`](/api-reference/endpoint/identify) with the `session_id` and the contact, for example when they log in or complete checkout without an event to send:
+    ```bash
+    curl -X POST https://api.contactship.ai/v1/events \
+      -H "x-api-key: $CONTACTSHIP_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "events": [{
+          "event_name": "purchase",
+          "event_id": "purchase-10025",
+          "session_id": "7f3c2a9e-1b4d-4c8a-9f21-5d6e8a0b3c47",
+          "contact": { "email": "ana@example.com", "phone": "+573001234567", "name": "Ana Pérez" },
+          "params": { "transaction_id": "10025", "value": 58000, "currency": "COP" }
+        }]
+      }'
+    ```
 
-     ```json
-     {
-       "session_id": "GA1.1.1234567890.1726000000",
-       "contact": { "email": "ana@example.com", "phone": "+573001234567", "name": "Ana Pérez" }
-     }
-     ```
-3. **The pending events move to the contact** in less than a minute, with their original date. In the activity they are marked **Before identifying**.
-4. **Anything arriving later** with that `session_id` goes straight to the contact, even without contact data.
+    If you have no event to send, because they logged in, signed up or finished a checkout you don't send as an event, call [`POST /v1/identify`](/api-reference/endpoint/identify):
+
+    ```bash
+    curl -X POST https://api.contactship.ai/v1/identify \
+      -H "x-api-key: $CONTACTSHIP_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "session_id": "7f3c2a9e-1b4d-4c8a-9f21-5d6e8a0b3c47",
+        "contact": { "email": "ana@example.com" }
+      }'
+    ```
+
+    `contact` takes any of the fields of the [lookup order](#how-the-contact-is-found), as in an event. The response says `linked` and, in `pending_events`, how many events were waiting. `identify` does not take `group`: the company goes inside an event.
+  </Step>
+  <Step title="The events move to the contact">
+    In less than a minute, with their original date, marked **Before identifying** in the activity. Anything arriving later with that `session_id` goes straight to the contact, even without contact data.
+  </Step>
+</Steps>
+
+<Note>A session belongs to the **first person** who identifies in it. If data of someone else arrives later in the same session, for example on a shared computer, the session stays with the first one and the response says so: `already_linked` in `identify`, `conflict` in an event. That is why it is best to generate a new `session_id` on logout.</Note>
 
 An organization's anonymous events are capped at 100,000 per day. Past that number they are rejected with `anonymous_daily_limit` until the next day; if you need more, contact us. Requests that carry anonymous events also use a request budget of their own, smaller than the rest of the events ([Rate limits](/api-reference/rate-limits)).
 
-<Warning>Never use something that identifies the person, such as their email or phone, as `session_id`: if you have it, send it in `contact`.</Warning>
+### How to generate the `session_id`
+
+Your site or app generates it, not ContactShip. The simplest is one UUID per browser, created the first time and reused in every event:
+
+```js
+// In the browser: one id per visitor, kept across visits.
+function contactshipSessionId() {
+  let id = localStorage.getItem('cs_session_id');
+  if (!id) {
+    id = crypto.randomUUID(); // for example "7f3c2a9e-1b4d-4c8a-9f21-5d6e8a0b3c47"
+    localStorage.setItem('cs_session_id', id);
+  }
+  return id;
+}
+
+// On logout: the next person starts with a new visit.
+function resetContactshipSession() {
+  localStorage.removeItem('cs_session_id');
+}
+```
+
+- If you already use Google Analytics, its client id works too: the `_ga` cookie, for example `GA1.1.1234567890.1726000000`.
+- **No spaces**, 1 to 200 characters. A `session_id` with a space in the middle makes the event `invalid`, and makes `identify` answer `400`.
+- It is compared exactly: case matters.
+- Never use something that identifies the person, such as their email or phone: if you have it, send it in `contact`.
+
+<Warning>The API key never goes in browser code. Your site passes the `session_id` to your server, and your server calls the API.</Warning>
 
 ## What each result means
 
@@ -341,7 +513,7 @@ An organization's anonymous events are capped at 100,000 per day. Past that numb
 | `unresolved` | Yes, without a contact | Check `reason`: `contact_limit_reached` (your plan allows no more contacts), `ambiguous_email` (send the phone too) or `not_found` (it did not exist and `create_contact` was `false`). |
 | `duplicate` | No | You already sent that `event_id`. Expected when retrying. |
 | `rejected` | No | Check `reason`: `no_identity` (no contact data and no `session_id`), `anonymous_daily_limit` (the daily cap of anonymous events was reached) or `event_name_limit` (the organization reached 500 distinct event names). |
-| `invalid` | No | Fix what `errors` says and send it again. |
+| `invalid` | No | Fix what `errors` says, such as an `event_id` or a `session_id` with spaces, and send it again. |
 
 An event with problems does not affect the others in the same request.
 
@@ -362,7 +534,8 @@ That is why you can ask questions that cross both worlds, such as "bought within
 
 ## Good practices
 
-- **Always send `event_id`**, such as the order number. That way you can retry a failed request without duplicating events.
+- **Always send `event_id`**, such as `purchase-10025`: unique across all your events and the same on every retry. That way you can retry a failed request without duplicating events.
+- **Send `event_id` and `session_id` without spaces**: one in the middle makes the event `invalid`.
 - **Load history with `occurred_at`.** Past events count for segments and reports as if they had arrived at the time.
 - **Send the phone in international format.** It is the field that best identifies the contact.
 - **Use GA4 names** (`purchase`, `add_to_cart`, `begin_checkout`, `sign_up`) and, for purchases, `transaction_id`, `value`, `currency` and `items`. Sales reports look for `purchase` first.
