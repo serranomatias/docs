@@ -5,6 +5,8 @@ description: "Handle request throttling, pagination, and uncertain write results
 
 Request capacity depends on the deployed API configuration and any gateway limits. Do not assume one fixed budget applies to every endpoint or organization. Contact support for capacity planning for your integration.
 
+[Send events](/api-reference/endpoint/send-events) and [Identify a session](/api-reference/endpoint/identify) share their own request budget, separate from the rest of the API, so a large event sync does not use up the capacity of your other requests. Requests that carry anonymous events (a `session_id` and no contact data) also count against a second, smaller budget, because website traffic can grow without bound: batch those events instead of sending one request per page view.
+
 ## Handle 429 responses
 
 If a request returns **429 Too Many Requests**, stop issuing requests in a tight loop. Use `Retry-After` when present. It can describe a delay in seconds or an HTTP date. If absent, use bounded exponential backoff with jitter and reduce concurrency.
@@ -22,9 +24,10 @@ Send `limit` and `offset` together on endpoints that support them. Begin with a 
 | Read-only GET | Retry transient failures with bounded backoff. |
 | Validation or authentication error | Correct the request or credentials first. |
 | Create a call, message, task, or comment | Check whether the first request succeeded before repeating it. |
+| Send events | Repeat the whole request with the same `event_id` values: events already stored come back as `duplicate`. |
 | Agent update | Read the current configuration before resubmitting an uncertain update. |
 | Incoming webhook | Accept repeated delivery without duplicating your business action. |
 
 Keep a log of request time, endpoint, status, and your own correlation identifier. Remove API keys and unnecessary personal data from logs shared with support.
 
-See [API introduction](/api-reference/introduction), [List contacts](/api-reference/endpoint/get-contacts), and [Call webhooks](/api-reference/webhooks).
+See [API introduction](/api-reference/introduction), [List contacts](/api-reference/endpoint/get-contacts), [Send events](/api-reference/endpoint/send-events), [Identify a session](/api-reference/endpoint/identify), and [Call webhooks](/api-reference/webhooks).

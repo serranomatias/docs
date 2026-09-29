@@ -1,0 +1,86 @@
+---
+title: "Catálogo de eventos"
+sidebarTitle: "Eventos"
+description: "Revisá qué eventos llegan a tu organización y elegí cómo se ve cada uno en la actividad del contacto."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Ajustes → Organización → Eventos" addon="Eventos" permission="events.read · events.update" status="nuevo" />
+
+El catálogo es la lista de eventos que tus sistemas mandan por la [API de eventos](/es/integraciones/eventos). Se arma solo: cada evento aparece la primera vez que llega, sin crearlo a mano. Desde acá elegís cómo se lee cada uno en la [actividad del contacto](/es/contactos/eventos) y mandás un evento de prueba para ver el resultado antes de integrar.
+
+## Qué muestra la lista
+
+| Columna | Qué es |
+|---|---|
+| **Evento** | El nombre que le pusiste, con el nombre técnico debajo, por ejemplo **Compra** y `purchase`. |
+| **Últimos 30 días** | Cuántas veces llegó en los últimos 30 días. |
+| **Última vez** | Cuándo llegó el último. |
+| **Datos que trae** | Los datos (`params`) que vinieron en esos eventos, como `order_id` o `item_name`. |
+
+Los nombres técnicos llegan siempre en minúscula y con guion bajo: si tu sistema manda `Add To Cart` o `addToCart`, se guarda y se muestra como `add_to_cart`. Ver [Cómo se nombran los eventos](/es/integraciones/eventos#cómo-se-nombran-los-eventos).
+
+Los eventos que registra ContactShip, como las llamadas o las campañas recibidas, no aparecen en esta lista: se ven siempre igual.
+
+## Elegir cómo se ve un evento
+
+Tocá un evento para abrir **Cómo se ve**. La vista previa usa los datos del último que llegó, así ves el resultado antes de guardar.
+
+| Opción | Para qué |
+|---|---|
+| **Nombre** | Cómo se lee en la actividad, por ejemplo **Compra** en lugar de `purchase`. Los nombres más comunes ya vienen traducidos. |
+| **Ícono** y **Color** | Para reconocerlo de un vistazo. Con **Automático** se usan los de siempre para ese evento. |
+| **Título** | Una frase con los datos del evento entre llaves, como `Orden #{order_id}`. Si un evento no trae alguno de esos datos, se muestra el nombre. |
+| **Datos destacados** | Hasta 5 datos que se muestran siempre debajo del título, en el orden que elijas. Se pueden destacar textos, números y sí/no; las listas, como `items`, no. |
+| **Monto** | Qué dato mostrar como monto en la actividad si el evento no manda `value`. Sólo cambia lo que se ve: los filtros y los [reportes de ventas](/es/reportes/ventas) suman el `value` que mandó el evento, así que conviene mandarlo siempre ahí. |
+| **Ocultar de la actividad del contacto** | Para eventos que llegan en cantidad y no aportan leídos uno por uno, como las visitas a páginas. Siguen contando en la lista y sirven para filtrar y en los reportes. |
+
+Los cambios se aplican en la actividad del contacto, en su ficha y en el panel del inbox.
+
+## Mandar un evento de prueba
+
+Tocá **Mandar evento de prueba**. ContactShip registra un **Evento de prueba** (`test_event`) por el mismo camino que usa la API, así comprobás que todo funciona sin escribir código.
+
+- Siempre va al mismo contacto, **Contacto de prueba de eventos** (`eventos.prueba@contactship.ai`). Se crea la primera vez y después se reusa, así que nunca toca a un cliente real.
+- Con **Ver contacto** abrís su ficha y ves el evento en la actividad.
+
+## Quitar un evento del catálogo
+
+Desde **Cómo se ve**, **Quitar del catálogo** borra la configuración de ese evento: nombre, ícono, título y demás. Los eventos ya registrados se conservan en la actividad de los contactos, y si llega uno nuevo con ese nombre, vuelve a aparecer en la lista con el aspecto por defecto.
+
+Para recuperar el evento de prueba después de quitarlo, mandá otro con **Mandar evento de prueba**.
+
+## Quién puede hacer qué
+
+| Permiso | Permite | Roles de sistema que lo tienen |
+|---|---|---|
+| `events.read` | Ver el catálogo | Owner, Admin, Moderator y User |
+| `events.create` | Mandar el evento de prueba | Owner, Admin y Moderator |
+| `events.update` | Cambiar cómo se ve un evento | Owner, Admin y Moderator |
+| `events.delete` | Quitar eventos del catálogo | Owner y Admin |
+
+Sin `events.update`, el editor se abre en modo solo lectura. Ver [Roles y permisos](/es/organizacion/roles-y-permisos).
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="No veo Eventos en Ajustes">
+    Aparece con el add-on de eventos activo y el permiso `events.read`. El add-on se activa a pedido: escribinos a [soporte](/es/comenzar/soporte).
+  </Accordion>
+  <Accordion title="¿Puedo agregar un evento que todavía no llegó?">
+    No. El catálogo lista lo que realmente llega, para que nunca muestre eventos que tu sistema no manda. Para verlo antes de integrar, usá el evento de prueba.
+  </Accordion>
+  <Accordion title="Mandé Add To Cart y aparece add_to_cart">
+    Es lo esperado: los nombres se normalizan para que el mismo evento no quede repartido en varios. El nombre que se muestra lo elegís vos en **Nombre**.
+  </Accordion>
+  <Accordion title="Si oculto un evento, ¿deja de contar?">
+    No. Sólo deja de verse en la actividad del contacto. Sigue sumando en la lista, en los filtros y en los reportes.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+<CardGroup cols={2}>
+  <Card title="Eventos por contacto (API)" href="/es/integraciones/eventos">Cómo mandar los eventos de tus sistemas.</Card>
+  <Card title="Eventos del contacto" href="/es/contactos/eventos">Dónde se ven y cómo filtrar contactos por lo que hicieron.</Card>
+</CardGroup>

@@ -111,6 +111,8 @@
                 "icon": "address-book",
                 "pages": [
                   "es/contactos/contactos-y-propiedades",
+                  "es/contactos/eventos",
+                  "es/contactos/empresas",
                   "es/contactos/importar",
                   "es/contactos/tableros",
                   "es/contactos/etiquetas",
@@ -145,6 +147,7 @@
                 "pages": [
                   "es/reportes/dashboard",
                   "es/reportes/a-medida",
+                  "es/reportes/ventas",
                   "es/reportes/mensajeria",
                   "es/reportes/evaluaciones"
                 ]
@@ -158,7 +161,8 @@
                   "es/organizacion/equipos",
                   "es/organizacion/historial-de-cambios",
                   "es/organizacion/configuracion",
-                  "es/organizacion/claves-api"
+                  "es/organizacion/claves-api",
+                  "es/organizacion/eventos"
                 ]
               },
               {
@@ -175,6 +179,7 @@
                 "icon": "plug",
                 "pages": [
                   "es/integraciones/integrar-tu-sistema",
+                  "es/integraciones/eventos",
                   "es/integraciones/webhooks",
                   "es/integraciones/herramientas-http",
                   "es/integraciones/automatizar-seguimientos",
@@ -210,7 +215,8 @@
                   "es/casos-de-uso/calificacion-de-leads",
                   "es/casos-de-uso/cobranzas-automatizadas",
                   "es/casos-de-uso/atencion-al-cliente-24-7",
-                  "es/casos-de-uso/campanas-de-ventas"
+                  "es/casos-de-uso/campanas-de-ventas",
+                  "es/casos-de-uso/eventos"
                 ]
               }
             ]
@@ -287,6 +293,13 @@
                   "api-reference/endpoint/get-contact-tags",
                   "api-reference/endpoint/add-contact-tag",
                   "api-reference/endpoint/remove-contact-tag"
+                ]
+              },
+              {
+                "group": "Eventos",
+                "pages": [
+                  "api-reference/endpoint/send-events",
+                  "api-reference/endpoint/identify"
                 ]
               },
               {
@@ -400,6 +413,8 @@
                 "icon": "address-book",
                 "pages": [
                   "en/contacts/contacts-and-properties",
+                  "en/contacts/events",
+                  "en/contacts/companies",
                   "en/contacts/import",
                   "en/contacts/boards",
                   "en/contacts/tags",
@@ -434,6 +449,7 @@
                 "pages": [
                   "en/reports/dashboard",
                   "en/reports/custom-reports",
+                  "en/reports/sales",
                   "en/reports/messaging",
                   "en/reports/evaluations"
                 ]
@@ -447,7 +463,8 @@
                   "en/organization/teams",
                   "en/organization/change-history",
                   "en/organization/settings",
-                  "en/organization/api-keys"
+                  "en/organization/api-keys",
+                  "en/organization/events"
                 ]
               },
               {
@@ -464,6 +481,7 @@
                 "icon": "plug",
                 "pages": [
                   "en/integrations/connect-your-system",
+                  "en/integrations/events",
                   "en/integrations/webhooks",
                   "en/integrations/http-tools",
                   "en/integrations/automate-follow-ups",
@@ -499,7 +517,8 @@
                   "en/use-cases/lead-qualification",
                   "en/use-cases/automated-collections",
                   "en/use-cases/24-7-customer-support",
-                  "en/use-cases/sales-campaigns"
+                  "en/use-cases/sales-campaigns",
+                  "en/use-cases/events"
                 ]
               }
             ]
@@ -576,6 +595,13 @@
                   "api-reference/endpoint/get-contact-tags",
                   "api-reference/endpoint/add-contact-tag",
                   "api-reference/endpoint/remove-contact-tag"
+                ]
+              },
+              {
+                "group": "Events",
+                "pages": [
+                  "api-reference/endpoint/send-events",
+                  "api-reference/endpoint/identify"
                 ]
               },
               {

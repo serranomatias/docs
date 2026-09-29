@@ -1,0 +1,94 @@
+---
+title: "Companies"
+sidebarTitle: "Companies"
+description: "Group your contacts by the company they work for: who they are, how much the company bought and what all of them did."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Contacts → Companies" addon="Events" permission="contacts.read" status="nuevo" />
+
+If you sell to companies, the question is not only what Ana did, but what is going on with ACME: who its contacts are, how much the company bought in total and what all of them did. Companies bring together the contacts of the same company and add up their activity.
+
+## Where they come from
+
+There are two ways, and you can use both at once:
+
+- **From your events.** When your system sends an event with `group`, ContactShip creates the company the first time its id arrives, updates its name and data the next times, and links the contact. See [The contact's company](/en/integrations/events#the-contacts-company).
+- **From a contact property.** If you already keep the company in a text property, such as "Company", ContactShip builds the companies from what you already loaded. Spelling variants of the same name end up as one: "ACME Inc.", "Acme Inc" and "acme" are the same company.
+
+If a company arrives through events and one with the same name was already built from the property, that one is used. A company never ends up twice.
+
+## Build the companies from a property
+
+<Steps>
+  <Step title="Open Companies">
+    In **Contacts**, go to the **Companies** tab and tap **Build from a property**.
+  </Step>
+  <Step title="Pick the property">
+    The list shows your contacts' text properties and how many of the latest 5,000 contacts have a value in each.
+    - **Recommended** marks properties of type Company.
+    - **Only on contacts** marks the ones your contacts have but that are not created as a property in Settings, for example because they came through the API or an import.
+  </Step>
+  <Step title="Build the companies">
+    Tap **Build companies**. All your contacts are checked in batches and you see the progress: contacts checked, new companies and contacts linked. Your contacts don't change.
+  </Step>
+</Steps>
+
+- **Contacts that arrive later aren't linked on their own.** Go back to **Build from a property** and tap **Add new contacts**: it links the new contacts without repeating the companies that already exist.
+- **One property at a time.** To use another one, undo the current one first.
+- **Undo** removes the companies that came from the property and their links to contacts. The ones that came from events stay, with their contacts.
+
+## The company page
+
+**Contacts → Companies** lists them all, with their source, the id in your system and how many contacts each has. Search by part of the name or by the exact id, and tap one to open it.
+
+- **Purchases.** The total of what all its contacts bought, split by currency, with the number of purchases and the last one. It counts the `purchase` event or, if you don't send that one, the one named like a sale, such as `order_completed`.
+- **Contacts.** Who they are, with their phone and email. **Primary** marks the contacts for whom it is their primary company.
+- **Activity.** What all its contacts did, newest first, with the name of who did it.
+- **Company data.** What arrived in `properties` inside `group`, such as the plan or the industry.
+- **See in Contacts** opens **Contacts** filtered by that company. From there you can tag them, create a campaign for them or filter them further.
+
+## In Contacts
+
+- **The Company column** shows each contact's primary company, linked to its page. If they have more, **+N** shows the rest. The column shows up when a contact on the page has a company.
+- **The Company filter** keeps the contacts of the companies you pick. You can also filter by a company's data, for example `plan` = `enterprise`: it keeps the contacts of every company with that data, ignoring case.
+- **The contact page** shows their company under their name.
+- The same filter is in the contacts step of [WhatsApp campaigns](/en/messages/campaigns).
+
+## In reports
+
+In the [custom report](/en/reports/sales#build-your-own-report-with-events) with events, split by **Company** to see how much each one buys. It is the company that came in the event or, if none did, the contact's primary company. What has no company shows as **Sin empresa**.
+
+## A contact with several companies
+
+A contact can be in more than one company, for example if they work with two or changed companies. One is the **primary**: the first one they were linked to. It is the one the column and the contact page show; the rest appear as **+N** and **and N more**.
+
+## Who sees them
+
+- All of this shows up with the events add-on on.
+- The **Companies** tab and each company page are for roles that can see **every** contact, because a company shows all its contacts and purchases. A role that sees only some contacts sees the **Company** column and filter, but not the tab.
+- Building and undoing companies needs permission to edit contacts.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="I don't see the Companies tab">
+    It shows up with the events add-on on and for roles that can see every contact. To turn it on, write to [support](/en/get-started/support).
+  </Accordion>
+  <Accordion title="My property isn't in the list">
+    Only text properties or properties of type Company work. Number, date, yes/no or list properties can't name a company.
+  </Accordion>
+  <Accordion title="How does it bring similar names together?">
+    It ignores case, accents, punctuation and the legal suffix at the end, such as Inc., LLC, Ltd., Corp., S.A., S.A.S. or GmbH. "Perez Distribution LLC" and "perez distribution" end up together. Two different names, such as "ACME" and "ACME Latam", stay apart.
+  </Accordion>
+  <Accordion title="Does building companies change my contacts?">
+    No. The link between the contact and the company is kept apart. Undoing deletes it and your contacts stay as they were.
+  </Accordion>
+</AccordionGroup>
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="The company in events" href="/en/integrations/events#the-contacts-company">How to send `group` from your system.</Card>
+  <Card title="Contact events" href="/en/contacts/events">Filter contacts by what they did.</Card>
+</CardGroup>
