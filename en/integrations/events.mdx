@@ -33,7 +33,7 @@ The format is Google Analytics 4's: an `event_name` and free-form `params`. If y
             "event_name": "purchase",
             "event_id": "order-10025",
             "contact": { "phone": "+573001234567", "email": "ana@example.com", "name": "Ana Pérez" },
-            "params": { "transaction_id": "10025", "value": 58000, "currency": "COP" }
+            "params": { "transaction_id": "10025", "value": 41.90, "currency": "USD" }
           }
         ]
       }'
@@ -50,7 +50,7 @@ The format is Google Analytics 4's: an `event_name` and free-form `params`. If y
 
 Each example is the full body of `POST /v1/events`. You can mix events of different kinds in the same array, up to 100 per request.
 
-- **Purchase, cart, checkout and refund** follow GA4's e-commerce format: the amount in `value`, the currency in `currency` and the products in `items`.
+- **Purchase, cart, checkout and refund** follow GA4's e-commerce format: the amount in `value`, the currency in `currency` and the products in `items`. The examples are in US dollars (`USD`); send your business's currency as its ISO 4217 code, such as `COP` or `MXN`.
 - **Form and sign-up** are the usual ones for a website that captures customers.
 - **Anonymous visit** is a visitor who has not identified yet; see [Visitors who have not identified yet](#visitors-who-have-not-identified-yet).
 - **History** loads past purchases with their real date.
@@ -75,13 +75,13 @@ With the names in these examples (`purchase`, `add_to_cart`, `begin_checkout`, `
       },
       "params": {
         "transaction_id": "10025",
-        "value": 58000,
-        "currency": "COP",
+        "value": 41.90,
+        "currency": "USD",
         "payment_method": "card",
         "coupon": "WELCOME10",
         "items": [
-          { "item_id": "PIZZA-L", "item_name": "Large pizza", "item_category": "Pizzas", "price": 24000, "quantity": 2 },
-          { "item_id": "SODA-15", "item_name": "Soda 1.5 L", "item_category": "Drinks", "price": 10000, "quantity": 1 }
+          { "item_id": "PIZZA-L", "item_name": "Large pizza", "item_category": "Pizzas", "price": 18.50, "quantity": 2 },
+          { "item_id": "SODA-15", "item_name": "Soda 1.5 L", "item_category": "Drinks", "price": 4.90, "quantity": 1 }
         ]
       }
     }
@@ -97,10 +97,10 @@ With the names in these examples (`purchase`, `add_to_cart`, `begin_checkout`, `
       "event_id": "cart-8812-1",
       "contact": { "email": "ana@example.com" },
       "params": {
-        "value": 24000,
-        "currency": "COP",
+        "value": 18.50,
+        "currency": "USD",
         "items": [
-          { "item_id": "PIZZA-L", "item_name": "Large pizza", "price": 24000, "quantity": 1 }
+          { "item_id": "PIZZA-L", "item_name": "Large pizza", "price": 18.50, "quantity": 1 }
         ]
       }
     }
@@ -116,12 +116,12 @@ With the names in these examples (`purchase`, `add_to_cart`, `begin_checkout`, `
       "event_id": "checkout-8812",
       "contact": { "phone": "+573001234567" },
       "params": {
-        "value": 58000,
-        "currency": "COP",
+        "value": 41.90,
+        "currency": "USD",
         "coupon": "WELCOME10",
         "items": [
-          { "item_id": "PIZZA-L", "item_name": "Large pizza", "price": 24000, "quantity": 2 },
-          { "item_id": "SODA-15", "item_name": "Soda 1.5 L", "price": 10000, "quantity": 1 }
+          { "item_id": "PIZZA-L", "item_name": "Large pizza", "price": 18.50, "quantity": 2 },
+          { "item_id": "SODA-15", "item_name": "Soda 1.5 L", "price": 4.90, "quantity": 1 }
         ]
       }
     }
@@ -138,8 +138,8 @@ With the names in these examples (`purchase`, `add_to_cart`, `begin_checkout`, `
       "contact": { "external_id": "customer-4821" },
       "params": {
         "transaction_id": "10025",
-        "value": 24000,
-        "currency": "COP",
+        "value": 18.50,
+        "currency": "USD",
         "reason": "Wrong product"
       }
     }
@@ -200,7 +200,7 @@ With the names in these examples (`purchase`, `add_to_cart`, `begin_checkout`, `
     {
       "event_name": "view_item",
       "session_id": "GA1.1.1234567890.1726000000",
-      "params": { "item_id": "PIZZA-L", "item_name": "Large pizza", "price": 24000, "currency": "COP" }
+      "params": { "item_id": "PIZZA-L", "item_name": "Large pizza", "price": 18.50, "currency": "USD" }
     }
   ]
 }
@@ -214,14 +214,14 @@ With the names in these examples (`purchase`, `add_to_cart`, `begin_checkout`, `
       "event_id": "order-9001",
       "occurred_at": "2025-11-03T19:20:00-05:00",
       "contact": { "phone": "+573001234567", "name": "Ana Pérez" },
-      "params": { "transaction_id": "9001", "value": 42000, "currency": "COP" }
+      "params": { "transaction_id": "9001", "value": 35.50, "currency": "USD" }
     },
     {
       "event_name": "purchase",
       "event_id": "order-9377",
       "occurred_at": "2026-01-15T12:05:00-05:00",
       "contact": { "phone": "+573001234567", "name": "Ana Pérez" },
-      "params": { "transaction_id": "9377", "value": 61000, "currency": "COP" }
+      "params": { "transaction_id": "9377", "value": 52.90, "currency": "USD" }
     }
   ]
 }
@@ -235,8 +235,8 @@ With the names in these examples (`purchase`, `add_to_cart`, `begin_checkout`, `
       "event_id": "order-10026",
       "create_contact": false,
       "contact": { "external_id": "customer-4821" },
-      "value": 35000,
-      "currency": "COP",
+      "value": 29.90,
+      "currency": "USD",
       "params": { "transaction_id": "10026", "store": "Downtown store" }
     }
   ]
@@ -329,7 +329,7 @@ Only the `contact` object changes. The response says how the contact was found i
   "event_name": "purchase",
   "event_id": "purchase-10025",
   "contact": { "phone": "+573001234567", "name": "Ana Pérez" },
-  "params": { "transaction_id": "10025", "value": 58000, "currency": "COP" }
+  "params": { "transaction_id": "10025", "value": 41.90, "currency": "USD" }
 }
 ```
 
@@ -347,7 +347,7 @@ Only the `contact` object changes. The response says how the contact was found i
   "event_name": "payment_received",
   "event_id": "payment_received-551902-3",
   "contact": { "contact_id": "33333333-3333-4333-8333-333333333333" },
-  "params": { "value": 250000, "currency": "COP" }
+  "params": { "value": 210, "currency": "USD" }
 }
 ```
 
@@ -387,7 +387,7 @@ curl -X POST https://api.contactship.ai/v1/events \
       "event_name": "purchase",
       "event_id": "purchase-10026",
       "contact": { "external_id": "CUS-9001" },
-      "params": { "transaction_id": "10026", "value": 32000, "currency": "COP" }
+      "params": { "transaction_id": "10026", "value": 27.50, "currency": "USD" }
     }]
   }'
 ```
@@ -404,7 +404,7 @@ If you sell to companies, send the contact's company in `group` with each event.
   "event_id": "order-9001",
   "contact": { "phone": "+573001234567", "name": "Ana Pérez" },
   "group": { "id": "ACME-1", "name": "ACME Inc.", "properties": { "plan": "enterprise", "industry": "retail" } },
-  "params": { "transaction_id": "9001", "value": 1200000, "currency": "COP" }
+  "params": { "transaction_id": "9001", "value": 1500, "currency": "USD" }
 }
 ```
 
@@ -429,7 +429,7 @@ If you sell to companies, send the contact's company in `group` with each event.
           { "event_name": "view_item", "session_id": "7f3c2a9e-1b4d-4c8a-9f21-5d6e8a0b3c47",
             "params": { "item_id": "SKU-123", "item_name": "Pro plan" } },
           { "event_name": "add_to_cart", "session_id": "7f3c2a9e-1b4d-4c8a-9f21-5d6e8a0b3c47",
-            "params": { "item_id": "SKU-123", "value": 58000, "currency": "COP" } }
+            "params": { "item_id": "SKU-123", "value": 41.90, "currency": "USD" } }
         ]
       }'
     ```
@@ -448,7 +448,7 @@ If you sell to companies, send the contact's company in `group` with each event.
           "event_id": "purchase-10025",
           "session_id": "7f3c2a9e-1b4d-4c8a-9f21-5d6e8a0b3c47",
           "contact": { "email": "ana@example.com", "phone": "+573001234567", "name": "Ana Pérez" },
-          "params": { "transaction_id": "10025", "value": 58000, "currency": "COP" }
+          "params": { "transaction_id": "10025", "value": 41.90, "currency": "USD" }
         }]
       }'
     ```
