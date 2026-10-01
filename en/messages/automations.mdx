@@ -21,6 +21,7 @@ Conditions include message count, spam status, contact tags, thread duration, an
 | Group | Actions and configuration |
 |---|---|
 | Freshdesk | Sync contact, create ticket, add conversation note. Ticket settings include priority/status, custom fields, assignment, history, and duplicate handling. |
+| HubSpot | Create, find and update contacts; create and move deals; create tasks, tickets and notes; log calls. Listed under **Integraciones**, with fields described by the integration itself. |
 | AI | Analyze the conversation into text, number, boolean, or enum fields. |
 | Conversation | Send a message in the current thread and channel. |
 | Organize | Add conversation/contact tags; add, move, or remove a contact’s board card. |
@@ -30,11 +31,11 @@ Conditions include message count, spam status, contact tags, thread duration, an
 | Developer | Webhook with POST, PUT, or PATCH; optional headers and JSON body template. |
 | Google Sheets | Add a row or update a matched row using column mappings. |
 
-Freshdesk and Sheets require connected integrations. Actions run top to bottom. **Continue if this action fails** allows later steps to run after a failure; consider whether those steps depend on missing output.
+Freshdesk, HubSpot and Sheets require connected integrations. With a single connected account the action picks it up on its own; with two or more you choose it before saving. Actions run top to bottom. **Continue if this action fails** allows later steps to run after a failure; consider whether those steps depend on missing output.
 
 Template values include `{{thread.id}}`, `{{contact.full_name}}`, `{{contact.phone_number}}`, `{{contact.email}}`, `{{system.now}}`, and `{{system.rule_id}}`. AI outputs such as `{{ai.summary}}` exist only after an analysis step in the same rule. Freshdesk note steps can use the created ticket’s ID and URL.
 
-The three new-rule presets are Basic Freshdesk Ticket, WhatsApp High Priority, and AI-Powered Ticket. The separate **Templates** tab is disabled.
+The six new-rule presets are Log Calls in HubSpot, Conversation Summary in HubSpot, Follow-up Task in HubSpot, Basic Freshdesk Ticket, WhatsApp High Priority, and AI-Powered Ticket. The separate **Templates** tab is disabled.
 
 ## Inspect and replay
 

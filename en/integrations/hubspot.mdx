@@ -1,0 +1,153 @@
+---
+title: "HubSpot"
+description: "Connect HubSpot with OAuth. Keep contacts in sync both ways and move board cards with your pipeline stages."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="en" route="Integrations → HubSpot" permission="integrations.read; integrations.create" />
+
+HubSpot keeps contacts current on both sides and connects your pipeline stages to the columns of a board. Moving a deal in HubSpot moves the card, and moving the card moves the deal.
+
+## Connect
+
+1. Open **Integrations → HubSpot → Manage**.
+2. Choose **Connect with HubSpot**, pick the portal and authorize.
+3. You return to ContactShip with the account listed.
+
+You can also connect with a private app token, but that route **does not receive HubSpot notifications**: changes you make in the CRM never reach ContactShip. Use it only when OAuth is not available to you.
+
+<Warning>
+If you reconnect with a different portal, your automations keep pointing at the previous account and stop working. The automations screen flags this and offers to move them all to the new account.
+</Warning>
+
+## What gets synchronized
+
+The **Sync** tab has two switches:
+
+- **Bring changes from the CRM**: what happens in HubSpot updates contacts and moves cards.
+- **Send changes to the CRM**: editing a contact or moving a card is reflected in HubSpot.
+
+Turning a direction off does not erase the configuration: it stays saved and resumes when you turn it back on.
+
+For email, phone and name you choose who wins when the same field changes on both sides: **the CRM wins**, **ContactShip wins**, or **last change wins**, which is the default.
+
+A change that came from the CRM does not go back to the CRM. There is nothing to configure for this.
+
+### Contacts that already existed
+
+The switches keep up with what changes from now on. For everything before that, choose between bringing nothing, linking the ones already present on both sides, or linking and also creating the missing ones. None of these options modifies your contacts.
+
+## The board and its stages
+
+Pipeline stages map to the columns of a board. Without that mapping, moving a deal moves nothing.
+
+In the **Board** dropdown choose **Create from pipeline**: you get a board with one column per stage, in HubSpot's order and already mapped, closing stages included. If you already have a board that matches, the screen offers it before creating another.
+
+If you use an existing board, whatever matches by name is mapped automatically and the rest is left empty. **A stage without a column moves nothing**, which beats moving a card to the wrong column. You can fix any mapping by hand.
+
+Creating the board does not save the configuration: the **Save** button at the end is what writes it.
+
+## The automations created for you
+
+On save, ContactShip creates and maintains the automations the configuration needs. They show up under **Settings → Automations**, named "Sincronización · …" with the account in parentheses.
+
+| When | What it does |
+| --- | --- |
+| HubSpot creates or updates a contact | creates or updates it here |
+| HubSpot deletes a contact | marks the link as deleted; the contact here is left alone |
+| A contact changed here | updates it in HubSpot |
+| A deal changed stage | moves the card to the matching column |
+| A card changed column | moves the deal to the matching stage |
+
+<Warning>
+Do not edit them by hand: they are regenerated on every save and your changes would be lost. If you need something different, create your own automation.
+</Warning>
+
+If you already had an automation doing the same thing, the screen tells you. It is never touched, but it is worth turning it off or the same change is processed twice.
+
+## Templates to start from
+
+When you create an automation, HubSpot templates are ready to use. They cover what the sync does not: what happens in a call and in a conversation.
+
+- **Log Calls in HubSpot**: every finished call lands on the contact record, with duration, result and recording.
+- **Conversation Summary in HubSpot**: when a conversation closes, AI summarizes it and leaves it as a note.
+- **Follow-up Task in HubSpot**: AI decides the next step and opens the task for the advisor.
+
+Pick one, adjust the wording and create it. With a single connected account, the template picks it up on its own.
+
+## HubSpot inside an AI agent
+
+The same actions you use in an automation can be used by a voice or text agent while it is talking to the person. What changes is who decides: in a rule you decide beforehand; in an agent the agent decides, in the conversation.
+
+This is what lets the agent answering WhatsApp open the deal the moment the person says how much they want to spend, instead of someone entering it later.
+
+### Adding it
+
+In the agent's **Tools** tab, add one of type **Integration** and pick the HubSpot action. They are listed under the **CRM** category and need the account connected.
+
+### What you configure
+
+**When to use this tool** is the field that matters most: it is the only thing the agent reads to decide whether to use it. Write it the way you talk to your customers, not as a specification.
+
+Under **Details it sends**, each detail comes from one of four places:
+
+| Source | When it fits |
+|---|---|
+| **The agent decides** | The detail comes up in the conversation: the amount, the stage, the reason. |
+| **Contact detail** | Email, phone, name or ID of whoever is talking. The agent does not ask for what we already know. |
+| **Fixed value** | Always the same: an initial stage, a task type, an owner. |
+| **Text with variables** | Your own text with gaps the agent fills, such as `[Call] '{{ai.reason}}'`. |
+
+Above the form, the app sums up how much was left to the agent: **The agent decides 2 details: Stage, Amount**. If it decides none, it says that too.
+
+<Warning>
+If the agent has several HubSpot tools, keep them all on **the same account**. With different accounts, what one tool records the other cannot find: the agent creates the contact in one portal and then says it does not exist. The app warns you when this happens.
+</Warning>
+
+### Which actions make sense in an agent
+
+- **Find contact** and **Find the contact's deals**: so it knows who it is talking to and what was already open.
+- **Create deal**: when the person shows concrete intent. One deal per request.
+- **Move deal stage**: when what that stage represents actually happens — they accept the proposal, confirm the purchase, walk away.
+- **Add note** and **Create task**: to leave the context and the next step for an advisor.
+
+**Update contact** is better left to the sync, which already does it both ways on its own. Giving it to the agent as well means the same field is written through two paths.
+
+## When something did not happen
+
+Every event that fires an automation leaves a run under **Settings → Automations → Run History**. It is where you see why something did not happen.
+
+**Skipped is not an error.** It means the automation did not run, almost always because something is missing: the conditions were not met, the stage is not mapped to a column, the deal is not linked to a card, or that direction of the sync is off. The detail says which one.
+
+Opening a run shows the event, each step with its status and what it returned. From there you can retry with the same event, which helps after fixing what was missing.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="I connected HubSpot and nothing synchronizes">
+    Check that the **Sync** tab has been saved. The switches alone are not enough: saving is what creates the automations that do the work.
+  </Accordion>
+  <Accordion title="I move a deal in HubSpot and the card does not move">
+    Three causes, in order: the stage is not mapped to any column, the deal is not linked to a card, or you connected with a token instead of OAuth so no notifications arrive. The run in Run History says which.
+  </Accordion>
+  <Accordion title="What if a contact has several deals?">
+    Today only one stays connected to the card. The others move nothing when they change stage.
+  </Accordion>
+  <Accordion title="Does a deal I create in HubSpot get linked?">
+    No. The link is born when a ContactShip automation creates the deal.
+  </Accordion>
+  <Accordion title="Can I connect two HubSpot portals?">
+    You can connect them, but the sync configuration belongs to a single account.
+  </Accordion>
+  <Accordion title="I deleted a contact in HubSpot, is it deleted here?">
+    No. The link is marked as deleted and nothing else is sent to it. The contact, its conversations, calls and cards are left intact.
+  </Accordion>
+</AccordionGroup>
+
+## See also
+
+- [Automations](/en/messages/automations)
+- [Voice agent tools](/en/voice-agents/tools)
+- [Text agent tools](/en/text-agents/tools)
+- [Boards](/en/contacts/boards)
+- [Freshdesk](/en/integrations/freshdesk)

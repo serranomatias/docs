@@ -188,6 +188,7 @@
                   "es/integraciones/google-sheets",
                   "es/integraciones/cal-com",
                   "es/integraciones/freshdesk",
+          "es/integraciones/hubspot",
                   "es/integraciones/make",
                   "es/integraciones/n8n"
                 ]
@@ -490,6 +491,7 @@
                   "en/integrations/google-sheets",
                   "en/integrations/cal-com",
                   "en/integrations/freshdesk",
+          "en/integrations/hubspot",
                   "en/integrations/make",
                   "en/integrations/n8n"
                 ]

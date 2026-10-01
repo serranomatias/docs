@@ -1,6 +1,6 @@
 ---
 title: 'Automatizaciones del inbox'
-description: 'Reglas de automatización (Automation Rules) del inbox: los ocho disparadores, condiciones y operadores, alcance por canal, las 17 acciones agrupadas (Freshdesk, IA, conversación, organizar, personas, llamadas, espera, webhook, Google Sheets), variables de plantilla, presets, historial de ejecuciones con replay y métricas.'
+description: 'Reglas de automatización (Automation Rules) del inbox: disparadores propios y de HubSpot, condiciones y operadores, alcance por canal, las acciones agrupadas (Freshdesk, HubSpot, IA, conversación, organizar, personas, llamadas, espera, webhook, Google Sheets), variables de plantilla, presets, historial de ejecuciones con replay y métricas.'
 tag: 'Nuevo'
 ---
 import { Availability } from '/snippets/availability.mdx';
@@ -57,6 +57,12 @@ La barra **Rule Preview** de la derecha resume la regla y, arriba del editor, un
 | Conversation | **Conversation Updated** | `thread.updated` | Al cambiar datos de la conversación. |
 | Message | **New Message** | `message.new` | Al entrar un mensaje nuevo. |
 | Contact | **Contact Created** | `contact.created` | Al crearse un contacto. |
+| Contact | **Contact Updated** | `contact.updated` | Al cambiar un dato del contacto. |
+| Board | **Card Moved** | `card.moved` | Al mover una tarjeta de columna. |
+| HubSpot | **HubSpot: Contact Created** | `hubspot.contact.created` | Al crearse un contacto en HubSpot. |
+| HubSpot | **HubSpot: Contact Updated** | `hubspot.contact.updated` | Al cambiar una propiedad del contacto en HubSpot. |
+| HubSpot | **HubSpot: Contact Deleted** | `hubspot.contact.deleted` | Al borrarse un contacto en HubSpot. |
+| HubSpot | **HubSpot: Deal Stage Changed** | `hubspot.deal.stage_changed` | Al cambiar de etapa un negocio en HubSpot. |
 | Call | **Call Finished** | `call.finished` | Al terminar una llamada. |
 | Call | **Call Started** | `call.started` | Al iniciar una llamada. |
 | Time | **Schedule** | `schedule` | Por horario. El editor no tiene todavía un campo para configurar la frecuencia. |
@@ -90,6 +96,29 @@ El catálogo **Add Action** agrupa las acciones en este orden. Las de Freshdesk 
 | **Sync Contact** | `freshdesk.sync_contact` | Busca o crea el contacto en Freshdesk con nombre, email y teléfono. Muestra los campos de contacto de tu cuenta de Freshdesk (**Required Fields** y **Optional Fields**) para completarlos con valores fijos o variables (**Use variable...**). Sin conexión, acepta **Custom Fields (JSON)**. |
 | **Create Ticket** | `freshdesk.create_ticket` | **Subject** (vacío usa el asunto por defecto; admite variables), **Priority** (Low, Medium, High, Urgent; por defecto Medium), **Status** (Open, Pending, Resolved, Closed; por defecto Open), **Tags** (separadas por coma). En **Advanced settings**: **Description**, **Ticket Type**, **Include conversation history** (activado por defecto), **History Limit**, **Dedup Window (hours)**, **Dedup Strategy** (Update existing ticket, Skip if duplicate), **Assign to Agent**, **Assign to Group**, **Attach conversation media** (hasta 15 archivos, 20 MB) con **Attachment Scan Limit**, y **Ticket Custom Fields**. |
 | **Add Conversation Note** | `freshdesk.add_thread_note` | **Note body**: nota interna en el ticket vinculado, visible solo para agentes. Vacío deja el enlace al ticket por defecto. Admite `{{contact.*}}`, `{{thread.*}}`, `{{ai.*}}`, `{{freshdesk.ticket_id}}` y `{{freshdesk.ticket_url}}`, con **Preview**. |
+
+### HubSpot
+
+Las acciones de HubSpot salen del catálogo de integraciones, así que figuran bajo el grupo **Integraciones** y no bajo un grupo propio. Sus campos los describe la integración: el editor los dibuja a partir de eso.
+
+| Acción | Capability | Campos |
+|---|---|---|
+| **Crear contacto** | `hubspot.create-contact` | Nombre, email y teléfono. |
+| **Actualizar contacto** | `hubspot.update-contact` | El contacto a actualizar y los campos nuevos. Es la que usa la sincronización. |
+| **Buscar contacto** | `hubspot.find-contact` | Email o teléfono. Devuelve la ficha. |
+| **Crear negocio** | `hubspot.create-deal` | Nombre, monto y etapa. Lo asocia a la ficha de la persona. |
+| **Mover negocio de etapa** | `hubspot.update-deal-stage` | El negocio y la etapa destino. |
+| **Buscar negocios del contacto** | `hubspot.find-deal` | Devuelve los negocios de la persona, abiertos y cerrados. |
+| **Crear tarea** | `hubspot.create-task` | Asunto, cuerpo, vencimiento, responsable y tipo. |
+| **Crear ticket** | `hubspot.create-ticket` | Asunto, cuerpo y prioridad. |
+| **Agregar nota** | `hubspot.add-note` | Cuerpo de la nota en la ficha del contacto. |
+| **Registrar llamada** | `hubspot.log-call` | Resumen, título, dirección, resultado, duración, cuándo fue y link a la grabación. |
+
+Si tenés una sola cuenta de HubSpot conectada, la acción la toma sola y lo dice abajo: **Esta regla escribe en …**. Con dos o más, hay que elegirla antes de guardar.
+
+<Warning>
+Las automatizaciones que crea la pestaña de **Sincronización** ya cubren los contactos en las dos direcciones y el negocio que se mueve con la tarjeta. Si escribís una regla propia que haga lo mismo, el mismo cambio se procesa dos veces. La pantalla te lo avisa al guardar el mapeo.
+</Warning>
 
 ### AI
 
@@ -162,7 +191,17 @@ Las notas de Freshdesk suman `{{freshdesk.ticket_id}}` y `{{freshdesk.ticket_url
 
 ## Presets
 
-Al crear una regla, **Start with a template** ofrece tres puntos de partida. Todos usan el disparador **Conversation Closed** y requieren Freshdesk conectado.
+Al crear una regla, **Start with a template** ofrece seis puntos de partida: tres de HubSpot y tres de Freshdesk. Cada uno requiere su integración conectada.
+
+Las de HubSpot cubren a propósito lo que la sincronización **no** hace —los contactos y el negocio ya viajan solos—: lo que pasa en una llamada y en una conversación.
+
+| Preset | Qué arma |
+|---|---|
+| **Log Calls in HubSpot** | Disparador **Call Finished**. **Registrar llamada** con el resumen, el título, la dirección, la duración y la grabación de la llamada. |
+| **Conversation Summary in HubSpot** | Disparador **Conversation Closed**. **AI Conversation Analysis** (extrae `summary` y `sentiment`) + **Agregar nota** con los dos. |
+| **Follow-up Task in HubSpot** | Disparador **Conversation Closed**. **AI Conversation Analysis** (extrae `next_step` y `summary`) + **Crear tarea** con el próximo paso como asunto. |
+
+Las tres de Freshdesk usan el disparador **Conversation Closed**.
 
 | Preset | Qué arma |
 |---|---|
