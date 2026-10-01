@@ -75,6 +75,44 @@ Al crear una automatización aparecen plantillas de HubSpot listas para usar. Cu
 
 Elegís una, ajustás el texto y la creás. Si tenés una sola cuenta conectada, la plantilla la toma sola.
 
+## HubSpot en un agente de IA
+
+Las mismas acciones que usás en una automatización las puede usar un agente de voz o de texto mientras habla con la persona. La diferencia es quién decide: en una regla lo decidís vos de antemano; en un agente lo decide él, en la conversación.
+
+Sirve para que el agente que atiende el WhatsApp abra el negocio en el momento en que la persona dice cuánto quiere invertir, sin que nadie lo cargue después.
+
+### Agregarla
+
+En la pestaña **Herramientas** del agente, agregá una del tipo **Integración** y elegí la acción de HubSpot. Aparecen bajo la categoría **CRM** y necesitan la cuenta conectada.
+
+### Qué configurás
+
+**Cuándo usar esta herramienta** es el campo que más importa: es lo único que lee el agente para decidir si la usa. Escribilo como le hablás a tus clientes, no como una especificación.
+
+En **Datos que envía**, cada dato sale de uno de cuatro lugares:
+
+| Origen | Cuándo conviene |
+|---|---|
+| **Lo decide el agente** | El dato aparece en la conversación: el monto, la etapa, el motivo. |
+| **Dato del contacto** | Email, teléfono, nombre o ID de quien está hablando. El agente no lo pregunta si ya lo sabemos. |
+| **Valor fijo** | Siempre el mismo: una etapa inicial, un tipo de tarea, un responsable. |
+| **Texto con variables** | Texto tuyo con huecos que llena el agente, por ejemplo `[Llamada] '{{ai.motivo}}'`. |
+
+Arriba del formulario, la app resume cuántos datos quedaron en manos del agente: **El agente decide 2 datos: Etapa, Monto**. Si no decide ninguno, lo dice también.
+
+<Warning>
+Si el agente tiene varias herramientas de HubSpot, que todas usen **la misma cuenta**. Con cuentas distintas, lo que registra una no lo encuentra la otra: el agente crea el contacto en un portal y después dice que no existe. La app avisa cuando pasa.
+</Warning>
+
+### Qué acciones tienen sentido en un agente
+
+- **Buscar contacto** y **Buscar negocios del contacto**: para que sepa con quién habla y qué tenía abierto.
+- **Crear negocio**: cuando la persona muestra intención concreta. Un negocio por pedido.
+- **Mover negocio de etapa**: cuando pasa lo que esa etapa representa —acepta la propuesta, confirma la compra, desiste—.
+- **Agregar nota** y **Crear tarea**: para dejar el contexto y el próximo paso al asesor.
+
+**Actualizar contacto** conviene dejarla para la sincronización, que ya lo hace sola en las dos direcciones. Si además se la das al agente, el mismo dato se escribe por dos caminos.
+
 ## Cuando algo no pasó
 
 Cada evento que dispara una automatización deja una ejecución en **Ajustes → Automatizaciones → Run History**. Es el lugar donde se ve por qué algo no ocurrió.
@@ -109,5 +147,7 @@ Abrir una ejecución muestra el evento, cada paso con su estado y lo que devolvi
 ## Ver también
 
 - [Automatizaciones](/es/mensajes/automatizaciones)
+- [Herramientas de un agente de voz](/es/agentes-de-voz/herramientas)
+- [Herramientas de un agente de texto](/es/agentes-de-texto/herramientas)
 - [Tableros](/es/contactos/tableros)
 - [Freshdesk](/es/integraciones/freshdesk)

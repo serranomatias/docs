@@ -75,6 +75,44 @@ When you create an automation, HubSpot templates are ready to use. They cover wh
 
 Pick one, adjust the wording and create it. With a single connected account, the template picks it up on its own.
 
+## HubSpot inside an AI agent
+
+The same actions you use in an automation can be used by a voice or text agent while it is talking to the person. What changes is who decides: in a rule you decide beforehand; in an agent the agent decides, in the conversation.
+
+This is what lets the agent answering WhatsApp open the deal the moment the person says how much they want to spend, instead of someone entering it later.
+
+### Adding it
+
+In the agent's **Tools** tab, add one of type **Integration** and pick the HubSpot action. They are listed under the **CRM** category and need the account connected.
+
+### What you configure
+
+**When to use this tool** is the field that matters most: it is the only thing the agent reads to decide whether to use it. Write it the way you talk to your customers, not as a specification.
+
+Under **Details it sends**, each detail comes from one of four places:
+
+| Source | When it fits |
+|---|---|
+| **The agent decides** | The detail comes up in the conversation: the amount, the stage, the reason. |
+| **Contact detail** | Email, phone, name or ID of whoever is talking. The agent does not ask for what we already know. |
+| **Fixed value** | Always the same: an initial stage, a task type, an owner. |
+| **Text with variables** | Your own text with gaps the agent fills, such as `[Call] '{{ai.reason}}'`. |
+
+Above the form, the app sums up how much was left to the agent: **The agent decides 2 details: Stage, Amount**. If it decides none, it says that too.
+
+<Warning>
+If the agent has several HubSpot tools, keep them all on **the same account**. With different accounts, what one tool records the other cannot find: the agent creates the contact in one portal and then says it does not exist. The app warns you when this happens.
+</Warning>
+
+### Which actions make sense in an agent
+
+- **Find contact** and **Find the contact's deals**: so it knows who it is talking to and what was already open.
+- **Create deal**: when the person shows concrete intent. One deal per request.
+- **Move deal stage**: when what that stage represents actually happens — they accept the proposal, confirm the purchase, walk away.
+- **Add note** and **Create task**: to leave the context and the next step for an advisor.
+
+**Update contact** is better left to the sync, which already does it both ways on its own. Giving it to the agent as well means the same field is written through two paths.
+
 ## When something did not happen
 
 Every event that fires an automation leaves a run under **Settings → Automations → Run History**. It is where you see why something did not happen.
@@ -109,5 +147,7 @@ Opening a run shows the event, each step with its status and what it returned. F
 ## See also
 
 - [Automations](/en/messages/automations)
+- [Voice agent tools](/en/voice-agents/tools)
+- [Text agent tools](/en/text-agents/tools)
 - [Boards](/en/contacts/boards)
 - [Freshdesk](/en/integrations/freshdesk)
