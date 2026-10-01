@@ -1,0 +1,113 @@
+---
+title: "HubSpot"
+description: "Conectá HubSpot por OAuth. Sincronizá contactos en las dos direcciones y mové las tarjetas del tablero con las etapas del pipeline."
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" route="Integraciones → HubSpot" permission="integrations.read; integrations.create" />
+
+HubSpot mantiene al día los contactos de los dos lados y conecta las etapas de tu pipeline con las columnas de un tablero. Mover un negocio en HubSpot mueve la tarjeta, y mover la tarjeta mueve el negocio.
+
+## Conectar
+
+1. Abrí **Integraciones → HubSpot → Gestionar**.
+2. Elegí **Conectar con HubSpot**, seleccioná el portal y autorizá.
+3. Volvés a ContactShip con la cuenta en la lista.
+
+También podés conectar con el token de una app privada, pero esa vía **no recibe avisos de HubSpot**: los cambios que hagas en el CRM no llegan a ContactShip. Usala solo si no podés autorizar por OAuth.
+
+<Warning>
+Si reconectás con otro portal, las automatizaciones siguen apuntando a la cuenta anterior y dejan de funcionar. La pantalla de automatizaciones lo marca y ofrece moverlas todas a la cuenta nueva.
+</Warning>
+
+## Qué se sincroniza
+
+En la pestaña **Sincronización** hay dos interruptores:
+
+- **Traer cambios del CRM**: lo que pasa en HubSpot actualiza los contactos y mueve las tarjetas.
+- **Enviar cambios al CRM**: editar un contacto o mover una tarjeta se refleja en HubSpot.
+
+Apagar un sentido no borra la configuración: queda guardada y vuelve a andar al encenderlo.
+
+Para correo, teléfono y nombre elegís quién gana cuando el dato cambia de los dos lados: **el CRM manda**, **ContactShip manda** o **último cambio gana**, que es el valor por defecto.
+
+Un cambio que entró del CRM no vuelve al CRM. No hay que configurarlo.
+
+### Contactos que ya existían
+
+Los interruptores mantienen al día lo que cambie de ahora en adelante. Para lo anterior, elegí entre no traer nada, vincular los que ya están de los dos lados, o vincular y además crear los que falten. Ninguna de las opciones modifica tus contactos.
+
+## El tablero y las etapas
+
+Las etapas del pipeline se corresponden con las columnas de un tablero. Sin esa correspondencia, mover un negocio no mueve nada.
+
+En el desplegable **Tablero** elegí **Crear desde el pipeline**: queda un tablero con una columna por etapa, en el orden de HubSpot y ya emparejadas, incluidas las de cierre. Si ya tenés un tablero que coincide, la pantalla te lo ofrece antes de crear otro.
+
+Si usás uno existente, lo que coincida por nombre se empareja solo y el resto queda vacío. **Una etapa sin columna no mueve nada**: es preferible a mover una tarjeta a la columna equivocada. Podés corregir cada emparejamiento a mano.
+
+Crear el tablero no guarda la configuración: el botón **Guardar** del final es el que la escribe.
+
+## Las automatizaciones que se crean solas
+
+Al guardar, ContactShip crea y mantiene las automatizaciones que hacen falta. Aparecen en **Ajustes → Automatizaciones** con el nombre «Sincronización · …» y la cuenta entre paréntesis.
+
+| Cuándo | Qué hace |
+| --- | --- |
+| HubSpot crea o actualiza un contacto | lo crea o actualiza acá |
+| HubSpot borra un contacto | marca el vínculo como borrado; el contacto de acá no se toca |
+| Un contacto cambió acá | lo actualiza en HubSpot |
+| Un negocio cambió de etapa | mueve la tarjeta a la columna que corresponde |
+| Una tarjeta cambió de columna | mueve el negocio a la etapa que corresponde |
+
+<Warning>
+No las edites a mano: se regeneran con cada guardado y perderías los cambios. Si necesitás algo distinto, creá una automatización propia.
+</Warning>
+
+Si ya tenías una automatización que hace lo mismo, la pantalla te avisa. No se toca, pero conviene apagarla o el mismo cambio se procesa dos veces.
+
+## Plantillas para empezar
+
+Al crear una automatización aparecen plantillas de HubSpot listas para usar. Cubren lo que la sincronización no hace: lo que pasa en una llamada y en una conversación.
+
+- **Log Calls in HubSpot**: cada llamada terminada queda en la ficha del contacto, con duración, resultado y grabación.
+- **Conversation Summary in HubSpot**: al cerrarse una conversación, la IA la resume y lo deja como nota.
+- **Follow-up Task in HubSpot**: la IA decide el próximo paso y abre la tarea para el asesor.
+
+Elegís una, ajustás el texto y la creás. Si tenés una sola cuenta conectada, la plantilla la toma sola.
+
+## Cuando algo no pasó
+
+Cada evento que dispara una automatización deja una ejecución en **Ajustes → Automatizaciones → Run History**. Es el lugar donde se ve por qué algo no ocurrió.
+
+**Skipped no es un error.** Significa que la automatización no corrió, casi siempre porque falta configuración: las condiciones no se cumplieron, la etapa no está emparejada con ninguna columna, el negocio no está vinculado a una tarjeta, o el sentido de la sincronización está apagado. El detalle dice cuál.
+
+Abrir una ejecución muestra el evento, cada paso con su estado y lo que devolvió. Desde ahí se puede reintentar con el mismo evento, útil después de corregir lo que faltaba.
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="Conecté HubSpot y no se sincroniza nada">
+    Revisá que la pestaña **Sincronización** esté guardada. Los interruptores por sí solos no alcanzan: al guardar es cuando se crean las automatizaciones que hacen el trabajo.
+  </Accordion>
+  <Accordion title="Muevo un negocio en HubSpot y la tarjeta no se mueve">
+    Tres causas, en orden: la etapa no está emparejada con ninguna columna, el negocio no está vinculado a una tarjeta, o conectaste con token en vez de OAuth y no llegan los avisos. La ejecución en Run History dice cuál es.
+  </Accordion>
+  <Accordion title="¿Qué pasa si un contacto tiene varios negocios?">
+    Hoy solo uno queda conectado a la tarjeta. Los demás no mueven nada al cambiar de etapa.
+  </Accordion>
+  <Accordion title="¿Se vincula un negocio que creo en HubSpot?">
+    No. El vínculo nace cuando una automatización de ContactShip crea el negocio.
+  </Accordion>
+  <Accordion title="¿Puedo conectar dos portales de HubSpot?">
+    Se pueden conectar, pero la configuración de sincronización es de una sola cuenta.
+  </Accordion>
+  <Accordion title="Borré un contacto en HubSpot, ¿se borra acá?">
+    No. Se marca el vínculo como borrado y no se le envía nada más. El contacto, sus conversaciones, llamadas y tarjetas quedan intactos.
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+- [Automatizaciones](/es/mensajes/automatizaciones)
+- [Tableros](/es/contactos/tableros)
+- [Freshdesk](/es/integraciones/freshdesk)
