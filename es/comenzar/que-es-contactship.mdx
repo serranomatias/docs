@@ -24,7 +24,7 @@ ContactShip es una plataforma de comunicación con clientes donde trabajan junto
 | Enrutamiento de leads | Reparto de leads por etapas, grupos y plazos, con avisos y reporte. | **Enrutamiento** |
 | Reportes | Dashboard personalizable, reportes a medida, reportes de mensajería y criterios de evaluación. | **Reportes** |
 | Widgets | Widget de llamada web para insertar en tu sitio. | **Widgets** |
-| Integraciones | Cal.com, Make, Google Calendar, Google Sheets y Freshdesk desde el catálogo. | **Integraciones** |
+| Integraciones | Cal.com, Make, Google Calendar, Google Sheets, Freshdesk y HubSpot desde el catálogo. | **Integraciones** |
 | Organización | Miembros, roles y permisos, equipos, claves API, números y facturación. | **Ajustes**, **Claves API**, **Mis Números**, **Facturación** |
 | API y MCP | API pública con clave por organización, webhooks de llamadas y servidor MCP para Claude, Cursor y Claude Code. | **Claves API** |
 
@@ -109,7 +109,9 @@ Los detalles de planes y precios están en [Planes y límites](/es/facturacion/p
     Sí. Todo se asocia al contacto por teléfono o correo. En la ficha del contacto ves el historial de llamadas, las conversaciones, los comentarios, las notas y las tareas. Ver [Contactos y propiedades](/es/contactos/contactos-y-propiedades).
   </Accordion>
   <Accordion title="¿Se integra con mi CRM?">
-    El catálogo incluye Google Calendar, Google Sheets, Cal.com, Freshdesk y Make. HubSpot, Salesforce, Zoho o Pipedrive no tienen conector nativo: se conectan por Make, n8n, webhooks de llamada o una herramienta HTTP del agente. Ver [Catálogo de integraciones](/es/integraciones/vision-general).
+    **HubSpot tiene conector nativo**: se conecta por OAuth y sincroniza contactos en las dos direcciones, además de mover las tarjetas del tablero con las etapas del pipeline. Ver [HubSpot](/es/integraciones/hubspot).
+
+    El catálogo incluye también Google Calendar, Google Sheets, Cal.com, Freshdesk y Make. Salesforce, Zoho y Pipedrive todavía no tienen conector nativo: se conectan por Make, n8n, webhooks de llamada o una herramienta HTTP del agente. Ver [Catálogo de integraciones](/es/integraciones/vision-general).
   </Accordion>
   <Accordion title="¿Necesito saber programar?">
     No para crear agentes, campañas, canales o tableros: todo se configura desde la app. La [API](/api-reference/introduction), los [webhooks](/es/llamadas/webhooks) y el [MCP](/es/mcp/vision-general) son opcionales, para quien quiera integrar sus propios sistemas.
