@@ -317,6 +317,7 @@
                 "pages": [
                   "api-reference/endpoint/list-calls",
                   "api-reference/endpoint/get-call",
+                  "api-reference/endpoint/get-call-status",
                   "api-reference/endpoint/stop-call"
                 ]
               },
@@ -621,6 +622,7 @@
                 "pages": [
                   "api-reference/endpoint/list-calls",
                   "api-reference/endpoint/get-call",
+                  "api-reference/endpoint/get-call-status",
                   "api-reference/endpoint/stop-call"
                 ]
               },

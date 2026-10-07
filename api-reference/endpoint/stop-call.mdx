@@ -6,7 +6,7 @@ description: 'Hang up a call that is ringing or in progress'
 
 Ends a call on the phone while it is ringing or in progress. Use it when the person on the other side hangs up from your own interface, for example a "hang up" button next to a live call.
 
-The call is then closed like any other: it reaches `call_status: ended` with `disconnection_reason: user_hangup`, and your call webhooks fire as usual. Poll [Get Call](/api-reference/endpoint/get-call) to see it finish.
+The call is then closed like any other: it reaches `call_status: ended` with `disconnection_reason: user_hangup`, and your call webhooks fire as usual. Poll [Get Call Status](/api-reference/endpoint/get-call-status) to see it finish.
 
 Stopping is idempotent: a call that already finished answers `stopped: false` instead of an error. A call that is still queued has not reached the phone yet and answers `409` — retry in a few seconds. To cancel a scheduled call, use the cancel endpoint instead.
 
