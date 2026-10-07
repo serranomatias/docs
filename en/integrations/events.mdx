@@ -414,6 +414,28 @@ If you sell to companies, send the contact's company in `group` with each event.
 - The first time an id arrives the company is created and linked to the contact. Another event with the same id doesn't duplicate it.
 - If you had already built companies from a contact property and one has the same name, that one is used.
 
+## Links to your systems
+
+If the event also lives in another system, send its link in `links`: the Freshdesk ticket, the invoice, the order in your store. They are shown with the event, in the contact's activity, and open in a new tab.
+
+```json
+{
+  "event_name": "ticket_closed",
+  "event_id": "ticket-4521",
+  "contact": { "email": "ana@example.com" },
+  "params": { "ticket_id": "4521", "subject": "Address change" },
+  "links": [
+    { "url": "https://acme.freshdesk.com/a/tickets/4521", "label": "Ticket 4521" },
+    { "url": "https://billing.example.com/invoices/10025", "label": "Invoice 10025" }
+  ]
+}
+```
+
+- Up to 10 per event. `url` is required, up to 2,000 characters, and must start with `http://` or `https://`.
+- `label` is optional, up to 200 characters. Without it the address is shown.
+- A link with another scheme (`javascript:`, `data:`) or none (`acme.com/invoice`) makes the event `invalid`, with a message that says which one.
+- What goes in `params` doesn't change: links are separate, to go from ContactShip to your system in one click.
+
 ## Visitors who have not identified yet
 
 "Viewed the catalog" or "added to cart" usually happen before you know who the person is. To keep that journey, send those events **without `contact` and with a `session_id`**: the id of the visit, the same in all its events. Below is [how to generate it](#how-to-generate-the-session_id).

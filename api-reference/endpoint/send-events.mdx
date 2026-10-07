@@ -78,6 +78,9 @@ Events from visitors who have not identified yet can be sent too: with a `sessio
     <ParamField body="group" type="object">
       The contact's company: `{ "id": "...", "name": "...", "properties": {} }`. `id` is required: the company's id in your system, not its name, up to 200 characters. The first event with an id creates the company and links the contact to it; later ones update its name and add to its `properties`. See [Companies](/en/contacts/companies).
     </ParamField>
+    <ParamField body="links" type="array">
+      Up to 10 links to the same thing in your systems, such as the ticket or the invoice: `[{ "url": "https://...", "label": "Invoice 10025" }]`. `url` is required, up to 2,000 characters, and must start with `http://` or `https://`: anything else (`javascript:`, `data:`, no scheme) makes the event `invalid`, with a message that says which link. `label` is optional, up to 200 characters; without it the address is shown. The links are shown with the event, in the contact's activity, and open in a new tab. See [Links to your systems](/en/integrations/events#links-to-your-systems).
+    </ParamField>
   </Expandable>
 </ParamField>
 
@@ -108,7 +111,10 @@ Full bodies for the most common cases. You can mix events of different kinds in 
           { "item_id": "PIZZA-L", "item_name": "Large pizza", "price": 18.50, "quantity": 2 },
           { "item_id": "SODA-15", "item_name": "Soda 1.5 L", "price": 4.90, "quantity": 1 }
         ]
-      }
+      },
+      "links": [
+        { "url": "https://billing.example.com/invoices/10025", "label": "Invoice 10025" }
+      ]
     }
   ]
 }

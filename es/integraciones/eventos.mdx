@@ -414,6 +414,28 @@ Si le vendés a empresas, mandá en cada evento la empresa del contacto en `grou
 - La primera vez que llega un id se crea la empresa y se vincula al contacto. Otro evento con el mismo id no la duplica.
 - Si ya habías armado empresas desde una propiedad de tus contactos y una tiene el mismo nombre, se usa esa.
 
+## Links a tus sistemas
+
+Si el evento existe también en otro sistema, mandá el link en `links`: el ticket de Freshdesk, la factura, el pedido en tu tienda. Se muestran con el evento, en la actividad del contacto, y se abren en otra pestaña.
+
+```json
+{
+  "event_name": "ticket_closed",
+  "event_id": "ticket-4521",
+  "contact": { "email": "ana@example.com" },
+  "params": { "ticket_id": "4521", "subject": "Cambio de dirección" },
+  "links": [
+    { "url": "https://acme.freshdesk.com/a/tickets/4521", "label": "Ticket 4521" },
+    { "url": "https://billing.example.com/invoices/10025", "label": "Factura 10025" }
+  ]
+}
+```
+
+- Hasta 10 por evento. `url` es obligatorio, de hasta 2.000 caracteres, y tiene que empezar con `http://` o `https://`.
+- `label` es opcional, de hasta 200 caracteres. Sin él se muestra la dirección.
+- Un link con otro esquema (`javascript:`, `data:`) o sin esquema (`acme.com/factura`) hace que el evento salga `invalid`, con un mensaje que dice cuál fue.
+- Lo que va en `params` no cambia: los links son aparte, para ir de ContactShip a tu sistema con un clic.
+
 ## Visitantes que todavía no se identificaron
 
 "Vio el catálogo" o "agregó al carrito" suelen pasar antes de que sepas quién es la persona. Para no perder ese recorrido, mandá esos eventos **sin `contact` y con un `session_id`**: el id de la visita, el mismo en todos sus eventos. Más abajo está [cómo generarlo](#cómo-generar-el-session_id).
