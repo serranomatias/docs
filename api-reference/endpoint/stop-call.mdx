@@ -1,0 +1,116 @@
+---
+title: 'Stop Call'
+api: 'POST /v1/calls/single-phone-call/{callId}/stop'
+description: 'Hang up a call that is ringing or in progress'
+---
+
+Ends a call on the phone while it is ringing or in progress. Use it when the person on the other side hangs up from your own interface, for example a "hang up" button next to a live call.
+
+The call is then closed like any other: it reaches `call_status: ended` with `disconnection_reason: user_hangup`, and your call webhooks fire as usual. Poll [Get Call Status](/api-reference/endpoint/get-call-status) to see it finish.
+
+Stopping is idempotent: a call that already finished answers `stopped: false` instead of an error. A call that is still queued has not reached the phone yet and answers `409` — retry in a few seconds. To cancel a scheduled call, use the cancel endpoint instead.
+
+## Path Parameters
+
+<ParamField path="callId" type="string" required>
+  The UUID of the call, as returned by [Make AI Phone Call](/api-reference/endpoint/make-ai-phone-call).
+</ParamField>
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication. Found in your dashboard under API settings.
+</ParamField>
+
+## Response
+
+The response is `{ "statusCode": number, "data": object }`. The fields below describe `data`.
+
+<ResponseField name="call_id" type="string">
+  The UUID of the call.
+</ResponseField>
+
+<ResponseField name="stopped" type="boolean">
+  `true` when the call was hung up; `false` when it had already finished.
+</ResponseField>
+
+<ResponseField name="call_status" type="string">
+  The call status when it was asked to stop, e.g. `pending` (ringing), `in_progress` or `ended`.
+</ResponseField>
+
+## Error Codes
+
+- `400 Bad Request` — `callId` is not a valid UUID
+- `401 Unauthorized` — Invalid or missing API key
+- `404 Not Found` — Call not found or does not belong to your organization
+- `409 Conflict` — The call has not been placed yet (queued or scheduled). Retry in a few seconds
+- `500 Internal Server Error` — Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL
+curl -X POST "https://api.contactship.ai/v1/calls/single-phone-call/a1b2c3d4-e5f6-7890-abcd-ef1234567890/stop" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript
+const stopCall = async (callId, attempts = 5) => {
+  const response = await fetch(
+    `https://api.contactship.ai/v1/calls/single-phone-call/${callId}/stop`,
+    { method: 'POST', headers: { 'x-api-key': 'your-api-key' } }
+  );
+  // Still queued: it reaches the phone in a few seconds.
+  if (response.status === 409 && attempts > 1) {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    return stopCall(callId, attempts - 1);
+  }
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return (await response.json()).data;
+};
+
+const { stopped } = await stopCall('a1b2c3d4-e5f6-7890-abcd-ef1234567890');
+```
+
+```python Python
+import time
+import requests
+
+api_key = "your-api-key"
+call_id = "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+
+for _ in range(5):
+    response = requests.post(
+        f"https://api.contactship.ai/v1/calls/single-phone-call/{call_id}/stop",
+        headers={"x-api-key": api_key},
+    )
+    if response.status_code != 409:
+        break
+    time.sleep(2)  # still queued
+
+if response.status_code == 200:
+    print("Stopped" if response.json()["data"]["stopped"] else "Already finished")
+else:
+    print(f"Error {response.status_code}: {response.text}")
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 OK
+{
+  "statusCode": 200,
+  "data": {
+    "call_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "stopped": true,
+    "call_status": "in_progress"
+  }
+}
+```
+
+```json 409 Conflict
+{
+  "statusCode": 409,
+  "message": "The call has not been placed yet. Retry in a few seconds, or cancel it if it is scheduled."
+}
+```
+</ResponseExample>
