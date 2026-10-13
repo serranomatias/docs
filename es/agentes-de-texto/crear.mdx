@@ -1,6 +1,6 @@
 ---
 title: 'Crear un agente de texto'
-description: 'Cómo crear un agente de texto para WhatsApp Business: el diálogo Nuevo agente (Shift+N), plantillas o desde cero, la pestaña General (nombre, descripción, seis modelos, temperatura 0 a 2, zona horaria), el guardado por pestaña y cómo asignarlo a un canal.'
+description: 'Cómo crear un agente de texto para WhatsApp Business: el diálogo Nuevo agente (Shift+N), plantillas o desde cero, la pestaña General (nombre, descripción, siete modelos, temperatura 0 a 2, zona horaria), el guardado por pestaña y cómo asignarlo a un canal.'
 tag: 'Nuevo'
 ---
 import { Availability } from '/snippets/availability.mdx';
@@ -15,7 +15,7 @@ Un agente de texto responde conversaciones escritas en los canales del inbox. Ho
 
 - Canales: WhatsApp Business. Instagram y Facebook Messenger figuran como **Próximamente** en el diálogo **Nuevo canal**.
 - Permisos: `agents.read` para ver la lista y la configuración, `agents.update` para editar y `agents.delete` para eliminar.
-- Un agente de texto no hace ni recibe llamadas. Para eso existen los agentes de voz.
+- Un agente de texto no hace ni recibe llamadas. Para eso existen los agentes de voz. Sí puede responder con notas de voz de WhatsApp; ver [Notas de voz](/es/agentes-de-texto/notas-de-voz).
 
 ## Crear el agente
 
@@ -52,7 +52,7 @@ Las plantillas las publica ContactShip. La app no tiene una opción para crear p
 
 - El encabezado muestra el nombre. Hacé clic sobre él para renombrarlo; el cambio se guarda al instante con el aviso **Nombre del agente actualizado**.
 - El botón **Probar agente** abre el sandbox. Ver [Probar en el sandbox](/es/agentes-de-texto/sandbox).
-- Las pestañas son **General**, **Instrucciones**, **Tools** (con el contador de tools), **Avanzado** y **Conocimiento**.
+- Las pestañas son **General**, **Instrucciones**, **Tools** (con el contador de tools), **Voz**, **Avanzado** y **Conocimiento**. En **Voz** se configuran las respuestas con notas de voz; ver [Notas de voz](/es/agentes-de-texto/notas-de-voz).
 
 ### Cómo se guarda
 
@@ -68,24 +68,25 @@ No hay borradores ni publicación. Lo que guardás es lo que usa el agente en la
 |---|---|---|---|
 | **Nombre del agente** | Identifica al agente en toda la app. Solo lo ve tu equipo. | Texto, obligatorio | El nombre que ingresaste al crearlo |
 | **Descripción** | Una nota corta sobre qué hace el agente. | Texto libre | La descripción que ingresaste al crearlo |
-| **Modelo** | El modelo de lenguaje que maneja la conversación. | Uno de los seis modelos de la tabla siguiente | GPT-4o mini desde cero; el de la plantilla si usaste una |
+| **Modelo** | El modelo de lenguaje que maneja la conversación. | Uno de los siete modelos de la tabla siguiente | GPT-4o mini desde cero; el de la plantilla si usaste una |
 | **Temperatura** | Valores bajos dan respuestas más predecibles; valores altos, más creativas. | 0 a 2, en pasos de 0.1 | 0.7 |
 | **Zona horaria** | Se usa para resolver fechas y horas que el agente menciona. | Una zona horaria, con buscador | Vacía desde cero; la de la plantilla si usaste una |
 
 ### Modelos disponibles
 
-El selector agrupa los modelos por proveedor. Estos son los seis, en el orden en que aparecen:
+El selector agrupa los modelos por proveedor: DeepSeek, OpenAI, Google y Anthropic. Estos son los siete, en el orden en que aparecen:
 
 | Modelo | Identificador |
 |---|---|
+| DeepSeek Flash | `deepseek-flash` |
 | GPT-4.1 Mini | `gpt-4.1-mini` |
 | GPT-4o mini | `gpt-4o-mini` |
-| GPT-4o | `gpt-4o` |
+| GPT-6 Luna | `gpt-6-luna` |
 | Gemini 3 Flash Preview | `gemini-3-flash-preview` |
 | Gemini 3 Pro | `gemini-3-pro-latest` |
 | Claude 4.5 Haiku | `claude-4.5-haiku` |
 
-La lista refleja el selector de ContactShip; no es un catálogo completo de modelos de cada proveedor.
+La lista refleja el selector de ContactShip; no es un catálogo completo de modelos de cada proveedor. El agente que crea el onboarding de la cuenta nace con DeepSeek Flash.
 
 <Tip>
 Cambiá el modelo y probalo en el sandbox antes de dejarlo en producción. La misma instrucción puede dar resultados distintos según el modelo.
@@ -138,7 +139,7 @@ Sin el permiso `agents.update`, la pantalla muestra el aviso **Tienes acceso de 
     Sí. Cada canal tiene sus propias reglas de asignación y cualquier regla puede apuntar a cualquier agente de texto de la organización. Si necesitás comportamientos distintos por canal, creá un agente por canal. Ver [Configurar un canal](/es/mensajes/configurar-canal).
   </Accordion>
   <Accordion title="¿Qué diferencia hay entre un agente de texto y uno de voz?">
-    El de texto responde mensajes escritos en el inbox y se guarda pestaña por pestaña, sin publicar. El de voz atiende llamadas, tiene voz, idiomas y versiones publicadas. Los dos comparten la base de conocimiento de la organización.
+    El de texto responde conversaciones del inbox, por escrito o con notas de voz de WhatsApp, y se guarda pestaña por pestaña, sin publicar. El de voz atiende llamadas telefónicas, con idiomas y versiones publicadas. Los dos comparten la base de conocimiento de la organización.
   </Accordion>
   <Accordion title="¿Escribo las instrucciones en español o en inglés?">
     Podés usar cualquiera de los dos. Indicá el idioma de respuesta y verificá el comportamiento con pruebas. Ver [Instrucciones](/es/agentes-de-texto/instrucciones).

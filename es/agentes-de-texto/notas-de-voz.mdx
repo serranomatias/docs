@@ -1,0 +1,302 @@
+---
+title: 'Notas de voz'
+description: 'El agente de texto responde con audios de WhatsApp que suenan grabados: cuándo habla, cómo elegir la voz y el sonido, indicaciones de estilo, pronunciaciones, modelos, costos, límites y guías por tipo de negocio.'
+tag: 'Nuevo'
+---
+import { Availability } from '/snippets/availability.mdx';
+
+<Availability lang="es" permission="agents.read; agents.update para editar" route="Agentes → Texto → Voz" status="nuevo" />
+
+Un agente de texto puede responder con **notas de voz de WhatsApp**: el cliente recibe un audio, como si alguien del negocio lo hubiera grabado desde el celular. Se configura en la pestaña **Voz** del agente. La voz la genera ElevenLabs y se cobra por uso, aparte del mensaje de IA.
+
+{/* captura: images/agentes-de-texto/voz-es.png | Pestaña Voz con el panel Escuchá cómo suena a la derecha | app: /agents/text/[id]?activeTab=voice */}
+
+## Cómo funciona
+
+<Steps>
+  <Step title="El cliente escribe o manda un audio">
+    El agente entiende los audios del cliente igual que los mensajes escritos.
+  </Step>
+  <Step title="El agente decide si habla">
+    Según el modo que elegiste (por ejemplo, **Espejo**: si el cliente mandó un audio, responde con audio), el agente escribe la respuesta pensada para decirse en voz alta: frases cortas, sin listas, links ni emojis.
+  </Step>
+  <Step title="Se prepara el texto hablado">
+    Los precios, números, fechas, horas y teléfonos se pasan a palabras como los diría una persona: `$185` se dice «ciento ochenta y cinco pesos», `2:30 p. m.` «las dos y media de la tarde», `10/10` «diez de octubre». Se aplican tus pronunciaciones.
+  </Step>
+  <Step title="Se genera la voz y el sonido">
+    ElevenLabs genera el audio con la voz y el modelo elegidos. Después se le da el sonido que configuraste: micrófono de celular, eco del lugar y un fondo suave, o el de un call center.
+  </Step>
+  <Step title="Llega como nota de voz">
+    El cliente recibe un audio de WhatsApp (el de micrófono, no un archivo adjunto). Si la respuesta tenía algo para tener por escrito, como un link o una dirección exacta, llega en un mensaje de texto justo después.
+  </Step>
+</Steps>
+
+Una nota de voz tarda unos segundos más que un texto: entre 1 y 5 segundos extra, según el largo.
+
+## Activarlas
+
+<Steps>
+  <Step title="Abrí la pestaña Voz">
+    En **Agentes → Texto**, abrí el agente y entrá en la pestaña **Voz**.
+  </Step>
+  <Step title="Activá Responder con notas de voz">
+    Al activarlo aparecen las secciones de configuración. Vienen con los valores recomendados: modo **Espejo**, sonido **Nota de celular** y modelo **v4 Turbo**.
+  </Step>
+  <Step title="Elegí una voz">
+    Es lo único obligatorio. Escuchá las muestras con ▶ y elegí una.
+  </Step>
+  <Step title="Escuchá cómo suena">
+    En el panel **Escuchá cómo suena**, hacé clic en **Escuchar**. La prueba usa lo que tenés en pantalla, aunque no esté guardado.
+  </Step>
+  <Step title="Guardá la pestaña">
+    Hacé clic en **Guardar** (o Ctrl + Enter). Desde ese momento el agente responde con audio según el modo.
+  </Step>
+</Steps>
+
+Guardar la pestaña **Voz** guarda solo la configuración de voz. Lo que tengas sin guardar en **Avanzado** u otras pestañas no se envía.
+
+## Cuándo responde con audio
+
+| Modo | Qué hace | Cuándo conviene |
+|---|---|---|
+| **Espejo** (recomendado) | Si el último mensaje del cliente fue un audio, responde con audio. Si escribió, responde escrito. | La mayoría de los negocios: cada cliente recibe el formato que eligió. |
+| **El agente decide** | Usa audio cuando ayuda: una explicación, un saludo cercano, algo empático. Datos, precios para comparar y links van en texto. | Marcas cercanas que quieren mezclar formatos. |
+| **Siempre** | Todas las respuestas son nota de voz. | Marcas que quieren sonar muy cercanas, con clientes que prefieren escuchar. |
+
+Aunque toque hablar, una respuesta sale como texto si trae una lista, si es más larga que el **Largo máximo de cada nota** o si no quedó nada para decir. Así una lista de precios o un menú no se convierte en un audio largo.
+
+## Elegir la voz
+
+El catálogo muestra voces en español de ElevenLabs, las más usadas para conversaciones.
+
+- **Acento**: México, Colombia, Argentina, Chile, Perú, Venezuela, España y neutro. La primera vez se preselecciona el acento de la zona horaria del agente.
+- **Género**: todas, femeninas o masculinas.
+- **Muestra**: tocá ▶ en una voz para escucharla. Tocar otra corta la anterior.
+
+### Usar otra voz
+
+En **Usar otra voz (ID de ElevenLabs)** podés pegar el ID de cualquier voz de la biblioteca pública de ElevenLabs y darle un nombre para reconocerla. Probala con **Escuchar** antes de guardar: si el ID no existe, la prueba lo avisa.
+
+<Note>
+Las voces las genera la cuenta de ElevenLabs de ContactShip. Una voz clonada en tu propia cuenta de ElevenLabs no funciona por ID si no está publicada en la biblioteca pública. Si necesitás una voz propia de tu marca, escribile a soporte.
+</Note>
+
+## Cómo suena
+
+Un audio de estudio perfecto delata que es una máquina. Estos estilos lo hacen sonar grabado de verdad:
+
+| Estilo | Cómo suena | Cómo habla el agente |
+|---|---|---|
+| **Nota de celular** (recomendado) | Micrófono de teléfono, eco del lugar, el control automático de volumen del celular y un fondo suave. Empieza con medio segundo de ambiente, como cuando alguien aprieta grabar. | Más suelto, como en un audio de WhatsApp, con alguna muletilla suave. |
+| **Call center** | Una agente con headset y el murmullo de la oficina de fondo. | Como una agente de atención: cordial, ordenada y tratando de usted. |
+| **Limpio** | Voz de estudio, sin efectos. | Sin un estilo agregado. |
+
+### Sonido de fondo
+
+Con **Nota de celular** o **Call center** elegís el fondo: **Casa**, **Local / negocio**, **Oficina**, **Calle**, **Call center**, **Sin fondo** o **Personalizado**. Con **Personalizado** describís cómo suena, por ejemplo «una taquería en la calle, ruido de comal y gente pidiendo»; en inglés suele salir mejor, y sin música ni voces claras.
+
+El fondo se genera una vez y se reutiliza en todas las notas del agente. La primera nota con un fondo nuevo puede tardar unos segundos más.
+
+**Volumen del fondo** va de **Apenas se nota** a **Bien presente**. El punto **Natural** es el recomendado: se escucha el lugar sin tapar la voz.
+
+## Cómo habla
+
+### Indicaciones de estilo
+
+Un texto libre, de hasta 2.000 caracteres, que el agente sigue solo cuando responde con audio: expresiones que usa, tono, cómo saluda o se despide, qué evitar. Los botones de ejemplo agregan una línea lista para editar.
+
+<Tabs>
+  <Tab title="Bien">
+    ```text
+    Hablá como alguien de Monterrey: usá «va», «sale» y «ándale», sin exagerar.
+    Saludá con «¡Qué onda!» solo si el cliente escribe informal.
+    Despedite con «¡que te aproveche!» cuando confirmes un pedido.
+    Nunca digas «órale».
+    ```
+  </Tab>
+  <Tab title="Mejor evitar">
+    ```text
+    Respondé con audio cuando el cliente pregunte por precios.
+    ```
+    Cuándo responder con audio lo define el **modo**, no las indicaciones. Acá va cómo habla, no cuándo.
+  </Tab>
+</Tabs>
+
+No hace falta explicarle en **Instrucciones** cómo escribir para voz: ContactShip le agrega esas reglas sola cuando le toca hablar. Las **Instrucciones** siguen valiendo para el contenido de la respuesta.
+
+### Pronunciaciones
+
+Para marcas o palabras que la voz dice mal. En **Se escribe** ponés la palabra como aparece en los mensajes y en **Se dice** cómo tiene que sonar.
+
+| Se escribe | Se dice | Por qué |
+|---|---|---|
+| Suhicito | Sushicito | La voz decía «Sujicito» |
+| GoodMed | Gud Med | Marca en inglés |
+| Dra. | doctora | Ya se convierte sola; no hace falta agregarla |
+
+- Se reemplaza la palabra completa, sin importar mayúsculas: `Suhicito` no cambia `Suhicitos`.
+- Solo afecta lo que se dice. En el chat, en la bandeja y en el historial queda escrito como siempre.
+- Hasta 50 pronunciaciones por agente. Las dos columnas son obligatorias.
+
+<Tip>
+Escribí **Se dice** como suena, no como se escribe correctamente. Si la voz sigue diciéndolo mal, probá separando sílabas con espacios o cambiando una letra («Gud Med», «Sushi sito»), y verificalo con **Escuchar**.
+</Tip>
+
+## Modelo de voz
+
+| Modelo | Para qué | Costo por 1.000 caracteres | Una nota típica (~300 caracteres, ~20 s) |
+|---|---|---|---|
+| **v4 Turbo** (recomendado) | Natural y muy rápido. El mejor equilibrio para chats. | 8 créditos (US$0,08) | ~2,4 créditos |
+| **v4** | La máxima calidad y expresividad. | 16 créditos (US$0,16) | ~4,8 créditos |
+| **Multilingual v2** | Estable y probado, sin emociones. | 16 créditos (US$0,16) | ~4,8 créditos |
+
+**Emociones**, disponible con los modelos v4: el agente puede marcar el tono de una frase (cálido, alegre, tranquilizador, una risa breve) y la voz lo interpreta. Usa como máximo dos por respuesta y ninguna en temas delicados como salud, quejas o cobros. Las marcas de tono no aparecen en el chat.
+
+### Ajustes finos
+
+| Ajuste | Qué hace | Por defecto |
+|---|---|---|
+| **Estabilidad** | Más baja: más expresiva y variable. Más alta: más pareja. | 45 % |
+| **Parecido a la voz original** | Qué tan fiel a la muestra suena. | 80 % |
+| **Velocidad** | De 0,70× a 1,20×. 1× es el ritmo normal de la voz. | 1× |
+| **Largo máximo de cada nota** | De 100 a 1.200 caracteres (unos 15 caracteres por segundo). Una respuesta más larga sale como texto. | 600 (unos 40 s) |
+| **Cómo se dice «$»** | **Automático** usa pesos según la zona horaria del agente (México, Colombia, Argentina, Chile, Uruguay, República Dominicana y Cuba) y dólares en el resto. También podés fijar **Pesos** o **Dólares**. `US$` y `USD` siempre se dicen dólares. | Automático |
+| **Datos por escrito** | Links, direcciones o números de referencia se mandan en un mensaje de texto justo después del audio. | Activado |
+
+## Probar antes de guardar
+
+El panel **Escuchá cómo suena** genera una nota con la configuración que tenés en pantalla, guardada o no, por el mismo camino que una nota real: mismo texto hablado, voz, modelo y sonido.
+
+- Escribí tu propio texto de prueba, de hasta 400 caracteres, o usá **Texto de ejemplo**: trae un precio y un horario para que escuches cómo se dicen.
+- Debajo del reproductor ves **Lo que se dijo**: el texto exacto que leyó la voz, con números en palabras y pronunciaciones aplicadas. Ahí se ve si algo se convierte mal.
+- Las insignias indican si se aplicó el sonido realista y cuánto costaría esa nota en producción.
+- Las pruebas no se cobran. Hay un máximo de 30 por hora por usuario.
+
+El sandbox de **Probar agente** no genera audios: muestra la respuesta escrita. Para escuchar la voz usá este panel. Ver [Probar en el sandbox](/es/agentes-de-texto/sandbox).
+
+## Qué ve tu equipo en la bandeja
+
+La respuesta queda en la conversación como un audio. Junto al audio se guarda el texto de lo que dijo la voz, `🔊 Nota de voz: «…»`, escrito normal (con `$185`, no «ciento ochenta y cinco pesos»). Ese texto es el que el agente ve en su historial, así que recuerda qué dijo.
+
+Si ElevenLabs no puede generar el audio, se hacen hasta tres intentos. Si sigue fallando, el cliente recibe el mismo contenido como mensaje de texto y la voz no se cobra. Si falla solo el efecto de sonido, la nota sale limpia.
+
+## Costos
+
+- La voz se cobra por caracteres dichos, según el modelo de la tabla anterior. Se descuenta del saldo de créditos de la organización (1 crédito = US$0,01).
+- Se cobra solo cuando la nota se envió. Si salió como texto por un error, no se cobra la voz.
+- El mensaje de IA se cobra como siempre, aparte de la voz.
+- Las pruebas de **Escuchá cómo suena** no se cobran.
+
+Ver [Créditos y pagos](/es/facturacion/creditos-y-pagos).
+
+## Qué se puede y qué no
+
+| Se puede | No se puede (por ahora) |
+|---|---|
+| Responder con audio en conversaciones de WhatsApp Business. | Notas de voz en otros canales: ahí la misma respuesta sale como texto. |
+| Mezclar audio y texto: el audio y los datos por escrito justo después. | Mostrar «grabando audio…» mientras se genera. La API de WhatsApp Business solo permite el indicador «escribiendo…». |
+| Usar cualquier voz de la biblioteca pública de ElevenLabs por su ID. | Clonar una voz desde la app ni usar una voz privada de otra cuenta de ElevenLabs. |
+| Una configuración distinta por agente: voz, sonido, estilo y pronunciaciones. | Que los **seguimientos** automáticos o las **plantillas** salgan como audio: siempre van como texto. |
+| Escuchar el resultado antes de guardar. | Escuchar audios en el sandbox de **Probar agente**. |
+| Notas de hasta 1.200 caracteres (unos 80 segundos). | Notas más largas: la respuesta sale como texto. |
+| Fondos de ambiente: casa, local, oficina, calle, call center o uno descripto. | Música o efectos a pedido dentro de una nota. |
+
+## Guías por tipo de negocio
+
+<Tabs>
+  <Tab title="Restaurante o delivery">
+    - **Modo**: Espejo.
+    - **Voz**: una del país del negocio, cálida.
+    - **Sonido**: Nota de celular, fondo **Local / negocio**, volumen Natural.
+    - **Modelo**: v4 Turbo, con emociones.
+    - **Indicaciones**:
+      ```text
+      Sonás como quien atiende el local. Confirmá el pedido en una sola frase y el tiempo de entrega.
+      Usá expresiones de la ciudad, sin exagerar. Despedite con buena onda.
+      ```
+    - **Pronunciaciones**: el nombre del local y de los platos con nombre propio.
+    - **Datos por escrito**: activado, para mandar el link de pago o la ubicación.
+  </Tab>
+  <Tab title="Clínica o consultorio">
+    - **Modo**: Espejo.
+    - **Voz**: tranquila y clara; subí la **Estabilidad** a 55–65 %.
+    - **Sonido**: Nota de celular con fondo **Oficina** volumen Sutil, o **Call center**.
+    - **Modelo**: v4 Turbo. El agente tiene indicado no usar emociones en temas de salud; si querés asegurarlo, desactivá **Emociones**.
+    - **Indicaciones**:
+      ```text
+      Tratá de usted. Nunca des diagnósticos ni indicaciones médicas por audio.
+      Confirmá fecha, hora y profesional del turno, y que la dirección va por escrito.
+      ```
+    - **Pronunciaciones**: nombres de profesionales y de la clínica si son en otro idioma.
+  </Tab>
+  <Tab title="Soporte o call center">
+    - **Modo**: El agente decide, para explicar con audio y mandar pasos y links en texto.
+    - **Sonido**: **Call center**, fondo Call center.
+    - **Indicaciones**:
+      ```text
+      Presentate como del equipo de soporte. Explicá en no más de tres frases.
+      Si hay pasos a seguir, decí que van por escrito.
+      ```
+    - **Largo máximo**: 400 a 600 caracteres, para que los audios no se hagan largos.
+  </Tab>
+  <Tab title="Marca con nombre difícil">
+    1. Escribí en el panel de prueba una frase con el nombre de la marca y escuchala.
+    2. Si suena mal, agregá la pronunciación: **Se escribe** el nombre real, **Se dice** como tiene que sonar.
+    3. Volvé a escuchar. Revisá **Lo que se dijo** para confirmar que el reemplazo se aplicó.
+    4. Repetí con los productos o lugares que el agente nombra seguido.
+  </Tab>
+</Tabs>
+
+## Buenas prácticas
+
+- **Empezá con Espejo.** El cliente que manda audios suele preferir escucharlos; el que escribe, leer.
+- **Elegí una voz que coincida con la persona del agente.** Si el agente se presenta como «Sofía de Monterrey», que la voz sea mexicana y femenina.
+- **Probá con tus mensajes reales.** Precios, horarios, direcciones y nombres propios son lo que más se nota si sale mal.
+- **Cuidá el volumen del fondo.** Natural se escucha real; Fuerte puede molestar en notas largas.
+- **Mantené las notas cortas.** Dos o tres frases se escuchan completas; lo largo conviene mandarlo por escrito.
+
+## Problemas frecuentes
+
+| Síntoma | Causa | Solución |
+|---|---|---|
+| El agente no responde con audio | En modo **Espejo**, el cliente escribió en lugar de mandar audio. O la conversación no es de WhatsApp Business. | Es lo esperado. Para probar, mandá un audio desde WhatsApp al número del canal. |
+| Respondió con texto a un audio | La respuesta traía una lista o superaba el **Largo máximo de cada nota**. | Subí el largo máximo o pedile en las **Indicaciones de estilo** respuestas más cortas. |
+| Pronuncia mal una palabra | La voz no conoce la marca o el nombre. | Agregala en **Pronunciaciones** y verificala con **Escuchar**. |
+| Dice «dólares» en lugar de «pesos» | La zona horaria del agente no es de un país con pesos. | Configurá la zona horaria en **General** o fijá **Pesos** en **Cómo se dice «$»**. |
+| Suena demasiado perfecta, «a robot» | El sonido está en **Limpio**. | Elegí **Nota de celular** y un fondo. |
+| El fondo tapa la voz | Volumen alto. | Bajalo a **Natural** o **Sutil**. |
+| **ElevenLabs no reconoce esa voz o configuración** | El ID de la voz no existe o es privado de otra cuenta. | Elegí una voz del catálogo o usá un ID de la biblioteca pública. |
+| **Llegaste al límite de pruebas por hora** | Hiciste 30 pruebas en la última hora. | Esperá un rato. Las notas reales no tienen este límite. |
+| El cliente recibió texto con el contenido del audio | ElevenLabs no respondió después de tres intentos. | La próxima respuesta vuelve a intentar con voz. Si se repite, contactá a soporte. Esa voz no se cobró. |
+
+## Preguntas frecuentes
+
+<AccordionGroup>
+  <Accordion title="¿El cliente se da cuenta de que es una IA?">
+    La voz y el sonido de celular están pensados para sonar naturales, pero no ocultan nada: la conversación sigue siendo con el agente de IA que configuraste. Si tu negocio informa que atiende un asistente virtual, mantené ese aviso en las **Instrucciones**.
+  </Accordion>
+  <Accordion title="¿Puedo tener una voz para cada agente?">
+    Sí. Cada agente tiene su propia pestaña **Voz** con voz, sonido, estilo y pronunciaciones.
+  </Accordion>
+  <Accordion title="¿El agente entiende los audios que manda el cliente?">
+    Sí, aunque las notas de voz estén desactivadas. Activarlas solo cambia cómo responde.
+  </Accordion>
+  <Accordion title="¿Qué pasa con las conversaciones que ya estaban abiertas?">
+    Desde que guardás, el agente aplica la configuración en su próxima respuesta, también en conversaciones abiertas.
+  </Accordion>
+  <Accordion title="¿Cuánto cuesta por mes?">
+    Depende de cuántas respuestas salgan como audio y de su largo. Con **v4 Turbo**, 1.000 notas de unos 20 segundos cuestan unos 2.400 créditos (US$24), aparte de los mensajes de IA. El modo **Espejo** limita los audios a los clientes que mandan audios.
+  </Accordion>
+  <Accordion title="¿Los humanos del equipo pueden mandar notas de voz?">
+    Sí, desde la bandeja, grabándolas como siempre. La pestaña **Voz** configura solo las respuestas del agente de IA. Ver [Bandeja de conversaciones](/es/mensajes/bandeja).
+  </Accordion>
+</AccordionGroup>
+
+## Ver también
+
+<CardGroup cols={2}>
+  <Card title="Crear un agente de texto" href="/es/agentes-de-texto/crear" />
+  <Card title="Instrucciones" href="/es/agentes-de-texto/instrucciones" />
+  <Card title="Probar en el sandbox" href="/es/agentes-de-texto/sandbox" />
+  <Card title="Créditos y pagos" href="/es/facturacion/creditos-y-pagos" />
+</CardGroup>

@@ -12,7 +12,7 @@ Automation Rules is an organization add-on. A rule combines **WHEN** (trigger), 
 
 Choose **New Rule**, select a preset or start from scratch, name it, and select a trigger and channel scope. Add conditions and at least one action, inspect **Rule Preview**, and save with **Create Rule** or **Save Changes**. Use **Active/Inactive** to control execution.
 
-Triggers include `thread.closed`, `thread.opened`, `thread.updated`, `message.new`, `contact.created`, `call.finished`, `call.started`, and `schedule`. The schedule option has no frequency editor yet. Channel choices beyond WhatsApp do not imply those channels can currently be connected.
+Triggers include `thread.closed`, `thread.opened`, `thread.updated`, `message.new`, `contact.created`, `call.finished`, `call.started`, and `schedule`. The schedule option has no frequency editor yet. `thread.closed` fires when a person closes a conversation from the inbox and also when the AI agent closes it after its follow-ups; AI closes carry `source: ai_follow_up`, so a webhook or n8n flow can tell them apart. A **Conversation Closed** rule that sends a satisfaction survey also runs for conversations the AI handled and closed. Channel choices beyond WhatsApp do not imply those channels can currently be connected.
 
 Conditions include message count, spam status, contact tags, thread duration, and channel. Multiple conditions use AND. The current editor does not preserve the selected operator on save/reopen: it returns to **is**. Do not rely on an alternative operator without verifying the saved rule and actual execution.
 

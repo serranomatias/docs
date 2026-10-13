@@ -52,7 +52,7 @@ La barra **Rule Preview** de la derecha resume la regla y, arriba del editor, un
 
 | Grupo | Disparador | Clave | Cuándo dispara |
 |---|---|---|---|
-| Conversation | **Conversation Closed** | `thread.closed` | Al cerrar una conversación. Es el valor por defecto. |
+| Conversation | **Conversation Closed** | `thread.closed` | Al cerrar una conversación, la cierre una persona desde el inbox o el agente de IA al terminar sus seguimientos. Es el valor por defecto. |
 | Conversation | **Conversation Opened** | `thread.opened` | Al abrir o reabrir una conversación. |
 | Conversation | **Conversation Updated** | `thread.updated` | Al cambiar datos de la conversación. |
 | Message | **New Message** | `message.new` | Al entrar un mensaje nuevo. |
@@ -66,6 +66,8 @@ La barra **Rule Preview** de la derecha resume la regla y, arriba del editor, un
 | Call | **Call Finished** | `call.finished` | Al terminar una llamada. |
 | Call | **Call Started** | `call.started` | Al iniciar una llamada. |
 | Time | **Schedule** | `schedule` | Por horario. El editor no tiene todavía un campo para configurar la frecuencia. |
+
+Cuando la cierra el agente de IA, el evento llega con `source: ai_follow_up`. Sirve para distinguir los cierres automáticos de los manuales, por ejemplo en un webhook o en n8n. Una regla de **Conversation Closed** que manda una encuesta de satisfacción, como un Flow de WhatsApp, también corre en las conversaciones que atendió y cerró la IA.
 
 ## Alcance por canal
 
