@@ -76,6 +76,7 @@
                   "es/agentes-de-texto/crear",
                   "es/agentes-de-texto/instrucciones",
                   "es/agentes-de-texto/herramientas",
+                  "es/agentes-de-texto/notas-de-voz",
                   "es/agentes-de-texto/seguimientos",
                   "es/agentes-de-texto/sandbox"
                 ]
@@ -381,6 +382,7 @@
                   "en/text-agents/create",
                   "en/text-agents/instructions",
                   "en/text-agents/tools",
+                  "en/text-agents/voice-notes",
                   "en/text-agents/follow-ups",
                   "en/text-agents/sandbox"
                 ]

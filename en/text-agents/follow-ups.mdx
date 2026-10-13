@@ -61,6 +61,10 @@ Each schedule needs at least one day and a start time before its end time. An en
 
 With **Auto-close conversation** off, the conversation stays open and an internal note is added when the process finishes. With it on, the conversation closes automatically.
 
+An automatic close triggers **Conversation Closed** automations, just like a manual one, with `source: ai_follow_up`. See [Automations](/en/messages/automations).
+
+Follow-up messages are always sent as text, even if the agent has [voice notes](/en/text-agents/voice-notes) on.
+
 The **On-close webhook** belongs to the follow-up process. It is separate from call webhooks and channel change webhooks. Do not assume every manual inbox closure triggers it.
 
 ## Other Advanced options

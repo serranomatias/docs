@@ -61,6 +61,10 @@ Cada rango requiere al menos un día y una hora de inicio anterior a la de fin. 
 
 Con **Auto-cerrar conversación** desactivado, la conversación queda abierta y se agrega una nota interna al finalizar el proceso. Activado, se cierra automáticamente.
 
+Un cierre automático dispara las automatizaciones de **Conversation Closed**, igual que un cierre manual, con `source: ai_follow_up`. Ver [Automatizaciones](/es/mensajes/automatizaciones).
+
+Los mensajes de seguimiento siempre se envían como texto, aunque el agente tenga activadas las [notas de voz](/es/agentes-de-texto/notas-de-voz).
+
 **Webhook al cierre** pertenece al proceso de seguimiento. No es el webhook de llamadas ni el webhook de cambios del canal. No asumas que se dispara ante cualquier cierre manual del inbox.
 
 ## Otras opciones de Avanzado

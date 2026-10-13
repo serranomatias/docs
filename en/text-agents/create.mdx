@@ -13,7 +13,7 @@ A text agent replies to written inbox conversations. WhatsApp Business is curren
 
 - WhatsApp Business channels. Instagram and Facebook Messenger are marked as coming soon in the new-channel dialog.
 - `agents.read` allows viewing; `agents.update` allows editing; `agents.delete` allows deletion.
-- Text agents do not make or receive voice calls. Use voice agents for those interactions.
+- Text agents do not make or receive voice calls. Use voice agents for those interactions. They can reply with WhatsApp voice notes; see [Voice notes](/en/text-agents/voice-notes).
 
 ## Create the agent
 
@@ -46,7 +46,7 @@ ContactShip publishes the templates. The app does not provide custom template cr
 
 ## The agent editor
 
-Click the header name to rename the agent; this saves immediately. **Test agent** opens the [sandbox](/en/text-agents/sandbox). Tabs are **General**, **Instructions**, **Tools**, **Advanced** and **Knowledge**.
+Click the header name to rename the agent; this saves immediately. **Test agent** opens the [sandbox](/en/text-agents/sandbox). Tabs are **General**, **Instructions**, **Tools**, **Voice**, **Advanced** and **Knowledge**. **Voice** configures replies with voice notes; see [Voice notes](/en/text-agents/voice-notes).
 
 ### Saving
 
@@ -66,18 +66,19 @@ Text agents do not have drafts or a publication step. Saved settings are used in
 
 ### Available models
 
-The selector groups models by provider:
+The selector groups models by provider: DeepSeek, OpenAI, Google and Anthropic. These are the seven, in the order they appear:
 
 | Model | Identifier |
 |---|---|
+| DeepSeek Flash | `deepseek-flash` |
 | GPT-4.1 Mini | `gpt-4.1-mini` |
 | GPT-4o mini | `gpt-4o-mini` |
-| GPT-4o | `gpt-4o` |
+| GPT-6 Luna | `gpt-6-luna` |
 | Gemini 3 Flash Preview | `gemini-3-flash-preview` |
 | Gemini 3 Pro | `gemini-3-pro-latest` |
 | Claude 4.5 Haiku | `claude-4.5-haiku` |
 
-This reflects the ContactShip selector, not each provider's complete model catalog.
+This reflects the ContactShip selector, not each provider's complete model catalog. The agent created by the account onboarding starts with DeepSeek Flash.
 
 <Tip>
 Compare the same scenarios in the sandbox after changing models. Identical instructions can produce different results.
@@ -128,7 +129,7 @@ Without `agents.update`, the editor displays read-only access. Fields are disabl
     Yes. Each channel has its own assignment rules. Use separate agents when you need different behavior; see [Channel settings](/en/messages/channel-settings).
   </Accordion>
   <Accordion title="How is a text agent different from a voice agent?">
-    Text agents handle written inbox messages and save by tab without publication. Voice agents handle calls with voices, languages and published versions. Both can use organization knowledge.
+    Text agents handle inbox conversations, in writing or with WhatsApp voice notes, and save by tab without publication. Voice agents handle phone calls, with languages and published versions. Both can use organization knowledge.
   </Accordion>
   <Accordion title="Should instructions be in Spanish or English?">
     Either is supported. Specify the response language and verify behavior through tests. See [Instructions](/en/text-agents/instructions).
