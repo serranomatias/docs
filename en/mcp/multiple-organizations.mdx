@@ -1,80 +1,91 @@
 ---
 title: 'Multiple organizations'
-description: 'How to review and operate more than one ContactShip organization from the same AI assistant.'
+description: 'Work with all your ContactShip organizations from a single connection of your AI assistant.'
 ---
 
-## One API key, one organization
-
-Every ContactShip API key belongs to a single organization: the MCP server derives the organization from the key, and the API rejects any attempt to use it with another one. To work with several organizations from Claude or Cursor, connect ContactShip **once per organization**, each connection with its own key.
-
-<Tip>
-Give each connection a distinct name, for example `contactship-acme` and `contactship-beta`. That is the name you will use to tell the assistant which organization to work on.
-</Tip>
+Every ContactShip API key belongs to a single organization. One MCP connection can carry the keys of **up to 10 organizations**: you connect once and the assistant works in any of them, or in all of them at once when you ask for an overview.
 
 ---
+
+## Connect several organizations
+
+### Claude.ai (web) and ChatGPT
+
+<Steps>
+  <Step title="Add the connector">
+    In Claude.ai, **Settings > Integrations > Add custom connector**, with the URL `https://mcp.contactship.ai/mcp`. See [MCP in Claude (web)](/en/mcp/claude).
+  </Step>
+  <Step title="Paste the first key">
+    On the ContactShip screen that opens, paste the API key of one of your organizations. Below the field you see which organization it is.
+  </Step>
+  <Step title="Add the others">
+    Hit **Add another organization** and paste the next one. If you copied several keys together, one per line, paste them all at once: each lands in its own row.
+  </Step>
+  <Step title="Connect">
+    The button says how many organizations you are connecting, for example **Connect 3 organizations**.
+  </Step>
+</Steps>
+
+<Note>
+If you already connected ContactShip with a single organization, disconnect the connector and connect it again pasting every key. The keys are stored encrypted inside the connection, so they cannot be edited afterwards.
+</Note>
 
 ### Claude Code
 
-Add one connection per organization, each with that organization's key:
+Separate the keys with commas in the same header:
 
 ```bash
-claude mcp add-json contactship-acme '{"type":"sse","url":"https://mcp.contactship.ai/sse","headers":{"x-api-key":"ACME_API_KEY"}}'
-claude mcp add-json contactship-beta '{"type":"sse","url":"https://mcp.contactship.ai/sse","headers":{"x-api-key":"BETA_API_KEY"}}'
+claude mcp add-json contactship '{"type":"sse","url":"https://mcp.contactship.ai/sse","headers":{"x-api-key":"ACME_KEY,BETA_KEY"}}'
 ```
 
-Check with `claude mcp list`: both connections should be listed. To remove one:
+If you already had the `contactship` connection, remove it first with `claude mcp remove contactship`.
 
-```bash
-claude mcp remove contactship-acme
-```
+### Cursor and Claude Desktop
 
-### Cursor
-
-In `.cursor/mcp.json`, one entry per organization:
+The same in `.cursor/mcp.json` or `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
-    "contactship-acme": {
+    "contactship": {
       "url": "https://mcp.contactship.ai/sse",
-      "headers": { "x-api-key": "ACME_API_KEY" }
-    },
-    "contactship-beta": {
-      "url": "https://mcp.contactship.ai/sse",
-      "headers": { "x-api-key": "BETA_API_KEY" }
+      "headers": { "x-api-key": "ACME_KEY,BETA_KEY" }
     }
   }
 }
 ```
 
-### Claude Desktop
+---
 
-Same format in `claude_desktop_config.json`, under `mcpServers`.
+## How to ask
 
-### Claude.ai (web)
+**For one organization, name it:**
 
-Add the connector once per organization from **Settings > Integrations > Add custom connector**, with a different name each time (for example `ContactShip · Acme` and `ContactShip · Beta`) and the same URL `https://mcp.contactship.ai/mcp`. Each connector will ask you to authorize with that organization's API key.
+> "In Acme, show today's unanswered conversations"
+
+**To see all of them, ask without naming one.** Overviews ask every organization and answer each one separately:
+
+> "Which conversations are still unanswered today?"
+
+> "Which organization is Ana Pérez in, and what happened with her?"
+
+This works for unanswered conversations, tasks, call summaries and call search, contact search, agents, channels and numbers, and inbox metrics.
+
+**To change something, the assistant needs to know where.** Sending a WhatsApp message, editing or publishing an agent, placing a call or closing a conversation always happens in one organization: if you did not name it, the assistant asks which one before doing anything.
+
+To see which organizations the connection reaches, ask "which organizations are connected?".
 
 ---
 
-### How to phrase requests
+## Keep in mind
 
-With more than one connection, the assistant sees the same tools repeated, once per organization. Name the organization in your request and the assistant picks the right connection:
-
-> "In Acme, show me today's unanswered conversations"
-
-> "Compare this week's answered calls for Acme and Beta"
-
-If you don't name it and several are connected, the assistant may ask which one you mean, or pick one. When it matters, say it explicitly.
+- **Each key still sees only its organization.** Every action runs with the key of a single organization, even with all of them in the same connection.
+- **Up to 10 organizations per connection.** If you need more, use more than one connection (see below) or contact [support](/en/get-started/support).
+- **If you regenerate an organization's key**, update the connection: in Claude.ai reconnect the connector with every key; in Claude Code or Cursor replace that key in the header.
+- **Two organizations with the same name** are told apart by the start of their id, for example `Demo (3f2a9c1e)`.
 
 ---
 
-### Keep in mind
+## One connection per organization
 
-<Warning>
-Each connection adds ContactShip's full tool set to the assistant's context. Two or three organizations work well; with many more, the assistant takes longer to choose and uses more context on every message. If you need to operate many organizations routinely, contact support.
-</Warning>
-
-- A key never sees another organization's data, even when both are connected in the same assistant.
-- If you rotate one organization's key, update only that connection.
-- In Claude Code and Cursor, tools carry the connection name as a prefix; in Claude.ai they are grouped by connector. That lets you verify which organization an action ran against.
+You can also connect ContactShip once per organization, each connection with its own key and a distinct name (for example `contactship-acme` and `contactship-beta`). It helps if you have more than 10 organizations or prefer each one to appear separately. Each connection adds ContactShip's full tool set to the assistant, so with many connections it chooses more slowly and uses more context on every message.
