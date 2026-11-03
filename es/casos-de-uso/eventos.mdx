@@ -215,7 +215,7 @@ Una llamada cuenta desde que empieza: si tu agente cierra el pedido mientras hab
 
 <Steps>
   <Step title="Nombrá los eventos">
-    En **Ajustes → Organización → Eventos**, poneles de **Nombre** **Cuota vencida** y **Pago recibido**, y sumá `loan_number` e `installment` a **Datos destacados**. Tu equipo ve en la ficha qué cuota debe cada cliente y cuál pagó.
+    En **Configuración → Organización → Eventos de la API**, poneles de **Nombre** **Cuota vencida** y **Pago recibido**, y sumá `loan_number` e `installment` a **Datos destacados**. Tu equipo ve en la ficha qué cuota debe cada cliente y cuál pagó.
   </Step>
   <Step title="Seguí llamando como hoy">
     Tu sistema llama con un agente por etapa —por vencer, vencida, con atraso— usando la [API de llamadas](/api-reference/endpoint/make-ai-phone-call). Para armar el agente, mirá [Cobranzas con IA](/es/casos-de-uso/cobranzas-automatizadas).
@@ -444,7 +444,7 @@ Las llamadas de tus asesores no cuentan para la atribución: solo cuentan las ca
 
 <Steps>
   <Step title="Dale contexto a tu equipo">
-    En **Ajustes → Organización → Eventos**, poneles de **Nombre** **Equipo registrado** y **Reparación abierta**, y sumá `model` y `rma_number` a **Datos destacados**. Tu equipo lo ve en el panel del contacto del inbox y en su ficha, sin abrir otro sistema.
+    En **Configuración → Organización → Eventos de la API**, poneles de **Nombre** **Equipo registrado** y **Reparación abierta**, y sumá `model` y `rma_number` a **Datos destacados**. Tu equipo lo ve en el panel del contacto del inbox y en su ficha, sin abrir otro sistema.
   </Step>
   <Step title="Encontrá a tus mejores instaladores">
     En **Contactos → Eventos**, filtrá por `product_registered` **Lo hizo** al menos 10 veces en los últimos 90 días. Son los que más instalan: invitalos a una capacitación o a tu programa de socios con una [campaña de WhatsApp](/es/mensajes/campanas).

@@ -4,7 +4,7 @@ description: 'Las herramientas de un agente de voz: transferencia de llamada inm
 ---
 import { Availability } from '/snippets/availability.mdx';
 
-<Availability lang="es" permission="agents.read" route="Agentes → Voz → Herramientas" />
+<Availability lang="es" permission="agents.read" route="Agentes de IA → Voz → Herramientas" />
 
 La pestaña **Herramientas** define "lo que el agente puede hacer durante la llamada, además de hablar": pasar la llamada a una persona, consultar tus sistemas, buscar en una base de conocimiento o agendar. El agente decide cuándo usar cada herramienta según la **Descripción** que escribís y lo que dice el prompt.
 
@@ -173,7 +173,7 @@ Tu endpoint recibe un POST con `call`, `tool_name` y `args`. Leé el pedido desd
 | **Hablar mientras se ejecuta** y **Qué decir** | Qué dice el agente mientras busca. | Activado, desactivado; texto | desactivado |
 | **Hablar al terminar** | El agente responde con lo que encontró. | Activado, desactivado | activado |
 
-La herramienta busca en las bases conectadas al agente en la pestaña **Conocimiento**. Si no hay ninguna conectada, el formulario queda deshabilitado y avisa "Sin base de conocimiento conectada. Esta herramienta no devolverá nada hasta que conectes una." con el botón **Conectar base**. Si la organización no tiene bases, ofrece **Ir a Recursos**. En el prompt aparece como `knowledge-base`. Cómo crear y cargar bases está en [Base de conocimiento](/es/agentes-de-voz/base-de-conocimiento).
+La herramienta busca en las bases conectadas al agente en la pestaña **Base de conocimiento**. Si no hay ninguna conectada, el formulario queda deshabilitado y avisa "Sin base de conocimiento conectada. Esta herramienta no devolverá nada hasta que conectes una." con el botón **Conectar base**. Si la organización no tiene bases, ofrece **Ir a Recursos**. En el prompt aparece como `knowledge-base`. Cómo crear y cargar bases está en [Base de conocimiento](/es/agentes-de-voz/base-de-conocimiento).
 
 ## Cal.com
 
@@ -219,7 +219,7 @@ Requiere la integración Google Calendar activa, ver [Google Calendar](/es/integ
 | "Debe empezar con X- o ser User-to-User." | Una cabecera SIP tiene una clave no permitida. | Renombrá la clave con el prefijo `X-`. |
 | **Conéctala en Integraciones** | La herramienta de calendario necesita una integración activa. | Conectá Cal.com o Google Calendar en [Integraciones](/es/integraciones/vision-general). |
 | "Hay que volver a conectar la integración." | La integración existe pero ya no es válida. | Volvé a conectarla en Integraciones y reintentá. |
-| "Sin base de conocimiento conectada" | El agente no tiene bases conectadas. | Conectá una desde el aviso o en la pestaña **Conocimiento**. |
+| "Sin base de conocimiento conectada" | El agente no tiene bases conectadas. | Conectá una desde el aviso o en la pestaña **Base de conocimiento**. |
 
 ## Preguntas frecuentes
 

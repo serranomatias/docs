@@ -6,13 +6,13 @@ tag: 'Nuevo'
 ---
 import { Availability } from '/snippets/availability.mdx';
 
-<Availability lang="es" permission="conversation.read" route="Mensajes · Ajustes → Inbox → Canales" status="nuevo" />
+<Availability lang="es" permission="conversation.read" route="Mensajes · Configuración → Inbox → Canales" status="nuevo" />
 
 Esta guía conecta un número de WhatsApp Business, lo deja atendido por un agente de texto y muestra cómo tu equipo sigue la conversación desde **Mensajes** y la toma cuando hace falta. Necesitás una cuenta de Meta Business con un número habilitado para la API de WhatsApp Business.
 
 <Steps>
   <Step title="Conectá WhatsApp Business">
-    Andá a **Ajustes → Inbox → Canales** y hacé clic en **Nuevo canal**. El diálogo muestra tres canales: **WhatsApp Business** con la marca **Socio verificado de Meta**, e **Instagram** y **Facebook Messenger** con la marca **Próximamente**. Elegí WhatsApp Business.
+    Andá a **Configuración → Inbox → Canales** y hacé clic en **Nuevo canal**. El diálogo muestra tres canales: **WhatsApp Business** con la marca **Socio verificado de Meta**, e **Instagram** y **Facebook Messenger** con la marca **Próximamente**. Elegí WhatsApp Business.
 
     {/* captura: images/comenzar/nuevo-canal-es.png | Diálogo Nuevo canal con WhatsApp Business (Socio verificado de Meta), Instagram y Messenger marcados como Próximamente | app: /settings/inbox/channels */}
 
@@ -26,12 +26,12 @@ Esta guía conecta un número de WhatsApp Business, lo deja atendido por un agen
     Después, en **Seleccionar número de teléfono**, elegí el número y hacé clic en **Conectar**. Cuando ves **Canal conectado**, el número ya recibe mensajes en la bandeja. La opción **Configuración manual** (Phone Number ID, Access Token y Business Account ID) figura como próximamente. Ver [Conectar WhatsApp Business](/es/mensajes/conectar-whatsapp).
   </Step>
   <Step title="Creá un agente de texto desde una plantilla">
-    En **Agentes**, hacé clic en **Nuevo agente** (Shift+N), elegí **Agente de texto** y después una plantilla o **Empezar desde cero**. El editor de texto tiene instrucciones en markdown, herramientas (mover contactos en el tablero, etiquetar, enviar imagen o PDF, transferir a otro agente, consultar una API) y la sección **Avanzado** con seguimientos y horario. Los cambios se guardan con **Guardar**.
+    En **Agentes de IA**, hacé clic en **Nuevo agente** (Shift+N), elegí **Agente de texto** y después una plantilla o **Empezar desde cero**. El editor de texto tiene instrucciones en markdown, herramientas (mover contactos en el tablero, etiquetar, enviar imagen o PDF, transferir a otro agente, consultar una API) y la sección **Avanzado** con seguimientos y horario. Los cambios se guardan con **Guardar**.
 
     Antes de conectarlo a un canal, probalo con **Probar agente**: es un sandbox donde las herramientas corren simuladas, sin efectos reales. Ver [Crear un agente de texto](/es/agentes-de-texto/crear) y [Probar en el sandbox](/es/agentes-de-texto/sandbox).
   </Step>
   <Step title="Asignalo al canal">
-    Volvé a **Ajustes → Inbox → Canales**, abrí el canal y entrá a la pestaña **Asignación**. La sección **Asignación automática** decide quién atiende cada conversación nueva con reglas que se evalúan en orden.
+    Volvé a **Configuración → Inbox → Canales**, abrí el canal y entrá a la pestaña **Asignación**. La sección **Asignación automática** decide quién atiende cada conversación nueva con reglas que se evalúan en orden.
 
     | Campo | Qué hace | Valores |
     |---|---|---|
@@ -81,13 +81,13 @@ WhatsApp solo permite responder libremente durante 24 horas desde el último men
 | Ya conectado | Ese número ya es un canal de la organización. | Abrí el canal existente en **Canales**. |
 | Error al conectar | Falló la creación del canal. | Reintentá. Si persiste, escribí a soporte con la hora y el número. |
 | Los agentes de texto no están habilitados para tu organización. | La organización tiene los agentes de texto desactivados por excepción. | Escribí a soporte. |
-| No tenés permiso para tomar esta conversación | Tu rol no tiene `conversation.take_from_ai` o la protección de asignación está activa. | Pedile a un administrador el permiso en **Roles y Permisos**. |
+| No tenés permiso para tomar esta conversación | Tu rol no tiene `conversation.take_from_ai` o la protección de asignación está activa. | Pedile a un administrador el permiso en **Roles y permisos**. |
 
 ## Preguntas frecuentes
 
 <AccordionGroup>
   <Accordion title="¿Por qué solo tengo 24 horas para responder?">
-    Es una regla de Meta: la ventana de conversación dura 24 horas desde el último mensaje del cliente. Después solo podés enviar plantillas aprobadas, que se crean en **Ajustes → Inbox → Plantillas**. La lista de conversaciones muestra el tiempo restante. Ver [Plantillas de WhatsApp](/es/mensajes/plantillas).
+    Es una regla de Meta: la ventana de conversación dura 24 horas desde el último mensaje del cliente. Después solo podés enviar plantillas aprobadas, que se crean en **Configuración → Inbox → Plantillas**. La lista de conversaciones muestra el tiempo restante. Ver [Plantillas de WhatsApp](/es/mensajes/plantillas).
   </Accordion>
   <Accordion title="¿Qué pasa si el cliente deja de responder?">
     El agente de texto tiene **Seguimientos** en **Avanzado**, con los presets **Suave**, **Balanceado** y **Persistente**, horario propio y cierre automático de la conversación. Los mensajes de seguimiento se generan con el contexto de la conversación y se envían dentro de la ventana de 24 horas. Ver [Seguimientos, horarios y cierre](/es/agentes-de-texto/seguimientos).

@@ -5,9 +5,9 @@ tag: 'Nuevo'
 ---
 import { Availability } from '/snippets/availability.mdx';
 
-<Availability lang="es" addon="Automation Rules" route="Ajustes → Inbox → Automation Rules" status="nuevo" />
+<Availability lang="es" addon="Automation Rules" route="Configuración → Inbox → Automation Rules" status="nuevo" />
 
-Las automatizaciones ejecutan acciones cuando pasa algo en ContactShip: se cierra una conversación, entra un mensaje, termina una llamada o se crea un contacto. Una regla tiene tres partes: un disparador (**WHEN**), condiciones opcionales (**IF**) y una lista de acciones que corren en orden (**THEN**). Se activa a pedido por organización; cuando está activa aparece **Automation Rules** en **Ajustes → Inbox**. Toda la pantalla está en inglés: acá se nombran los botones y campos tal como se ven.
+Las automatizaciones ejecutan acciones cuando pasa algo en ContactShip: se cierra una conversación, entra un mensaje, termina una llamada o se crea un contacto. Una regla tiene tres partes: un disparador (**WHEN**), condiciones opcionales (**IF**) y una lista de acciones que corren en orden (**THEN**). Se activa a pedido por organización; cuando está activa aparece **Automation Rules** en **Configuración → Inbox**. Toda la pantalla está en inglés: acá se nombran los botones y campos tal como se ven.
 
 {/* captura: images/mensajes/automatizaciones-lista-es.png | Pestaña Rules con las tarjetas Total rules, Active e Inactive y la tabla de reglas | app: /settings/inbox/automations */}
 
@@ -279,8 +279,8 @@ Para esperar entre dos acciones de la misma regla usá **Wait / Delay**, que adm
 ## Preguntas frecuentes
 
 <AccordionGroup>
-<Accordion title="No veo Automation Rules en Ajustes. ¿Por qué?">
-Las automatizaciones se activan a pedido por organización. Si no aparece **Automation Rules** en **Ajustes → Inbox**, contactá a soporte.
+<Accordion title="No veo Automation Rules en Configuración. ¿Por qué?">
+Las automatizaciones se activan a pedido por organización. Si no aparece **Automation Rules** en **Configuración → Inbox**, contactá a soporte.
 </Accordion>
 <Accordion title="¿Cómo pruebo una regla antes de activarla?">
 No hay modo de prueba. Guardala como **Active**, provocá el evento (por ejemplo, cerrá una conversación de prueba) y revisá **Run History**: cada paso muestra su **Output** o su error. Si algo falló, corregí la regla y usá **Replay**.
