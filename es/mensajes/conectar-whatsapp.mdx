@@ -6,9 +6,9 @@ tag: 'Nuevo'
 ---
 import { Availability } from '/snippets/availability.mdx';
 
-<Availability lang="es" permission="channels.create" route="Ajustes → Inbox → Canales" status="nuevo" />
+<Availability lang="es" permission="channels.create" route="Configuración → Inbox → Canales" status="nuevo" />
 
-Un canal es un número de WhatsApp Business API conectado a tu organización. Se conecta desde **Ajustes → Inbox → Canales** con el registro integrado de Facebook, sin cargar tokens a mano. ContactShip figura como **Socio verificado de Meta** en el diálogo de conexión. Una vez conectado, el número recibe y envía mensajes desde **Mensajes**.
+Un canal es un número de WhatsApp Business API conectado a tu organización. Se conecta desde **Configuración → Inbox → Canales** con el registro integrado de Facebook, sin cargar tokens a mano. ContactShip figura como **Socio verificado de Meta** en el diálogo de conexión. Una vez conectado, el número recibe y envía mensajes desde **Mensajes**.
 
 ## Antes de empezar
 
@@ -21,7 +21,7 @@ Un canal es un número de WhatsApp Business API conectado a tu organización. Se
 
 Hay tres entradas al mismo diálogo:
 
-- **Ajustes → Inbox → Canales → New Channel**. Al hacer scroll, el botón se convierte en **Nuevo canal**.
+- **Configuración → Inbox → Canales → New Channel**. Al hacer scroll, el botón se convierte en **Nuevo canal**.
 - Desde **Mensajes**, el botón **Conectar un canal** de los estados vacíos.
 - Desde el selector de canales de la bandeja, la opción **New Channel**.
 
@@ -53,7 +53,7 @@ Mientras el SDK de Facebook se carga, el botón **Comenzar** aparece deshabilita
 
 <Steps>
   <Step title="Abrí Canales y hacé clic en New Channel">
-    Ruta: **Ajustes → Inbox → Canales**. El botón está arriba a la derecha.
+    Ruta: **Configuración → Inbox → Canales**. El botón está arriba a la derecha.
   </Step>
   <Step title="Elegí WhatsApp Business">
     Es la única tarjeta habilitada del diálogo **Nuevo canal**.
@@ -87,7 +87,7 @@ Otros mensajes de esa pantalla:
 
 ## Después de conectar
 
-El canal aparece en **Ajustes → Inbox → Canales**, dentro de la sección **WhatsApp**. La lista tiene las pestañas **Todos los canales** y **Activos**, más una pestaña por tipo (**WhatsApp**, **Instagram**, **Messenger**) solo cuando hay canales de ese tipo. Cada tarjeta muestra:
+El canal aparece en **Configuración → Inbox → Canales**, dentro de la sección **WhatsApp**. La lista tiene las pestañas **Todos los canales** y **Activos**, más una pestaña por tipo (**WhatsApp**, **Instagram**, **Messenger**) solo cuando hay canales de ese tipo. Cada tarjeta muestra:
 
 | Dato | Valores |
 |---|---|
@@ -97,7 +97,7 @@ El canal aparece en **Ajustes → Inbox → Canales**, dentro de la sección **W
 | Estado | **activo** o **inactivo**, con la fecha en **Creado**. |
 | Acciones | **Conectar Meta Ads**, **Configuración del canal** (requiere `channels.update`) y el botón de eliminar (requiere `channels.delete`). |
 
-- Un canal **inactivo** aparece deshabilitado en el selector de canales de la bandeja, con el texto "This channel is inactive. Please contact support to reactivate it." En Ajustes, la app muestra el aviso "Tienes N canal(es) en estado inactivo." con el botón **Ver canales**.
+- Un canal **inactivo** aparece deshabilitado en el selector de canales de la bandeja, con el texto "This channel is inactive. Please contact support to reactivate it." En Configuración, la app muestra el aviso "Tienes N canal(es) en estado inactivo." con el botón **Ver canales**.
 - **Conectar Meta Ads** vincula la cuenta publicitaria de Meta al canal. Sirve para que las conversaciones que llegan desde anuncios Click-to-WhatsApp muestren la campaña, el conjunto de anuncios y el anuncio de origen en la bandeja.
 - El botón de eliminar abre **Delete Channel?** ("This will permanently delete the channel … This action cannot be undone."). La eliminación es permanente.
 

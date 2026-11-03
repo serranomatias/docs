@@ -16,7 +16,7 @@ import { Availability } from '/snippets/availability.mdx';
 
 | Elemento | Qué es | Dónde se administra |
 |---|---|---|
-| Canal | Un número de WhatsApp Business conectado a tu organización. Cada canal tiene sus propias reglas de asignación, horario y webhook. | **Ajustes → Inbox → Canales** |
+| Canal | Un número de WhatsApp Business conectado a tu organización. Cada canal tiene sus propias reglas de asignación, horario y webhook. | **Configuración → Inbox → Canales** |
 | Conversación | El hilo entre un contacto y un canal. Un contacto tiene como máximo una conversación por canal. | **Mensajes** |
 | Contacto | La persona que escribe. La conversación se vincula al contacto por su número de teléfono, y la ficha del contacto reúne sus llamadas y conversaciones. | **Contactos** |
 | Mensaje | Cada texto, archivo, plantilla, nota interna o reacción dentro de una conversación. | **Mensajes** |
@@ -33,7 +33,7 @@ Cada conversación tiene un asignado: un agente de texto (IA), una persona o nad
 2. **Asignación manual.** Desde el encabezado de la conversación, cualquier persona con permiso elige un agente, una persona o **Unassigned**.
 3. **Take Over.** Si la conversación está asignada a un agente de IA, el compositor se reemplaza por un aviso con el botón **Take Over**. Al tomarla, la IA deja de responder y la conversación pasa a la persona.
 
-Con **Proteger la asignación de conversaciones** activo en **Ajustes → Organización → General**, reasignar depende de los permisos del rol: `conversation.assign` para reasignar a cualquiera, `conversation.claim_unassigned` para tomar una sin asignar y `conversation.take_from_ai` para tomarla de la IA. El detalle de los tres modos está en [Trabajar en la bandeja](/es/mensajes/bandeja).
+Con **Proteger la asignación de conversaciones** activo en **Configuración → Organización → General**, reasignar depende de los permisos del rol: `conversation.assign` para reasignar a cualquiera, `conversation.claim_unassigned` para tomar una sin asignar y `conversation.take_from_ai` para tomarla de la IA. El detalle de los tres modos está en [Trabajar en la bandeja](/es/mensajes/bandeja).
 
 ## Estados de una conversación
 
@@ -51,15 +51,15 @@ Meta permite responder libremente durante 24 horas desde el último mensaje del 
 
 - El acceso al inbox y a los agentes de texto depende de la configuración de la organización. Soporte puede desactivarlo para una organización puntual; en ese caso, **Mensajes** muestra la pantalla **CRM Multicanal** con el botón **Solicitar Acceso**.
 - La cantidad de canales de WhatsApp depende del plan. La tabla de **Planes** no muestra ese número. Al llegar al límite, la app avisa: "Has alcanzado el límite de canales de WhatsApp permitidos en tu plan".
-- Tres funciones dentro del inbox pertenecen a add-ons que se activan a pedido desde soporte: las [automatizaciones](/es/mensajes/automatizaciones) (**Automation Rules** en Ajustes), la pestaña **Gestión** del panel de contacto (add-on **Enrutamiento de leads**) y el botón **Call** del panel de contacto (softphone del add-on **Contact center**).
+- Tres funciones dentro del inbox pertenecen a add-ons que se activan a pedido desde soporte: las [automatizaciones](/es/mensajes/automatizaciones) (**Automation Rules** en Configuración), la pestaña **Gestión** del panel de contacto (add-on **Asignación de leads**) y el botón **Call** del panel de contacto (softphone del add-on **Contact center**).
 
-<Info>Los permisos del inbox se configuran en **Ajustes → Organización → Roles y Permisos**. Para ver **Mensajes** en el menú hace falta `messages.read` o `conversation.read`. Para abrir la bandeja hace falta `conversation.read`; para escribir, `messages.create`; para ver los canales en Ajustes, `channels.read`.</Info>
+<Info>Los permisos del inbox se configuran en **Configuración → Organización → Roles y permisos**. Para ver **Mensajes** en el menú hace falta `messages.read` o `conversation.read`. Para abrir la bandeja hace falta `conversation.read`; para escribir, `messages.create`; para ver los canales en Configuración, `channels.read`.</Info>
 
 ## Primeros pasos
 
 <Steps>
   <Step title="Conectá un número de WhatsApp Business">
-    Desde **Ajustes → Inbox → Canales**, con el registro integrado de Facebook. Guía: [Conectar WhatsApp Business](/es/mensajes/conectar-whatsapp).
+    Desde **Configuración → Inbox → Canales**, con el registro integrado de Facebook. Guía: [Conectar WhatsApp Business](/es/mensajes/conectar-whatsapp).
   </Step>
   <Step title="Creá un agente de texto">
     Es quien responde cuando una regla asigna a **IA**. Guía: [Crear un agente de texto](/es/agentes-de-texto/crear).
@@ -91,7 +91,7 @@ Meta permite responder libremente durante 24 horas desde el último mensaje del 
 
 <AccordionGroup>
   <Accordion title="¿Por qué no veo Mensajes en el menú?">
-    Tu rol necesita el permiso `messages.read` o `conversation.read`. Pedile a un administrador que lo revise en **Ajustes → Organización → Roles y Permisos**. Si ves la pantalla **CRM Multicanal** con el botón **Solicitar Acceso**, el inbox está desactivado para tu organización y tenés que contactar a soporte.
+    Tu rol necesita el permiso `messages.read` o `conversation.read`. Pedile a un administrador que lo revise en **Configuración → Organización → Roles y permisos**. Si ves la pantalla **CRM Multicanal** con el botón **Solicitar Acceso**, el inbox está desactivado para tu organización y tenés que contactar a soporte.
   </Accordion>
   <Accordion title="¿Los planes incluyen WhatsApp?">
     Sí. El inbox y los agentes de texto están abiertos para todas las organizaciones, sin add-on. Lo que cambia con el plan es la cantidad de canales de WhatsApp que podés conectar. Ese número no aparece en la tabla de **Planes**; si tenés dudas, consultá a soporte.

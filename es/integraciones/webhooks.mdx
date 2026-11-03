@@ -5,7 +5,7 @@ description: "Compará webhooks de voz, contexto entrante, conversaciones, autom
 ---
 import { Availability } from '/snippets/availability.mdx';
 
-<Availability lang="es" route="Agentes; Ajustes → Inbox; Llamadas → Webhooks" />
+<Availability lang="es" route="Agentes de IA; Configuración → Inbox; Llamadas → Webhooks" />
 
 Un webhook conecta un evento de ContactShip con una URL de tu sistema. **No hay un único webhook para toda la plataforma**: elegí el que corresponda al momento y a los datos que necesitás.
 
@@ -15,11 +15,11 @@ Un webhook conecta un evento de ContactShip con una URL de tu sistema. **No hay 
 |---|---|---|
 | Recibir resultado, análisis y grabación de una llamada | Webhook de salida de voz | Agente de voz → Avanzado → Post llamada |
 | Dar contexto antes de atender una entrante | Webhook propio de entrada | Agente de voz → Avanzado → Contexto de entrada |
-| Reaccionar a creación, cambio o eliminación de una conversación | Webhook del canal | Ajustes → Inbox → Canales → Canal → Avanzado |
-| Reaccionar a un mensaje nuevo o a una condición del inbox | Acción Send Webhook de una automatización | Ajustes → Inbox → Automatizaciones |
+| Reaccionar a creación, cambio o eliminación de una conversación | Webhook del canal | Configuración → Inbox → Canales → Canal → Avanzado |
+| Reaccionar a un mensaje nuevo o a una condición del inbox | Acción Send Webhook de una automatización | Configuración → Inbox → Automatizaciones |
 | Saber que terminó una secuencia de seguimiento | Webhook al cierre | Agente de texto → Avanzado → Seguimientos |
 | Avisar a tu sistema fuera del horario del canal | Webhook fuera de horario | Canal → Respuestas → Horario de atención |
-| Integrar asignación, vencimientos o SLA de enrutamiento | Integración de enrutamiento | Configuración coordinada con soporte |
+| Integrar asignación, vencimientos o SLA de la asignación de leads | Integración de la asignación de leads | Configuración coordinada con soporte |
 
 ## Qué envía cada uno
 
@@ -49,10 +49,10 @@ Un webhook conecta un evento de ContactShip con una URL de tu sistema. **No hay 
 
     No representa todos los cierres manuales del inbox. Ver [campos y ejemplo de cierre](/api-reference/follow-up-webhook) y [configuración de seguimientos](/es/agentes-de-texto/seguimientos).
   </Accordion>
-  <Accordion title="Fuera de horario y enrutamiento">
+  <Accordion title="Fuera de horario y asignación de leads">
     El webhook fuera de horario notifica al receptor con un POST cuando se aplica esa regla del canal. Configuralo en [Respuestas](/es/mensajes/configurar-canal) y verificá un mensaje controlado en tu receptor.
 
-    Los avisos de enrutamiento describen asignación y plazos; la pantalla actual no expone un editor público de su webhook. Coordiná el contrato con soporte según [Condiciones, avisos y webhooks](/es/enrutamiento/condiciones-y-avisos). No reutilices una firma ni un parser de otro tipo de webhook.
+    Los avisos de la asignación de leads describen asignación y plazos; la pantalla actual no expone un editor público de su webhook. Coordiná el contrato con soporte según [Condiciones, avisos y webhooks](/es/asignacion-de-leads/condiciones-y-avisos). No reutilices una firma ni un parser de otro tipo de webhook.
   </Accordion>
 </AccordionGroup>
 
@@ -65,7 +65,7 @@ Un webhook conecta un evento de ContactShip con una URL de tu sistema. **No hay 
   <Step title="Verificá la acción final">Comprobá el ticket, tarea o actualización en tu sistema. Una respuesta HTTP exitosa no demuestra por sí sola que esa acción terminó.</Step>
 </Steps>
 
-<Note>Los reintentos, los headers y las firmas dependen del tipo de webhook. El webhook de llamadas no agrega la firma del enrutamiento, y el cierre de seguimiento no comparte su mecanismo de reintentos.</Note>
+<Note>Los reintentos, los headers y las firmas dependen del tipo de webhook. El webhook de llamadas no agrega la firma de la asignación de leads, y el cierre de seguimiento no comparte su mecanismo de reintentos.</Note>
 
 ## Preguntas frecuentes
 
