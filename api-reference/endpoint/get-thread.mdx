@@ -4,7 +4,7 @@ api: 'GET /v1/thread/{threadId}'
 description: 'Retrieve a conversation thread by its ID'
 ---
 
-Returns the details of a specific conversation thread, including its channel, contact, status, and assignee.
+Returns the details of a specific conversation thread, including its channel, contact, status, assignee and, when the conversation started from a Meta ad or post, its `referral`.
 
 ## Headers
 
@@ -60,6 +60,55 @@ Returns the details of a specific conversation thread, including its channel, co
   Timestamp of the last update (ISO 8601).
 </ResponseField>
 
+<ResponseField name="referral" type="object | null">
+  Where the conversation came from, as Meta reported it in the contact's first message. Present when someone wrote from a Click-to-WhatsApp ad, a post or a page; `null` for organic conversations. Fields Meta did not send are left out, so check each one before using it.
+  <Expandable title="Referral object">
+    <ResponseField name="source_type" type="string">What the contact clicked: `ad`, `post` or `page`.</ResponseField>
+    <ResponseField name="source_id" type="string">Meta ID of the ad or post. For ads, this is the ad ID in Ads Manager.</ResponseField>
+    <ResponseField name="source_url" type="string">Link to the ad or post on Facebook or Instagram.</ResponseField>
+    <ResponseField name="ctwa_clid" type="string">Click ID of the Click-to-WhatsApp ad. Use it with the Meta Conversions API to attribute a lead or a purchase to the ad (see below). Meta omits it in some cases, such as ads shown in WhatsApp Status.</ResponseField>
+    <ResponseField name="headline" type="string">Ad or post headline.</ResponseField>
+    <ResponseField name="body" type="string">Ad or post text.</ResponseField>
+    <ResponseField name="media_type" type="string">Type of media in the ad: `image` or `video`.</ResponseField>
+    <ResponseField name="image_url" type="string">Image of the ad, when `media_type` is `image`.</ResponseField>
+    <ResponseField name="video_url" type="string">Link to the video of the ad, when `media_type` is `video`.</ResponseField>
+    <ResponseField name="thumbnail_url" type="string">Thumbnail of the video, when `media_type` is `video`.</ResponseField>
+    <ResponseField name="welcome_message" type="object">Pre-filled message the ad suggested to the contact, as `{ "text": "..." }`.</ResponseField>
+    <ResponseField name="ref" type="string">Custom `ref` parameter of the link, when the ad or the link set one.</ResponseField>
+  </Expandable>
+</ResponseField>
+
+<Warning>
+  `image_url`, `video_url` and `thumbnail_url` are signed Meta URLs and expire after a few days. Download the media when you receive it if you need to keep it; don't store the URL.
+</Warning>
+
+## Ad attribution with the Conversions API
+
+`referral.ctwa_clid` is the identifier Meta asks for to attribute a conversion from a WhatsApp conversation to the ad that started it. When the contact converts (a lead, a purchase), send the event to the [Conversions API](https://developers.facebook.com/docs/marketing-api/conversions-api/business-messaging) of your dataset with:
+
+- `action_source`: `business_messaging`
+- `messaging_channel`: `whatsapp`
+- `user_data.ctwa_clid`: the `ctwa_clid` of the thread
+- `user_data.whatsapp_business_account_id`: the ID of your WhatsApp Business account
+
+```bash
+curl -X POST "https://graph.facebook.com/v21.0/{DATASET_ID}/events?access_token={TOKEN}"   -H "Content-Type: application/json"   -d '{
+    "data": [{
+      "event_name": "Purchase",
+      "event_time": 1775487600,
+      "action_source": "business_messaging",
+      "messaging_channel": "whatsapp",
+      "user_data": {
+        "ctwa_clid": "ARAkLkA8rmlFeiCktEJQ-QTwRiyYHAFDLMNDBH0CD3qpjd0HR4irJ6LEkR7JwFF4XvnO2E4Nx0-eM-GABDLOPaOdRMv-_zfUQ2a",
+        "whatsapp_business_account_id": "1234567890123456"
+      },
+      "custom_data": { "currency": "USD", "value": 49.9 }
+    }]
+  }'
+```
+
+`referral.source_id` is the ad ID: use it to match the conversation with the ad's results in Ads Manager.
+
 ## Error Codes
 
 - `401 Unauthorized` — Invalid or missing API key
@@ -108,7 +157,18 @@ print(response.json())
   "assignee": null,
   "assignee_type": null,
   "created_at": "2026-04-06T15:00:00Z",
-  "updated_at": "2026-04-06T15:05:00Z"
+  "updated_at": "2026-04-06T15:05:00Z",
+  "referral": {
+    "source_type": "ad",
+    "source_id": "120212345678900123",
+    "source_url": "https://fb.me/2AbCdEfGh",
+    "ctwa_clid": "ARAkLkA8rmlFeiCktEJQ-QTwRiyYHAFDLMNDBH0CD3qpjd0HR4irJ6LEkR7JwFF4XvnO2E4Nx0-eM-GABDLOPaOdRMv-_zfUQ2a",
+    "headline": "2x1 pizzas every Tuesday",
+    "body": "Order on WhatsApp and get the second pizza free.",
+    "media_type": "image",
+    "image_url": "https://scontent.xx.fbcdn.net/v/t45.1600-4/example.jpg?oe=6801A2B3",
+    "welcome_message": { "text": "Hi! I want the 2x1 promo" }
+  }
 }
 ```
 </ResponseExample>
