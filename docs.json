@@ -133,20 +133,20 @@
                 ]
               },
               {
-                "group": "Enrutamiento de leads",
+                "group": "Asignación de leads",
                 "icon": "route",
                 "pages": [
-                  "es/enrutamiento/como-funciona",
-                  "es/enrutamiento/etapas-y-grupos",
-                  "es/enrutamiento/condiciones-y-avisos",
-                  "es/enrutamiento/reporte"
+                  "es/asignacion-de-leads/como-funciona",
+                  "es/asignacion-de-leads/etapas-y-grupos",
+                  "es/asignacion-de-leads/condiciones-y-avisos",
+                  "es/asignacion-de-leads/reporte"
                 ]
               },
               {
                 "group": "Reportes",
                 "icon": "chart-mixed",
                 "pages": [
-                  "es/reportes/dashboard",
+                  "es/reportes/resumen",
                   "es/reportes/a-medida",
                   "es/reportes/ventas",
                   "es/reportes/mensajeria",
@@ -667,6 +667,11 @@
     { "source": "/es/integrations/make", "destination": "/es/integraciones/make" },
     { "source": "/es/integrations/n8n", "destination": "/es/integraciones/n8n" },
     { "source": "/es/campaigns/overview", "destination": "/es/llamadas/campanas" },
+    { "source": "/es/enrutamiento/como-funciona", "destination": "/es/asignacion-de-leads/como-funciona" },
+    { "source": "/es/enrutamiento/etapas-y-grupos", "destination": "/es/asignacion-de-leads/etapas-y-grupos" },
+    { "source": "/es/enrutamiento/condiciones-y-avisos", "destination": "/es/asignacion-de-leads/condiciones-y-avisos" },
+    { "source": "/es/enrutamiento/reporte", "destination": "/es/asignacion-de-leads/reporte" },
+    { "source": "/es/reportes/dashboard", "destination": "/es/reportes/resumen" },
     { "source": "/en/introduction", "destination": "/en/get-started/what-is-contactship" },
     { "source": "/en/quickstart", "destination": "/en/get-started/first-call" },
     { "source": "/en/support", "destination": "/en/get-started/support" },

@@ -5,7 +5,7 @@ tag: 'Nuevo'
 ---
 import { Availability } from '/snippets/availability.mdx';
 
-<Availability lang="es" permission="agents.read; agents.update para editar" route="Agentes → Texto → Tools" status="nuevo" />
+<Availability lang="es" permission="agents.read; agents.update para editar" route="Agentes de IA → Texto → Herramientas" status="nuevo" />
 
 Las herramientas permiten actuar sobre la conversación y consultar sistemas. La IA decide cuándo invocarlas usando sus descripciones y las instrucciones del agente. Agregar una herramienta no garantiza que se ejecute en cada mensaje.
 
@@ -18,14 +18,14 @@ Las herramientas permiten actuar sobre la conversación y consultar sistemas. La
 ## Agregar y guardar
 
 <Steps>
-  <Step title="Abrí Tools">
-    Entrá al agente de texto y seleccioná **Tools → Agregar**. Buscá una herramienta en el catálogo.
+  <Step title="Abrí Herramientas">
+    Entrá al agente de texto y seleccioná **Herramientas → Agregar**. Buscá una herramienta en el catálogo.
   </Step>
   <Step title="Configurá sus datos">
     Completá el nombre, la descripción y los destinos, campos o archivos que correspondan. La descripción explica cuándo usarla.
   </Step>
   <Step title="Guardá la pestaña">
-    Confirmá el diálogo y guardá **Tools**. Los cambios de herramientas se aplican al guardar esta pestaña.
+    Confirmá el diálogo y guardá **Herramientas**. Los cambios de herramientas se aplican al guardar esta pestaña.
   </Step>
   <Step title="Comprobá la decisión de la IA">
     Abrí **Probar agente**. Escribí una solicitud que deba activar la herramienta y revisá los argumentos simulados.
@@ -84,7 +84,7 @@ La prueba HTTP del configurador envía una solicitud al endpoint. Puede producir
 
 | Mensaje o síntoma | Causa y solución |
 |---|---|
-| Sin tools conectadas | Agregá una herramienta y guardá **Tools**. |
+| Sin tools conectadas | Agregá una herramienta y guardá **Herramientas**. |
 | Selecciona al menos una etiqueta | Habilitá una etiqueta y completá su instrucción. |
 | Este board no tiene etapas. | Creá etapas en el tablero antes de configurar la herramienta. |
 | No hay otros agentes disponibles | Creá otro agente de texto o comprobá su disponibilidad en la organización. |
@@ -95,7 +95,7 @@ La prueba HTTP del configurador envía una solicitud al endpoint. Puede producir
 
 <AccordionGroup>
   <Accordion title="¿Es suficiente escribir «enviá el catálogo» en las instrucciones?">
-    Necesitás agregar **Enviar imagen** o **Enviar PDF**, cargar el archivo y describir cuándo enviarlo. Después guardá **Tools** y probá esa solicitud en el [sandbox](/es/agentes-de-texto/sandbox).
+    Necesitás agregar **Enviar imagen** o **Enviar PDF**, cargar el archivo y describir cuándo enviarlo. Después guardá **Herramientas** y probá esa solicitud en el [sandbox](/es/agentes-de-texto/sandbox).
   </Accordion>
   <Accordion title="¿Las etiquetas del contacto y de la conversación son las mismas?">
     No. **Etiquetar conversación** usa etiquetas del inbox. Las etiquetas del contacto se administran por separado en [Etiquetas de contacto](/es/contactos/etiquetas).
@@ -107,7 +107,7 @@ La prueba HTTP del configurador envía una solicitud al endpoint. Puede producir
     El sandbox muestra qué habría ejecutado la IA. Para comprobar la conexión real usá la pestaña **Probar** de la herramienta HTTP con un entorno de prueba.
   </Accordion>
   <Accordion title="¿Por qué no se guardó una herramienta que agregué?">
-    Confirmar el diálogo prepara el cambio. Guardá la pestaña **Tools** y comprobá que el estado indique cambios guardados.
+    Confirmar el diálogo prepara el cambio. Guardá la pestaña **Herramientas** y comprobá que el estado indique cambios guardados.
   </Accordion>
 </AccordionGroup>
 

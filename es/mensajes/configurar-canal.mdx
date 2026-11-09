@@ -6,9 +6,9 @@ tag: 'Nuevo'
 ---
 import { Availability } from '/snippets/availability.mdx';
 
-<Availability lang="es" permission="channels.update" route="Ajustes → Inbox → Canales → Configuración del canal" status="nuevo" />
+<Availability lang="es" permission="channels.update" route="Configuración → Inbox → Canales → Configuración del canal" status="nuevo" />
 
-La configuración de un canal define quién atiende cada conversación nueva, en qué horario responde la IA, cuándo avisar por inactividad y a qué sistema notificar. Se abre desde **Ajustes → Inbox → Canales → Configuración del canal**. Ver la pantalla requiere `channels.read`; guardar cambios requiere `channels.update`.
+La configuración de un canal define quién atiende cada conversación nueva, en qué horario responde la IA, cuándo avisar por inactividad y a qué sistema notificar. Se abre desde **Configuración → Inbox → Canales → Configuración del canal**. Ver la pantalla requiere `channels.read`; guardar cambios requiere `channels.update`.
 
 El encabezado muestra el nombre del canal (editable con un clic), el tipo, el estado **Active** o **Inactive** y el número. Las pestañas van en este orden: **Asignación**, **Respuestas**, **Alertas**, **Conexión**, **Llamadas** (solo canales de WhatsApp Business API) y **Avanzado**. Un punto en la pestaña indica que esa función está encendida. El botón **Guardar cambios** guarda todas las pestañas a la vez, salvo **Conexión** (solo lectura) y **Llamadas** (se aplica al instante).
 
@@ -39,7 +39,7 @@ Cada regla se lee como una oración: "Cuando sea **L–V · 09:00–18:00 · Bue
 | Solo asignar a gente conectada | Ignora a quienes no tienen la app abierta. | Encendido · Apagado | Apagado |
 | Respaldo (obligatorio con **Un equipo**) | "Si el equipo queda vacío (todos excluidos o desconectados), la conversación va acá." | **IA** · **Una persona** | Sin valor; hay que elegirlo |
 
-<Note>**Un equipo** en una regla es una lista de personas de la organización. No está vinculado a los equipos de **Ajustes → Organización → Equipos**.</Note>
+<Note>**Un equipo** en una regla es una lista de personas de la organización. No está vinculado a los equipos de **Configuración → Organización → Equipos**.</Note>
 
 ### Ejemplo: horario con IA, fin de semana con equipo
 
@@ -149,7 +149,7 @@ Tarjeta con un código QR, el número, **Abrir WhatsApp** y **Copy Link**. Escan
 
 ## Qué no existe todavía
 
-- El destino **Un equipo** no usa los equipos de **Ajustes → Organización → Equipos**. Se eligen personas una por una.
+- El destino **Un equipo** no usa los equipos de **Configuración → Organización → Equipos**. Se eligen personas una por una.
 - El webhook fuera de horario solo se envía con método POST.
 - Los feriados son días completos; no hay franjas de excepción por horas.
 - No hay prioridad por canal en la interfaz. El dato `priority_level` existe con valor `medium`, pero no se edita.
@@ -175,7 +175,7 @@ Tarjeta con un código QR, el número, **Abrir WhatsApp** y **Copy Link**. Escan
   <Accordion title="¿Qué pasa cuando un contacto escribe fuera del horario de atención?">
     Con **Horario de atención** activo, el contacto recibe el mensaje de **Cuando escriben fuera de horario** y la IA no responde hasta la próxima franja. Si configuraste **Webhook fuera de horario**, tu sistema recibe un POST con el mensaje. La conversación igual se asigna según las reglas de **Asignación**, así que una persona puede responder desde la bandeja.
   </Accordion>
-  <Accordion title="¿Puedo asignar a un equipo de Ajustes → Equipos?">
+  <Accordion title="¿Puedo asignar a un equipo de Configuración → Equipos?">
     No. El destino **Un equipo** de una regla es una lista de personas que elegís en el momento, con **Todo el equipo** o **Elegir personas**. Los equipos de la organización se usan para los permisos de lectura (**My teams**) y no para el reparto automático.
   </Accordion>
   <Accordion title="¿Qué significa Solo asignar a gente conectada?">

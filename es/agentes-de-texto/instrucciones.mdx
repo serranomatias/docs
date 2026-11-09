@@ -5,7 +5,7 @@ tag: 'Nuevo'
 ---
 import { Availability } from '/snippets/availability.mdx';
 
-<Availability lang="es" permission="agents.read; agents.update para editar" route="Agentes → Texto → Instrucciones" status="nuevo" />
+<Availability lang="es" permission="agents.read; agents.update para editar" route="Agentes de IA → Texto → Instrucciones" status="nuevo" />
 
 Las instrucciones definen cómo responde el agente y cuándo usa sus herramientas. Se aplican a las conversaciones que tiene asignadas. La descripción de **General** identifica al agente; escribí sus reglas de conversación en **Instrucciones**.
 
@@ -13,20 +13,20 @@ Las instrucciones definen cómo responde el agente y cuándo usa sus herramienta
 
 <Steps>
   <Step title="Abrí Instrucciones">
-    Elegí el agente en **Agentes → Texto** y abrí **Instrucciones**. Podés organizar el texto con títulos y listas.
+    Elegí el agente en **Agentes de IA → Texto** y abrí **Instrucciones**. Podés organizar el texto con títulos y listas.
   </Step>
   <Step title="Definí una tarea concreta">
     Indicá qué debe resolver, qué datos necesita y cuándo termina su trabajo. Especificá cómo actuar ante información faltante.
   </Step>
   <Step title="Conectá las reglas con las herramientas">
-    Explicá cuándo consultar documentos, actualizar un contacto o delegar. Configurá esas acciones en **Tools**: mencionarlas en el texto no las crea.
+    Explicá cuándo consultar documentos, actualizar un contacto o delegar. Configurá esas acciones en **Herramientas**: mencionarlas en el texto no las crea.
   </Step>
   <Step title="Guardá y probá">
     Hacé clic en **Guardar** en esta pestaña. Abrí **Probar agente** y comprobá las respuestas y las herramientas simuladas.
   </Step>
 </Steps>
 
-Cada pestaña se guarda por separado. Si modificaste **Tools** además del prompt, guardá también esa pestaña.
+Cada pestaña se guarda por separado. Si modificaste **Herramientas** además del prompt, guardá también esa pestaña.
 
 ## Estructura recomendada
 
@@ -63,7 +63,7 @@ No digas que la derivación terminó antes de conocer el resultado.
 
 ## Información del negocio
 
-Usá las instrucciones para reglas permanentes y criterios de decisión. Cargá documentos extensos en **Conocimiento** y configurá su consulta en **Tools**. Evitá mantener precios contradictorios en el prompt y los documentos.
+Usá las instrucciones para reglas permanentes y criterios de decisión. Cargá documentos extensos en **Base de conocimiento** y configurá su consulta en **Herramientas**. Evitá mantener precios contradictorios en el prompt y los documentos.
 
 El **Contexto global del contacto**, en **Avanzado**, incorpora historial y estado del contacto. Activarlo no reemplaza las instrucciones ni configura una herramienta.
 
@@ -85,7 +85,7 @@ Si el agente responde con notas de voz, no hace falta explicarle acá cómo escr
     Podés escribirlas en español o inglés. Indicá el idioma de respuesta y comprobalo con mensajes reales de prueba en el [sandbox](/es/agentes-de-texto/sandbox).
   </Accordion>
   <Accordion title="¿Por qué el agente no deriva aunque se lo pida en el prompt?">
-    La instrucción necesita una herramienta de delegación configurada, con un destino disponible. Revisá sus reglas en [Herramientas](/es/agentes-de-texto/herramientas) y guardá **Tools**.
+    La instrucción necesita una herramienta de delegación configurada, con un destino disponible. Revisá sus reglas en [Herramientas](/es/agentes-de-texto/herramientas) y guardá **Herramientas**.
   </Accordion>
   <Accordion title="¿Guardar Instrucciones guarda también las otras pestañas?">
     No. Cada pestaña guarda sus propios campos. Revisá el estado de guardado antes de iniciar una prueba.
