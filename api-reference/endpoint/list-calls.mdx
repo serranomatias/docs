@@ -4,75 +4,41 @@ api: 'GET /v1/calls'
 description: 'Retrieve a paginated list of calls for your organization'
 ---
 
-Returns a paginated list of calls for your organization. By default, `chat_history` (transcript) is **not** included — pass `include_transcript=true` to include it. Supports filtering by date range, status, result, agent, and campaign.
+Returns a paginated list of your organization's calls, newest first by default. Each call includes its transcript (`chat_history`), its analysis and its contact.
+
+The only filter is `phoneNumber`, which narrows the list to one contact. This endpoint does not filter by date, status, result, agent or campaign: any query parameter not listed below is rejected with `400`.
+
+<Note>
+  This endpoint requires your organization's API key. A personal API key gets `403 Forbidden`.
+</Note>
 
 ## Headers
 
 <ParamField header="x-api-key" type="string" required>
-  Your API key for authentication. Found in your dashboard under API settings.
+  Your organization's API key. Found in your dashboard under API settings.
 </ParamField>
 
 ## Query Parameters
 
-<ParamField query="limit" type="number" default="20">
-  Maximum number of calls to return. Must be ≥ 0.
+<ParamField query="limit" type="number" default="5">
+  Maximum number of calls to return, up to `1000`. If omitted or `0`, returns 5.
 </ParamField>
 
 <ParamField query="offset" type="number" default="0">
-  Number of records to skip for pagination. Must be ≥ 0.
+  Number of calls to skip for pagination. Must be ≥ 0.
 </ParamField>
 
 <ParamField query="order" type="string" default="desc">
-  Sort direction by creation date. Possible values: `asc`, `desc`.
-</ParamField>
-
-<ParamField query="date_from" type="string">
-  Filter calls created on or after this date (ISO 8601, e.g. `2026-01-01`).
-</ParamField>
-
-<ParamField query="date_to" type="string">
-  Filter calls created on or before this date (ISO 8601, e.g. `2026-04-01`).
-</ParamField>
-
-<ParamField query="call_status" type="string">
-  Filter by call status. Possible values: `in-progress`, `completed`, `no-answer`, `failed`, `in-queue`, `incomplete`, `busy`, `answering-machine`, `scheduled`, `voice_mail`.
-</ParamField>
-
-<ParamField query="call_result" type="string">
-  Filter by call result. Possible values: `answered`, `voicemail`, `no_answer`, `busy`, `failed`.
-</ParamField>
-
-<ParamField query="agent_id" type="string">
-  Filter by agent UUID.
-</ParamField>
-
-<ParamField query="campaign_id" type="string">
-  Filter by campaign UUID.
+  Sort direction by creation date. Possible values: `asc`, `desc` (lowercase).
 </ParamField>
 
 <ParamField query="phoneNumber" type="string">
-  Filter by phone number in E.164 format (e.g. `+12124567890`).
-</ParamField>
-
-<ParamField query="include_transcript" type="boolean" default="false">
-  Include `chat_history` (transcript) in each call record. Defaults to `false`.
-</ParamField>
-
-<ParamField query="include_words" type="boolean" default="false">
-  Include per-word timing data in transcript entries. Only applies when `include_transcript=true`.
-</ParamField>
-
-<ParamField query="include_tools" type="boolean" default="false">
-  Include `chat_history_with_tools` in each call record.
-</ParamField>
-
-<ParamField query="transcript_format" type="string" default="json">
-  Format for transcript output. Possible values: `json` (raw array), `toon` (token-efficient TOON encoding). Only applies when `include_transcript=true` or `include_tools=true`.
+  Phone number in E.164 format (e.g. `+12124567890`). Returns only the calls of the contact in your organization that has this phone number. It does not match the number a call was placed from or to.
 </ParamField>
 
 ## Response
 
-The response contains `statusCode`, a `data` array, and `pagination` with `page`, `total_rows`, and `total_pages`.
+The response contains `statusCode`, a `data` array, and `pagination`.
 
 <ResponseField name="data" type="array">
   Array of call objects.
@@ -81,75 +47,71 @@ The response contains `statusCode`, a `data` array, and `pagination` with `page`
       Unique identifier of the call (UUID).
     </ResponseField>
     <ResponseField name="direction" type="string">
-      Call direction: `inbound` or `outbound`.
+      Call direction (e.g. `outbound-api`). May be `null`.
     </ResponseField>
     <ResponseField name="from" type="string">
-      The phone number that initiated the call (E.164 format).
+      The phone number that placed the call (E.164 format).
+    </ResponseField>
+    <ResponseField name="chat_history" type="array">
+      Transcript of the call, always included. Empty array when there is no transcript.
+      <Expandable title="Transcript entry">
+        <ResponseField name="role" type="string">Who spoke: `agent` or `user`.</ResponseField>
+        <ResponseField name="content" type="string">What was said.</ResponseField>
+        <ResponseField name="words" type="array">Per-word timing: `word`, `start` and `end` (seconds from the start of the call).</ResponseField>
+        <ResponseField name="metadata" type="object">Present on some agent entries.</ResponseField>
+      </Expandable>
     </ResponseField>
     <ResponseField name="call_record" type="string">
       URL to the call recording, if available.
     </ResponseField>
     <ResponseField name="call_status" type="string">
-      Current status of the call (e.g. `completed`, `no-answer`, `failed`).
+      Current status of the call (e.g. `ended`, `failed`, `in_queue`). May be `null`.
     </ResponseField>
     <ResponseField name="call_result" type="string">
-      Outcome of the call (e.g. `answered`, `voicemail`, `no_answer`).
+      Outcome of the call (e.g. `answered`, `voicemail`, `no_answer`, `failed`). May be `null`.
     </ResponseField>
     <ResponseField name="disconnection_reason" type="string">
-      Reason the call was disconnected, if applicable.
-    </ResponseField>
-    <ResponseField name="finished_at" type="string">
-      Timestamp when the call ended (ISO 8601).
+      Reason the call ended (e.g. `user_hangup`, `agent_hangup`, `voicemail`, `max_duration_reached`), if applicable.
     </ResponseField>
     <ResponseField name="start_at" type="string">
       Timestamp when the call started (ISO 8601).
     </ResponseField>
-    <ResponseField name="duration" type="number">
-      Call duration in seconds.
+    <ResponseField name="finished_at" type="string">
+      Timestamp when the call ended (ISO 8601).
+    </ResponseField>
+    <ResponseField name="duration" type="string">
+      Call duration in seconds, as a string (e.g. `"41"`).
     </ResponseField>
     <ResponseField name="call_analysis" type="object">
-      AI-generated analysis of the call (summary, sentiment, etc.).
+      AI-generated analysis of the call. Usually includes `call_summary`, `user_sentiment`, `call_successful` and `custom_analysis_data` (the fields defined in your agent's post-call analysis). Empty when the call was not analyzed.
     </ResponseField>
     <ResponseField name="type" type="string">
-      Call type identifier.
+      Call type (`api_call`).
     </ResponseField>
     <ResponseField name="created_at" type="string">
       Timestamp when the call record was created (ISO 8601).
     </ResponseField>
-    <ResponseField name="agent_id" type="string">
-      UUID of the AI agent that handled the call.
-    </ResponseField>
-    <ResponseField name="campaign_id" type="string">
-      UUID of the campaign this call belongs to, if any.
-    </ResponseField>
     <ResponseField name="contact" type="object">
       Contact associated with the call.
       <Expandable title="Contact object">
-        <ResponseField name="id" type="string">Contact UUID.</ResponseField>
         <ResponseField name="full_name" type="string">Contact full name.</ResponseField>
         <ResponseField name="phone_number" type="string">Contact phone number.</ResponseField>
         <ResponseField name="email" type="string">Contact email address.</ResponseField>
-        <ResponseField name="country" type="string">Contact country code.</ResponseField>
+        <ResponseField name="country" type="string">Contact country.</ResponseField>
       </Expandable>
-    </ResponseField>
-    <ResponseField name="chat_history" type="array or string">
-      Transcript of the call. Present only when `include_transcript=true`. Returns an array of transcript entries (JSON format) or a TOON-encoded string when `transcript_format=toon`.
-    </ResponseField>
-    <ResponseField name="chat_history_with_tools" type="array or string">
-      Transcript including tool calls. Present only when `include_tools=true`.
-    </ResponseField>
-    <ResponseField name="transcript_format" type="string">
-      Format used for transcript fields. Present when transcript is included.
     </ResponseField>
   </Expandable>
 </ResponseField>
 
-<ResponseField name="pagination" type="object">Pagination metadata: `page`, `total_rows`, and `total_pages`.</ResponseField>
+<ResponseField name="pagination" type="object">
+  Pagination metadata: `page` (current page, counting from 1, given `limit` and `offset`), `total_rows` and `total_pages`.
+</ResponseField>
 
 ## Error Codes
 
-- `400 Bad Request` — Invalid query parameters
+- `400 Bad Request` — Invalid query parameters: an unknown parameter (`property <name> should not exist`), `limit` above 1000, an `order` other than `asc`/`desc`, or a `phoneNumber` that is not a valid number. Today it is also returned when `phoneNumber` does not match any contact in your organization.
 - `401 Unauthorized` — Invalid or missing API key
+- `403 Forbidden` — The key is a personal API key; use your organization's API key
 - `429 Too Many Requests` — Rate limit exceeded; honor `Retry-After` when present and use bounded backoff. See [Rate Limits](/api-reference/rate-limits)
 - `500 Internal Server Error` — Server-side error
 
@@ -161,8 +123,10 @@ curl -X GET "https://api.contactship.ai/v1/calls?limit=20&offset=0" \
   -H "x-api-key: your-api-key"
 ```
 
-```bash cURL — Filtered with transcript
-curl -X GET "https://api.contactship.ai/v1/calls?limit=10&call_result=answered&date_from=2026-01-01&include_transcript=true" \
+```bash cURL — One contact, oldest first
+curl -G "https://api.contactship.ai/v1/calls" \
+  --data-urlencode "phoneNumber=+14155552678" \
+  --data-urlencode "order=asc" \
   -H "x-api-key: your-api-key"
 ```
 
@@ -177,11 +141,11 @@ const listCalls = async (params = {}) => {
   return response.json();
 };
 
-// Example: get the last 10 answered calls
+// Example: the last 10 calls of one contact
 const result = await listCalls({
   limit: 10,
-  call_result: 'answered',
-  date_from: '2026-01-01',
+  order: 'desc',
+  phoneNumber: '+14155552678',
 });
 console.log(`${result.data.length} calls, ${result.pagination.total_rows} total`);
 ```
@@ -193,8 +157,8 @@ api_key = "your-api-key"
 
 params = {
     "limit": 10,
-    "call_result": "answered",
-    "date_from": "2026-01-01",
+    "order": "desc",
+    "phoneNumber": "+14155552678",
 }
 
 response = requests.get(
@@ -218,28 +182,51 @@ else:
   "data": [
     {
       "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-      "direction": "outbound",
+      "direction": "outbound-api",
       "from": "+12025551234",
-      "call_record": "https://api.contactship.ai/recordings/a1b2c3d4.mp3",
-      "call_status": "completed",
+      "chat_history": [
+        {
+          "role": "agent",
+          "content": "Hi Jane, this is Alex from Acme. Do you have a minute?",
+          "words": [
+            { "word": "Hi ", "start": 0.42, "end": 0.61 },
+            { "word": "Jane, ", "start": 0.61, "end": 0.98 }
+          ],
+          "metadata": { "response_id": 0 }
+        },
+        {
+          "role": "user",
+          "content": "Sure, go ahead.",
+          "words": [
+            { "word": "Sure, ", "start": 3.12, "end": 3.4 },
+            { "word": "go ", "start": 3.4, "end": 3.55 },
+            { "word": "ahead.", "start": 3.55, "end": 3.9 }
+          ]
+        }
+      ],
+      "call_record": "https://recordings.contactship.ai/a1b2c3d4/recording.wav",
+      "call_status": "ended",
       "call_result": "answered",
-      "disconnection_reason": "agent_hangup",
-      "finished_at": "2026-03-15T14:35:22Z",
-      "start_at": "2026-03-15T14:30:05Z",
-      "duration": 317,
+      "disconnection_reason": "user_hangup",
+      "finished_at": "2026-03-15T14:35:22.714+00:00",
+      "duration": "317",
+      "start_at": "2026-03-15T14:30:05.248+00:00",
       "call_analysis": {
-        "summary": "Customer expressed interest in the premium plan and requested a demo.",
-        "sentiment": "positive"
+        "call_summary": "Customer expressed interest in the premium plan and requested a demo.",
+        "in_voicemail": false,
+        "user_sentiment": "Positive",
+        "call_successful": true,
+        "custom_analysis_data": {
+          "interest": "high",
+          "next_step": "Schedule a demo"
+        }
       },
-      "type": "ai_call",
-      "created_at": "2026-03-15T14:30:00Z",
-      "agent_id": "f1e2d3c4-b5a6-7890-1234-567890abcdef",
-      "campaign_id": null,
+      "type": "api_call",
+      "created_at": "2026-03-15T14:30:00.934774+00:00",
       "contact": {
-        "id": "c1d2e3f4-a5b6-7890-cdef-123456789012",
+        "email": "jane.smith@example.com",
         "full_name": "Jane Smith",
         "phone_number": "+14155552678",
-        "email": "jane.smith@example.com",
         "country": "US"
       }
     }
@@ -247,7 +234,7 @@ else:
   "pagination": {
     "page": 1,
     "total_rows": 142,
-    "total_pages": 3
+    "total_pages": 29
   }
 }
 ```
