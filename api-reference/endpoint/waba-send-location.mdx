@@ -69,7 +69,6 @@ The response is `{ "statusCode": number, "data": object }`. The fields below des
     <ResponseField name="message_id" type="string">Internal UUID of the message record.</ResponseField>
     <ResponseField name="provider_id" type="string">WhatsApp message ID returned by Meta.</ResponseField>
     <ResponseField name="thread_id" type="string">UUID of the conversation thread.</ResponseField>
-    <ResponseField name="status" type="string">Message status: `sent` or `pending`.</ResponseField>
   </Expandable>
 </ResponseField>
 
@@ -145,12 +144,11 @@ print(response.json())
   "statusCode": 201,
   "data": {
     "success": true,
-    "message": "Location enviada y guardada",
+    "message": "Ubicación enviada y guardada",
     "data": {
       "message_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
       "provider_id": "wamid.HBgNMTIxMjM0NTY3ODkwFQIAERgSM...",
-      "thread_id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
-      "status": "sent"
+      "thread_id": "b2c3d4e5-f6a7-8901-bcde-f12345678901"
     }
   }
 }
