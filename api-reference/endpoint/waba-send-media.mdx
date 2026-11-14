@@ -18,8 +18,12 @@ Sends a media message (image, video, audio, or document) to a contact through a 
   UUID of the WABA channel to send from.
 </ParamField>
 
-<ParamField body="contact_id" type="string" required>
-  UUID of the contact to message.
+<ParamField body="contact_id" type="string">
+  UUID of the contact to message. Required unless you send `to` or `thread_id`.
+</ParamField>
+
+<ParamField body="to" type="string">
+  Phone number or WhatsApp ID (`wa_id`) to message, as an alternative to `contact_id`. Use E.164 format, with or without the `+` (8 to 15 digits). Ignored if `contact_id` is sent or `thread_id` resolves a contact. If no contact in your organization has this number, a new one is created, named `WhatsApp` followed by the last six digits.
 </ParamField>
 
 <ParamField body="media_type" type="string" required>
@@ -71,7 +75,7 @@ Sends a media message (image, video, audio, or document) to a contact through a 
 
 ## Error Codes
 
-- `400 Bad Request` — Missing required fields, invalid channel type, or invalid media data, or Meta rejected the request (`message` carries the reason Meta gave, for example an expired channel token or a re-engagement window that closed)
+- `400 Bad Request` — Missing required fields, invalid channel type, invalid media data, or invalid `to` number (`error.code` is `invalid_recipient`), or Meta rejected the request (`message` carries the reason Meta gave, for example an expired channel token or a re-engagement window that closed)
 - `401 Unauthorized` — Invalid or missing API key
 - `404 Not Found` — Contact not found
 - `429 Too Many Requests` — Meta rate limit; retry after a pause
@@ -105,6 +109,19 @@ curl -X POST "https://api.contactship.ai/v1/waba/send-media" \
     "media_data": "https://example.com/invoice.pdf",
     "file_name": "invoice_2026.pdf",
     "content": "Your invoice for this month"
+  }'
+```
+
+```bash cURL — Send to a phone number
+curl -X POST "https://api.contactship.ai/v1/waba/send-media" \
+  -H "x-api-key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "channel_id": "chn_abc123",
+    "to": "+15555550102",
+    "media_type": "image",
+    "media_data": "https://example.com/product-catalog.jpg",
+    "content": "Check out our latest catalog!"
   }'
 ```
 

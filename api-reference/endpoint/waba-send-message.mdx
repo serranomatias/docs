@@ -19,8 +19,12 @@ Sends a plain text message to a contact through a configured WhatsApp Business c
   UUID of the WABA channel to send from. Find your channel IDs in your dashboard under **Channels**.
 </ParamField>
 
-<ParamField body="contact_id" type="string" required>
-  UUID of the contact to message. The contact must have a valid WhatsApp number (`wa_id` or `phone_number`).
+<ParamField body="contact_id" type="string">
+  UUID of the contact to message. The contact must have a valid WhatsApp number (`wa_id` or `phone_number`). Required unless you send `to` or `thread_id`.
+</ParamField>
+
+<ParamField body="to" type="string">
+  Phone number or WhatsApp ID (`wa_id`) to message, as an alternative to `contact_id`. Use E.164 format, with or without the `+` (8 to 15 digits). Ignored if `contact_id` is sent or `thread_id` resolves a contact. If no contact in your organization has this number, a new one is created, named `WhatsApp` followed by the last six digits.
 </ParamField>
 
 <ParamField body="content" type="string" required>
@@ -60,7 +64,7 @@ Sends a plain text message to a contact through a configured WhatsApp Business c
 
 ## Error Codes
 
-- `400 Bad Request` — Missing required fields or channel is not WABA type, or Meta rejected the request (`message` carries the reason Meta gave, for example an expired channel token or a re-engagement window that closed)
+- `400 Bad Request` — Missing required fields, channel is not WABA type, or invalid `to` number (`error.code` is `invalid_recipient`), or Meta rejected the request (`message` carries the reason Meta gave, for example an expired channel token or a re-engagement window that closed)
 - `401 Unauthorized` — Invalid or missing API key
 - `404 Not Found` — Channel or contact not found
 - `429 Too Many Requests` — Meta rate limit; retry after a pause
@@ -77,6 +81,17 @@ curl -X POST "https://api.contactship.ai/v1/waba/send" \
   -d '{
     "channel_id": "chn_abc123",
     "contact_id": "c1d2e3f4-a5b6-7890-cdef-123456789012",
+    "content": "Hello! How can I help you today?"
+  }'
+```
+
+```bash cURL — Send to a phone number
+curl -X POST "https://api.contactship.ai/v1/waba/send" \
+  -H "x-api-key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "channel_id": "chn_abc123",
+    "to": "+15555550102",
     "content": "Hello! How can I help you today?"
   }'
 ```
