@@ -1,0 +1,214 @@
+---
+title: 'List Thread Messages'
+api: 'GET /v1/thread/{threadId}/messages'
+description: 'Retrieve the messages of a thread, one page at a time'
+---
+
+Returns the messages of a conversation thread, oldest first by default. Narrow it to one conversation with `session_id` (the `id` from [List Conversations](/api-reference/endpoint/list-conversations)) or to a time window with `from` and `to`.
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication. An organization key reads any thread of the organization. A personal key needs the `messages.read` permission and reads only the threads its user can see in the inbox.
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="threadId" type="string" required>
+  The UUID of the thread.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="session_id" type="string">
+  UUID of a conversation of this thread: only its messages are returned. Messages from before conversations were tracked have no `session_id` and are left out by this filter.
+</ParamField>
+
+<ParamField query="from" type="string">
+  Only messages created at or after this instant (ISO 8601, e.g. `2026-11-10T00:00:00-05:00`).
+</ParamField>
+
+<ParamField query="to" type="string">
+  Only messages created before this instant (ISO 8601). It cannot be before `from`.
+</ParamField>
+
+<ParamField query="order" type="string" default="asc">
+  Sort direction by creation date: `asc` (oldest first) or `desc`.
+</ParamField>
+
+<ParamField query="limit" type="number" default="50">
+  Messages per page, from 1 to 100.
+</ParamField>
+
+<ParamField query="offset" type="number" default="0">
+  Number of messages to skip for pagination, up to 10000.
+</ParamField>
+
+## Response
+
+<ResponseField name="data" type="array">
+  Messages of the page.
+  <Expandable title="Message object">
+    <ResponseField name="id" type="string">
+      Unique identifier of the message (UUID).
+    </ResponseField>
+    <ResponseField name="thread_id" type="string">
+      UUID of the thread.
+    </ResponseField>
+    <ResponseField name="session_id" type="string">
+      UUID of the conversation the message belongs to, or `null`.
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      When the message was created (ISO 8601).
+    </ResponseField>
+    <ResponseField name="role" type="string">
+      Who wrote it: `user` (the contact), `agent` (the AI agent), `human` (a person on your team) or `system`.
+    </ResponseField>
+    <ResponseField name="sender_id" type="string">
+      UUID of the team member who sent it from the app. `null` for the contact, the AI agent, and messages sent with an API key or by an automation.
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      Message type, e.g. `text`, `image`, `audio`, `video`, `document`, `template`, `location`, `reaction`, `sticker`. `null` on internal notes.
+    </ResponseField>
+    <ResponseField name="content" type="string">
+      Text of the message, or the caption of a media message.
+    </ResponseField>
+    <ResponseField name="media" type="object">
+      The attachment of a media message, or `null`. `media.internal_data` carries `file_name`, `mime_type` and, when available, `file_size` and `url`.
+    </ResponseField>
+    <ResponseField name="components" type="array">
+      The components of a template message (header, body, buttons), or `null`.
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      `received` for messages from the contact; `sent`, `delivered`, `read` or `failed` for messages sent to them. `null` on internal notes.
+    </ResponseField>
+    <ResponseField name="is_note" type="boolean">
+      `true` for internal notes of your team. The contact never sees them.
+    </ResponseField>
+    <ResponseField name="is_reply" type="boolean">
+      `true` when the message quotes an earlier one.
+    </ResponseField>
+    <ResponseField name="is_follow_up" type="boolean">
+      `true` when it is an automatic follow-up of the AI agent.
+    </ResponseField>
+    <ResponseField name="from_campaign" type="boolean">
+      `true` when it was sent by a messaging campaign.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="pagination" type="object">
+  <Expandable title="Pagination object">
+    <ResponseField name="page" type="number">
+      Page number, from 1.
+    </ResponseField>
+    <ResponseField name="total_rows" type="number">
+      Messages that match the filters.
+    </ResponseField>
+    <ResponseField name="total_pages" type="number">
+      Pages at the requested `limit`.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Error Codes
+
+- `400 Bad Request` — `threadId` or `session_id` is not a UUID, a date is not ISO 8601, or `to` is before `from`
+- `401 Unauthorized` — Invalid or missing API key
+- `403 Forbidden` — The thread belongs to another organization, or the personal key's user cannot see it
+- `404 Not Found` — Thread not found
+- `429 Too Many Requests` — Rate limit exceeded, see [Rate limits](/api-reference/rate-limits)
+- `500 Internal Server Error` — Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL — One conversation
+curl -X GET "https://api.contactship.ai/v1/thread/thr-b2c3d4e5-f6a7-8901-bcde-f12345678901/messages?session_id=5f0c1d2e-3a4b-4c5d-8e6f-7a8b9c0d1e2f&limit=100" \
+  -H "x-api-key: your-api-key"
+```
+
+```bash cURL — Time window
+curl -X GET "https://api.contactship.ai/v1/thread/thr-b2c3d4e5-f6a7-8901-bcde-f12345678901/messages?from=2026-11-10T00:00:00Z&to=2026-11-12T00:00:00Z" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript
+const threadId = 'thr-b2c3d4e5-f6a7-8901-bcde-f12345678901';
+const messages = [];
+for (let offset = 0; ; offset += 100) {
+  const response = await fetch(
+    `https://api.contactship.ai/v1/thread/${threadId}/messages?limit=100&offset=${offset}`,
+    { headers: { 'x-api-key': 'your-api-key' } }
+  );
+  const { data, pagination } = await response.json();
+  messages.push(...data);
+  if (offset + 100 >= pagination.total_rows) break;
+}
+messages
+  .filter((m) => !m.is_note)
+  .forEach((m) => console.log(`[${m.created_at}] ${m.role}: ${m.content}`));
+```
+
+```python Python
+import requests
+
+thread_id = 'thr-b2c3d4e5-f6a7-8901-bcde-f12345678901'
+response = requests.get(
+    f'https://api.contactship.ai/v1/thread/{thread_id}/messages',
+    headers={'x-api-key': 'your-api-key'},
+    params={'session_id': '5f0c1d2e-3a4b-4c5d-8e6f-7a8b9c0d1e2f', 'limit': 100},
+)
+for message in response.json()['data']:
+    print(message['created_at'], message['role'], message['content'])
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+{
+  "statusCode": 200,
+  "data": [
+    {
+      "id": "msg-a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "thread_id": "thr-b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "session_id": "5f0c1d2e-3a4b-4c5d-8e6f-7a8b9c0d1e2f",
+      "created_at": "2026-11-14T15:03:26Z",
+      "role": "user",
+      "sender_id": null,
+      "type": "text",
+      "content": "Hi, can I move my delivery to Friday?",
+      "media": null,
+      "components": null,
+      "status": "received",
+      "is_note": false,
+      "is_reply": false,
+      "is_follow_up": false,
+      "from_campaign": false
+    },
+    {
+      "id": "msg-b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "thread_id": "thr-b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "session_id": "5f0c1d2e-3a4b-4c5d-8e6f-7a8b9c0d1e2f",
+      "created_at": "2026-11-14T15:21:10Z",
+      "role": "human",
+      "sender_id": "u1v2w3x4-y5z6-7890-abcd-ef1234567890",
+      "type": "text",
+      "content": "Done, your delivery is now on Friday the 20th.",
+      "media": null,
+      "components": null,
+      "status": "read",
+      "is_note": false,
+      "is_reply": false,
+      "is_follow_up": false,
+      "from_campaign": false
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "total_rows": 2,
+    "total_pages": 1
+  }
+}
+```
+</ResponseExample>

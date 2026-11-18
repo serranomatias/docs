@@ -1,0 +1,244 @@
+---
+title: 'List Conversations'
+api: 'GET /v1/conversations'
+description: 'List the WhatsApp conversations of a channel that started in a date range'
+---
+
+Returns the conversations of a WhatsApp channel that started between two dates, newest first, one page at a time. They are the same conversations as **Reports → Sessions** in the app.
+
+A thread is the whole chat with a contact on a channel and never ends. A conversation is one stretch of that thread: it opens with new activity and closes after a period without messages, so one thread has many conversations. To read the messages of a conversation, call [List Thread Messages](/api-reference/endpoint/get-thread-messages) with its `thread_id` and `session_id` set to its `id`.
+
+<Note>
+  Only WhatsApp (`WABA`) channels have conversations. For any other channel the list is empty.
+</Note>
+
+## Headers
+
+<ParamField header="x-api-key" type="string" required>
+  Your API key for authentication. An organization key lists every conversation of the channel. A personal key needs the `messages.read` permission and the channel inside its role's channels; it lists only the conversations of threads its user can see in the inbox.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="channel_id" type="string" required>
+  ID of the WhatsApp channel, from [List Channels](/api-reference/endpoint/get-channels).
+</ParamField>
+
+<ParamField query="start_date" type="string" required>
+  First day of the range, `YYYY-MM-DD`. A conversation is in the range when it started in it.
+</ParamField>
+
+<ParamField query="end_date" type="string" required>
+  Last day of the range, included, `YYYY-MM-DD`. It cannot be before `start_date`.
+</ParamField>
+
+<ParamField query="timezone" type="string" default="UTC">
+  IANA time zone the two days are read in, e.g. `America/Bogota`. An unknown zone is read as UTC.
+</ParamField>
+
+<ParamField query="limit" type="number" default="50">
+  Conversations per page, from 1 to 100.
+</ParamField>
+
+<ParamField query="offset" type="number" default="0">
+  Number of conversations to skip, up to 10000.
+</ParamField>
+
+## Response
+
+<ResponseField name="data" type="array">
+  Conversations of the page, newest first.
+  <Expandable title="Conversation object">
+    <ResponseField name="id" type="string">
+      Unique identifier of the conversation (UUID). Pass it as `session_id` to [List Thread Messages](/api-reference/endpoint/get-thread-messages).
+    </ResponseField>
+    <ResponseField name="thread_id" type="string">
+      UUID of the thread the conversation belongs to.
+    </ResponseField>
+    <ResponseField name="channel_id" type="string">
+      ID of the channel.
+    </ResponseField>
+    <ResponseField name="channel_name" type="string">
+      Display name of the channel.
+    </ResponseField>
+    <ResponseField name="contact_id" type="string">
+      UUID of the contact.
+    </ResponseField>
+    <ResponseField name="contact_name" type="string">
+      Full name of the contact.
+    </ResponseField>
+    <ResponseField name="contact_phone" type="string">
+      Phone number of the contact.
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      `open` while the conversation is active, `closed` once it ended.
+    </ResponseField>
+    <ResponseField name="started_at" type="string">
+      When the conversation started (ISO 8601).
+    </ResponseField>
+    <ResponseField name="ended_at" type="string">
+      When it closed (ISO 8601). `null` while it is open.
+    </ResponseField>
+    <ResponseField name="message_count" type="number">
+      Messages in the conversation.
+    </ResponseField>
+    <ResponseField name="user_message_count" type="number">
+      Messages the contact sent.
+    </ResponseField>
+    <ResponseField name="first_response_at" type="string">
+      When the first reply to the contact was sent, by the AI agent or a person (ISO 8601), or `null`.
+    </ResponseField>
+    <ResponseField name="is_returning" type="boolean">
+      `true` when the contact had an earlier conversation on this channel.
+    </ResponseField>
+    <ResponseField name="handled_by" type="string">
+      Who answered: `ai`, `human`, `mixed` or `none`. `null` while the conversation is open, and for conversations that closed before September 7, 2026.
+    </ResponseField>
+    <ResponseField name="escalated_at" type="string">
+      When the conversation was handed from the AI agent to a person (ISO 8601), or `null`.
+    </ResponseField>
+    <ResponseField name="escalated_by_type" type="string">
+      Who made the handoff: `agent` (the AI agent escalated), `user` (a person on your team took the conversation over) or `system` (a rule or automation). `null` when there was none.
+    </ResponseField>
+    <ResponseField name="analyzed_at" type="string">
+      When the conversation was analyzed (ISO 8601), or `null`.
+    </ResponseField>
+    <ResponseField name="analysis" type="object">
+      The analysis written when the conversation closes, only on channels with conversation analysis turned on; `null` otherwise.
+      <Expandable title="Analysis object">
+        <ResponseField name="session_summary" type="string">
+          Summary of the conversation.
+        </ResponseField>
+        <ResponseField name="user_sentiment" type="string">
+          Sentiment of the contact: `Positive`, `Neutral` or `Negative`.
+        </ResponseField>
+        <ResponseField name="session_successful" type="boolean">
+          Whether the conversation reached its goal.
+        </ResponseField>
+        <ResponseField name="custom_analysis_data" type="object">
+          The custom fields set up for the channel's analysis.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="pagination" type="object">
+  <Expandable title="Pagination object">
+    <ResponseField name="page" type="number">
+      Page number, from 1.
+    </ResponseField>
+    <ResponseField name="total_rows" type="number">
+      Conversations in the range.
+    </ResponseField>
+    <ResponseField name="total_pages" type="number">
+      Pages at the requested `limit`.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+The conversation does not carry who it was assigned to: read the thread's `assignee` with [Get Thread](/api-reference/endpoint/get-thread), or the `sender_id` of each message.
+
+## Error Codes
+
+- `400 Bad Request` — A parameter is missing or invalid, or `end_date` is before `start_date`
+- `401 Unauthorized` — Invalid or missing API key
+- `403 Forbidden` — The personal key lacks `messages.read`, or the channel is not among its role's channels
+- `429 Too Many Requests` — Rate limit exceeded, see [Rate limits](/api-reference/rate-limits)
+- `500 Internal Server Error` — Server-side error
+
+## Code Examples
+
+<RequestExample>
+```bash cURL
+curl -X GET "https://api.contactship.ai/v1/conversations?channel_id=chn_w4b4e5x4mp1e0000000000&start_date=2026-11-01&end_date=2026-11-15&timezone=America/Bogota&limit=100" \
+  -H "x-api-key: your-api-key"
+```
+
+```javascript JavaScript
+const params = new URLSearchParams({
+  channel_id: 'chn_w4b4e5x4mp1e0000000000',
+  start_date: '2026-11-01',
+  end_date: '2026-11-15',
+  timezone: 'America/Bogota',
+  limit: '100',
+});
+const conversations = [];
+for (let offset = 0; ; offset += 100) {
+  params.set('offset', String(offset));
+  const response = await fetch(`https://api.contactship.ai/v1/conversations?${params}`, {
+    headers: { 'x-api-key': 'your-api-key' },
+  });
+  const { data, pagination } = await response.json();
+  conversations.push(...data);
+  if (offset + 100 >= pagination.total_rows) break;
+}
+console.log(`${conversations.length} conversations`);
+```
+
+```python Python
+import requests
+
+params = {
+    'channel_id': 'chn_w4b4e5x4mp1e0000000000',
+    'start_date': '2026-11-01',
+    'end_date': '2026-11-15',
+    'timezone': 'America/Bogota',
+    'limit': 100,
+    'offset': 0,
+}
+conversations = []
+while True:
+    page = requests.get(
+        'https://api.contactship.ai/v1/conversations',
+        headers={'x-api-key': 'your-api-key'},
+        params=params,
+    ).json()
+    conversations += page['data']
+    params['offset'] += 100
+    if params['offset'] >= page['pagination']['total_rows']:
+        break
+print(len(conversations), 'conversations')
+```
+</RequestExample>
+
+<ResponseExample>
+```json Example Response
+{
+  "statusCode": 200,
+  "data": [
+    {
+      "id": "5f0c1d2e-3a4b-4c5d-8e6f-7a8b9c0d1e2f",
+      "thread_id": "thr-b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "channel_id": "chn_w4b4e5x4mp1e0000000000",
+      "channel_name": "WhatsApp Business",
+      "contact_id": "c1d2e3f4-a5b6-7890-cdef-123456789012",
+      "contact_name": "Ana Gómez",
+      "contact_phone": "+573001234567",
+      "status": "closed",
+      "started_at": "2026-11-14T15:03:26Z",
+      "ended_at": "2026-11-14T16:10:02Z",
+      "message_count": 12,
+      "user_message_count": 5,
+      "first_response_at": "2026-11-14T15:03:41Z",
+      "is_returning": true,
+      "handled_by": "mixed",
+      "escalated_at": "2026-11-14T15:20:00Z",
+      "escalated_by_type": "user",
+      "analyzed_at": "2026-11-14T16:11:30Z",
+      "analysis": {
+        "session_summary": "The contact asked to reschedule a delivery and was handed to an agent, who confirmed the new date.",
+        "user_sentiment": "Positive",
+        "session_successful": true,
+        "custom_analysis_data": {}
+      }
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "total_rows": 53,
+    "total_pages": 2
+  }
+}
+```
+</ResponseExample>
