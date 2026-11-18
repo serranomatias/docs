@@ -258,7 +258,9 @@
                 "group": "Canales y conversaciones",
                 "pages": [
                   "api-reference/endpoint/get-channels",
+                  "api-reference/endpoint/list-conversations",
                   "api-reference/endpoint/get-thread",
+                  "api-reference/endpoint/get-thread-messages",
                   "api-reference/endpoint/update-thread",
                   "api-reference/endpoint/get-message"
                 ]
@@ -564,7 +566,9 @@
                 "group": "Channels and threads",
                 "pages": [
                   "api-reference/endpoint/get-channels",
+                  "api-reference/endpoint/list-conversations",
                   "api-reference/endpoint/get-thread",
+                  "api-reference/endpoint/get-thread-messages",
                   "api-reference/endpoint/update-thread",
                   "api-reference/endpoint/get-message"
                 ]
