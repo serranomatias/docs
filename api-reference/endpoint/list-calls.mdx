@@ -6,7 +6,7 @@ description: 'Retrieve a paginated list of calls for your organization'
 
 Returns a paginated list of your organization's calls, newest first by default. Each call includes its transcript (`chat_history`), its analysis and its contact.
 
-The only filter is `phoneNumber`, which narrows the list to one contact. This endpoint does not filter by date, status, result, agent or campaign: any query parameter not listed below is rejected with `400`.
+By default it lists only the calls started through this API (`api_call`). Use `type` to list another call type, or `type=all` for every type: inbound, campaign, human-agent and test calls included. `phoneNumber` narrows the list to one contact. This endpoint does not filter by date, status, result, agent or campaign: any query parameter not listed below is rejected with `400`.
 
 <Note>
   This endpoint requires your organization's API key. A personal API key gets `403 Forbidden`.
@@ -30,6 +30,10 @@ The only filter is `phoneNumber`, which narrows the list to one contact. This en
 
 <ParamField query="order" type="string" default="desc">
   Sort direction by creation date. Possible values: `asc`, `desc` (lowercase).
+</ParamField>
+
+<ParamField query="type" type="string" default="api_call">
+  Call type to list: `api_call`, `inbound_call`, `campaign_call`, `platform_contact_call`, `human_call`, `internal_call`, `widget_web_call`, `web_call`, `test_web_call` or `test_phone_call`, or `all` for every type. See [call types](/en/calls/call-types). Values are lowercase; anything else returns `400`.
 </ParamField>
 
 <ParamField query="phoneNumber" type="string">
@@ -86,13 +90,13 @@ The response contains `statusCode`, a `data` array, and `pagination`.
       AI-generated analysis of the call. Usually includes `call_summary`, `user_sentiment`, `call_successful` and `custom_analysis_data` (the fields defined in your agent's post-call analysis). Empty when the call was not analyzed.
     </ResponseField>
     <ResponseField name="type" type="string">
-      Call type (`api_call`).
+      Call type. `api_call` unless you passed another `type`.
     </ResponseField>
     <ResponseField name="created_at" type="string">
       Timestamp when the call record was created (ISO 8601).
     </ResponseField>
     <ResponseField name="contact" type="object">
-      Contact associated with the call.
+      Contact associated with the call. `null` when the call has no contact, such as a browser test without an email or an internal call.
       <Expandable title="Contact object">
         <ResponseField name="full_name" type="string">Contact full name.</ResponseField>
         <ResponseField name="phone_number" type="string">Contact phone number.</ResponseField>
@@ -109,7 +113,7 @@ The response contains `statusCode`, a `data` array, and `pagination`.
 
 ## Error Codes
 
-- `400 Bad Request` — Invalid query parameters: an unknown parameter (`property <name> should not exist`), `limit` above 1000, an `order` other than `asc`/`desc`, or a `phoneNumber` that is not a valid number. Today it is also returned when `phoneNumber` does not match any contact in your organization.
+- `400 Bad Request` — Invalid query parameters: an unknown parameter (`property <name> should not exist`), `limit` above 1000, an `order` other than `asc`/`desc`, a `type` that is not one of the listed values, or a `phoneNumber` that is not a valid number. Today it is also returned when `phoneNumber` does not match any contact in your organization.
 - `401 Unauthorized` — Invalid or missing API key
 - `403 Forbidden` — The key is a personal API key; use your organization's API key
 - `429 Too Many Requests` — Rate limit exceeded; honor `Retry-After` when present and use bounded backoff. See [Rate Limits](/api-reference/rate-limits)
@@ -120,6 +124,11 @@ The response contains `statusCode`, a `data` array, and `pagination`.
 <RequestExample>
 ```bash cURL — Basic list
 curl -X GET "https://api.contactship.ai/v1/calls?limit=20&offset=0" \
+  -H "x-api-key: your-api-key"
+```
+
+```bash cURL — Every call type
+curl -X GET "https://api.contactship.ai/v1/calls?type=all&limit=50" \
   -H "x-api-key: your-api-key"
 ```
 
