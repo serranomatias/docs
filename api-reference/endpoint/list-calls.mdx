@@ -96,7 +96,7 @@ The response contains `statusCode`, a `data` array, and `pagination`.
       Timestamp when the call record was created (ISO 8601).
     </ResponseField>
     <ResponseField name="contact" type="object">
-      Contact associated with the call.
+      Contact associated with the call. `null` when the call has no contact, such as a browser test without an email or an internal call.
       <Expandable title="Contact object">
         <ResponseField name="full_name" type="string">Contact full name.</ResponseField>
         <ResponseField name="phone_number" type="string">Contact phone number.</ResponseField>
